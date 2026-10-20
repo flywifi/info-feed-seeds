@@ -1,0 +1,8 @@
+# local state never committed
+*.db
+*.sqlite
+cache/
+local/
+profiles/*.local.json
+.venv/
+__pycache__/
