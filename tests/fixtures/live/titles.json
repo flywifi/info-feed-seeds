@@ -1,0 +1,1098 @@
+{
+  "built_at": "2026-10-20T19:15:10Z",
+  "cutoff": "2026-09-20T19:15:10Z",
+  "feeds": [
+    {
+      "fetch": {
+        "attempts": 1,
+        "capture_url": null,
+        "error": null,
+        "final_url": "https://www.nist.gov/news-events/news/rss.xml",
+        "hops": [],
+        "retrieved_at": "2026-10-20T19:15:12Z",
+        "robots": "allowed",
+        "source_label": "live",
+        "status": 200,
+        "truncated": false,
+        "url": "https://www.nist.gov/news-events/news/rss.xml",
+        "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)"
+      },
+      "item_count": 40,
+      "kept": 5,
+      "kind": "rss",
+      "parse_error": null
+    },
+    {
+      "fetch": {
+        "attempts": 1,
+        "capture_url": null,
+        "error": null,
+        "final_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+        "hops": [],
+        "retrieved_at": "2026-10-20T19:15:14Z",
+        "robots": "allowed",
+        "source_label": "live",
+        "status": 200,
+        "truncated": false,
+        "url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+        "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)"
+      },
+      "item_count": 40,
+      "kept": 10,
+      "kind": "rss",
+      "parse_error": null
+    },
+    {
+      "fetch": {
+        "attempts": 1,
+        "capture_url": null,
+        "error": null,
+        "final_url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
+        "hops": [],
+        "retrieved_at": "2026-10-20T19:15:16Z",
+        "robots": "allowed",
+        "source_label": "live",
+        "status": 200,
+        "truncated": false,
+        "url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
+        "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)"
+      },
+      "item_count": 40,
+      "kept": 3,
+      "kind": "rss",
+      "parse_error": null
+    },
+    {
+      "fetch": {
+        "attempts": 1,
+        "capture_url": null,
+        "error": null,
+        "final_url": "https://www.nist.gov/news-events/cybersecurity/rss.xml",
+        "hops": [],
+        "retrieved_at": "2026-10-20T19:15:18Z",
+        "robots": "allowed",
+        "source_label": "live",
+        "status": 200,
+        "truncated": false,
+        "url": "https://www.nist.gov/news-events/cybersecurity/rss.xml",
+        "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)"
+      },
+      "item_count": 0,
+      "kept": 0,
+      "kind": "rss",
+      "parse_error": null
+    },
+    {
+      "fetch": {
+        "attempts": 1,
+        "capture_url": null,
+        "error": null,
+        "final_url": "https://www.nist.gov/news-events/standards/rss.xml",
+        "hops": [],
+        "retrieved_at": "2026-10-20T19:15:20Z",
+        "robots": "allowed",
+        "source_label": "live",
+        "status": 200,
+        "truncated": false,
+        "url": "https://www.nist.gov/news-events/standards/rss.xml",
+        "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)"
+      },
+      "item_count": 40,
+      "kept": 6,
+      "kind": "rss",
+      "parse_error": null
+    },
+    {
+      "fetch": {
+        "attempts": 1,
+        "capture_url": null,
+        "error": null,
+        "final_url": "https://www.govinfo.gov/rss/fr.xml",
+        "hops": [],
+        "retrieved_at": "2026-10-20T19:15:23Z",
+        "robots": "allowed",
+        "source_label": "live",
+        "status": 200,
+        "truncated": false,
+        "url": "https://www.govinfo.gov/rss/fr.xml",
+        "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)"
+      },
+      "item_count": 100,
+      "kept": 29,
+      "kind": "rss",
+      "parse_error": null
+    },
+    {
+      "fetch": {
+        "attempts": 1,
+        "capture_url": null,
+        "error": null,
+        "final_url": "https://www.govinfo.gov/rss/cfr.xml",
+        "hops": [],
+        "retrieved_at": "2026-10-20T19:15:25Z",
+        "robots": "allowed",
+        "source_label": "live",
+        "status": 200,
+        "truncated": false,
+        "url": "https://www.govinfo.gov/rss/cfr.xml",
+        "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)"
+      },
+      "item_count": 100,
+      "kept": 15,
+      "kind": "rss",
+      "parse_error": null
+    },
+    {
+      "fetch": {
+        "attempts": 1,
+        "capture_url": null,
+        "error": null,
+        "final_url": "https://www.govinfo.gov/rss/lsa.xml",
+        "hops": [],
+        "retrieved_at": "2026-10-20T19:15:27Z",
+        "robots": "allowed",
+        "source_label": "live",
+        "status": 200,
+        "truncated": false,
+        "url": "https://www.govinfo.gov/rss/lsa.xml",
+        "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)"
+      },
+      "item_count": 100,
+      "kept": 0,
+      "kind": "rss",
+      "parse_error": null
+    },
+    {
+      "fetch": {
+        "attempts": 1,
+        "capture_url": null,
+        "error": null,
+        "final_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+        "hops": [],
+        "retrieved_at": "2026-10-20T19:15:29Z",
+        "robots": "allowed",
+        "source_label": "live",
+        "status": 200,
+        "truncated": false,
+        "url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+        "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)"
+      },
+      "item_count": 100,
+      "kept": 29,
+      "kind": "rss",
+      "parse_error": null
+    },
+    {
+      "fetch": {
+        "attempts": 1,
+        "capture_url": null,
+        "error": null,
+        "final_url": "https://www.govinfo.gov/rss/pai-bulkdata.xml",
+        "hops": [],
+        "retrieved_at": "2026-10-20T19:15:31Z",
+        "robots": "allowed",
+        "source_label": "live",
+        "status": 200,
+        "truncated": false,
+        "url": "https://www.govinfo.gov/rss/pai-bulkdata.xml",
+        "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)"
+      },
+      "item_count": 100,
+      "kept": 0,
+      "kind": "rss",
+      "parse_error": null
+    }
+  ],
+  "guard": {
+    "counts": {
+      "BLOCK": 0,
+      "CLEAN": 97,
+      "QUARANTINE": 0,
+      "REVIEW": 0
+    },
+    "rates": {
+      "BLOCK": 0.0,
+      "CLEAN": 1.0,
+      "QUARANTINE": 0.0,
+      "REVIEW": 0.0
+    },
+    "scored_field": "title"
+  },
+  "items": [
+    {
+      "feed_url": "https://www.nist.gov/news-events/news/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922796",
+      "link": "https://www.nist.gov/news-events/news/2026/10/new-chip-based-tape-measure-light-could-revolutionize-mobile-timekeeping",
+      "published": "2026-10-16T12:00:00Z",
+      "title": "New Chip-Based ‘Tape Measure’ for Light Could Revolutionize Mobile Timekeeping and Enhance National Security"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/news/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922336",
+      "link": "https://www.nist.gov/news-events/news/2026/10/nist-joins-white-house-effort-drive-new-golden-age-science",
+      "published": "2026-10-08T12:00:00Z",
+      "title": "NIST Joins White House Effort to Drive ‘A New Golden Age of Science’"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/news/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1919736",
+      "link": "https://www.nist.gov/news-events/news/2026/10/nist-study-shows-how-toxic-substances-mixed-fentanyl-vary-across-us-and",
+      "published": "2026-10-08T12:00:00Z",
+      "title": "NIST Study Shows How the Toxic Substances Mixed Into Fentanyl Vary Across the U.S. and Change Over Time"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/news/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922061",
+      "link": "https://www.nist.gov/news-events/news/2026/10/physicist-jun-ye-wins-wolf-prize-physics",
+      "published": "2026-10-05T12:00:00Z",
+      "title": "Physicist Jun Ye Wins Wolf Prize in Physics"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/news/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1921646",
+      "link": "https://www.nist.gov/news-events/news/2026/09/nist-provides-updates-national-construction-safety-team-activities",
+      "published": "2026-09-28T12:00:00Z",
+      "title": "NIST Provides Updates on National Construction Safety Team Activities"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922431",
+      "link": "https://www.nist.gov/news-events/news/2026/10/nist-publishes-reports-open-radio-access-network-o-ran-security",
+      "published": "2026-10-08T12:00:00Z",
+      "title": "NIST Publishes Reports on Open Radio Access Network (O-RAN) Security"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922036",
+      "link": "https://www.nist.gov/news-events/news/2026/09/draft-5g-white-paper-now-available-false-base-station",
+      "published": "2026-09-30T12:00:00Z",
+      "title": "Draft 5G White Paper Now Available: False Base Station"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1921866",
+      "link": "https://www.nist.gov/news-events/events/2026/12/second-semiconductor-traceability-and-provenance-workshop",
+      "published": "2026-12-08T13:30:00Z",
+      "title": "Second Semiconductor Traceability and Provenance Workshop"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1921871",
+      "link": "https://www.nist.gov/news-events/news/2026/09/comments-software-and-agentic-ai-identity-concept-paper",
+      "published": "2026-09-29T12:00:00Z",
+      "title": "Comments on Software and Agentic AI Identity Concept Paper"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1921471",
+      "link": "https://www.nist.gov/news-events/news/2026/09/new-nist-nccoe-resources-devsecops-and-october-28-webinar-agentic-ai",
+      "published": "2026-09-24T12:00:00Z",
+      "title": "New NIST NCCoE Resources on DevSecOps and October 28 Webinar on Agentic AI"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1921466",
+      "link": "https://www.nist.gov/news-events/events/2026/10/devsecops-and-impact-agentic-si-0",
+      "published": "2026-10-28T17:00:00Z",
+      "title": "DevSecOps and the Impact of Agentic SI"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1920796",
+      "link": "https://www.nist.gov/news-events/events/2026/10/nccoe-cybersecurity-connections-event-national-cybersecurity-awareness",
+      "published": "2026-10-15T15:00:00Z",
+      "title": "NCCoE Cybersecurity Connections Event: National Cybersecurity Awareness Month"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1920801",
+      "link": "https://www.nist.gov/news-events/events/2026/09/nist-supply-chain-traceability-and-manufacturing-meta-framework-webinar",
+      "published": "2026-09-29T17:00:00Z",
+      "title": "NIST Supply Chain Traceability and Manufacturing Meta-Framework Webinar"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1917601",
+      "link": "https://www.nist.gov/news-events/events/2027/01/super-intelligence-fire-service",
+      "published": "2027-01-26T05:00:00Z",
+      "title": "Super Intelligence in the Fire Service"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1911686",
+      "link": "https://www.nist.gov/news-events/events/2026/11/trec-2026",
+      "published": "2026-11-16T05:00:00Z",
+      "title": "TREC 2026"
+    },
+    {
+      "feed_url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922656",
+      "link": "https://www.nist.gov/blogs/cybersecurity-insights/kicking-cybersecurity-career-week-nist",
+      "published": "2026-10-14T12:00:00Z",
+      "title": "Kicking off Cybersecurity Career Week with NIST!"
+    },
+    {
+      "feed_url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922141",
+      "link": "https://www.nist.gov/blogs/cybersecurity-insights/introducing-new-small-business-cybersecurity-support-program-finder",
+      "published": "2026-10-05T12:00:00Z",
+      "title": "Introducing the New Small Business Cybersecurity Support Program Finder"
+    },
+    {
+      "feed_url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1921481",
+      "link": "https://www.nist.gov/blogs/cybersecurity-insights/securing-water-and-wastewater-operational-technology-environments",
+      "published": "2026-10-01T12:00:00Z",
+      "title": "Securing Water and Wastewater Operational Technology Environments"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/standards/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922751",
+      "link": "https://www.nist.gov/news-events/news/2026/10/key-practices-incident-readiness-and-response-super-intelligence-training",
+      "published": "2026-10-16T12:00:00Z",
+      "title": "Key Practices for Incident Readiness and Response in Super Intelligence Training and Evaluation"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/standards/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922651",
+      "link": "https://www.nist.gov/news-events/news/2026/10/department-commerce-announces-agreement-globalfoundries-amend-its-existing",
+      "published": "2026-10-14T12:00:00Z",
+      "title": "Department of Commerce Announces Agreement with GlobalFoundries to Amend Its Existing CHIPS Program Award and Reallocate $955 Million to Accelerate Investments in Silicon Photonics, Silicon-Germanium, and Advanced Packaging"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/standards/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922336",
+      "link": "https://www.nist.gov/news-events/news/2026/10/nist-joins-white-house-effort-drive-new-golden-age-science",
+      "published": "2026-10-08T12:00:00Z",
+      "title": "NIST Joins White House Effort to Drive ‘A New Golden Age of Science’"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/standards/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1922286",
+      "link": "https://www.nist.gov/news-events/events/2026/10/mep-state-competition-kick-conference",
+      "published": "2026-10-20T13:00:00Z",
+      "title": "MEP State Competition Kick-Off Conference"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/standards/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1919191",
+      "link": "https://www.nist.gov/news-events/events/2026/11/2026-nist-photometry-short-course",
+      "published": "2026-11-03T05:00:00Z",
+      "title": "2026 NIST Photometry Short Course"
+    },
+    {
+      "feed_url": "https://www.nist.gov/news-events/standards/rss.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "https://www.nist.gov/node/1914336",
+      "link": "https://www.nist.gov/news-events/events/2026/09/plastic-composition-analysis-workshop-identifying-reference-material-data",
+      "published": "2026-09-28T04:00:00Z",
+      "title": "Plastic Composition Analysis Workshop: Identifying reference material, data, and measurement needs"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-21",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-09-21",
+      "published": "2026-09-22T05:25:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.181, September 21, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-22",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-09-22",
+      "published": "2026-09-22T08:06:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.182, September 22, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2022-08-03",
+      "link": "https://www.govinfo.gov/app/details/FR-2022-08-03",
+      "published": "2026-09-22T23:45:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t87,\n\t\t\t\t\tNo.148, August 3, 2022"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2025-04-02",
+      "link": "https://www.govinfo.gov/app/details/FR-2025-04-02",
+      "published": "2026-09-22T23:54:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t90,\n\t\t\t\t\tNo.62, April 2, 2025"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2025-04-03",
+      "link": "https://www.govinfo.gov/app/details/FR-2025-04-03",
+      "published": "2026-09-22T23:56:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t90,\n\t\t\t\t\tNo.63, April 3, 2025"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-23",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-09-23",
+      "published": "2026-09-23T09:24:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.183, September 23, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-18",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-09-18",
+      "published": "2026-09-23T15:18:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.180, September 18, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2025-04-04",
+      "link": "https://www.govinfo.gov/app/details/FR-2025-04-04",
+      "published": "2026-09-23T17:26:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t90,\n\t\t\t\t\tNo.64, April 4, 2025"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-24",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-09-24",
+      "published": "2026-09-24T04:47:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.184, September 24, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-25",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-09-25",
+      "published": "2026-09-25T07:24:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.185, September 25, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-28",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-09-28",
+      "published": "2026-09-28T20:38:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.186, September 28, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-29",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-09-29",
+      "published": "2026-09-29T08:17:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.187, September 29, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-08-24",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-08-24",
+      "published": "2026-09-29T22:44:09Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.162, August 24, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2023-02-07",
+      "link": "https://www.govinfo.gov/app/details/FR-2023-02-07",
+      "published": "2026-09-30T18:16:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t88,\n\t\t\t\t\tNo.25, February 7, 2023"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-01",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-01",
+      "published": "2026-10-01T19:26:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.189, October 1, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-02",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-02",
+      "published": "2026-10-02T06:17:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.190, October 2, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-06",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-06",
+      "published": "2026-10-06T07:45:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.192, October 6, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-05",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-05",
+      "published": "2026-10-06T14:34:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.191, October 5, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-04-01",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-04-01",
+      "published": "2026-10-06T21:00:14Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.62, April 1, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-08",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-08",
+      "published": "2026-10-08T16:16:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.194, October 8, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-07",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-07",
+      "published": "2026-10-08T17:12:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.193, October 7, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-09",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-09",
+      "published": "2026-10-09T14:51:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.195, October 9, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-30",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-09-30",
+      "published": "2026-10-09T14:52:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.188, September 30, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-13",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-13",
+      "published": "2026-10-13T16:50:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.196, October 13, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-15",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-15",
+      "published": "2026-10-15T14:27:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.198, October 15, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-16",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-16",
+      "published": "2026-10-19T16:33:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.199, October 16, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-14",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-14",
+      "published": "2026-10-19T21:24:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.197, October 14, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-19",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-19",
+      "published": "2026-10-19T21:32:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.200, October 19, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-20",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-20",
+      "published": "2026-10-20T06:48:00Z",
+      "title": "Federal Register Vol.\n\t\t\t\t\t91,\n\t\t\t\t\tNo.201, October 20, 2026"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2025-title15-vol3",
+      "link": "https://www.govinfo.gov/app/details/CFR-2025-title15-vol3",
+      "published": "2026-09-21T16:23:00Z",
+      "title": "Title 15 - Commerce and Foreign Trade"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2026-title15-vol3",
+      "link": "https://www.govinfo.gov/app/details/CFR-2026-title15-vol3",
+      "published": "2026-09-21T16:23:00Z",
+      "title": "Title 15 - Commerce and Foreign Trade"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2025-title9-vol1",
+      "link": "https://www.govinfo.gov/app/details/CFR-2025-title9-vol1",
+      "published": "2026-09-23T18:28:00Z",
+      "title": "Title 9 - Animals and Animal Products"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2026-title9-vol1",
+      "link": "https://www.govinfo.gov/app/details/CFR-2026-title9-vol1",
+      "published": "2026-09-23T18:34:00Z",
+      "title": "Title 9 - Animals and Animal Products"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2025-title7-vol9",
+      "link": "https://www.govinfo.gov/app/details/CFR-2025-title7-vol9",
+      "published": "2026-10-02T18:58:00Z",
+      "title": "Title 7 - Agriculture"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2026-title7-vol9",
+      "link": "https://www.govinfo.gov/app/details/CFR-2026-title7-vol9",
+      "published": "2026-10-02T19:01:00Z",
+      "title": "Title 7 - Agriculture"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2025-title7-vol14",
+      "link": "https://www.govinfo.gov/app/details/CFR-2025-title7-vol14",
+      "published": "2026-10-02T19:07:00Z",
+      "title": "Title 7 - Agriculture"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2026-title7-vol14",
+      "link": "https://www.govinfo.gov/app/details/CFR-2026-title7-vol14",
+      "published": "2026-10-02T19:07:00Z",
+      "title": "Title 7 - Agriculture"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2025-title15-vol4",
+      "link": "https://www.govinfo.gov/app/details/CFR-2025-title15-vol4",
+      "published": "2026-10-07T16:25:00Z",
+      "title": "Title 15 - Commerce and Foreign Trade"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2026-title15-vol4",
+      "link": "https://www.govinfo.gov/app/details/CFR-2026-title15-vol4",
+      "published": "2026-10-07T16:29:00Z",
+      "title": "Title 15 - Commerce and Foreign Trade"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2025-title15-vol1",
+      "link": "https://www.govinfo.gov/app/details/CFR-2025-title15-vol1",
+      "published": "2026-10-07T17:08:00Z",
+      "title": "Title 15 - Commerce and Foreign Trade"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2026-title15-vol1",
+      "link": "https://www.govinfo.gov/app/details/CFR-2026-title15-vol1",
+      "published": "2026-10-07T17:11:00Z",
+      "title": "Title 15 - Commerce and Foreign Trade"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2025-title12-vol1",
+      "link": "https://www.govinfo.gov/app/details/CFR-2025-title12-vol1",
+      "published": "2026-10-08T12:44:00Z",
+      "title": "Title 12 - Banks and Banking"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2026-title12-vol1",
+      "link": "https://www.govinfo.gov/app/details/CFR-2026-title12-vol1",
+      "published": "2026-10-08T12:49:00Z",
+      "title": "Title 12 - Banks and Banking"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "CFR-2026-title2-vol01",
+      "link": "https://www.govinfo.gov/app/details/CFR-2026-title2-vol01",
+      "published": "2026-10-16T20:50:09Z",
+      "title": "Title 2 - Federal Financial Assistance"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-21",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-21.xml",
+      "published": "2026-09-22T05:25:00Z",
+      "title": "FR-2026-09-21"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-22",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-22.xml",
+      "published": "2026-09-22T08:06:00Z",
+      "title": "FR-2026-09-22"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2022-08-03",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2022/08/FR-2022-08-03.xml",
+      "published": "2026-09-22T23:45:00Z",
+      "title": "FR-2022-08-03"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2025-04-02",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2025/04/FR-2025-04-02.xml",
+      "published": "2026-09-22T23:54:00Z",
+      "title": "FR-2025-04-02"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2025-04-03",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2025/04/FR-2025-04-03.xml",
+      "published": "2026-09-22T23:56:00Z",
+      "title": "FR-2025-04-03"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-23",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-23.xml",
+      "published": "2026-09-23T09:24:00Z",
+      "title": "FR-2026-09-23"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-18",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-18.xml",
+      "published": "2026-09-23T15:18:00Z",
+      "title": "FR-2026-09-18"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2025-04-04",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2025/04/FR-2025-04-04.xml",
+      "published": "2026-09-23T17:26:00Z",
+      "title": "FR-2025-04-04"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-24",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-24.xml",
+      "published": "2026-09-24T04:47:00Z",
+      "title": "FR-2026-09-24"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-25",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-25.xml",
+      "published": "2026-09-25T07:24:00Z",
+      "title": "FR-2026-09-25"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-28",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-28.xml",
+      "published": "2026-09-28T20:38:00Z",
+      "title": "FR-2026-09-28"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-29",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-29.xml",
+      "published": "2026-09-29T08:17:00Z",
+      "title": "FR-2026-09-29"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-08-24",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/08/FR-2026-08-24.xml",
+      "published": "2026-09-29T22:44:11Z",
+      "title": "FR-2026-08-24"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2023-02-07",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2023/02/FR-2023-02-07.xml",
+      "published": "2026-09-30T18:16:00Z",
+      "title": "FR-2023-02-07"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-01",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-01.xml",
+      "published": "2026-10-01T19:26:00Z",
+      "title": "FR-2026-10-01"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-02",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-02.xml",
+      "published": "2026-10-02T06:17:00Z",
+      "title": "FR-2026-10-02"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-06",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-06.xml",
+      "published": "2026-10-06T07:45:00Z",
+      "title": "FR-2026-10-06"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-05",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-05.xml",
+      "published": "2026-10-06T14:34:00Z",
+      "title": "FR-2026-10-05"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-04-01",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/04/FR-2026-04-01.xml",
+      "published": "2026-10-06T20:58:03Z",
+      "title": "FR-2026-04-01"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-08",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-08.xml",
+      "published": "2026-10-08T16:16:00Z",
+      "title": "FR-2026-10-08"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-07",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-07.xml",
+      "published": "2026-10-08T17:12:00Z",
+      "title": "FR-2026-10-07"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-09",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-09.xml",
+      "published": "2026-10-09T14:51:00Z",
+      "title": "FR-2026-10-09"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-09-30",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-30.xml",
+      "published": "2026-10-09T14:52:00Z",
+      "title": "FR-2026-09-30"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-13",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-13.xml",
+      "published": "2026-10-13T16:50:00Z",
+      "title": "FR-2026-10-13"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-15",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-15.xml",
+      "published": "2026-10-15T14:27:00Z",
+      "title": "FR-2026-10-15"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-16",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-16.xml",
+      "published": "2026-10-19T16:33:00Z",
+      "title": "FR-2026-10-16"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-14",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-14.xml",
+      "published": "2026-10-19T21:24:00Z",
+      "title": "FR-2026-10-14"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-19",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-19.xml",
+      "published": "2026-10-19T21:32:00Z",
+      "title": "FR-2026-10-19"
+    },
+    {
+      "feed_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "guard_level": "CLEAN",
+      "guard_score": 0,
+      "guid": "FR-2026-10-20",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-20.xml",
+      "published": "2026-10-20T06:48:00Z",
+      "title": "FR-2026-10-20"
+    }
+  ],
+  "user_agent": "info-feed-seeds/0.1.0 (+https://github.com/flywifi/info-feed-seeds)",
+  "window_days": 30
+}

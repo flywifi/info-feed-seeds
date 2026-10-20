@@ -1,0 +1,203 @@
+{
+  "$defs": {
+    "attempt": {
+      "additionalProperties": false,
+      "if": {
+        "properties": {
+          "source_label": {
+            "const": "archive"
+          }
+        },
+        "required": [
+          "source_label"
+        ]
+      },
+      "properties": {
+        "capture_url": {
+          "description": "An archive capture URL, recorded only after that URL was fetched. Null for every non-archive method.",
+          "pattern": "^https?://",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "http_status": {
+          "description": "HTTP status of the attempt, or null when no response arrived.",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "media": {
+          "items": {
+            "$ref": "#/$defs/media"
+          },
+          "type": "array"
+        },
+        "method": {
+          "description": "Acquisition method name, for example conditional-get, archive, browser, user-saved, paid, ocr.",
+          "pattern": "^[a-z][a-z0-9-]{1,40}$",
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "result": {
+          "enum": [
+            "ok",
+            "not-modified",
+            "empty",
+            "refused",
+            "bot-wall",
+            "robots-disallowed",
+            "timeout",
+            "network-error",
+            "parse-error",
+            "truncated",
+            "error"
+          ],
+          "type": "string"
+        },
+        "source_label": {
+          "enum": [
+            "live",
+            "cache",
+            "archive",
+            "user_saved",
+            "paid"
+          ],
+          "type": "string"
+        },
+        "tried_at": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "method",
+        "tried_at",
+        "result",
+        "http_status",
+        "source_label"
+      ],
+      "then": {
+        "description": "An archive result must carry the capture URL that was fetched.",
+        "properties": {
+          "capture_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "capture_url"
+        ]
+      },
+      "type": "object"
+    },
+    "media": {
+      "additionalProperties": false,
+      "description": "A file kept on the local machine under local/sources/<id>/media/, referenced by name and digest.",
+      "properties": {
+        "file": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "screenshot",
+            "pdf",
+            "saved_page",
+            "ocr"
+          ],
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "file",
+        "sha256",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "route_record": {
+      "additionalProperties": false,
+      "properties": {
+        "attempts": {
+          "items": {
+            "$ref": "#/$defs/attempt"
+          },
+          "type": "array"
+        },
+        "last_success": {
+          "additionalProperties": false,
+          "description": "The method that worked last and when; the poller tries it first. Null until something worked.",
+          "properties": {
+            "method": {
+              "pattern": "^[a-z][a-z0-9-]{1,40}$",
+              "type": "string"
+            },
+            "source_label": {
+              "enum": [
+                "live",
+                "cache",
+                "archive",
+                "user_saved",
+                "paid"
+              ],
+              "type": "string"
+            },
+            "tried_at": {
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "method",
+            "tried_at",
+            "source_label"
+          ],
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "url": {
+          "pattern": "^https?://",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url",
+        "attempts",
+        "last_success"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/flywifi/info-feed-seeds/schema/methods.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Acquisition record for one source, stored at sources/<id>/methods.json. One entry per route; each route lists every method tried and which one worked last.",
+  "properties": {
+    "id": {
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
+      "type": "string"
+    },
+    "routes": {
+      "items": {
+        "$ref": "#/$defs/route_record"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "routes"
+  ],
+  "title": "Source methods record",
+  "type": "object"
+}

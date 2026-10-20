@@ -1,0 +1,78 @@
+{
+  "$id": "https://github.com/flywifi/info-feed-seeds/schema/profile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One project profile, stored at profiles/<name>.json. Selects sources by id and topic, filters items by keyword and caps the daily digest.",
+  "properties": {
+    "daily_cap": {
+      "description": "Maximum items per daily digest.",
+      "minimum": 1,
+      "type": "integer"
+    },
+    "description": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "exclude_keywords": {
+      "description": "Lowercase words or phrases; an item matching any of these is dropped even when it matches an include keyword.",
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "include_keywords": {
+      "description": "Lowercase words or phrases matched on word boundaries against title and summary. Empty means every item from the selected sources.",
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "name": {
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
+      "type": "string"
+    },
+    "sources": {
+      "description": "Source ids included regardless of topic.",
+      "items": {
+        "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "topic_keywords": {
+      "additionalProperties": {
+        "items": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "description": "Optional map of topic or topic/subtopic id to the keywords that tag an item with it.",
+      "type": "object"
+    },
+    "topics": {
+      "description": "topic or topic/subtopic ids from schema/topics.json; every enabled source carrying one of them is included.",
+      "items": {
+        "pattern": "^[a-z0-9][a-z0-9-]*(/[a-z0-9][a-z0-9-]*)?$",
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "topics",
+    "sources",
+    "include_keywords",
+    "exclude_keywords",
+    "daily_cap",
+    "enabled"
+  ],
+  "title": "Project profile",
+  "type": "object"
+}
