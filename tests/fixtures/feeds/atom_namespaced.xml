@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom">
+  <link rel="self" href="https://www.youtube.com/feeds/videos.xml?channel_id=UC_x5XG1OV2P6uZZ5FSM9Ttw"/>
+  <id>yt:channel:_x5XG1OV2P6uZZ5FSM9Ttw</id>
+  <yt:channelId>UC_x5XG1OV2P6uZZ5FSM9Ttw</yt:channelId>
+  <title>Example channel feed (fixture)</title>
+  <link rel="alternate" href="https://www.youtube.com/channel/UC_x5XG1OV2P6uZZ5FSM9Ttw"/>
+  <author>
+    <name>Example channel</name>
+    <uri>https://www.youtube.com/channel/UC_x5XG1OV2P6uZZ5FSM9Ttw</uri>
+  </author>
+  <published>2020-01-01T00:00:00+00:00</published>
+  <entry>
+    <id>yt:video:fixture0001</id>
+    <yt:videoId>fixture0001</yt:videoId>
+    <yt:channelId>UC_x5XG1OV2P6uZZ5FSM9Ttw</yt:channelId>
+    <title>Fixture entry one &amp; the ampersand</title>
+    <link rel="enclosure" href="https://example.invalid/enclosure-should-not-win"/>
+    <link rel="alternate" href="https://www.youtube.com/watch?v=fixture0001"/>
+    <author>
+      <name>Example channel</name>
+      <uri>https://www.youtube.com/channel/UC_x5XG1OV2P6uZZ5FSM9Ttw</uri>
+    </author>
+    <published>2026-10-15T14:30:00+00:00</published>
+    <updated>2026-10-16T09:00:00+00:00</updated>
+    <media:group>
+      <media:title>Fixture entry one &amp; the ampersand</media:title>
+      <media:content url="https://www.youtube.com/v/fixture0001?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+      <media:thumbnail url="https://i.ytimg.com/vi/fixture0001/hqdefault.jpg" width="480" height="360"/>
+      <media:description>A description that lives only in the media namespace.</media:description>
+      <media:community>
+        <media:starRating count="0" average="0.00" min="1" max="5"/>
+        <media:statistics views="0"/>
+      </media:community>
+    </media:group>
+  </entry>
+  <entry>
+    <id>yt:video:fixture0002</id>
+    <yt:videoId>fixture0002</yt:videoId>
+    <title>Fixture entry two, updated only</title>
+    <link href="https://www.youtube.com/watch?v=fixture0002"/>
+    <updated>2026-10-10T08:00:00-04:00</updated>
+    <summary>Entry two has a summary element and no published element.</summary>
+  </entry>
+</feed>

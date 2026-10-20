@@ -1,0 +1,28 @@
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "Fixture JSON Feed",
+  "home_page_url": "https://example.invalid/",
+  "feed_url": "https://example.invalid/feed.json",
+  "description": "JSON Feed 1.1 fixture.",
+  "authors": [{"name": "Fixture Feed Author"}],
+  "items": [
+    {
+      "id": "jf-1",
+      "url": "https://example.invalid/jf/1",
+      "title": "JSON Feed item one",
+      "content_html": "<p>HTML content with <em>emphasis</em>.</p>",
+      "summary": "A short summary.",
+      "date_published": "2026-10-09T15:00:00Z",
+      "authors": [{"name": "Item Author"}],
+      "tags": ["fixtures", "json"]
+    },
+    {
+      "id": "jf-2",
+      "external_url": "https://example.invalid/elsewhere/2",
+      "title": "JSON Feed item two, text only",
+      "content_text": "Plain text content.",
+      "date_modified": "2026-10-08T15:00:00-05:00",
+      "author": {"name": "Legacy Author Field"}
+    }
+  ]
+}
