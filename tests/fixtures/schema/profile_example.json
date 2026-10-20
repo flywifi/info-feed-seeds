@@ -1,0 +1,31 @@
+{
+  "daily_cap": 25,
+  "description": "Technology and regulation digest: standards, cybersecurity and federal rulemaking.",
+  "enabled": true,
+  "exclude_keywords": [
+    "job opening",
+    "webinar recording"
+  ],
+  "include_keywords": [],
+  "name": "technology",
+  "sources": [
+    "nist-cybersecurity-insights"
+  ],
+  "topic_keywords": {
+    "cybersecurity/vulnerabilities": [
+      "cve",
+      "vulnerability",
+      "zero-day"
+    ],
+    "standards/nist": [
+      "nist",
+      "sp 800"
+    ]
+  },
+  "topics": [
+    "technology",
+    "cybersecurity",
+    "standards/nist",
+    "regulation/federal-rulemaking"
+  ]
+}

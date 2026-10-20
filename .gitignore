@@ -2,7 +2,12 @@
 *.db
 *.sqlite
 cache/
+.cache/
 local/
-profiles/*.local.json
+logs/
 .venv/
+.venv-crawl/
+*.local.json
+.secrets.local.json
+profiles/*.local.json
 __pycache__/

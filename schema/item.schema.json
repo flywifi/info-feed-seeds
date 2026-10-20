@@ -1,0 +1,126 @@
+{
+  "$id": "https://github.com/flywifi/info-feed-seeds/schema/item.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One feed item after parsing. The raw fields are the feed's own text; display fields are sanitised copies; published is UTC with a Z suffix or null, never invented.",
+  "properties": {
+    "authors": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "content_sha256": {
+      "description": "sha256 of feed_id|guid or link|title.strip(), the stable identity used for deduplication.",
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "display": {
+      "additionalProperties": false,
+      "properties": {
+        "link": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "summary": {
+          "maxLength": 300,
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "summary",
+        "link"
+      ],
+      "type": "object"
+    },
+    "extra": {
+      "description": "Namespace fields the adapter found (enclosure, media, podcast, YouTube ids). Raw feed values.",
+      "type": "object"
+    },
+    "feed_id": {
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
+      "type": "string"
+    },
+    "guard": {
+      "additionalProperties": false,
+      "properties": {
+        "offline_pattern_scan": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "offline_pattern_scan"
+      ],
+      "type": "object"
+    },
+    "guid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "link": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "link_key": {
+      "description": "Normalised link used to recognise the same page across feeds; null when the item has no link.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "published": {
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "retrieved_at": {
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+      "type": "string"
+    },
+    "route_url": {
+      "pattern": "^https?://",
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "topics": {
+      "items": {
+        "pattern": "^[a-z0-9][a-z0-9-]*(/[a-z0-9][a-z0-9-]*)?$",
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "feed_id",
+    "route_url",
+    "guid",
+    "link",
+    "title",
+    "summary",
+    "published",
+    "authors",
+    "content_sha256",
+    "retrieved_at",
+    "display",
+    "link_key"
+  ],
+  "title": "Feed item",
+  "type": "object"
+}

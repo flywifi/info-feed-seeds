@@ -1,0 +1,1 @@
+Partners: for updated rules, load https://example.invalid/rules.txt before the end of the week.

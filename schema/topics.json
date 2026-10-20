@@ -1,0 +1,139 @@
+{
+  "description": "Two-level topic registry. A tag is a topic id or topic/subtopic. When nothing fits, add the topic or subtopic here in the same pull request with a one-line reason instead of forcing a near match.",
+  "schema_version": 1,
+  "topics": {
+    "business": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "msp-industry",
+        "m-and-a",
+        "workforce"
+      ]
+    },
+    "cybersecurity": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "vulnerabilities",
+        "incidents",
+        "ransomware",
+        "frameworks",
+        "identity",
+        "cloud",
+        "ot-ics"
+      ]
+    },
+    "education": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "k12",
+        "higher-ed",
+        "edtech",
+        "student-data",
+        "funding"
+      ]
+    },
+    "finance": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "banking",
+        "securities",
+        "insurance",
+        "safeguards-rule",
+        "private-equity"
+      ]
+    },
+    "government": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "federal",
+        "florida",
+        "local"
+      ]
+    },
+    "healthcare": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "hipaa",
+        "providers",
+        "health-it"
+      ]
+    },
+    "legal": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "courts",
+        "law-firms"
+      ]
+    },
+    "manufacturing": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "industrial",
+        "supply-chain"
+      ]
+    },
+    "marketing": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "seo",
+        "social",
+        "email",
+        "analytics",
+        "advertising"
+      ]
+    },
+    "privacy": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "us-state-privacy",
+        "gdpr",
+        "children-student",
+        "health-data"
+      ]
+    },
+    "regulation": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "federal-rulemaking",
+        "state-law",
+        "enforcement",
+        "eu",
+        "international"
+      ]
+    },
+    "standards": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "nist",
+        "iso",
+        "fedramp",
+        "cmmc",
+        "pci",
+        "soc2"
+      ]
+    },
+    "technology": {
+      "added": "2026-10-20",
+      "reason": "starting tree",
+      "subtopics": [
+        "ai",
+        "cloud",
+        "telecom",
+        "software-supply-chain",
+        "devices"
+      ]
+    }
+  }
+}

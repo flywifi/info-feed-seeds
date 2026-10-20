@@ -1,0 +1,44 @@
+{
+  "added": "2026-10-20",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-20",
+    "kind": "seed",
+    "ref": "seeds/2026-10-20_initial-sources.md"
+  },
+  "enabled": true,
+  "expected_update_period_days": 30,
+  "homepage": "https://www.nist.gov/blogs/cybersecurity-insights",
+  "id": "nist-cybersecurity-insights",
+  "interval_days": 1,
+  "label": "NIST Cybersecurity Insights blog",
+  "lists": [
+    "technology"
+  ],
+  "publisher": "National Institute of Standards and Technology",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml"
+    },
+    {
+      "adapter": "page",
+      "kind": "page",
+      "params": {},
+      "url": "https://www.nist.gov/blogs/cybersecurity-insights"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "tier": "canonical",
+  "topics": [
+    "cybersecurity",
+    "standards/nist"
+  ],
+  "verified": null
+}

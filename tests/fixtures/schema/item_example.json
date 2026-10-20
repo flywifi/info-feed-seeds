@@ -1,0 +1,39 @@
+{
+  "authors": [],
+  "content_sha256": "e84055bf6d3378cacb8e0abcddd3f25ff5ed6ae73740f1d3cc2989c0c86b16d3",
+  "display": {
+    "link": "https://www.nist.gov/blogs/cybersecurity-insights/kicking-cybersecurity-career-week-nist",
+    "summary": "Considering a career in cybersecurity? Cybersecurity Career Week (CCW), a campaign led by the NICE Program at NIST from October 19-24, 2026, aims to raise public awareness and help people find their path to #ChooseCyber. During this week, academia, industry, non-profit organizations, and governme...",
+    "title": "Kicking off Cybersecurity Career Week with NIST!"
+  },
+  "extra": {},
+  "feed_id": "nist-cybersecurity-insights",
+  "guard": {
+    "offline_pattern_scan": {
+      "patterns_detected": [],
+      "quarantine_active": false,
+      "response": "proceed",
+      "risk_level": "CLEAN",
+      "scored_view": "raw",
+      "source_trust_class": "untrusted_external",
+      "surfaced_to_user": false,
+      "total_score": 0,
+      "views": {
+        "folded": 0,
+        "raw": 0
+      }
+    }
+  },
+  "guid": "https://www.nist.gov/node/1922656",
+  "link": "https://www.nist.gov/blogs/cybersecurity-insights/kicking-cybersecurity-career-week-nist",
+  "link_key": "nist.gov/blogs/cybersecurity-insights/kicking-cybersecurity-career-week-nist",
+  "published": "2026-10-14T12:00:00Z",
+  "retrieved_at": "2026-10-20T19:15:16Z",
+  "route_url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
+  "summary": "Considering a career in cybersecurity? Cybersecurity Career Week (CCW), a campaign led by the NICE Program at NIST from October 19-24, 2026, aims to raise public awareness and help people find their path to #ChooseCyber. During this week, academia, industry, non-profit organizations, and government agencies host events, share resources, provide trainings, and engage community to build awareness about the cybersecurity job opportunities, educate people on how to develop capabilities to qualify for cybersecurity roles, and showcase how building a cybersecurity workforce enhances the Nation’s",
+  "title": "Kicking off Cybersecurity Career Week with NIST!",
+  "topics": [
+    "cybersecurity",
+    "standards/nist"
+  ]
+}
