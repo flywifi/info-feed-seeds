@@ -98,8 +98,6 @@ def main(argv: list[str]) -> int:
                 if url == SCHEMA_EXAMPLE_FEED and parsed["items"]:
                     first = parsed["items"][0]
                     item = items.build_item(SCHEMA_EXAMPLE_ID, url, first, retrieved_at=result.retrieved_at)
-                    # The committed example never names a person: the feed's byline is dropped here.
-                    item["authors"] = []
                     item["guard"] = {guard.FIELD_NAME: guard.scan_item_fields(first.title, first.summary)}
                     item["topics"] = ["cybersecurity", "standards/nist"]
                     example_item = item
