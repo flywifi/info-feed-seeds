@@ -28,3 +28,21 @@ All notable changes to this repository are recorded here. The format follows
   and YouTube namespaces; documents containing `<!ENTITY` are refused.
 - Offline unittest suite under `tests/` with fixtures, a repository em dash scan (`tools/emdash_scan.py`)
   and a 30-day fixture of real titles from the NIST and govinfo seed feeds (`tools/build_title_fixture.py`).
+- `feeder/hub.py` with `poll`, `lint`, `fmt`, `cat` and `release`; poll exits 0 on success, 2 on a
+  configuration error and 3 when every fetch failed, prints ASCII only and runs as `py -3 -I feeder\hub.py`.
+- `feeder/store.py`: SQLite state (`items`, `hits`, `health`) at `.cache/feeder.db`; each day's digest is
+  re-rendered from it.
+- `feeder/outputs.py`: `YYYY-MM-DD.md`, `latest.md`, `latest.json` and `report.json` per profile, written
+  only when bytes differ, with the `generated` timestamp carried forward, and guard handling by band.
+- `feeder/config.py`: source, profile and release loading, profile matching and the `hub lint` checks.
+- `feeder/jsonio.py`: text and write-if-changed helpers so every output goes through the one writer.
+- Nine proven sources under `sources/` (four NIST feeds, five govinfo feeds), each with a live
+  `methods.json` record.
+- `profiles/technology-regulation.json` and an empty `guard/releases.json`.
+- Profile schema fields `window_days`, `backfill_days`, `outputs`, `guard.hold_at` and
+  `subtopic_keywords` (include and exclude per subtopic).
+
+### Changed
+
+- `tools/build_title_fixture.py` keeps the feed's byline in the item schema example.
+- README rewritten for the repository as it now is.
