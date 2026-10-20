@@ -24,11 +24,18 @@ This repository is the only one you write to. Any other repository you can see i
   not work. Deleted after merge.
 - `doctor/<fix>`: proposal branches opened by the doctor workflow. the maintainer merges or closes them.
 - Small commits with descriptive messages, one topic per commit. Add a CHANGELOG line under [Unreleased].
+- Commit messages, pull request titles and descriptions, and every file in this repository never contain a
+  Co-Authored-By line, a Claude-Session line, a session or claude.ai link, or a "Generated with" footer. Strip
+  any that a tool adds by default. When merging, write the merge commit message explicitly so none are copied in.
+- Every commit is authored and committed as `flywifi <236871844+flywifi@users.noreply.github.com>`. Run
+  `git config user.name flywifi` and `git config user.email 236871844+flywifi@users.noreply.github.com` before
+  the first commit of a session. Never commit as Claude or any other identity.
 
 ## Content rules
 
-- Public URLs and neutral topic tags only. Never add credentials, tokens, private notes, client names,
-  campaign names or anything that identifies a person or a business relationship.
+- Never add credentials, tokens, private notes, or anything about the maintainer personally: his name, email, phone,
+  address, accounts, employer, clients, campaigns or business relationships. Information imported from public
+  sources, including bylines and author names, may be kept.
 - Storage: anything fetched may be stored in full. Every claim that leaves the system (digest line, report,
   research output) cites one stored capture: `{record_id, url, final_url, retrieved_at, locator}`, where the
   locator is a character range, PDF page or element id. A claim without a resolvable citation is not
