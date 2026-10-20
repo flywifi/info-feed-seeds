@@ -1,0 +1,85 @@
+{
+  "id": "govinfo-pai-bulkdata",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 100 items (rss)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-20T20:42:29Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-20T20:42:29Z"
+      },
+      "url": "https://www.govinfo.gov/rss/pai-bulkdata.xml"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 27928 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-20T20:42:31Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-20T20:42:31Z"
+      },
+      "url": "https://www.govinfo.gov/bulkdata/PAI"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 1769 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-20T20:42:33Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-20T20:42:33Z"
+      },
+      "url": "https://www.govinfo.gov/app/collection/pai"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/xml, 2749 bytes; reachable, not parsed (no sitemap adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-20T20:42:35Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-20T20:42:35Z"
+      },
+      "url": "https://www.govinfo.gov/sitemap/PAI_sitemap_index.xml"
+    }
+  ]
+}

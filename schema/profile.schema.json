@@ -4,6 +4,11 @@
   "additionalProperties": false,
   "description": "One project profile, stored at profiles/<name>.json. Selects sources by id and topic, filters items by keyword and caps the daily digest.",
   "properties": {
+    "backfill_days": {
+      "description": "Each poll also re-renders this many earlier days' digests from the database, so releases and late changes reach them.",
+      "minimum": 0,
+      "type": "integer"
+    },
     "daily_cap": {
       "description": "Maximum items per daily digest.",
       "minimum": 1,
@@ -23,6 +28,24 @@
       },
       "type": "array"
     },
+    "guard": {
+      "additionalProperties": false,
+      "description": "Injection guard handling. Items at or above hold_at are held from latest.json until released in guard/releases.json; BLOCK is always held from every output.",
+      "properties": {
+        "hold_at": {
+          "enum": [
+            "REVIEW",
+            "QUARANTINE",
+            "BLOCK"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "hold_at"
+      ],
+      "type": "object"
+    },
     "include_keywords": {
       "description": "Lowercase words or phrases matched on word boundaries against title and summary. Empty means every item from the selected sources.",
       "items": {
@@ -35,6 +58,18 @@
       "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
       "type": "string"
     },
+    "outputs": {
+      "description": "Which digest files to write: md (YYYY-MM-DD.md and latest.md) and json (latest.json). report.json is always written.",
+      "items": {
+        "enum": [
+          "md",
+          "json"
+        ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
     "sources": {
       "description": "Source ids included regardless of topic.",
       "items": {
@@ -42,6 +77,34 @@
         "type": "string"
       },
       "type": "array"
+    },
+    "subtopic_keywords": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "exclude": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "include": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "include",
+          "exclude"
+        ],
+        "type": "object"
+      },
+      "description": "Map of topic/subtopic id to include and exclude keywords. An item matching an include keyword and no exclude keyword is tagged with that subtopic and its topic.",
+      "type": "object"
     },
     "topic_keywords": {
       "additionalProperties": {
@@ -61,6 +124,11 @@
         "type": "string"
       },
       "type": "array"
+    },
+    "window_days": {
+      "description": "Only items published (or, when undated, first seen) within this many days before the digest day are eligible.",
+      "minimum": 1,
+      "type": "integer"
     }
   },
   "required": [
