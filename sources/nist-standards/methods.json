@@ -1,0 +1,45 @@
+{
+  "id": "nist-standards",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 40 items (rss)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-20T20:42:00Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-20T20:42:00Z"
+      },
+      "url": "https://www.nist.gov/news-events/standards/rss.xml"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 107415 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-20T20:42:02Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-20T20:42:02Z"
+      },
+      "url": "https://www.nist.gov/standards"
+    }
+  ]
+}

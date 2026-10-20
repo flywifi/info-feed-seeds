@@ -1,0 +1,48 @@
+{
+  "added": "2026-10-20",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-20",
+    "kind": "seed",
+    "ref": "seeds/2026-10-20_initial-sources.md"
+  },
+  "enabled": true,
+  "homepage": "https://www.govinfo.gov/app/collection/lsa",
+  "id": "govinfo-lsa",
+  "label": "List of CFR Sections Affected (govinfo)",
+  "lists": [
+    "govinfo-core"
+  ],
+  "publisher": "U.S. Government Publishing Office",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://www.govinfo.gov/rss/lsa.xml"
+    },
+    {
+      "adapter": "page",
+      "kind": "page",
+      "params": {},
+      "url": "https://www.govinfo.gov/app/collection/lsa"
+    },
+    {
+      "adapter": "sitemap",
+      "kind": "sitemap",
+      "params": {},
+      "url": "https://www.govinfo.gov/sitemap/LSA_sitemap_index.xml"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "tier": "canonical",
+  "topics": [
+    "regulation/federal-rulemaking",
+    "government/federal"
+  ],
+  "verified": "2026-10-20"
+}

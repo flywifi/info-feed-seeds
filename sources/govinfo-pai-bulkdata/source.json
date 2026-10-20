@@ -1,0 +1,55 @@
+{
+  "added": "2026-10-20",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-20",
+    "kind": "seed",
+    "ref": "seeds/2026-10-20_initial-sources.md"
+  },
+  "enabled": true,
+  "homepage": "https://www.govinfo.gov/bulkdata/PAI",
+  "id": "govinfo-pai-bulkdata",
+  "label": "Privacy Act Issuances bulk data (govinfo)",
+  "lists": [
+    "govinfo-core",
+    "govinfo-bulkdata"
+  ],
+  "publisher": "U.S. Government Publishing Office",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://www.govinfo.gov/rss/pai-bulkdata.xml"
+    },
+    {
+      "adapter": "page",
+      "kind": "page",
+      "params": {},
+      "url": "https://www.govinfo.gov/bulkdata/PAI"
+    },
+    {
+      "adapter": "page",
+      "kind": "page",
+      "params": {},
+      "url": "https://www.govinfo.gov/app/collection/pai"
+    },
+    {
+      "adapter": "sitemap",
+      "kind": "sitemap",
+      "params": {},
+      "url": "https://www.govinfo.gov/sitemap/PAI_sitemap_index.xml"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "tier": "canonical",
+  "topics": [
+    "privacy",
+    "government/federal"
+  ],
+  "verified": "2026-10-20"
+}

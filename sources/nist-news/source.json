@@ -1,0 +1,42 @@
+{
+  "added": "2026-10-20",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-20",
+    "kind": "seed",
+    "ref": "seeds/2026-10-20_initial-sources.md"
+  },
+  "enabled": true,
+  "homepage": "https://www.nist.gov/news-events/news",
+  "id": "nist-news",
+  "label": "NIST News",
+  "lists": [
+    "nist-feeds"
+  ],
+  "publisher": "National Institute of Standards and Technology",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://www.nist.gov/news-events/news/rss.xml"
+    },
+    {
+      "adapter": "page",
+      "kind": "page",
+      "params": {},
+      "url": "https://www.nist.gov/news-events/news"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "tier": "canonical",
+  "topics": [
+    "technology",
+    "standards/nist"
+  ],
+  "verified": "2026-10-20"
+}
