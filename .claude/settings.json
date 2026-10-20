@@ -5,4 +5,7 @@
     "deny": ["Bash(git push --force:*)", "Bash(git push -f:*)", "Bash(git push origin main:*)"]
   },
   "crossSessionInbound": "accept"
+    "enabledPlugins": {
+    "install-checkpoint@synced": false
+  },
 }
