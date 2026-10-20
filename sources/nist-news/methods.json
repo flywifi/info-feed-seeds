@@ -1,0 +1,45 @@
+{
+  "id": "nist-news",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 40 items (rss)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-20T20:41:45Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-20T20:41:45Z"
+      },
+      "url": "https://www.nist.gov/news-events/news/rss.xml"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 127473 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-20T20:41:47Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-20T20:41:47Z"
+      },
+      "url": "https://www.nist.gov/news-events/news"
+    }
+  ]
+}
