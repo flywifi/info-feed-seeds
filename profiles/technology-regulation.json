@@ -1,0 +1,207 @@
+{
+  "backfill_days": 2,
+  "daily_cap": 40,
+  "description": "Technology and regulation digest: NIST standards and cybersecurity news, and federal rulemaking from govinfo.",
+  "enabled": true,
+  "exclude_keywords": [],
+  "guard": {
+    "hold_at": "QUARANTINE"
+  },
+  "include_keywords": [],
+  "name": "technology-regulation",
+  "outputs": [
+    "md",
+    "json"
+  ],
+  "sources": [],
+  "subtopic_keywords": {
+    "cybersecurity/cloud": {
+      "exclude": [],
+      "include": [
+        "cloud security"
+      ]
+    },
+    "cybersecurity/frameworks": {
+      "exclude": [],
+      "include": [
+        "cybersecurity framework",
+        "csf",
+        "sp 800",
+        "zero trust",
+        "risk management framework"
+      ]
+    },
+    "cybersecurity/identity": {
+      "exclude": [
+        "identity theft insurance"
+      ],
+      "include": [
+        "digital identity",
+        "identity",
+        "authentication",
+        "passkey",
+        "passkeys"
+      ]
+    },
+    "cybersecurity/incidents": {
+      "exclude": [],
+      "include": [
+        "incident response",
+        "incident readiness",
+        "breach",
+        "cyberattack"
+      ]
+    },
+    "cybersecurity/ot-ics": {
+      "exclude": [],
+      "include": [
+        "operational technology",
+        "industrial control",
+        "ics",
+        "scada"
+      ]
+    },
+    "cybersecurity/ransomware": {
+      "exclude": [],
+      "include": [
+        "ransomware"
+      ]
+    },
+    "cybersecurity/vulnerabilities": {
+      "exclude": [],
+      "include": [
+        "vulnerability",
+        "vulnerabilities",
+        "cve",
+        "zero-day",
+        "exploit"
+      ]
+    },
+    "regulation/enforcement": {
+      "exclude": [],
+      "include": [
+        "enforcement action",
+        "civil penalty",
+        "consent order"
+      ]
+    },
+    "regulation/eu": {
+      "exclude": [],
+      "include": [
+        "european union",
+        "eu ai act",
+        "nis2",
+        "gdpr"
+      ]
+    },
+    "regulation/federal-rulemaking": {
+      "exclude": [
+        "federal register index"
+      ],
+      "include": [
+        "proposed rule",
+        "final rule",
+        "interim final rule",
+        "rulemaking",
+        "federal register"
+      ]
+    },
+    "standards/cmmc": {
+      "exclude": [],
+      "include": [
+        "cmmc",
+        "cybersecurity maturity model certification"
+      ]
+    },
+    "standards/fedramp": {
+      "exclude": [],
+      "include": [
+        "fedramp"
+      ]
+    },
+    "standards/iso": {
+      "exclude": [],
+      "include": [
+        "iso",
+        "iec"
+      ]
+    },
+    "standards/nist": {
+      "exclude": [],
+      "include": [
+        "nist"
+      ]
+    },
+    "standards/pci": {
+      "exclude": [],
+      "include": [
+        "pci dss",
+        "payment card industry"
+      ]
+    },
+    "technology/ai": {
+      "exclude": [
+        "artificial insemination"
+      ],
+      "include": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "large language model",
+        "generative",
+        "super intelligence"
+      ]
+    },
+    "technology/cloud": {
+      "exclude": [
+        "cloud chamber",
+        "cloud physics"
+      ],
+      "include": [
+        "cloud",
+        "cloud computing",
+        "saas"
+      ]
+    },
+    "technology/devices": {
+      "exclude": [
+        "potato chips"
+      ],
+      "include": [
+        "semiconductor",
+        "chips",
+        "iot",
+        "internet of things",
+        "microelectronics"
+      ]
+    },
+    "technology/software-supply-chain": {
+      "exclude": [],
+      "include": [
+        "software supply chain",
+        "sbom",
+        "software bill of materials",
+        "open source software"
+      ]
+    },
+    "technology/telecom": {
+      "exclude": [],
+      "include": [
+        "5g",
+        "6g",
+        "o-ran",
+        "open radio access network",
+        "wireless",
+        "spectrum",
+        "broadband"
+      ]
+    }
+  },
+  "topics": [
+    "technology",
+    "regulation",
+    "cybersecurity",
+    "standards"
+  ],
+  "window_days": 30
+}
