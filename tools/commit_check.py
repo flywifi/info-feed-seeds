@@ -13,10 +13,10 @@ Usage:
   python3 tools/commit_check.py --selftest               prove the checks fire, in a scratch repository
 
 Checks
-  messages   no co-author or session trailer, no session link, no generated footer (a line that
-             opens with the generated-with phrase, or that phrase or its by/using forms shortly
-             before the assistant's name), no em or en dash. Text is normalised first (NFKC, format characters removed, Unicode hyphens and
-             common lookalike letters folded, HTML entities and percent-encoding decoded).
+  messages   no co-author or session trailer, no session link or id, no footer (see the footer
+             rules below), no em or en dash. Text is normalised first (NFKD, format characters and
+             marks removed, Unicode hyphens and lookalike letters folded, HTML entities and
+             percent-encoding decoded).
   files      the same rules read as CLAUDE.md words them: a trailer LINE, a LINK, a footer LINE, so
              a sentence that names the rule (as CLAUDE.md does) passes. Also UTF-8, no CR, no em or
              en dash, ASCII-only .py; never local/, .cache/, logs/, .venv-crawl/, *.local.json or
@@ -34,6 +34,7 @@ Output is ASCII only. Exit 0 clean, 1 on any finding or error, 2 on a usage erro
 """
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import os
@@ -78,33 +79,66 @@ DASHES = (
 _SEP = r"[\W_]*"
 _CO = "co" + _SEP + "author(?:ed)?" + _SEP + "by"
 _SESSION = "claude" + _SEP + "session"
-_HOST = "claude" + r"\." + "ai"
+_HOST = "claude" + r"\s*\.\s*" + "ai"
 # A line may open with symbols, digits, underscores, quote markers and list markers, then a label:
 # a letter, up to 60 letters, digits, spaces or apostrophes ("Note", "Tool's note", "Automatically
 # produced release notes"), any symbols, a colon and any symbols.
 _LABEL = r"(?:[a-z][a-z0-9 ']{0,60}[^a-z0-9:\n]*:(?:[^\w\n]|_)*)?"
 _LINE_START = r"^(?:[^\w\n]|[_\d])*" + _LABEL
-_PHRASE = "generated" + r"[\W_]+(?:with|by|using)(?![a-z0-9])"
+_PHRASE = "generated" + r"[\W_]+(?:(?:with|by|using|via)(?![a-z0-9])|w/)"
 _NAME = "claude"
+# The name may run straight into "ai" ("...AI") or digits; any other letter ends the match.
+_NAME_END = r"(?:ai)?(?![a-z])"
 # Footer rules:
-#   line     a line opening with "Generated with" in any case, after an optional label, whatever
-#            tool it names (finding 7, read literally until it is ruled on)
+#   line     a line opening with "Generated" with, by, using or via in any case, after an optional
+#            label, whatever tool it names (finding 7, read literally and failing closed until it
+#            is ruled on)
 #   product  anywhere, the phrase followed by separators only and then the assistant's name
 #   sentence anywhere, the phrase and then the assistant's name later in the same sentence, within
-#            80 characters and before any line break or sentence-ending mark: any statement that
-#            something was generated with, by or using it (the assistant's file name, ending in
-#            ".md", is not the assistant)
-#   near     (cased) a capital "Generated" with, by or using anywhere, and the assistant's name later
-#            within 160 characters, across single line breaks
+#            200 characters, across single line breaks and dots inside words or numbers ("4.5"):
+#            any statement that something was generated with, by, using or via it
+#   near     anywhere, the phrase and the assistant's name later in the same paragraph, within
+#            1,000 characters (a bound for speed only)
 #   tool     a line opening with the phrase that names the assistant within a few words
 #   code     anywhere, the phrase and then the assistant's name and "code" within a few words
 #   paren    anywhere, the phrase and then the assistant's name in parentheses within a few words
-_GEN_LINE = _LINE_START + "generated" + r"[\W_]+with(?![a-z0-9])"
-_GEN_PRODUCT = _PHRASE + _SEP + r"\[?" + _NAME + r"(?![a-z0-9])"
-_GEN_SENTENCE = (r"(?<![a-z0-9])" + _PHRASE + r"[^\n.!?]{0,80}?(?<![a-z0-9])" + _NAME
-                 + r"(?![a-z0-9]|\.md\b)")
-_GEN_NEAR_CASED = ("G" + r"(?i:enerated)[\W_]+(?i:with|by|using)(?![A-Za-z0-9])(?:[^\n]|\n(?!\n)){0,160}?"
-                   + r"(?<![A-Za-z0-9])(?i:" + _NAME + r")(?![A-Za-z0-9])")
+_GEN_LINE = _LINE_START + _PHRASE
+_GEN_PRODUCT = _PHRASE + _SEP + r"\[?" + _NAME + _NAME_END
+
+
+class _PhraseThenName:
+    """The phrase, then the assistant's name starting within `reach` characters, in a window that
+    ends at the first `stop` match. Equivalent to the phrase, a lazy gap of up to `reach`
+    characters that never contains `stop`, and the name, but linear: each phrase is followed by
+    one window, searched twice in C."""
+
+    def __init__(self, reach: int, stop: str):
+        self.reach = reach
+        self.start = re.compile(_PHRASE)
+        self.stop = re.compile(stop)
+        self.name = re.compile(r"(?<![a-z0-9])" + _NAME + _NAME_END)
+        self.pattern = f"{_PHRASE} ...{reach} (stop {stop}) {_NAME}"
+
+    def search(self, text: str):
+        for m in self.start.finditer(text):
+            end = m.end()
+            window = text[end:end + self.reach + len(_NAME) + 2]
+            if _NAME not in window:
+                continue
+            cut = self.stop.search(window)
+            if cut:
+                window = window[:cut.start()]
+            # One character of context before the window, for the name's left boundary.
+            hit = self.name.search(text[end - 1:end] + window)
+            if hit and hit.start() - 1 <= self.reach:
+                return hit
+        return None
+
+
+# sentence: stop at a blank line, a line break followed by another, "!" or "?", or a dot that is not
+# inside a word or number. near: stop only at a blank line.
+_GEN_SENTENCE = _PhraseThenName(200, r"\n\n|[!?]|\.(?![a-z0-9])")
+_GEN_NEAR = _PhraseThenName(1000, r"\n\n")
 _GEN_TOOL = _LINE_START + _PHRASE + _SEP + ".{0,24}?" + _NAME
 _GEN_CODE = _PHRASE + _SEP + ".{0,24}?" + _NAME + _SEP + "code(?![a-z0-9])"
 _GEN_PAREN = _PHRASE + _SEP + r".{0,24}?\(\s*" + _NAME + r"\s*\)"
@@ -113,15 +147,14 @@ _TAG = re.compile(r"<[^<>\n]*>")
 FOOTER_RULES = (
     ("generated footer", re.compile(_GEN_LINE, re.M)),
     ("generated footer", re.compile(_GEN_PRODUCT)),
-    ("generated footer", re.compile(_GEN_SENTENCE)),
+    ("generated footer", _GEN_SENTENCE),
+    ("generated footer", _GEN_NEAR),
     ("generated footer", re.compile(_GEN_TOOL, re.M)),
     ("generated footer", re.compile(_GEN_CODE)),
     ("generated footer", re.compile(_GEN_PAREN)),
 )
 # Rules that need the original letter case (run on a normalised copy that keeps case).
-CASED_FOOTER_RULES = (
-    ("generated footer", re.compile(_GEN_NEAR_CASED)),
-)
+CASED_FOOTER_RULES = ()  # none at present; the near rule no longer depends on letter case
 
 # A trailer line: a line that opens (after symbols, numbers, list markers or a short label) with
 # the key and then a colon or an equals sign.
@@ -130,7 +163,7 @@ _SESSION_LINE = _LINE_START + _SESSION + _SEP + "[:=]"
 # Anywhere, the co-author key followed within 60 characters by an address in angle brackets.
 _CO_ADDRESS = _CO + r".{0,60}?<[^<>\s@]{1,64}@[^<>\s]{1,255}>"
 # A bare session id: "session_" and at least 20 letters or digits.
-_SESSION_ID = r"(?<![a-z0-9])session_[a-z0-9]{20}"
+_SESSION_ID = r"(?<![a-z0-9])session_(?:[-_]?[a-z0-9]){20}"
 MESSAGE_RULES = (
     # A co-author trailer: a trailer line; or anywhere, the key with a hyphen before "by" (which
     # prose such as "co-authored by Smith" never has); or the key and an address.
@@ -247,18 +280,22 @@ def _dash_findings(text: str, where: str) -> list[str]:
 
 def _rule_findings(text: str, where: str, rules) -> list[str]:
     folded = normalize(text)
-    cased = normalize(text, keep_case=True)
-    views = {"plain": (folded, _TAG.sub("", folded)), "cased": (cased, _TAG.sub("", cased))}
+    views = {"plain": (folded, _TAG.sub("", folded))}
+    if CASED_FOOTER_RULES:
+        cased = normalize(text, keep_case=True)
+        views["cased"] = (cased, _TAG.sub("", cased))
     footer = {id(r) for _, r in FOOTER_RULES}
     labels = []
     checks = [(label, pattern, "plain") for label, pattern in rules]
     if any(id(r) in footer for _, r in rules):
         checks += [(label, pattern, "cased") for label, pattern in CASED_FOOTER_RULES]
     for label, pattern, view in checks:
+        if label in labels:
+            continue  # one finding per label is enough
         text_view, untagged = views[view]
         is_footer = view == "cased" or id(pattern) in footer
-        hit = pattern.search(text_view) or (is_footer and pattern.search(untagged))
-        if hit and label not in labels:
+        hit = pattern.search(text_view) or (is_footer and untagged != text_view and pattern.search(untagged))
+        if hit:
             labels.append(label)
     return [f"{where}: contains a {label}" for label in labels]
 
@@ -292,6 +329,19 @@ def path_findings(path: str, branch: str | None) -> list[str]:
     return out
 
 
+# Two files describe the rules in words the rules refuse: the 512e818 checker, kept as the
+# no-narrowing baseline, and CLAUDE.md, whose rule paragraph puts the footer phrase and the
+# assistant's name in one paragraph. Only these exact paths with exactly these bytes skip the text
+# rules; any change to either file makes it an ordinary file again (audit 7, M3). The texts they
+# protect are in tests/fixtures/pending_ruling.jsonl for Matt's ruling.
+BASELINE_PATH = "tests/fixtures/checker_baseline.py"
+BASELINE_SHA256 = "fd224233c718939f7f4ce29cd1b758efeb49dc1550901e3339f42bdd782ad05a"
+PINNED_FILES = {
+    BASELINE_PATH: BASELINE_SHA256,
+    "CLAUDE.md": "0b07b25dd6ac49927c61ea18000fdf2882f6edce4863a89f22aa5a2440daac86",
+}
+
+
 def content_findings(path: str, data: bytes) -> list[str]:
     if b"\x00" in data[:8192]:
         return []  # binary
@@ -299,7 +349,8 @@ def content_findings(path: str, data: bytes) -> list[str]:
         text = data.decode("utf-8")
     except UnicodeDecodeError as exc:
         return [f"{path}: not UTF-8 (byte {exc.start})"]
-    out = _rule_findings(text, path, FILE_RULES)
+    pinned = path in PINNED_FILES and hashlib.sha256(data).hexdigest() == PINNED_FILES[path]
+    out = [] if pinned else _rule_findings(text, path, FILE_RULES)
     if "\r" in text:
         out.append(f"{path}: has CR line endings")
     decoded = html.unescape(text)
@@ -629,7 +680,9 @@ def selftest() -> list[str]:
     for label, text in samples.items():
         if not text_findings(text, label):
             failures.append(f"selftest text {label!r}: expected a finding")
-    for label in ("Generated by info-feed-seeds hub poll", "Add the co-author rule", "Written by hand"):
+        if not check_pr_text(text, "", "selftest"):
+            failures.append(f"selftest title {label!r}: expected a finding")
+    for label in ("Add the co-author rule", "Written by hand", "Data for the digest"):
         if text_findings(label, "clean"):
             failures.append(f"selftest text {label!r}: expected clean")
     named = ("Commit messages never contain a " + "Co-" + "Authored-By line, a " + "Claude" + "-Session line,\n"

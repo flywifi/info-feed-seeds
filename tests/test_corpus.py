@@ -37,7 +37,7 @@ PENDING = FIXTURES / "pending_ruling.jsonl"
 LOCK = FIXTURES / "corpus.lock"
 ALL = dict(CORPORA, pending=PENDING)
 PLACES = {"message", "body", "file", "main-history"}
-SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "audit6", "repo"}
+SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "audit6", "audit7", "repo"}
 
 
 def load(path_or_text) -> list[dict]:
@@ -56,9 +56,18 @@ def refused_in(place: str, text: str, checker=cc) -> bool:
         return bool(checker.text_findings(text, "m"))
     if place == "body":
         return bool(checker.check_pr_text("Title", text, "pr"))
+    if place == "title":
+        return bool(checker.check_pr_text(text, "", "pr"))
     if place == "file":
         return bool(checker.content_findings("corpus.md", (text + "\n").encode("utf-8")))
     raise ValueError(place)
+
+
+def checked_places(e: dict) -> list[str]:
+    """The listed places other than main-history, plus a pull request title wherever a message or
+    a body is listed (audit 7, HIGH 1)."""
+    places = [p for p in e["where"] if p != "main-history"]
+    return places + (["title"] if {"message", "body"} & set(places) else [])
 
 
 def lock_rows(text: str) -> list[list[str]]:
@@ -146,10 +155,18 @@ class CorpusShapeTests(unittest.TestCase):
         self.assertEqual(problems, [], "corpus.lock")
 
     def test_lock_keeps_every_row_on_main(self):
+        # Fails closed: only a main that exists and has no lock file skips. A missing origin/main or
+        # any other git error fails. The comparison protects main only once the main ruleset
+        # requires the checks status check (F1).
         rel = LOCK.relative_to(ROOT).as_posix()
-        proc = subprocess.run(["git", "show", f"origin/main:{rel}"], cwd=ROOT, capture_output=True)
-        if proc.returncode != 0:
+        main = subprocess.run(["git", "rev-parse", "--verify", "origin/main^{commit}"], cwd=ROOT, capture_output=True)
+        self.assertEqual(main.returncode, 0, "origin/main is not available; fetch it")
+        listed = subprocess.run(["git", "ls-tree", "--name-only", "origin/main", rel], cwd=ROOT, capture_output=True)
+        self.assertEqual(listed.returncode, 0, listed.stderr.decode("utf-8", "replace"))
+        if not listed.stdout.strip():
             self.skipTest("main has no corpus.lock yet")
+        proc = subprocess.run(["git", "show", f"origin/main:{rel}"], cwd=ROOT, capture_output=True)
+        self.assertEqual(proc.returncode, 0, proc.stderr.decode("utf-8", "replace"))
         now = {r[0]: r for r in lock_rows(LOCK.read_text(encoding="utf-8"))}
         problems = []
         for row in lock_rows(proc.stdout.decode("utf-8")):
@@ -186,8 +203,8 @@ class RefusedCorpusTests(unittest.TestCase):
     def test_every_refused_entry_is_refused_in_every_listed_place(self):
         passed = []
         for e in load(CORPORA["refused"]):
-            for place in e["where"]:
-                if place != "main-history" and not refused_in(place, e["text"]):
+            for place in checked_places(e):
+                if not refused_in(place, e["text"]):
                     passed.append(f"{e['id']} passed in {place}")
         self.assertEqual(passed, [], "refused corpus entries that got through")
 
@@ -204,8 +221,8 @@ class AllowedCorpusTests(unittest.TestCase):
         refused = []
         entries = load(CORPORA["allowed"])
         for e in entries:
-            for place in e["where"]:
-                if place != "main-history" and refused_in(place, e["text"]):
+            for place in checked_places(e):
+                if refused_in(place, e["text"]):
                     refused.append(f"{e['id']} refused in {place}")
         history = [e for e in entries if "main-history" in e["where"]]
         refused += [f"{i} refused in main-history" for i in sorted(main_history_refused(history))]
@@ -220,8 +237,8 @@ class AllowedCorpusTests(unittest.TestCase):
         refused = []
         entries = load(CORPORA["allowed"])
         for e in entries:
-            for place in e["where"]:
-                if place != "main-history" and refused_in(place, e["text"], baseline):
+            for place in checked_places(e):
+                if refused_in(place, e["text"], baseline):
                     refused.append(f"{e['id']} refused by the baseline in {place}")
         history = [e for e in entries if "main-history" in e["where"]]
         refused += [f"{i} refused by the baseline in main-history"
@@ -230,6 +247,16 @@ class AllowedCorpusTests(unittest.TestCase):
 
 
 class PendingRulingTests(unittest.TestCase):
+    def test_every_pending_entry_is_refused_until_ruled(self):
+        # Pending fails closed: until Matt rules, every pending text is refused wherever it is
+        # listed, so adding a text to pending can never let it through (audit 7, MED 4).
+        passed = [f"{e['id']} passes in {place}" for e in load(PENDING) for place in checked_places(e)
+                  if not refused_in(place, e["text"])]
+        history = [e for e in load(PENDING) if "main-history" in e["where"]]
+        passed += [f"{e['id']} passes in main-history" for e in history
+                   if e["id"] not in main_history_refused(history)]
+        self.assertEqual(passed, [], "pending entries the current checker lets through")
+
     def test_print_current_verdicts(self):
         lines = []
         for e in load(PENDING):
@@ -256,6 +283,8 @@ class RuleTimingTests(unittest.TestCase):
         "letters then host": "a" * N + ".cla" + "ude.ai",
         "newlines": "\n" * N, "newline symbols": "-\n" * (N // 2), "newline labels": "a:\n" * (N // 3),
         "capital phrase": ("Gener" + "ated with ") * (N // 15), "capital phrase lines": ("Gener" + "ated by\n") * (N // 13),
+        "tagged phrase": ("<b>x gener" + "ated with ") * (N // 20),
+        "tagged phrase and name": ("<b>x gener" + "ated with cla" + "ude. ") * (N // 33),
     }
 
     def test_every_rule_on_long_lines(self):

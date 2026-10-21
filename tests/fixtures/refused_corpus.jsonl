@@ -138,3 +138,8 @@
 {"b64": "VGhlIHN1bW1hcnkgYmVsb3cgd2FzIGdlbmVyYXRlZCB1c2luZyB0aGUgQ2xhdWRlIG1vZGVsLg==", "exact": true, "id": "audit6_n2_model", "source": "audit6", "where": ["message", "body", "file", "main-history"]}
 {"b64": "UGFydHMgb2YgdGhpcyBmaWxlIHdlcmUgZ2VuZXJhdGVkIHdpdGggYXNzaXN0YW5jZSBmcm9tIENsYXVkZS4=", "exact": true, "id": "audit6_n2_assistance", "source": "audit6", "where": ["message", "body", "file", "main-history"]}
 {"b64": "Q29kZSBnZW5lcmF0ZWQgYnkgYW4gQUkgYXNzaXN0YW50IChDbGF1ZGUgT3B1cyA0KS4=", "exact": true, "id": "audit6_n2_ai_assistant", "source": "audit6", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhpcyBQUiB3YXMgZ2VuZXJhdGVkIHdpdGggdGhlIGhlbHAgb2YKQ2xhdWRlLg==", "exact": true, "id": "audit7_h2_wrapped", "source": "audit7", "where": ["message", "body", "file", "main-history"]}
+{"b64": "PiBUaGlzIFBSIHdhcyBnZW5lcmF0ZWQgd2l0aCB0aGUgaGVscCBvZgo+IENsYXVkZS4=", "exact": true, "id": "audit7_h2_quoted", "source": "audit7", "where": ["message", "body", "file", "main-history"]}
+{"b64": "QWRkIG5vdGVzCgpUaGlzIFBSIHdhcyBnZW5lcmF0ZWQgd2l0aCB0aGUgaGVscCBvZgpDbGF1ZGUu", "exact": false, "id": "audit7_h2_commit_body", "source": "audit7", "where": ["message", "body", "file", "main-history"]}
+{"b64": "Z2VuZXJhdGVkIGJ5IHZlcnNpb24gNC41IG9mIENsYXVkZS4=", "exact": true, "id": "audit7_h2_version", "source": "audit7", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhpcyB3YXMgZ2VuZXJhdGVkIHdpdGggYW5kIHRoZW4gYWZ0ZXIgYSBsb25nIGFuZCB3aW5kaW5nIHJldmlldyBieSBzZXZlcmFsIHBlb3BsZSBvdmVyIGEgZmV3IHdlZWtzIG9mIHcgQ2xhdWRl", "exact": false, "id": "audit7_h2_gap_81", "source": "audit7", "where": ["message", "body", "file", "main-history"]}
