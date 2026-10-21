@@ -7,6 +7,7 @@ Usage:
   python3 tools/commit_check.py --pre-push REMOTE URL    pre-push: reads git's ref lines on stdin
   python3 tools/commit_check.py --range A..B | auto      CI: every commit and changed file in a range
   python3 tools/commit_check.py --sources A..B | auto    CI: proof records of changed source folders
+  python3 tools/commit_check.py --main-history A..B      CI: commits that landed on main (stricter web rule)
   python3 tools/commit_check.py --pr N                   a pull request's title and body (gh api, REST)
   python3 tools/commit_check.py --pr-event FILE          the same, from a GitHub Actions event payload
   python3 tools/commit_check.py --selftest               prove the checks fire, in a scratch repository
@@ -54,20 +55,28 @@ SCISSORS = "# ------------------------ >8 ------------------------"
 SELF_PATHS = ("tools/commit_check.py", "tools/hooks/", ".github/workflows/")
 
 EM_DASH, EN_DASH = "\u2014", "\u2013"
+# Every dash-like character a renderer could show as an em or en dash. Checked after HTML entities
+# are decoded, because GitHub renders the named HTML entities for both dashes as the characters.
+DASHES = (
+    ("\u2014", "em dash"), ("\u2013", "en dash"), ("\u2015", "horizontal bar"),
+    ("\u2e3a", "two-em dash"), ("\u2e3b", "three-em dash"), ("\ufe58", "small em dash"),
+    ("\ufe31", "vertical em dash"),
+)
 
 # The banned strings are assembled from pieces so this file never contains what it hunts for.
 _CO = "co" + r"[\W_]*" + "author(?:ed)?" + r"[\W_]*" + "by"
 _SESSION = "claude" + r"[\W_]*" + "session"
 _HOST = "claude" + r"\." + "ai"
-_GEN_LINE = r"^[\W_\d]*" + "generated" + r"[\W_]+with\b"
-_GEN_TOOL = "generated" + r"[\W_]+(?:with|by|using)\b[\W_].{0,24}?" + "claude"
+_GEN_LINE = r"^[\W_\d]*" + "generated" + r"[\W_]+with(?![a-z0-9])"
+_GEN_TOOL = (r"^[\W_\d]*" + "generated" + r"[\W_]+(?:with|by|using)(?![a-z0-9])[\W_]*.{0,24}?"
+             + "claude")
 
 MESSAGE_RULES = (
     ("co-author trailer", re.compile(_CO)),
     ("session trailer", re.compile(_SESSION)),
     ("session link", re.compile(_HOST + r"\b")),
     ("generated footer", re.compile(_GEN_LINE, re.M)),
-    ("generated footer", re.compile(_GEN_TOOL)),
+    ("generated footer", re.compile(_GEN_TOOL, re.M)),
 )
 FILE_RULES = (
     ("co-author trailer line", re.compile(r"^[\W_]*" + _CO + r"[\W_]*:", re.M)),
@@ -75,11 +84,25 @@ FILE_RULES = (
     ("session link", re.compile(r"(?:[a-z][a-z0-9+.-]*:/*|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
                                 + _HOST + r"(?=[/:?#])")),
     ("generated footer", re.compile(_GEN_LINE, re.M)),
-    ("generated footer", re.compile(_GEN_TOOL)),
+    ("generated footer", re.compile(_GEN_TOOL, re.M)),
 )
 
 _HYPHENS = {ord(c): "-" for c in "\u00ad\u2010\u2011\u2012\u2013\u2014\u2015\u2212\ufe58\ufe63\uff0d"}
 # Letters from other scripts that render like the ASCII letters in the banned words.
+# Capital letters from other scripts that look like Latin capitals; folded before lowercasing so a
+# capital lookalike cannot slip past the small-letter table below.
+_CAPITAL_CONFUSABLES = {ord(k): v for k, v in {
+    "\u0410": "A", "\u0412": "B", "\u0415": "E", "\u041a": "K", "\u041c": "M", "\u041d": "H",
+    "\u041e": "O", "\u0420": "P", "\u0421": "C", "\u0422": "T", "\u0423": "Y", "\u0425": "X",
+    "\u0405": "S", "\u0406": "I", "\u0408": "J", "\u04c0": "I", "\u051a": "Q", "\u051c": "W",
+    "\u0391": "A", "\u0392": "B", "\u0395": "E", "\u0396": "Z", "\u0397": "H", "\u0399": "I",
+    "\u039a": "K", "\u039c": "M", "\u039d": "N", "\u039f": "O", "\u03a1": "P", "\u03a4": "T",
+    "\u03a5": "Y", "\u03a7": "X",
+}.items()}
+# Characters that render as nothing but are not format (Cf) characters: Hangul fillers.
+_FILLERS = frozenset("\u3164\u115f\u1160\uffa0")
+# Dots that IDNA treats as the label separator, so "claude" + ideographic dot + "ai" opens the host.
+_DOTS = {ord(c): "." for c in "\u3002\uff61\uff0e"}
 _CONFUSABLES = {ord(k): v for k, v in {
     "\u0430": "a", "\u0441": "c", "\u0435": "e", "\u043e": "o", "\u0440": "p", "\u0443": "y",
     "\u0445": "x", "\u0456": "i", "\u0455": "s", "\u0501": "d", "\u04bb": "h", "\u051d": "w",
@@ -117,22 +140,24 @@ def toplevel(cwd: Path | None = None) -> Path:
 
 def normalize(text: str) -> str:
     """Fold the tricks that hide a banned string: entities, percent-encoding, compatibility forms
-    (fullwidth letters and dots), format characters (zero-width, bidi), Unicode hyphens and common
-    lookalike letters. Lowercased."""
+    (fullwidth letters and dots), format characters (zero-width, bidi), combining marks, Hangul
+    fillers, ideographic dots, Unicode hyphens and lookalike letters in either case. Lowercased."""
     value = html.unescape(text or "")
     for _ in range(2):
         value = unquote(value)
-    value = unicodedata.normalize("NFKC", value)
-    value = "".join(ch for ch in value if unicodedata.category(ch) != "Cf")
-    return value.translate(_HYPHENS).translate(_CONFUSABLES).lower()
+    # NFKD, not NFKC: decomposing first means an accented letter (precomposed or built from a
+    # combining mark) always leaves a combining mark (Mn) behind, which the next line removes.
+    value = unicodedata.normalize("NFKD", value)
+    value = "".join(ch for ch in value
+                    if unicodedata.category(ch) not in ("Cf", "Mn") and ch not in _FILLERS)
+    value = value.translate(_DOTS).translate(_HYPHENS).translate(_CAPITAL_CONFUSABLES)
+    return value.lower().translate(_CONFUSABLES)
 
 
 def _dash_findings(text: str, where: str) -> list[str]:
-    out = []
-    for dash, name in ((EM_DASH, "em dash"), (EN_DASH, "en dash")):
-        if dash in (text or ""):
-            out.append(f"{where}: contains an {name}")
-    return out
+    decoded = html.unescape(text or "")
+    return [f"{where}: contains an {name}" if name[0] in "ae" else f"{where}: contains a {name}"
+            for ch, name in DASHES if ch in decoded]
 
 
 def _rule_findings(text: str, where: str, rules) -> list[str]:
@@ -157,8 +182,8 @@ def identity_findings(author, committer, where: str, on_main: bool = False) -> l
         if tuple(committer) == WEB_COMMITTER and on_main:
             pass  # landed on main through GitHub (web merge or web edit)
         elif tuple(committer) == WEB_COMMITTER:
-            out.append(f"{where}: committer claims to be GitHub but the commit is not on main; "
-                       "a web-flow committer is accepted only on main")
+            out.append(f"{where}: committer claims to be GitHub but is not trusted here: not on main "
+                       "(job ranges), or neither a first-parent merge nor GitHub-verified (main history)")
         else:
             out.append(f"{where}: committer is {committer[0]} <{committer[1]}>, expected {AUTHOR[0]} <{AUTHOR[1]}>")
     return out
@@ -183,10 +208,11 @@ def content_findings(path: str, data: bytes) -> list[str]:
     out = _rule_findings(text, path, FILE_RULES)
     if "\r" in text:
         out.append(f"{path}: has CR line endings")
-    for dash, name in ((EM_DASH, "em dash"), (EN_DASH, "en dash")):
-        if dash in text:
-            line = text[: text.index(dash)].count("\n") + 1
-            out.append(f"{path}:{line}: contains an {name}")
+    decoded = html.unescape(text)
+    for ch, name in DASHES:
+        if ch in decoded:
+            line = decoded[: decoded.index(ch)].count("\n") + 1
+            out.append(f"{path}:{line}: contains {'an' if name[0] in 'ae' else 'a'} {name}")
     if path.endswith(".py"):
         for index, ch in enumerate(text):
             if ord(ch) > 127:
@@ -213,15 +239,33 @@ def resolve_range(spec: str, cwd: Path | None = None) -> str | None:
     return None
 
 
-def commits_in(rng: str, cwd: Path | None = None) -> list[dict]:
+def github_verified(sha: str) -> bool:
+    """True when GitHub's API marks the commit as verified (signed by GitHub for web commits).
+    Any failure to ask counts as not verified, so the check fails closed."""
+    proc = subprocess.run(["gh", "api", f"repos/{REPO_SLUG}/commits/{sha}", "--jq", ".commit.verification.verified"],
+                          capture_output=True)
+    return proc.returncode == 0 and proc.stdout.decode().strip() == "true"
+
+
+def commits_in(rng: str, cwd: Path | None = None, main_history: bool = False, verify=github_verified) -> list[dict]:
+    """Every commit in the range. On a job-branch range a web-flow committer is trusted when the
+    commit is already on origin/main, because main-history checked it when it landed. In
+    main-history mode it is trusted only on a first-parent merge of the range or on a commit
+    GitHub marks verified."""
     shas = git("rev-list", "--reverse", rng, cwd=cwd).decode().split()
     main_ok = git_ok("rev-parse", "--verify", "--quiet", "origin/main^{commit}", cwd=cwd)
+    first_parent = set()
+    if main_history:
+        first_parent = set(git("rev-list", "--first-parent", "--merges", rng, cwd=cwd).decode().split())
     out = []
     for sha in shas:
         raw = git("show", "-s", "--format=%an%x00%ae%x00%cn%x00%ce%x00%B", sha, cwd=cwd)
         an, ae, cn, ce, body = raw.decode("utf-8", "replace").split("\x00", 4)
-        on_main = main_ok and git_ok("merge-base", "--is-ancestor", sha, "origin/main", cwd=cwd)
-        out.append({"sha": sha, "author": (an, ae), "committer": (cn, ce), "message": body, "on_main": on_main})
+        if main_history:
+            web_ok = (cn, ce) == WEB_COMMITTER and (sha in first_parent or verify(sha))
+        else:
+            web_ok = main_ok and git_ok("merge-base", "--is-ancestor", sha, "origin/main", cwd=cwd)
+        out.append({"sha": sha, "author": (an, ae), "committer": (cn, ce), "message": body, "on_main": web_ok})
     return out
 
 
@@ -233,8 +277,9 @@ def changed_paths(rng: str, cwd: Path | None = None) -> tuple[str, list[str]]:
     return tip, [p for p in raw.decode("utf-8", "replace").split("\x00") if p]
 
 
-def check_range(rng: str, branch: str | None = None, cwd: Path | None = None) -> list[str]:
-    commits = commits_in(rng, cwd=cwd)
+def check_range(rng: str, branch: str | None = None, cwd: Path | None = None, main_history: bool = False,
+                verify=github_verified) -> list[str]:
+    commits = commits_in(rng, cwd=cwd, main_history=main_history, verify=verify)
     if not commits:
         say(f"commit_check: 0 commit(s) in {rng}")
         return [f"{rng}: the range holds no commits; failing closed"]
@@ -267,10 +312,14 @@ def current_branch(cwd: Path | None = None) -> str | None:
 
 def check_staged(cwd: Path | None = None) -> list[str]:
     findings: list[str] = []
-    ident = git("var", "GIT_AUTHOR_IDENT", cwd=cwd).decode("utf-8", "replace")
-    m = re.match(r"^(.*) <([^>]*)>", ident)
-    if m:
-        findings += identity_findings((m.group(1), m.group(2)), None, "author for this commit")
+    for var, role in (("GIT_AUTHOR_IDENT", "author"), ("GIT_COMMITTER_IDENT", "committer")):
+        ident = git("var", var, cwd=cwd).decode("utf-8", "replace")
+        m = re.match(r"^(.*) <([^>]*)>", ident)
+        if not m:
+            findings.append(f"cannot read the {role} identity for this commit")
+        elif (m.group(1), m.group(2)) != AUTHOR:
+            findings.append(f"{role} for this commit is {m.group(1)} <{m.group(2)}>, "
+                            f"expected {AUTHOR[0]} <{AUTHOR[1]}>")
     raw = git("diff", "--cached", "--name-only", "-z", "--no-renames", "--diff-filter=d", cwd=cwd)
     paths = [p for p in raw.decode("utf-8", "replace").split("\x00") if p]
     branch = current_branch(cwd)
@@ -306,10 +355,15 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
             findings.append(f"origin push URL {push_url!r} is not github.com/{REPO_SLUG}")
     except RuntimeError as exc:
         findings.append(str(exc))
+    valid = 0
     for line in lines:
-        parts = line.split()
-        if len(parts) != 4:
+        if not line.strip():
             continue
+        parts = line.split()
+        if len(parts) != 4 or not all(re.fullmatch(r"[0-9a-f]{40}", x) for x in (parts[1], parts[3])):
+            findings.append(f"malformed pre-push line {line[:80]!r}; failing closed")
+            continue
+        valid += 1
         local_ref, local_sha, remote_ref, remote_sha = parts
         target = remote_ref.removeprefix("refs/heads/")
         if target in PROTECTED_BRANCHES:
@@ -327,6 +381,8 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
                 continue
             rng = base.replace("HEAD", local_sha)
         findings += check_range(rng, branch=target, cwd=cwd)
+    if valid == 0:
+        findings.append("git passed no refs to push; failing closed")
     return findings
 
 
@@ -410,6 +466,17 @@ def banned_samples() -> dict[str, str]:
         "footer italic": "Body\n\n---\n_" + "Gener" + "ated" + " by [Claude Code](" + link + ")_",
         "footer using": "Add b\n\n" + "Gener" + "ated" + " using " + "Claude",
         "footer robot": "Add b\n\n\U0001F916 " + "Gener" + "ated" + " with [" + "Claude" + " Code]",
+        # The first audit's italic probe, byte for byte: underscore right after "with".
+        "footer italic audit": "_" + "Gener" + "ated" + " with_ [" + "Cla" + "ude Code](...)",
+        "trailer capital cyrillic": "Add b\n\n\u0421o-Authored-By: x",
+        "trailer capital cyrillic o": "Add b\n\nC\u041e-Authored-By: x",
+        "session capital greek": "Add b\n\nCl\u0391ude-Session: x",
+        "trailer combining mark": "Add b\n\nCo\u0336-Authored-By: x",
+        "trailer precomposed accent": "Add b\n\nC\u00f3-Authored-By: x",
+        "trailer hangul filler": "Add b\n\nCo-Auth\u3164ored-By: x",
+        "link ideographic dot": "Add b\n\nsee https://" + "claude" + "\u3002" + "ai/x",
+        "link halfwidth dot": "Add b\n\nsee https://" + "claude" + "\uff61" + "ai/x",
+        "link fullwidth dot": "Add b\n\nsee https://" + "claude" + "\uff0e" + "ai/x",
     }
 
 
@@ -520,6 +587,8 @@ def main(argv: list[str]) -> int:
             return report(check_message_text(text), "commit message")
         if mode == "--pre-push" and len(rest) == 2:
             return report(check_pre_push(rest[0], rest[1], sys.stdin.read().splitlines()), "pre-push")
+        if mode == "--main-history" and len(rest) == 1:
+            return report(check_range(rest[0], branch="main", main_history=True), "main history")
         if mode in ("--range", "--sources") and len(rest) == 1:
             rng = resolve_range(rest[0])
             if rng is None:

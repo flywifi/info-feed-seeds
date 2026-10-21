@@ -407,5 +407,113 @@ class DoctorTests(unittest.TestCase):
         self.assertEqual(quiet(doctor.main, ["propose"]), 4, "not implemented")
 
 
+
+# Re-audit of head ba76314. Each probe is the auditor's string where the audit gave one, byte for
+# byte (assembled from pieces so this file never holds it); reconstructed probes say so.
+AUDIT_ITALIC = "_" + GEN + " with_ [" + "Cla" + "ude Code](...)"
+
+
+class AuditRevision2Tests(unittest.TestCase):
+    def test_f2_italic_probe_everywhere(self):
+        self.assertTrue(cc.text_findings("Add a\n\n" + AUDIT_ITALIC, "m"), "commit message")
+        self.assertTrue(cc.check_pr_text("Job", "Body\n\n" + AUDIT_ITALIC, "pr"), "pull request body")
+        self.assertTrue(cc.content_findings("notes.md", (AUDIT_ITALIC + "\n").encode()), "file")
+
+    def test_f2_italic_probe_in_main_history(self):
+        repo = Scratch()
+        try:
+            repo.commit("README.md", b"x\n", "Add README")
+            base = repo.head()
+            repo.commit("m.txt", b"m\n", "Merge pull request 9\n\n" + AUDIT_ITALIC, extra=WEB)
+            found = quiet(cc.check_range, f"{base}..HEAD", branch="main", cwd=repo.dir,
+                          main_history=True, verify=lambda sha: True)
+            self.assertTrue(any("generated footer" in f for f in found), found)
+        finally:
+            repo.close()
+
+    def test_f2_lookalikes_and_hidden_characters(self):
+        for key in ("trailer capital cyrillic", "trailer capital cyrillic o", "session capital greek",
+                    "trailer combining mark", "trailer precomposed accent", "trailer hangul filler",
+                    "link ideographic dot", "link halfwidth dot", "link fullwidth dot"):
+            with self.subTest(probe=key):
+                self.assertTrue(cc.text_findings(SAMPLES[key], "m"), key)
+        for filler in ("\u3164", "\u115f", "\u1160", "\uffa0"):
+            with self.subTest(filler=hex(ord(filler))):
+                self.assertTrue(cc.text_findings("Co-Auth" + filler + "ored-By: x", "m"))
+        for dot in ("\u3002", "\uff61", "\uff0e"):
+            with self.subTest(dot=hex(ord(dot))):
+                self.assertTrue(cc.content_findings("n.md", ("https://claude" + dot + "ai/x\n").encode()))
+
+    def test_f8_prose_about_the_rule_passes(self):
+        prose = ("The checker refuses a footer where the words " + GEN.lower() + " with come shortly before "
+                 + "Cla" + "ude.")
+        self.assertEqual(cc.text_findings(prose, "m"), [], "mid-line prose is not a footer")
+        self.assertEqual(cc.content_findings("doc.md", (prose + "\n").encode()), [])
+        self.assertEqual(cc.text_findings("Data " + GEN.lower() + " with hub poll", "m"), [])
+
+    def test_f8_literal_reading_of_claude_md_still_holds(self):
+        """Finding 7 (owner's call, implemented literally for now): a line opening with that phrase
+        is refused whatever tool it names."""
+        self.assertTrue(cc.text_findings(GEN + " with hub poll", "m"))
+
+    def test_f9_dash_entities_and_more_dashes(self):
+        for text in ("a &" + "mdash; b", "a &" + "ndash; b", "a &#" + "8212; b", "a \u2015 b", "a \u2e3a b",
+                     "a \u2e3b b", "a \ufe58 b", "a \ufe31 b"):
+            with self.subTest(text=text.encode("ascii", "backslashreplace")):
+                self.assertTrue(cc.text_findings(text, "m"))
+                self.assertTrue(cc.content_findings("d.md", (text + "\n").encode()))
+
+    def test_f10_pre_push_with_no_or_malformed_lines(self):
+        repo = Scratch()
+        try:
+            repo.commit("README.md", b"x\n", "Add README")
+            repo.git("remote", "add", "origin", "https://github.com/flywifi/info-feed-seeds")
+            url = "https://github.com/flywifi/info-feed-seeds"
+            none = quiet(cc.check_pre_push, "origin", url, [], cwd=repo.dir)
+            self.assertTrue(any("no refs" in f for f in none), none)
+            blank = quiet(cc.check_pre_push, "origin", url, ["", "   "], cwd=repo.dir)
+            self.assertTrue(any("no refs" in f for f in blank), blank)
+            bad = quiet(cc.check_pre_push, "origin", url, ["refs/heads/x abc refs/heads/x def"], cwd=repo.dir)
+            self.assertTrue(any("malformed" in f for f in bad), bad)
+        finally:
+            repo.close()
+
+    def test_f11_main_history_web_committer(self):
+        repo = Scratch()
+        try:
+            repo.commit("README.md", b"x\n", "Add README")
+            base = repo.head()
+            repo.commit("w.txt", b"w\n", "Web edit on main", extra=WEB)
+            forged = repo.head()
+            unverified = quiet(cc.check_range, f"{base}..HEAD", branch="main", cwd=repo.dir,
+                               main_history=True, verify=lambda sha: False)
+            self.assertTrue(any("committer" in f for f in unverified), "a non-merge web commit needs verification")
+            verified = quiet(cc.check_range, f"{base}..HEAD", branch="main", cwd=repo.dir,
+                             main_history=True, verify=lambda sha: sha == forged)
+            self.assertEqual(verified, [])
+            repo.git("checkout", "-q", "-b", "side", base)
+            repo.commit("s.txt", b"s\n", "Side work")
+            repo.git("checkout", "-q", "main")
+            repo.git("merge", "-q", "--no-ff", "side", "-m", "Merge pull request 3", extra=WEB)
+            merged = quiet(cc.check_range, f"{forged}..HEAD", branch="main", cwd=repo.dir,
+                           main_history=True, verify=lambda sha: False)
+            self.assertEqual(merged, [], "a first-parent merge by GitHub passes without verification")
+        finally:
+            repo.close()
+
+
+@unittest.skipIf(shutil.which("sh") is None, "the hooks are sh scripts")
+class AuditRevision2HookTests(unittest.TestCase):
+    def test_f13_pre_commit_checks_the_committer(self):
+        repo = Scratch(hooks=True)
+        try:
+            repo.commit("README.md", b"x\n", "Add README")
+            result = repo.commit("c.txt", b"c\n", "Add c", check=False,
+                                 extra={"GIT_COMMITTER_NAME": "Someone", "GIT_COMMITTER_EMAIL": "s@example.com"})
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn(b"committer for this commit", result.stdout + result.stderr)
+        finally:
+            repo.close()
+
 if __name__ == "__main__":
     unittest.main()
