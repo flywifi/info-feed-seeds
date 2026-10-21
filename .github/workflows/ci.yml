@@ -14,9 +14,11 @@ on:
 permissions:
   contents: read
 
+# A newer pull request event replaces an older run for the same pull request. Push runs get one
+# group per commit, so no push run, above all a run on main, is ever cancelled or replaced.
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.event_name == 'pull_request' && format('ci-pr-{0}', github.event.pull_request.number) || format('ci-push-{0}', github.sha) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   checks:
@@ -27,6 +29,7 @@ jobs:
     timeout-minutes: 15
     env:
       BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
+      BOOTSTRAP_BASE: 2bbdbf270a6893d377ed014aada503f89ecb0327
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,9 +48,14 @@ jobs:
           if git cat-file -e "origin/$BASE_REF:tools/commit_check.py" 2>/dev/null; then
             git show "origin/$BASE_REF:tools/commit_check.py" > "$RUNNER_TEMP/commit_check.py"
             echo "Using the checker from origin/$BASE_REF"
-          else
+          elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ]; then
+            # One-time bootstrap: the pull request that adds the checker merges into a main that has
+            # none. Remove this branch in the next pull request after it merges.
             cp tools/commit_check.py "$RUNNER_TEMP/commit_check.py"
-            echo "::warning::origin/$BASE_REF has no tools/commit_check.py yet; using this branch's copy"
+            echo "::warning::bootstrap: origin/main is $BOOTSTRAP_BASE, which has no checker; using this branch's copy"
+          else
+            echo "::error::origin/$BASE_REF has no tools/commit_check.py and is not the bootstrap base; refusing to run a checker this pull request supplies"
+            exit 1
           fi
       - name: Commit hygiene (messages, identity, changed files)
         run: python3 -I "$RUNNER_TEMP/commit_check.py" --range auto
@@ -74,6 +82,7 @@ jobs:
     timeout-minutes: 5
     env:
       BASE_REF: ${{ github.event.pull_request.base.ref }}
+      BOOTSTRAP_BASE: 2bbdbf270a6893d377ed014aada503f89ecb0327
     steps:
       - uses: actions/checkout@v4
         with:
@@ -86,20 +95,28 @@ jobs:
         run: |
           if git cat-file -e "origin/$BASE_REF:tools/commit_check.py" 2>/dev/null; then
             git show "origin/$BASE_REF:tools/commit_check.py" > "$RUNNER_TEMP/commit_check.py"
-          else
+          elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ]; then
             cp tools/commit_check.py "$RUNNER_TEMP/commit_check.py"
-            echo "::warning::origin/$BASE_REF has no tools/commit_check.py yet; using this branch's copy"
+            echo "::warning::bootstrap: origin/main is $BOOTSTRAP_BASE, which has no checker; using this branch's copy"
+          else
+            echo "::error::origin/$BASE_REF has no tools/commit_check.py and is not the bootstrap base; refusing to run a checker this pull request supplies"
+            exit 1
           fi
       - name: Pull request title and body
         # The text is read from the event payload file, never interpolated into the shell.
         run: python3 -I "$RUNNER_TEMP/commit_check.py" --pr-event "$GITHUB_EVENT_PATH"
 
   main-history:
-    # Every push to main is a merge or an edit made on github.com. Its message was never checked by
-    # a hook or by the pull request run, so check every new commit here and fail loudly.
+    # Every push to main is a merge or an edit made on github.com, whose message no hook or pull
+    # request run ever saw. Each run re-checks main from the policy boundary, not just
+    # before..after, so a run that never happened cannot leave a gap. A web-flow committer passes
+    # here only on a first-parent merge or on a commit GitHub marks verified.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
+    concurrency:
+      group: main-history-${{ github.sha }}
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
@@ -107,8 +124,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: New commits on main
+      - name: Every commit on main since the policy boundary
         env:
-          BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.sha }}
-        run: python3 -I tools/commit_check.py --range "$BEFORE..$AFTER"
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -I tools/commit_check.py --main-history "5436f99..$AFTER"
