@@ -1,0 +1,70 @@
+# Checks every pull request and every push to a job branch. main changes only by merged pull
+# request and data only by the poll workflow, so neither branch runs this workflow on push.
+name: ci
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches-ignore: [main, data]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    # Editing only the title or description does not change the code; the pr-text job covers it.
+    if: github.event_name == 'push' || github.event.action != 'edited'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # The pull request's own head, not GitHub's synthetic merge commit, so every commit checked
+          # is one a person made.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Commit hygiene (messages, identity, changed files)
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
+        run: python3 -I tools/commit_check.py --range auto
+      - name: Commit checker selftest
+        run: python3 -I tools/commit_check.py --selftest
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -t .
+      - name: hub lint
+        run: python3 -I feeder/hub.py lint
+      - name: hub fmt --check
+        run: python3 -I feeder/hub.py fmt --check
+      - name: Em dash scan
+        run: python3 -I tools/emdash_scan.py
+      - name: Proof records of changed sources
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
+        run: python3 -I tools/commit_check.py --sources auto
+      - name: Doctor
+        run: python3 -I tools/doctor.py check
+
+  pr-text:
+    # Runs on every pull request event, including edits, so removing a footer from the description
+    # turns this green without a new push.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pull request title and body
+        # The text is read from the event payload file, never interpolated into the shell.
+        run: python3 -I tools/commit_check.py --pr-event "$GITHUB_EVENT_PATH"
