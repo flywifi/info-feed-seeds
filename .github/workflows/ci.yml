@@ -1,12 +1,15 @@
-# Checks every pull request and every push to a job branch. main changes only by merged pull
-# request and data only by the poll workflow, so neither branch runs this workflow on push.
+# Checks every pull request, every push to a job branch, and every push to main (which can only be a
+# merge or an edit made on github.com). data is written only by the poll workflow and never runs this.
+#
+# These checks are advisory until the main ruleset requires the `checks` and `pr-text` status
+# checks; only the repository owner can add that rule.
 name: ci
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
   push:
-    branches-ignore: [main, data]
+    branches-ignore: [data]
 
 permissions:
   contents: read
@@ -17,10 +20,13 @@ concurrency:
 
 jobs:
   checks:
-    # Editing only the title or description does not change the code; the pr-text job covers it.
-    if: github.event_name == 'push' || github.event.action != 'edited'
+    # Runs on edits too: a skipped job reports success, so skipping it would let an edit made during
+    # a run replace a real result with a free pass.
+    if: github.event_name == 'pull_request' || github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,11 +37,23 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Take the checker from the base branch
+        # A pull request must not be able to weaken its own check, so the range, source and text
+        # checks run the base branch's copy. Only the very first pull request, before the base has a
+        # checker, falls back to its own copy, and says so.
+        run: |
+          if git cat-file -e "origin/$BASE_REF:tools/commit_check.py" 2>/dev/null; then
+            git show "origin/$BASE_REF:tools/commit_check.py" > "$RUNNER_TEMP/commit_check.py"
+            echo "Using the checker from origin/$BASE_REF"
+          else
+            cp tools/commit_check.py "$RUNNER_TEMP/commit_check.py"
+            echo "::warning::origin/$BASE_REF has no tools/commit_check.py yet; using this branch's copy"
+          fi
       - name: Commit hygiene (messages, identity, changed files)
-        env:
-          BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
-        run: python3 -I tools/commit_check.py --range auto
-      - name: Commit checker selftest
+        run: python3 -I "$RUNNER_TEMP/commit_check.py" --range auto
+      - name: Proof records of changed sources
+        run: python3 -I "$RUNNER_TEMP/commit_check.py" --sources auto
+      - name: This branch's checker selftest
         run: python3 -I tools/commit_check.py --selftest
       - name: Unit tests
         run: python3 -m unittest discover -s tests -t .
@@ -45,10 +63,6 @@ jobs:
         run: python3 -I feeder/hub.py fmt --check
       - name: Em dash scan
         run: python3 -I tools/emdash_scan.py
-      - name: Proof records of changed sources
-        env:
-          BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
-        run: python3 -I tools/commit_check.py --sources auto
       - name: Doctor
         run: python3 -I tools/doctor.py check
 
@@ -58,13 +72,43 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      BASE_REF: ${{ github.event.pull_request.base.ref }}
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Take the checker from the base branch
+        run: |
+          if git cat-file -e "origin/$BASE_REF:tools/commit_check.py" 2>/dev/null; then
+            git show "origin/$BASE_REF:tools/commit_check.py" > "$RUNNER_TEMP/commit_check.py"
+          else
+            cp tools/commit_check.py "$RUNNER_TEMP/commit_check.py"
+            echo "::warning::origin/$BASE_REF has no tools/commit_check.py yet; using this branch's copy"
+          fi
       - name: Pull request title and body
         # The text is read from the event payload file, never interpolated into the shell.
-        run: python3 -I tools/commit_check.py --pr-event "$GITHUB_EVENT_PATH"
+        run: python3 -I "$RUNNER_TEMP/commit_check.py" --pr-event "$GITHUB_EVENT_PATH"
+
+  main-history:
+    # Every push to main is a merge or an edit made on github.com. Its message was never checked by
+    # a hook or by the pull request run, so check every new commit here and fail loudly.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: New commits on main
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: python3 -I tools/commit_check.py --range "$BEFORE..$AFTER"
