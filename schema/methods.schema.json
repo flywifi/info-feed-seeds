@@ -59,6 +59,37 @@
           ],
           "type": "string"
         },
+        "sample": {
+          "additionalProperties": false,
+          "description": "One item exactly as the feed gave it on this attempt, so the repository alone shows the proof. Present only when the attempt parsed at least one item.",
+          "properties": {
+            "link": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "published": {
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "link",
+            "published"
+          ],
+          "type": [
+            "object",
+            "null"
+          ]
+        },
         "source_label": {
           "enum": [
             "live",

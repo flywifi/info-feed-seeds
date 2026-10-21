@@ -12,12 +12,27 @@
           "result": "ok",
           "source_label": "live",
           "tried_at": "2026-10-20T20:42:00Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 40 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://www.nist.gov/news-events/news/2026/10/key-practices-incident-readiness-and-response-super-intelligence-training",
+            "published": "2026-10-16T12:00:00Z",
+            "title": "Key Practices for Incident Readiness and Response in Super Intelligence Training and Evaluation"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-21T04:01:14Z"
         }
       ],
       "last_success": {
         "method": "conditional-get",
         "source_label": "live",
-        "tried_at": "2026-10-20T20:42:00Z"
+        "tried_at": "2026-10-21T04:01:14Z"
       },
       "url": "https://www.nist.gov/news-events/standards/rss.xml"
     },

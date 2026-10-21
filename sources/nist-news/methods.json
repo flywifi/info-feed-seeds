@@ -12,12 +12,27 @@
           "result": "ok",
           "source_label": "live",
           "tried_at": "2026-10-20T20:41:45Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 40 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://www.nist.gov/news-events/news/2026/10/new-chip-based-tape-measure-light-could-revolutionize-mobile-timekeeping",
+            "published": "2026-10-16T12:00:00Z",
+            "title": "New Chip-Based ‘Tape Measure’ for Light Could Revolutionize Mobile Timekeeping and Enhance National Security"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-21T04:01:12Z"
         }
       ],
       "last_success": {
         "method": "conditional-get",
         "source_label": "live",
-        "tried_at": "2026-10-20T20:41:45Z"
+        "tried_at": "2026-10-21T04:01:12Z"
       },
       "url": "https://www.nist.gov/news-events/news/rss.xml"
     },

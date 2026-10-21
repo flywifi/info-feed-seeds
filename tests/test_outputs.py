@@ -28,12 +28,25 @@ class EscapeTests(unittest.TestCase):
             self.assertNotIn(">", line)
         self.assertIn("A &lt;script&gt; b (Pub &lt;Inc&gt;, 2026-10-19)", md)
 
+    def test_markdown_metacharacters_are_inert(self):
+        title = "[click](https://evil.example/x) ![img](https://evil.example/t.png) *b* _i_ `c` # | \\ & ~x~"
+        view = outputs.item_view(row(title, summary="a [b](http://e) ![c](http://f)"), SOURCE, PROFILE, set())
+        md = outputs.render_markdown(PROFILE, "2026-10-20", [view], [])
+        self.assertIn("\\[click\\]\\(https://evil.example/x\\) \\!\\[img\\]\\(https://evil.example/t.png\\)", md)
+        self.assertIn("\\*b\\* \\_i\\_ \\`c\\` \\# \\| \\\\ \\& \\~x\\~", md)
+        self.assertIn("  a \\[b\\]\\(http://e\\) \\!\\[c\\]\\(http://f\\)", md)
+        import re
+        for m in re.finditer(r"(?<!\\)!?\[[^\]]*\]\(", md):
+            self.fail(f"live Markdown link or image syntax survived: {m.group(0)!r}")
+
     def test_link_is_reserialised_and_safe(self):
         self.assertEqual(outputs.safe_link("HTTPS://Example.GOV:443/a b?utm_source=x&q=1#frag"),
                          "https://example.gov/a%20b?q=1")
         self.assertIsNone(outputs.safe_link("javascript:alert(1)"))
         self.assertIsNone(outputs.safe_link(None))
         self.assertNotIn(">", outputs.safe_link("https://example.gov/a>b"))
+        self.assertIsNone(outputs.safe_link("https://nist.gov@evil.example/p"), "userinfo reads as the wrong host")
+        self.assertIsNone(outputs.safe_link("https://user:pw@example.gov/p"))
 
     def test_link_line_is_indented_in_angle_brackets(self):
         view = outputs.item_view(row("T"), SOURCE, PROFILE, set())
@@ -75,10 +88,15 @@ class LatestJsonShapeTests(unittest.TestCase):
         self.assertEqual(set(doc), {"_comment", "version", "profile", "date", "generated", "items", "health", "coverage"})
         self.assertEqual(doc["version"], "1")
         self.assertEqual(set(doc["items"][0]), {
-            "content_sha256", "feed_id", "publisher", "title", "title_display", "authors", "link",
+            "content_sha256", "feed_id", "publisher", "title_display", "authors", "link",
             "summary_display", "published", "first_seen", "topics", "authority", "tier", "offline_pattern_scan"})
         self.assertEqual(doc["items"][0]["authors"], ["Jane Example"], "bylines are kept as the feed gave them")
+        self.assertIn("must escape", doc["_comment"])
         self.assertEqual(cov["sources_responded"], 1)
+
+    def test_authors_are_sanitised_and_emails_redacted(self):
+        view = outputs.item_view(row("T", authors=["<b>Jane</b> jane@example.gov", ""]), SOURCE, PROFILE, set())
+        self.assertEqual(view["authors"], ["Jane [email redacted]"])
 
 
 if __name__ == "__main__":
