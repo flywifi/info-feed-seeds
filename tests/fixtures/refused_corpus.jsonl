@@ -16,7 +16,7 @@
 {"b64": "Q9CeLUF1dGhvcmVkLUJ5OiB4", "exact": false, "id": "a2-capital-o", "source": "audit2", "where": ["message", "body", "file", "main-history"]}
 {"b64": "0KHQni1BVVRIT1JFRC1CWTogeA==", "exact": false, "id": "a2-two-capitals-es-o", "source": "audit2", "where": ["message", "body", "file", "main-history"]}
 {"b64": "Q2zOkXVkZS1TZXNzaW9uOiB4", "exact": false, "id": "a2-greek-alpha-session", "source": "audit2", "where": ["message", "body", "file", "main-history"]}
-{"b64": "Q2xhdWRl44WkU2Vzc2lvbjogeA==", "exact": false, "id": "a2-hangul-3164-claude-session", "source": "audit2", "where": ["message", "body", "file", "main-history"]}
+{"b64": "Q2xhdWRl44WkU2Vzc2lvbjogeA==", "exact": false, "id": "a2-hangul-3164-name-session", "source": "audit2", "where": ["message", "body", "file", "main-history"]}
 {"b64": "Q28tQXV0aOOFpG9yZWQtQnk6IHg=", "exact": false, "id": "a2-hangul-3164-authored", "source": "audit2", "where": ["message", "body", "file", "main-history"]}
 {"b64": "Q28tQXV0aOGFn29yZWQtQnk6IHg=", "exact": false, "id": "a2-hangul-115f-authored", "source": "audit2", "where": ["message", "body", "file", "main-history"]}
 {"b64": "Q28tQXV0aOGFoG9yZWQtQnk6IHg=", "exact": false, "id": "a2-hangul-1160-authored", "source": "audit2", "where": ["message", "body", "file", "main-history"]}
