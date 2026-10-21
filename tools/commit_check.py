@@ -55,7 +55,8 @@ SCISSORS = "# ------------------------ >8 ------------------------"
 SELF_PATHS = ("tools/commit_check.py", "tools/hooks/", ".github/workflows/", "tools/main_history_known.txt",
               "tests/fixtures/refused_corpus.jsonl", "tests/fixtures/allowed_corpus.jsonl",
               "tests/fixtures/pending_ruling.jsonl", "tests/fixtures/corpus.lock",
-              "tests/fixtures/checker_baseline.py", "tests/test_corpus.py", "tests/test_no_narrowing.py")
+              "tests/fixtures/checker_baseline.py", "tests/fixtures/renamed_ids.txt", "tests/test_corpus.py",
+              "tests/test_no_narrowing.py", "tools/corpus_added.py")
 
 EM_DASH, EN_DASH = "\u2014", "\u2013"
 # Every dash-like character a renderer could show as an em or en dash. Checked after HTML entities
@@ -88,16 +89,20 @@ _NAME = "claude"
 # Footer rules:
 #   line     a line opening with "Generated with" in any case, after an optional label, whatever
 #            tool it names (finding 7, read literally until it is ruled on)
-#   product  anywhere, the phrase followed by separators only and then the assistant's name: any
-#            statement that something was generated with, by or using it. Not inside an identifier
-#            joined by underscores ("docs_" + "generated_by_" + "name"), such as a corpus id
+#   product  anywhere, the phrase followed by separators only and then the assistant's name
+#   sentence anywhere, the phrase and then the assistant's name later in the same sentence, within
+#            80 characters and before any line break or sentence-ending mark: any statement that
+#            something was generated with, by or using it (the assistant's file name, ending in
+#            ".md", is not the assistant)
 #   near     (cased) a capital "Generated" with, by or using anywhere, and the assistant's name later
 #            within 160 characters, across single line breaks
 #   tool     a line opening with the phrase that names the assistant within a few words
 #   code     anywhere, the phrase and then the assistant's name and "code" within a few words
 #   paren    anywhere, the phrase and then the assistant's name in parentheses within a few words
 _GEN_LINE = _LINE_START + "generated" + r"[\W_]+with(?![a-z0-9])"
-_GEN_PRODUCT = r"(?<![a-z0-9]_)" + _PHRASE + _SEP + r"\[?" + _NAME + r"(?![a-z0-9])"
+_GEN_PRODUCT = _PHRASE + _SEP + r"\[?" + _NAME + r"(?![a-z0-9])"
+_GEN_SENTENCE = (r"(?<![a-z0-9])" + _PHRASE + r"[^\n.!?]{0,80}?(?<![a-z0-9])" + _NAME
+                 + r"(?![a-z0-9]|\.md\b)")
 _GEN_NEAR_CASED = ("G" + r"(?i:enerated)[\W_]+(?i:with|by|using)(?![A-Za-z0-9])(?:[^\n]|\n(?!\n)){0,160}?"
                    + r"(?<![A-Za-z0-9])(?i:" + _NAME + r")(?![A-Za-z0-9])")
 _GEN_TOOL = _LINE_START + _PHRASE + _SEP + ".{0,24}?" + _NAME
@@ -108,6 +113,7 @@ _TAG = re.compile(r"<[^<>\n]*>")
 FOOTER_RULES = (
     ("generated footer", re.compile(_GEN_LINE, re.M)),
     ("generated footer", re.compile(_GEN_PRODUCT)),
+    ("generated footer", re.compile(_GEN_SENTENCE)),
     ("generated footer", re.compile(_GEN_TOOL, re.M)),
     ("generated footer", re.compile(_GEN_CODE)),
     ("generated footer", re.compile(_GEN_PAREN)),
@@ -141,7 +147,7 @@ FILE_RULES = (
     ("co-author trailer", re.compile(_CO_ADDRESS)),
     ("session trailer line", re.compile(_SESSION_LINE, re.M)),
     ("session id", re.compile(_SESSION_ID)),
-    ("session link", re.compile(r"(?:[a-z][a-z0-9+.-]{0,30}:/*|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
+    ("session link", re.compile(r"(?:[a-z0-9+.-]:/*|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
                                 + _HOST + r"(?=[/:?#])")),
 ) + FOOTER_RULES
 

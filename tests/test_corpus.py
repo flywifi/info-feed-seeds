@@ -13,6 +13,7 @@ tests/fixtures/corpus.lock pins every id to the sha256 of its text and its kind,
 exists on origin/main must still exist here."""
 import base64
 import hashlib
+import importlib.util
 import io
 import json
 import os
@@ -36,7 +37,7 @@ PENDING = FIXTURES / "pending_ruling.jsonl"
 LOCK = FIXTURES / "corpus.lock"
 ALL = dict(CORPORA, pending=PENDING)
 PLACES = {"message", "body", "file", "main-history"}
-SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "repo"}
+SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "audit6", "repo"}
 
 
 def load(path_or_text) -> list[dict]:
@@ -50,13 +51,13 @@ def load(path_or_text) -> list[dict]:
     return out
 
 
-def refused_in(place: str, text: str) -> bool:
+def refused_in(place: str, text: str, checker=cc) -> bool:
     if place == "message":
-        return bool(cc.text_findings(text, "m"))
+        return bool(checker.text_findings(text, "m"))
     if place == "body":
-        return bool(cc.check_pr_text("Title", text, "pr"))
+        return bool(checker.check_pr_text("Title", text, "pr"))
     if place == "file":
-        return bool(cc.content_findings("corpus.md", (text + "\n").encode("utf-8")))
+        return bool(checker.content_findings("corpus.md", (text + "\n").encode("utf-8")))
     raise ValueError(place)
 
 
@@ -69,14 +70,14 @@ def row_of(kind: str, e: dict) -> list[str]:
             hashlib.sha256(e["text"].encode("utf-8")).hexdigest()]
 
 
-def main_history_refused(entries: list[dict]) -> set[str]:
+def main_history_refused(entries: list[dict], checker=cc) -> set[str]:
     """Commit each entry's text as a message on a scratch main, committed by GitHub's web committer
     and treated as verified, and return the ids main-history refuses."""
     tmp = Path(tempfile.mkdtemp())
     try:
         env = dict(os.environ, GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1",
-                   GIT_AUTHOR_NAME=cc.AUTHOR[0], GIT_AUTHOR_EMAIL=cc.AUTHOR[1],
-                   GIT_COMMITTER_NAME=cc.WEB_COMMITTER[0], GIT_COMMITTER_EMAIL=cc.WEB_COMMITTER[1])
+                   GIT_AUTHOR_NAME=checker.AUTHOR[0], GIT_AUTHOR_EMAIL=checker.AUTHOR[1],
+                   GIT_COMMITTER_NAME=checker.WEB_COMMITTER[0], GIT_COMMITTER_EMAIL=checker.WEB_COMMITTER[1])
 
         def git(*a):
             return subprocess.run(["git", "-c", "core.hooksPath=" + os.devnull, "-c", "commit.gpgsign=false", *a],
@@ -94,8 +95,8 @@ def main_history_refused(entries: list[dict]) -> set[str]:
             shas[e["id"]] = git("rev-parse", "HEAD").stdout.decode().strip()
         git("update-ref", "refs/remotes/origin/main", "HEAD")
         with redirect_stdout(io.StringIO()):
-            found = cc.check_range(f"{base}..HEAD", branch="main", cwd=tmp, main_history=True,
-                                   verify=lambda sha: True)
+            found = checker.check_range(f"{base}..HEAD", branch="main", cwd=tmp, main_history=True,
+                                        verify=lambda sha: True)
         return {i for i, sha in shas.items() if any(f"commit {sha[:7]}" in f for f in found)}
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -209,6 +210,23 @@ class AllowedCorpusTests(unittest.TestCase):
         history = [e for e in entries if "main-history" in e["where"]]
         refused += [f"{i} refused in main-history" for i in sorted(main_history_refused(history))]
         self.assertEqual(refused, [], "allowed corpus entries that were refused")
+
+    def test_every_allowed_entry_passes_the_baseline(self):
+        # An allowed entry the 512e818 checker refuses would let a narrowing through by name; such
+        # a text belongs in pending_ruling.jsonl for a ruling (audit 6, N5).
+        spec = importlib.util.spec_from_file_location("checker_baseline", FIXTURES / "checker_baseline.py")
+        baseline = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(baseline)
+        refused = []
+        entries = load(CORPORA["allowed"])
+        for e in entries:
+            for place in e["where"]:
+                if place != "main-history" and refused_in(place, e["text"], baseline):
+                    refused.append(f"{e['id']} refused by the baseline in {place}")
+        history = [e for e in entries if "main-history" in e["where"]]
+        refused += [f"{i} refused by the baseline in main-history"
+                    for i in sorted(main_history_refused(history, baseline))]
+        self.assertEqual(refused, [], "allowed entries the baseline refuses belong in pending_ruling.jsonl")
 
 
 class PendingRulingTests(unittest.TestCase):
