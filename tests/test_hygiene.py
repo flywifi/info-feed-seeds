@@ -48,6 +48,15 @@ class StdlibOnlyTests(unittest.TestCase):
         self.assertEqual(offenders, [])
 
 
+class AsciiSourceTests(unittest.TestCase):
+    def test_python_files_are_ascii(self):
+        for folder in ("feeder", "tools", "tests"):
+            for path in (ROOT / folder).rglob("*.py"):
+                data = path.read_bytes()
+                bad = [i for i, b in enumerate(data) if b > 127]
+                self.assertEqual(bad, [], f"{path.relative_to(ROOT)} has non-ASCII bytes at {bad[:5]}; use \\u escapes")
+
+
 class LayoutTests(unittest.TestCase):
     def test_gitignore_entries(self):
         lines = {l.strip() for l in (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()}
