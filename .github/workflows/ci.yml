@@ -63,21 +63,33 @@ jobs:
             echo "::error::origin/$BASE_REF has no tools/commit_check.py and this is not the bootstrap pull request at the bootstrap base; refusing to run a checker this pull request supplies"
             exit 1
           fi
+      # Every step after this one runs even when an earlier one failed, so one red step does not
+      # hide the others; the job still fails.
+      - name: Allowed corpus lines this change adds (read each one)
+        run: python3 -I tools/corpus_added.py "origin/$BASE_REF"
       - name: Commit hygiene (messages, identity, changed files)
+        if: ${{ !cancelled() }}
         run: python3 -I "$RUNNER_TEMP/commit_check.py" --range auto
       - name: Proof records of changed sources
+        if: ${{ !cancelled() }}
         run: python3 -I "$RUNNER_TEMP/commit_check.py" --sources auto
       - name: This branch's checker selftest
+        if: ${{ !cancelled() }}
         run: python3 -I tools/commit_check.py --selftest
       - name: Unit tests
+        if: ${{ !cancelled() }}
         run: python3 -m unittest discover -s tests -t .
       - name: hub lint
+        if: ${{ !cancelled() }}
         run: python3 -I feeder/hub.py lint
       - name: hub fmt --check
+        if: ${{ !cancelled() }}
         run: python3 -I feeder/hub.py fmt --check
       - name: Em dash scan
+        if: ${{ !cancelled() }}
         run: python3 -I tools/emdash_scan.py
       - name: Doctor
+        if: ${{ !cancelled() }}
         run: python3 -I tools/doctor.py check
 
   pr-text:
