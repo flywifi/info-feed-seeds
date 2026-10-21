@@ -55,6 +55,12 @@ All notable changes to this repository are recorded here. The format follows
   until the main ruleset requires the `checks` and `pr-text` status checks.
 - `tools/doctor.py check` with a required lint check and an advisory hooks check; exit 4 for a
   command that is not implemented yet.
+- Second audit round: footer lines with an underscore after the phrase, capital lookalike letters,
+  combining marks, Hangul fillers, ideographic dots, dash entities and more dash characters are
+  caught; a tool-named footer must open a line, so prose about the rule passes; pre-push fails
+  with no or malformed ref lines; pre-commit checks the committer; `main-history` re-checks main
+  from the boundary and trusts GitHub's committer only on first-parent merges or verified
+  commits; the checker bootstrap is limited to the one base that has no checker.
 
 ### Changed
 

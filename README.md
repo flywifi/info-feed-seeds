@@ -91,17 +91,34 @@ CI (`.github/workflows/ci.yml`) runs on every pull request, every push to a job 
 push to `main`:
 
 - `checks` runs the commit checks over the whole branch and the proof check on changed source
-  folders, using the base branch's copy of the checker so a pull request cannot weaken its own
-  check. It also runs the branch's checker selftest, the unit tests, `hub lint`,
-  `hub fmt --check`, the em dash scan and the doctor. It runs on description edits too.
+  folders using the base branch's copy of the checker, so editing `tools/commit_check.py` in a
+  pull request does not change what checks that pull request. It also runs the branch's checker
+  selftest, the unit tests, `hub lint`, `hub fmt --check`, the em dash scan and the doctor. It
+  runs on description edits too.
 - `pr-text` checks the pull request title and description, and re-runs on every edit, so removing
   a footer turns it green without a new push.
-- `main-history` checks every new commit on `main`, which catches a merge or edit made on
-  github.com whose message was never seen by a hook or a pull request run.
+- `main-history` runs on every push to `main` and re-checks every commit since the policy boundary,
+  so a merge or edit made on github.com is caught even if an earlier run never happened. There,
+  GitHub's web-flow committer passes only on a first-parent merge or on a commit GitHub marks
+  verified.
 
-**CI is advisory for now.** A red run does not block a merge until the repository owner adds a
-required status checks rule for `checks` and `pr-text` to the main ruleset. The data ruleset also
-needs a rule that stops anything but the poll workflow from updating `data`.
+Two limits remain:
+
+- **CI is advisory for now.** A red run does not block a merge until the repository owner adds a
+  required status checks rule for `checks` and `pr-text` to the main ruleset. The data ruleset
+  also needs a rule that stops anything but the poll workflow from updating `data`.
+- **A pull request can still weaken its own CI.** A `pull_request` workflow runs the workflow file
+  from the pull request itself, so a pull request that edits `ci.yml` can remove the step that
+  takes the checker from the base branch. Closing that gap needs the hygiene checks moved to a
+  `pull_request_target` workflow that runs the base branch's checker over git data only; that is
+  planned as a separate change. Until then, any change to `ci.yml`, `tools/hooks/` or
+  `tools/commit_check.py` needs a person's review, and the checker prints a notice when a range
+  touches them.
+
+The file rule reads CLAUDE.md the way it is worded: a trailer line, a link, a footer line. CLAUDE.md
+itself names these things mid-sentence and passes. Rewrapping that paragraph so a line starts with
+the quoted footer phrase would make CLAUDE.md fail the check, so keep the phrase off the start of a
+line.
 
 ## Outputs
 
