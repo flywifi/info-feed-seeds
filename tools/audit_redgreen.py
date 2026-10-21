@@ -2,7 +2,7 @@
 """Red-then-green evidence for the PR 7 audits: every audit probe, run through older copies of
 tools/commit_check.py and through the working tree's copy, side by side.
 
-Usage: python3 tools/audit_redgreen.py [--old REF ...]     (default: ba76314, 6686d0a, 512e818, f8473e6)
+Usage: python3 tools/audit_redgreen.py [--old REF ...]     (default: ba76314, 6686d0a, 512e818, f8473e6, fe11d79)
 
 Rows come from the refused and allowed corpora (tests/fixtures/*_corpus.jsonl), the pending
 ruling file (shown, never scored) and scenario probes that need a repository (main-history, acknowledgements) or a clock (rule timing).
@@ -37,7 +37,7 @@ WEB = {"GIT_COMMITTER_NAME": "GitHub", "GIT_COMMITTER_EMAIL": "noreply@github.co
 
 def load(name: str, source: str):
     tmp = Path(tempfile.mkdtemp()) / f"{name}.py"
-    tmp.write_text(source, encoding="utf-8")
+    tmp.write_text(source, encoding="utf-8", newline="\n")
     spec = importlib.util.spec_from_file_location(name, tmp)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -103,7 +103,7 @@ class Repo:
                               cwd=self.dir, env={**self.env, **(extra or {})}, check=True, capture_output=True)
 
     def commit(self, name, message, extra=None):
-        (self.dir / name).write_text(name + "\n")
+        (self.dir / name).write_bytes((name + "\n").encode("utf-8"))
         self.git("add", name)
         self.git("commit", "-q", "-m", message, extra=extra)
         return self.head()
@@ -244,7 +244,7 @@ def rows():
 
 
 def main(argv: list[str]) -> int:
-    refs = [argv[i + 1] for i, a in enumerate(argv) if a == "--old"] or ["ba76314", "6686d0a", "512e818", "f8473e6"]
+    refs = [argv[i + 1] for i, a in enumerate(argv) if a == "--old"] or ["ba76314", "6686d0a", "512e818", "f8473e6", "fe11d79"]
     olds = []
     for ref in refs:
         src = subprocess.run(["git", "show", f"{ref}:tools/commit_check.py"], cwd=HERE, capture_output=True)
