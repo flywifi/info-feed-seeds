@@ -1,13 +1,16 @@
 # Shared by the info-feed-seeds hooks. Sourced, not run.
 # Install the hooks once per clone:  git config core.hooksPath tools/hooks
+# The hooks are opt-in: a clone without that setting runs none of them, and
+# git commit --no-verify or git push --no-verify skips them without a word.
 
 skip_if_bypassed() {
   if [ "${IFS_SKIP_HOOKS:-}" = "1" ]; then
     {
       echo "##################################################################"
       echo "#  WARNING: IFS_SKIP_HOOKS=1 is set. The $1 hook did NOT run."
-      echo "#  Nothing was checked. CI runs the same checks and will refuse"
-      echo "#  the pull request if anything here is wrong."
+      echo "#  Nothing was checked. CI runs the same checks on the pull"
+      echo "#  request, but a red CI run blocks a merge only once the main"
+      echo "#  ruleset requires the checks and pr-text status checks."
       echo "##################################################################"
     } >&2
     exit 0
