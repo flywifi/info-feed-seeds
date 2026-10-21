@@ -32,12 +32,32 @@ class EscapeTests(unittest.TestCase):
         title = "[click](https://evil.example/x) ![img](https://evil.example/t.png) *b* _i_ `c` # | \\ & ~x~"
         view = outputs.item_view(row(title, summary="a [b](http://e) ![c](http://f)"), SOURCE, PROFILE, set())
         md = outputs.render_markdown(PROFILE, "2026-10-20", [view], [])
-        self.assertIn("\\[click\\]\\(https://evil.example/x\\) \\!\\[img\\]\\(https://evil.example/t.png\\)", md)
+        self.assertIn("\\[click\\]\\(https:\\/\\/evil.example/x\\) \\!\\[img\\]\\(https:\\/\\/evil.example/t.png\\)", md)
         self.assertIn("\\*b\\* \\_i\\_ \\`c\\` \\# \\| \\\\ \\& \\~x\\~", md)
-        self.assertIn("  a \\[b\\]\\(http://e\\) \\!\\[c\\]\\(http://f\\)", md)
+        self.assertIn("  a \\[b\\]\\(http:\\/\\/e\\) \\!\\[c\\]\\(http:\\/\\/f\\)", md)
         import re
         for m in re.finditer(r"(?<!\\)!?\[[^\]]*\]\(", md):
             self.fail(f"live Markdown link or image syntax survived: {m.group(0)!r}")
+
+    def test_bare_urls_do_not_autolink(self):
+        """Checked against cmark-gfm: an escaped slash after the scheme and an escaped dot after
+        www stop GitHub-flavoured Markdown from turning text into a link."""
+        self.assertEqual(outputs.escape("see http://evil.example/x"), "see http:\\/\\/evil.example/x")
+        self.assertEqual(outputs.escape("see HTTPS://evil.example"), "see HTTPS:\\/\\/evil.example")
+        self.assertEqual(outputs.escape("see www.evil.example"), "see www\\.evil.example")
+        self.assertEqual(outputs.escape("see WWW.evil.example"), "see WWW\\.evil.example")
+        view = outputs.item_view(row("Read http://evil.example/a", summary="and www.evil.example"), SOURCE, PROFILE, set())
+        md = outputs.render_markdown(PROFILE, "2026-10-20", [view], [])
+        self.assertNotIn("http://evil", md)
+        self.assertNotIn(" www.evil", md)
+
+    def test_leading_list_markers_do_not_nest(self):
+        """A title or snippet that starts like a list item would render as a nested list."""
+        for text, want in (("1. first", "1\\. first"), ("12) x", "12\\) x"), ("+ plus", "\\+ plus"),
+                           ("- minus", "\\- minus"), ("  3. indented", "  3\\. indented")):
+            self.assertEqual(outputs.escape(text), want, text)
+        self.assertEqual(outputs.escape("Section 1. Scope"), "Section 1. Scope", "only a leading marker")
+        self.assertEqual(outputs.escape("2026 budget"), "2026 budget", "a number alone is not a marker")
 
     def test_link_is_reserialised_and_safe(self):
         self.assertEqual(outputs.safe_link("HTTPS://Example.GOV:443/a b?utm_source=x&q=1#frag"),

@@ -20,6 +20,7 @@ carries its scan in latest.json.
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -39,10 +40,19 @@ RESPONDED = frozenset({"ok", "not-modified", "empty"})
 _MARKDOWN_META = "\\[]()!*_`#|&~"
 
 
+_LIST_MARKER_RE = re.compile(r"^(\s*)([-+]|\d{1,9}(?=[.)]))")
+_WWW_RE = re.compile(r"(?i)\b(www)\.")
+
+
 def escape(text: str) -> str:
-    """Feed text rendered inert inside Markdown: every Markdown metacharacter is backslash-escaped,
-    so `[x](url)` and `![x](url)` stay literal text, and angle brackets become entities so no raw
-    tag can reach a renderer. The backslash is escaped first so an escape can never be undone."""
+    """Feed text rendered inert inside Markdown. Every Markdown metacharacter is backslash-escaped,
+    so `[x](url)` and `![x](url)` stay literal text; angle brackets become entities so no raw tag
+    can reach a renderer; the backslash is escaped first so an escape can never be undone.
+
+    GitHub-flavoured Markdown also turns bare `scheme://` and `www.` text into links and a leading
+    `1.`, `1)`, `+` or `-` into a nested list. Checked against cmark-gfm: writing the slashes after
+    a scheme as `\\/\\/`, writing `www\\.`, and escaping a leading list marker render as plain
+    text. E-mail addresses still autolink, but titles and summaries redact them before this runs."""
     out = []
     for ch in text or "":
         if ch in _MARKDOWN_META:
@@ -53,7 +63,15 @@ def escape(text: str) -> str:
             out.append("&gt;")
         else:
             out.append(ch)
-    return "".join(out)
+    value = "".join(out)
+    value = value.replace("://", ":\\/\\/")
+    value = _WWW_RE.sub(lambda m: m.group(1) + "\\.", value)
+    match = _LIST_MARKER_RE.match(value)
+    if match:
+        marker = match.group(2)
+        escaped = ("\\" + marker) if marker in "+-" else marker + "\\"
+        value = match.group(1) + escaped + value[match.end():]
+    return value
 
 
 def safe_link(url: str | None) -> str | None:
