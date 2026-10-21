@@ -120,7 +120,7 @@ jobs:
     # Every push to main is a merge or an edit made on github.com, whose message no hook or pull
     # request run ever saw. Each run re-checks main from the policy boundary, not just
     # before..after, so a run that never happened cannot leave a gap. A web-flow committer passes
-    # here only on a first-parent merge or on a commit GitHub marks verified.
+    # here only on a commit GitHub marks verified, merges included.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
