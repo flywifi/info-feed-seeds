@@ -124,24 +124,34 @@ current one, side by side, as the evidence for each fix.
 
 What the checker refuses:
 
-- **Co-author trailer:** in messages and pull request text, a line that opens with the key and a
-  colon, the key joined by hyphens anywhere, or the key followed by an address in angle brackets.
-  Prose such as "co-authored by Smith" passes. In files, only a trailer line.
-- **Session trailer and session link:** anywhere in a message or pull request text; in files, a
-  trailer line or a real link.
-- **Generated footer:** a line opening with "Generated with" (capital G, as CLAUDE.md writes it,
-  after an optional label such as "Note:"), whatever tool it names; a line opening with any form of
-  the phrase that names the assistant within a few words; and, anywhere, the phrase followed within
-  a few words by the assistant's name and "code", or by the name in parentheses, or directly by a
-  name that closes the line or a bracket. A lowercase "generated with" in a sentence is ordinary
-  prose. Footer rules also run with HTML tags removed.
+- **Co-author trailer:** a trailer line (the key and then a colon or an equals sign, at the start
+  of a line or after a bullet, a number or a short label) and the key followed by an address in
+  angle brackets, everywhere; in messages and pull request text, also the key joined by hyphens
+  anywhere. Prose such as "co-authored by Smith" passes.
+- **Session trailer, link and id:** in messages and pull request text, any mention; in files, a
+  trailer line, a real link, or a bare session id ("session_" and 20 or more letters or digits).
+- **Generated footer:** a line opening with the phrase "generated with" in any case, after an
+  optional label such as "Note:", whatever tool it names (finding 7, read literally until it is
+  ruled on); a capital "Generated" with, by or using anywhere, with the assistant's name later on
+  the same line within 64 characters; a line opening with any form of the phrase that names the
+  assistant within a few words; and, anywhere, the phrase followed within a few words by the
+  assistant's name and "code", or by the name in parentheses, or directly by a name that closes
+  the line or a bracket. A lowercase sentence that mentions the assistant after the phrase, such as
+  a description of these rules, passes. Footer rules also run with HTML tags removed.
+- **Hidden characters:** text is folded before matching: entities, percent-encoding,
+  compatibility forms, format characters, combining and enclosing marks, Hangul fillers, the
+  blank braille pattern, ideographic dots, Unicode hyphens and lookalike letters.
 
-**What may and may not pass is fixed by two corpora, not by the rules.**
+**What may and may not pass is fixed by corpora, not by the rules.**
 `tests/fixtures/refused_corpus.jsonl` holds every string an audit proved must be refused, and
 `tests/fixtures/allowed_corpus.jsonl` holds prose and real commit messages and pull request bodies
-that must pass. The text is base64 so no scanner sees it. A rule may change only when both corpora
-still pass, and the corpora only grow: a test fails if an id that is on main disappears. Every rule
-also has to finish within a second on a 100,000-character line.
+that must pass. `tests/fixtures/pending_ruling.jsonl` holds text whose verdict waits on a ruling;
+the tests print its current verdicts without asserting them. The text is base64 so no scanner sees
+it. A rule may change only when both corpora still pass, and the corpora only grow:
+`tests/fixtures/corpus.lock` pins every id to the sha256 of its text and to its kind, and a test
+fails if a locked id is missing, its text changed, or it moved between refused and allowed. New
+ids are appended to the lock in the same commit. Every rule also has to finish within a second on a
+100,000-character line.
 
 The file rule reads CLAUDE.md the way it is worded: a trailer line, a link, a footer line. CLAUDE.md
 itself names these things mid-sentence and passes. Rewrapping that paragraph so a line starts with

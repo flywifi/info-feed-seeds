@@ -71,6 +71,12 @@ All notable changes to this repository are recorded here. The format follows
   against them; every rule bounded and timed on 100,000-character lines; an acknowledgement in
   `tools/main_history_known.txt` counts only after the commit landed; the red-green harness runs
   the corpora.
+- Fifth audit round: the auditor's exact probe strings join the corpora (60 refused, 9 allowed);
+  `tests/fixtures/pending_ruling.jsonl` holds text whose verdict waits on finding 7, with its
+  verdicts printed; `tests/fixtures/corpus.lock` pins every id to its text and kind. The literal
+  footer rule is case-insensitive again; a capital "Generated" naming the assistant later on the
+  line is refused; files refuse numbered, labelled, equals-sign and address-bearing co-author
+  forms and bare session ids; enclosing marks and the blank braille pattern are folded away.
 
 ### Changed
 
