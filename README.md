@@ -65,29 +65,43 @@ Run the tests with `python3 -m unittest discover -s tests -t .`.
 
 ## Checks before commit, push and merge
 
-Every clone that pushes runs the tracked hooks. Install them once per clone:
+The tracked hooks are opt-in. A clone runs them only after this one-time setting, and every clone
+that pushes should set it:
 
 ```
 git config core.hooksPath tools/hooks
 ```
 
 - `pre-commit` checks staged files and the author identity.
-- `commit-msg` refuses co-author and session trailers, Claude footers and dashes in the message.
-- `pre-push` checks every commit and changed file being pushed, confirms the push URL names
-  flywifi/info-feed-seeds, and refuses pushes to `main` and `data`.
+- `commit-msg` refuses co-author and session trailers, generated footers and dashes in the message.
+- `pre-push` checks every commit and changed file being pushed, confirms the push URL is
+  github.com/flywifi/info-feed-seeds, refuses pushes to `main` and `data`, and refuses an empty
+  push (anything but a branch deletion).
 
 All three call `tools/commit_check.py`. Run it by hand with `--range origin/main..HEAD`, check a
-pull request with `--pr N`, or prove the checks fire with `--selftest`. In an emergency,
-`IFS_SKIP_HOOKS=1` skips a hook and prints a warning block; CI still runs every check.
+pull request with `--pr N`, or prove the checks fire with `--selftest`.
 
-The hub never requires the hooks: it also runs in GitHub Actions and on pull-only clones. Instead,
-`python3 tools/doctor.py check` reports a clone that can push without them.
+The hooks are a convenience, not a guarantee. `git commit --no-verify` and `git push --no-verify`
+skip them without any message, and a clone without the setting above runs none of them.
+`IFS_SKIP_HOOKS=1` also skips them, but prints a warning block. The hub never requires the hooks:
+it also runs in GitHub Actions and on pull-only clones. `python3 tools/doctor.py check` notes a
+clone that can push without them.
 
-CI (`.github/workflows/ci.yml`) runs on every pull request and every push to a job branch. It runs
-the commit checks over the whole branch, the checker selftest, the unit tests, `hub lint`,
-`hub fmt --check`, the em dash scan, a proof check on every changed source folder, and the doctor.
-A second job checks the pull request title and description. It re-runs when the description is
-edited, so removing a footer turns it green without a new push.
+CI (`.github/workflows/ci.yml`) runs on every pull request, every push to a job branch, and every
+push to `main`:
+
+- `checks` runs the commit checks over the whole branch and the proof check on changed source
+  folders, using the base branch's copy of the checker so a pull request cannot weaken its own
+  check. It also runs the branch's checker selftest, the unit tests, `hub lint`,
+  `hub fmt --check`, the em dash scan and the doctor. It runs on description edits too.
+- `pr-text` checks the pull request title and description, and re-runs on every edit, so removing
+  a footer turns it green without a new push.
+- `main-history` checks every new commit on `main`, which catches a merge or edit made on
+  github.com whose message was never seen by a hook or a pull request run.
+
+**CI is advisory for now.** A red run does not block a merge until the repository owner adds a
+required status checks rule for `checks` and `pr-text` to the main ruleset. The data ruleset also
+needs a rule that stops anything but the poll workflow from updating `data`.
 
 ## Outputs
 

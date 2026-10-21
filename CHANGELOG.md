@@ -42,14 +42,19 @@ All notable changes to this repository are recorded here. The format follows
 - Profile schema fields `window_days`, `backfill_days`, `outputs`, `guard.hold_at` and
   `subtopic_keywords` (include and exclude per subtopic).
 - `tools/commit_check.py`: commit hygiene for staged files, commit messages, pushes, commit ranges,
-  changed source folders and pull request text, with a selftest. Web-flow merges by GitHub are
-  allowed as committer; every author must be flywifi.
-- Tracked hooks in `tools/hooks/` (pre-commit, commit-msg, pre-push), installed with
-  `git config core.hooksPath tools/hooks`, with a loud `IFS_SKIP_HOOKS=1` bypass.
-- `.github/workflows/ci.yml`: commit checks, selftest, unit tests, lint, format, em dash scan,
-  source proof check and doctor on every pull request and job-branch push; pull request text
-  checked on every edit.
-- `tools/doctor.py check` with a required lint check and an advisory hooks check.
+  changed source folders and pull request text, with a selftest. Text is normalised before matching
+  (compatibility forms, format characters, Unicode hyphens, lookalike letters, entities and
+  percent-encoding). Files are held to the rule as CLAUDE.md words it: no trailer line, session
+  link or generated footer line. An empty range fails closed. Every author and committer must be
+  flywifi; GitHub's web-flow committer is accepted only on commits already on main.
+- Tracked hooks in `tools/hooks/` (pre-commit, commit-msg, pre-push), opt-in with
+  `git config core.hooksPath tools/hooks`, with a loud `IFS_SKIP_HOOKS=1` bypass. The push URL must
+  be exactly github.com/flywifi/info-feed-seeds.
+- `.github/workflows/ci.yml`: `checks` and `pr-text` on every pull request event and job-branch
+  push, using the base branch's copy of the checker; `main-history` on every push to main. Advisory
+  until the main ruleset requires the `checks` and `pr-text` status checks.
+- `tools/doctor.py check` with a required lint check and an advisory hooks check; exit 4 for a
+  command that is not implemented yet.
 
 ### Changed
 
@@ -72,3 +77,5 @@ All notable changes to this repository are recorded here. The format follows
 - `hub release` checks the item in the database and refuses unknown, CLEAN and BLOCK items.
 - README restores the rule that nothing here identifies a client or a campaign.
 - Test files use `\u` escapes; a hygiene test keeps every Python file ASCII.
+- Digest Markdown also stops bare URLs and `www.` text from autolinking and stops a leading `1.`,
+  `1)`, `+` or `-` from opening a nested list (checked against cmark-gfm).
