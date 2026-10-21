@@ -36,7 +36,7 @@ PENDING = FIXTURES / "pending_ruling.jsonl"
 LOCK = FIXTURES / "corpus.lock"
 ALL = dict(CORPORA, pending=PENDING)
 PLACES = {"message", "body", "file", "main-history"}
-SOURCES = {"audit1", "audit2", "audit3", "audit4", "repo"}
+SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "repo"}
 
 
 def load(path_or_text) -> list[dict]:
@@ -58,6 +58,15 @@ def refused_in(place: str, text: str) -> bool:
     if place == "file":
         return bool(cc.content_findings("corpus.md", (text + "\n").encode("utf-8")))
     raise ValueError(place)
+
+
+def lock_rows(text: str) -> list[list[str]]:
+    return [line.split(" ") for line in text.splitlines() if line.strip() and not line.startswith("#")]
+
+
+def row_of(kind: str, e: dict) -> list[str]:
+    return [e["id"], kind, "true" if e["exact"] else "false", ",".join(e["where"]),
+            hashlib.sha256(e["text"].encode("utf-8")).hexdigest()]
 
 
 def main_history_refused(entries: list[dict]) -> set[str]:
@@ -120,23 +129,44 @@ class CorpusShapeTests(unittest.TestCase):
             self.assertEqual(before - now, set(), f"{name}: ids removed since main")
 
     def test_lock_pins_every_id_and_text(self):
-        rows = [line.split() for line in LOCK.read_text(encoding="utf-8").splitlines()
-                if line.strip() and not line.startswith("#")]
-        self.assertTrue(all(len(r) == 3 for r in rows), "lock lines are: id kind sha256")
-        locked = {r[0]: (r[2], r[1]) for r in rows}
+        rows = lock_rows(LOCK.read_text(encoding="utf-8"))
+        self.assertTrue(all(len(r) == 5 for r in rows), "lock lines are: id kind exact where sha256")
+        locked = {r[0]: r for r in rows}
         self.assertEqual(len(locked), len(rows), "an id is locked twice")
-        current = {e["id"]: (hashlib.sha256(e["text"].encode("utf-8")).hexdigest(), kind)
-                   for kind, path in ALL.items() for e in load(path)}
+        current = {e["id"]: row_of(kind, e) for kind, path in ALL.items() for e in load(path)}
         problems = []
-        for i, (sha, kind) in locked.items():
+        for i, row in locked.items():
             if i not in current:
                 problems.append(f"{i}: locked but missing")
-            elif current[i][0] != sha:
-                problems.append(f"{i}: text changed")
-            elif current[i][1] != kind and kind != "pending":
-                problems.append(f"{i}: moved from {kind} to {current[i][1]}")
+            elif current[i] != row:
+                problems.append(f"{i}: locked {' '.join(row[1:4])}, now {' '.join(current[i][1:4])}"
+                                + (" (text changed)" if current[i][4] != row[4] else ""))
         problems += [f"{i}: not in the lock" for i in current if i not in locked]
         self.assertEqual(problems, [], "corpus.lock")
+
+    def test_lock_keeps_every_row_on_main(self):
+        rel = LOCK.relative_to(ROOT).as_posix()
+        proc = subprocess.run(["git", "show", f"origin/main:{rel}"], cwd=ROOT, capture_output=True)
+        if proc.returncode != 0:
+            self.skipTest("main has no corpus.lock yet")
+        now = {r[0]: r for r in lock_rows(LOCK.read_text(encoding="utf-8"))}
+        problems = []
+        for row in lock_rows(proc.stdout.decode("utf-8")):
+            mine = now.get(row[0])
+            if mine == row:
+                continue
+            if mine and row[1] == "pending" and mine[:1] + mine[2:] == row[:1] + row[2:]:
+                continue  # a ruling moved a pending entry
+            problems.append(f"{row[0]}: changed or removed since main")
+        self.assertEqual(problems, [], "corpus.lock rows on main")
+
+    def test_no_text_is_both_pending_and_decided(self):
+        texts = {kind: {e["text"]: e["id"] for e in load(path)} for kind, path in ALL.items()}
+        clashes = [f"{texts['pending'][t]} (pending) = {texts[k][t]} ({k})"
+                   for k in ("refused", "allowed") for t in texts["pending"] if t in texts[k]]
+        clashes += [f"{texts['refused'][t]} (refused) = {texts['allowed'][t]} (allowed)"
+                    for t in texts["refused"] if t in texts["allowed"]]
+        self.assertEqual(clashes, [], "the same text in two kinds")
 
     def test_no_real_session_id(self):
         # Only a made-up id of one repeated character may appear, never a real one.
@@ -206,6 +236,8 @@ class RuleTimingTests(unittest.TestCase):
         "label colons": "note:" * (N // 5), "apostrophes": "a'" * (N // 2),
         "key then at signs": "co-" + "authored-by " + "@" * N, "key then open angle": "co-" + "authored-by <" + "a" * N,
         "letters then host": "a" * N + ".cla" + "ude.ai",
+        "newlines": "\n" * N, "newline symbols": "-\n" * (N // 2), "newline labels": "a:\n" * (N // 3),
+        "capital phrase": ("Gener" + "ated with ") * (N // 15), "capital phrase lines": ("Gener" + "ated by\n") * (N // 13),
     }
 
     def test_every_rule_on_long_lines(self):

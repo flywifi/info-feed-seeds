@@ -1,6 +1,5 @@
 {"b64": "VGhlIGNoZWNrZXIgcmVmdXNlcyBhIGZvb3RlciB3aGVyZSB0aGUgd29yZHMgZ2VuZXJhdGVkIHdpdGggY29tZSBzaG9ydGx5IGJlZm9yZSBDbGF1ZGUu", "exact": false, "id": "a3-f8-prose", "source": "audit3", "where": ["message", "body", "file"]}
 {"b64": "Q2l0ZSB0aGUgcGFwZXIgY28tYXV0aG9yZWQgYnkgU21pdGg=", "exact": true, "id": "a3-n9-coauthored-prose", "source": "audit3", "where": ["message", "body", "file"]}
-{"b64": "VGhlIGRpZ2VzdCBpcyBnZW5lcmF0ZWQgYnkgQ2xhdWRlIGVhY2ggbW9ybmluZw==", "exact": true, "id": "a4-r8-digest", "source": "audit4", "where": ["message", "body", "file"]}
 {"b64": "V3JpdHRlbiBieSBpbmZvLWZlZWQtc2VlZHMgaHViIHBvbGw=", "exact": true, "id": "repo-written-by", "source": "repo", "where": ["message", "body", "file"]}
 {"b64": "QWRkIHRoZSBjby1hdXRob3IgcnVsZSB0byB0aGUgZG9jcw==", "exact": true, "id": "repo-coauthor-rule", "source": "repo", "where": ["message", "body", "file"]}
 {"b64": "R2VuZXJhdGVkIGRhdGEgZm9yIHRoZSBkaWdlc3Q=", "exact": true, "id": "repo-generated-data", "source": "repo", "where": ["message", "body", "file"]}
@@ -76,3 +75,4 @@
 {"b64": "zpHOuM6uzr3OsSBuZXdzIHNvdXJjZQ==", "exact": true, "id": "audit3_fp_greek_prose", "source": "audit3", "where": ["message", "body", "file"]}
 {"b64": "QWRkIGEgcGxhaW4gY2hhbmdl", "exact": true, "id": "audit4_fp_plain", "source": "audit4", "where": ["message", "body", "file", "main-history"]}
 {"b64": "Q29ycG9yYTogcmVuYW1lIG9uZSByZWZ1c2VkIGlkLCBhZGQgdGhpcyByb3VuZCdzIGZpdmUgY29tbWl0IG1lc3NhZ2VzIHRvIHRoZSBhbGxvd2VkIGNvcnB1cw==", "exact": true, "id": "repo-commit-f8473e6", "source": "repo", "where": ["message"]}
+{"b64": "YXVkaXQ0X2ZwX2RvY3NfZ2VuZXJhdGVkX2J5X2NsYXVkZQ==", "exact": true, "id": "repo-identifier-generated-by", "source": "repo", "where": ["message", "body", "file"]}

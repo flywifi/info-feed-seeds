@@ -52,7 +52,10 @@ WEB_COMMITTER = ("GitHub", "noreply@github.com")
 PROTECTED_BRANCHES = ("main", "data")
 ZERO_SHA = "0" * 40
 SCISSORS = "# ------------------------ >8 ------------------------"
-SELF_PATHS = ("tools/commit_check.py", "tools/hooks/", ".github/workflows/", "tools/main_history_known.txt")
+SELF_PATHS = ("tools/commit_check.py", "tools/hooks/", ".github/workflows/", "tools/main_history_known.txt",
+              "tests/fixtures/refused_corpus.jsonl", "tests/fixtures/allowed_corpus.jsonl",
+              "tests/fixtures/pending_ruling.jsonl", "tests/fixtures/corpus.lock",
+              "tests/fixtures/checker_baseline.py", "tests/test_corpus.py", "tests/test_no_narrowing.py")
 
 EM_DASH, EN_DASH = "\u2014", "\u2013"
 # Every dash-like character a renderer could show as an em or en dash. Checked after HTML entities
@@ -64,66 +67,69 @@ DASHES = (
 )
 
 # The banned strings are assembled from pieces so this file never contains what it hunts for.
-_CO = "co" + r"[\W_]{0,4}" + "author(?:ed)?" + r"[\W_]{0,4}" + "by"
-_SESSION = "claude" + r"[\W_]{0,4}" + "session"
-_HOST = "claude" + r"\." + "ai"
-# Every rule below is checked against tests/fixtures/refused_corpus.jsonl (all must be refused) and
-# tests/fixtures/allowed_corpus.jsonl (all must pass). A rule may change only if both corpora pass.
-# Every quantifier that can meet a long run of one character class is bounded, and a timing test
-# runs each rule on 100,000-character lines, so no rule can backtrack quadratically.
 #
-# A line may open with a label before a footer: a letter, then up to 60 letters, digits, spaces or
-# apostrophes ("Note", "Tool's note", "Automatically produced release notes"), then a colon.
-_LABEL = r"(?:[a-z][a-z0-9 ']{0,60}[^a-z0-9:\n]{0,8}:[\W_]{0,16})?"
-_LINE_START = r"^[\W_\d]{0,16}" + _LABEL
-_PHRASE = "generated" + r"[\W_]{1,8}(?:with|by|using)(?![a-z0-9])"
+# Every rule below is checked against tests/fixtures/refused_corpus.jsonl (all must be refused) and
+# tests/fixtures/allowed_corpus.jsonl (all must pass), and tests/test_no_narrowing.py fails when the
+# 512e818 checker (tests/fixtures/checker_baseline.py) refuses a variant this one lets through.
+# Separator runs are unbounded, as in the baseline, but every unbounded run either follows a literal
+# or is anchored at a line start and cannot cross a newline, and no two unbounded runs can trade
+# characters, so matching stays linear; a timing test runs each rule on 100,000-character lines.
+_SEP = r"[\W_]*"
+_CO = "co" + _SEP + "author(?:ed)?" + _SEP + "by"
+_SESSION = "claude" + _SEP + "session"
+_HOST = "claude" + r"\." + "ai"
+# A line may open with symbols, digits, underscores, quote markers and list markers, then a label:
+# a letter, up to 60 letters, digits, spaces or apostrophes ("Note", "Tool's note", "Automatically
+# produced release notes"), any symbols, a colon and any symbols.
+_LABEL = r"(?:[a-z][a-z0-9 ']{0,60}[^a-z0-9:\n]*:(?:[^\w\n]|_)*)?"
+_LINE_START = r"^(?:[^\w\n]|[_\d])*" + _LABEL
+_PHRASE = "generated" + r"[\W_]+(?:with|by|using)(?![a-z0-9])"
 _NAME = "claude"
 # Footer rules:
 #   line     a line opening with "Generated with" in any case, after an optional label, whatever
 #            tool it names (finding 7, read literally until it is ruled on)
+#   product  anywhere, the phrase followed by separators only and then the assistant's name: any
+#            statement that something was generated with, by or using it. Not inside an identifier
+#            joined by underscores ("docs_" + "generated_by_" + "name"), such as a corpus id
 #   near     (cased) a capital "Generated" with, by or using anywhere, and the assistant's name later
-#            on the same line within 64 characters; a lowercase "generated" in a sentence that
-#            mentions the assistant is prose, such as a description of these rules
-#   tool     a line opening with any form of the phrase that names the assistant within a few words
+#            within 160 characters, across single line breaks
+#   tool     a line opening with the phrase that names the assistant within a few words
 #   code     anywhere, the phrase and then the assistant's name and "code" within a few words
 #   paren    anywhere, the phrase and then the assistant's name in parentheses within a few words
-#   product  anywhere, the phrase directly followed by the assistant's name where that name closes
-#            the line or a bracket, or is followed by "code"
-_GEN_LINE = _LINE_START + "generated" + r"[\W_]{1,8}with(?![a-z0-9])"
-_GEN_NEAR_CASED = ("G" + r"(?i:enerated)[\W_]{1,8}(?i:with|by|using)(?![A-Za-z0-9])[^\n]{0,64}?(?<![A-Za-z0-9])"
-                   + "(?i:" + _NAME + ")(?![A-Za-z0-9])")
-_GEN_TOOL = _LINE_START + _PHRASE + r"[\W_]{0,8}.{0,24}?" + _NAME
-_GEN_CODE = _PHRASE + r"[\W_]{0,8}.{0,24}?" + _NAME + r"[\W_]{0,8}code(?![a-z0-9])"
-_GEN_PAREN = _PHRASE + r"[\W_]{0,8}.{0,24}?\(\s{0,4}" + _NAME + r"\s{0,4}\)"
-_GEN_PRODUCT = _PHRASE + r"[\W_]{0,8}\[?" + _NAME + r"(?=[\W_]{0,8}(?:code(?![a-z0-9])|$)|[\])])"
+_GEN_LINE = _LINE_START + "generated" + r"[\W_]+with(?![a-z0-9])"
+_GEN_PRODUCT = r"(?<![a-z0-9]_)" + _PHRASE + _SEP + r"\[?" + _NAME + r"(?![a-z0-9])"
+_GEN_NEAR_CASED = ("G" + r"(?i:enerated)[\W_]+(?i:with|by|using)(?![A-Za-z0-9])(?:[^\n]|\n(?!\n)){0,160}?"
+                   + r"(?<![A-Za-z0-9])(?i:" + _NAME + r")(?![A-Za-z0-9])")
+_GEN_TOOL = _LINE_START + _PHRASE + _SEP + ".{0,24}?" + _NAME
+_GEN_CODE = _PHRASE + _SEP + ".{0,24}?" + _NAME + _SEP + "code(?![a-z0-9])"
+_GEN_PAREN = _PHRASE + _SEP + r".{0,24}?\(\s*" + _NAME + r"\s*\)"
 # Footer rules also run on a copy with HTML tags removed, so <p> or <sub> cannot hide a line start.
-_TAG = re.compile(r"<[^<>\n]{0,400}>")
+_TAG = re.compile(r"<[^<>\n]*>")
 FOOTER_RULES = (
     ("generated footer", re.compile(_GEN_LINE, re.M)),
+    ("generated footer", re.compile(_GEN_PRODUCT)),
     ("generated footer", re.compile(_GEN_TOOL, re.M)),
     ("generated footer", re.compile(_GEN_CODE)),
     ("generated footer", re.compile(_GEN_PAREN)),
-    ("generated footer", re.compile(_GEN_PRODUCT, re.M)),
 )
 # Rules that need the original letter case (run on a normalised copy that keeps case).
 CASED_FOOTER_RULES = (
     ("generated footer", re.compile(_GEN_NEAR_CASED)),
 )
 
-# A trailer line: a line that opens (after bullets, numbers or a short label) with the key and
-# then a colon or an equals sign.
-_CO_LINE = _LINE_START + _CO + r"[\W_]{0,8}[:=]"
-_SESSION_LINE = _LINE_START + _SESSION + r"[\W_]{0,8}[:=]"
+# A trailer line: a line that opens (after symbols, numbers, list markers or a short label) with
+# the key and then a colon or an equals sign.
+_CO_LINE = _LINE_START + _CO + _SEP + "[:=]"
+_SESSION_LINE = _LINE_START + _SESSION + _SEP + "[:=]"
 # Anywhere, the co-author key followed within 60 characters by an address in angle brackets.
 _CO_ADDRESS = _CO + r".{0,60}?<[^<>\s@]{1,64}@[^<>\s]{1,255}>"
 # A bare session id: "session_" and at least 20 letters or digits.
 _SESSION_ID = r"(?<![a-z0-9])session_[a-z0-9]{20}"
 MESSAGE_RULES = (
-    # A co-author trailer: a trailer line; or anywhere, the key joined by hyphens
-    # ("co-authored-by", which prose such as "co-authored by Smith" never is); or the key and an
-    # address.
+    # A co-author trailer: a trailer line; or anywhere, the key with a hyphen before "by" (which
+    # prose such as "co-authored by Smith" never has); or the key and an address.
     ("co-author trailer", re.compile(_CO_LINE, re.M)),
-    ("co-author trailer", re.compile("co" + r"[\W_]{0,4}" + "author(?:ed)?-by")),
+    ("co-author trailer", re.compile("co" + _SEP + "author(?:ed)?" + "-" + "by")),
     ("co-author trailer", re.compile(_CO_ADDRESS)),
     ("session trailer", re.compile(_SESSION)),
     ("session link", re.compile(_HOST + r"\b")),
@@ -135,7 +141,7 @@ FILE_RULES = (
     ("co-author trailer", re.compile(_CO_ADDRESS)),
     ("session trailer line", re.compile(_SESSION_LINE, re.M)),
     ("session id", re.compile(_SESSION_ID)),
-    ("session link", re.compile(r"(?:[a-z][a-z0-9+.-]{0,30}:/{0,3}|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
+    ("session link", re.compile(r"(?:[a-z][a-z0-9+.-]{0,30}:/*|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
                                 + _HOST + r"(?=[/:?#])")),
 ) + FOOTER_RULES
 
@@ -150,10 +156,19 @@ _CAPITAL_CONFUSABLES = {ord(k): v for k, v in {
     "\u0391": "A", "\u0392": "B", "\u0395": "E", "\u0396": "Z", "\u0397": "H", "\u0399": "I",
     "\u039a": "K", "\u039c": "M", "\u039d": "N", "\u039f": "O", "\u03a1": "P", "\u03a4": "T",
     "\u03a5": "Y", "\u03a7": "X",
+    # Cherokee capitals (their lowercase forms are folded below) and Lisu letters.
+    "\u13aa": "A", "\u13f4": "B", "\u13df": "C", "\u13a0": "D", "\u13ac": "E", "\u13c0": "G",
+    "\u13bb": "H", "\u13a5": "i", "\u13ab": "J", "\u13e6": "K", "\u13de": "L", "\u13b7": "M",
+    "\u13e2": "P", "\u13a1": "R", "\u13da": "S", "\u13a2": "T", "\u13b3": "W", "\u13a9": "Y",
+    "\u13c3": "Z", "\u13cf": "b", "\u13c2": "h", "\u13d9": "V",
+    "\ua4ee": "A", "\ua4d0": "B", "\ua4da": "C", "\ua4d3": "D", "\ua4f0": "E", "\ua4d6": "G",
+    "\ua4e7": "H", "\ua4f2": "I", "\ua4d9": "J", "\ua4d7": "K", "\ua4e1": "L", "\ua4df": "M",
+    "\ua4e0": "N", "\ua4f3": "O", "\ua4d1": "P", "\ua4e3": "R", "\ua4e2": "S", "\ua4d4": "T",
+    "\ua4f4": "U", "\ua4e6": "V", "\ua4ea": "W", "\ua4ec": "Y", "\ua4dc": "Z",
 }.items()}
-# Characters that render as blank but are not format (Cf) characters: Hangul fillers and the blank
-# braille pattern.
-_FILLERS = frozenset("\u3164\u115f\u1160\uffa0\u2800")
+# Characters that render as blank but are not format (Cf) characters: Hangul fillers, the blank
+# braille pattern and the null notehead.
+_FILLERS = frozenset("\u3164\u115f\u1160\uffa0\u2800\U0001d159")
 # Dots that IDNA treats as the label separator, so "claude" + ideographic dot + "ai" opens the host.
 _DOTS = {ord(c): "." for c in "\u3002\uff61\uff0e"}
 _CONFUSABLES = {ord(k): v for k, v in {
@@ -161,7 +176,17 @@ _CONFUSABLES = {ord(k): v for k, v in {
     "\u0445": "x", "\u0456": "i", "\u0455": "s", "\u0501": "d", "\u04bb": "h", "\u051d": "w",
     "\u04cf": "l", "\u0261": "g", "\u0131": "i", "\u03b1": "a", "\u03bf": "o", "\u03b5": "e",
     "\u03b9": "i", "\u03bd": "v", "\u03c1": "p", "\u03c4": "t", "\u03c5": "u", "\u0251": "a",
+    # Latin small capitals, Armenian, and a few more Greek, Cyrillic and Latin lookalikes.
+    "\u1d00": "a", "\u0299": "b", "\u1d04": "c", "\u1d05": "d", "\u1d07": "e", "\u0262": "g",
+    "\u029c": "h", "\u026a": "i", "\u1d0a": "j", "\u1d0b": "k", "\u029f": "l", "\u1d0d": "m",
+    "\u0274": "n", "\u1d0f": "o", "\u1d18": "p", "\u0280": "r", "\ua731": "s", "\u1d1b": "t",
+    "\u1d1c": "u", "\u1d20": "v", "\u1d21": "w", "\u028f": "y", "\u1d22": "z",
+    "\u0585": "o", "\u0578": "n", "\u057d": "u", "\u0570": "h", "\u0581": "g", "\u0566": "q",
+    "\u03ba": "k", "\u051b": "q", "\u0458": "j", "\u0269": "i", "\u0237": "j",
 }.items()}
+# Cherokee small letters, which lowercasing makes of the capitals above.
+_CONFUSABLES.update({ord(chr(k).lower()): v.lower() for k, v in _CAPITAL_CONFUSABLES.items()
+                     if 0x13a0 <= k <= 0x13f5})
 
 FORBIDDEN_PREFIXES = ("local/", ".cache/", "logs/", ".venv-crawl/")
 FORBIDDEN_NAMES = re.compile(r"(?:^|/)(?:[^/]*\.local\.json|\.secrets\.local\.json)$")
