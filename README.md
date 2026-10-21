@@ -131,19 +131,21 @@ What the checker refuses:
   of a line or after a bullet, a number or a short label) and the key followed by an address in
   angle brackets, everywhere; in messages and pull request text, also the key joined by hyphens
   anywhere. Prose such as "co-authored by Smith" passes.
-- **Session trailer, link and id:** in messages and pull request text, any mention; in files, a
-  trailer line, a real link, or a bare session id ("session_" and 20 or more letters or digits).
-- **Generated footer:** a line opening with the phrase "generated with" in any case, after an
-  optional label such as "Note:", whatever tool it names (finding 7, read literally until it is
-  ruled on); anywhere, the phrase followed by separators only and then the assistant's name, so any
-  statement that something was made with, by or using it; a capital "Generated" with the
-  assistant's name later within 160 characters, across single line breaks; a line opening with
-  the phrase that names the assistant within a few words; and, anywhere, the phrase followed
-  within a few words by the assistant's name and "code", or by the name in parentheses; and,
-  anywhere, the phrase and the assistant's name later in the same sentence, within 80 characters.
-  Footer rules also run with HTML tags removed. There are no exceptions: text that should pass
-  although the baseline refuses it waits in `tests/fixtures/pending_ruling.jsonl` for Matt's
-  ruling.
+- **Session trailer, link and id:** in messages and pull request text, any mention, the host
+  written with spaces around its dot included; in files, a trailer line, a real link, or a bare
+  session id ("session_" and 20 or more letters or digits, hyphens allowed between them).
+- **Footer:** the phrase is "generated" followed by with, by, using, via or "w/". Refused: a line
+  opening with the phrase in any case, after an optional label such as "Note:", whatever tool it
+  names (finding 7, read literally and failing closed until it is ruled on); and, anywhere, the
+  phrase followed by the assistant's name (the name may run into "AI" or digits) directly, within a
+  few words before "code" or in parentheses, later in the same sentence within 200 characters
+  (across single line breaks and dots inside words or numbers), or later in the same paragraph
+  within 1,000 characters (a bound for speed only). Footer rules also run with HTML tags removed.
+  There are no exceptions in the rules. Two files are pinned by path and sha256 because they
+  describe the rules in the words the rules refuse: the baseline checker and CLAUDE.md. Any change
+  to either makes it an ordinary file again. The texts they protect, and every other text that
+  might pass although the rules refuse it, wait in `tests/fixtures/pending_ruling.jsonl` for
+  Matt's ruling, and are refused until then.
 - **Hidden characters:** text is folded before matching: entities, percent-encoding,
   compatibility forms, format characters, combining and enclosing marks, Hangul fillers, the
   blank braille pattern, the null notehead, ideographic dots, Unicode hyphens and lookalike letters
@@ -162,20 +164,27 @@ when its ruling is made). New ids are appended to the lock in the same commit. E
 to finish within a second on a 100,000-character line.
 
 **Nothing may pass that the baseline refused.** `tests/fixtures/checker_baseline.py` is a copy of
-the checker at `512e818`, pinned by its sha256. `tests/test_no_narrowing.py` builds more than
-130,000 variants with fixed seeds in named dimensions (separator runs of 0 to 40, 41, 64, 100 and
-200 characters, line-break splits, prefixes and leading spaces, underscore-joined prefixes, every
-lookalike letter the baseline folds, sentence openings and suffixes, the refused corpus, and 20,000
-random combinations), each with a minimum count. It fails if the baseline refuses a variant that
-the current checker lets through, in a message, a PR body or a file, and also runs a sample through
-`check_range` (files at `.md`, `.jsonl`, `.py` and dotfile paths), `check_pr_event` and
-`check_message_text`. Only an exact pending text is skipped. Every allowed entry must also pass the
-baseline. CI prints the decoded text of every allowed line a change adds. The baseline changes
-only in a commit that changes nothing else.
+the checker at `512e818`, pinned by its sha256. `tests/test_no_narrowing.py` builds about 140,000
+variants with fixed seeds in named dimensions (separator runs of 0 to 40, 41, 64, 100 and 200
+characters, line-break splits, prefixes and leading spaces, underscore-joined prefixes, every
+lookalike letter the baseline folds, sentence openings and suffixes, sentence gaps of 0 to 80
+characters, the refused corpus, every shape after 8,000, 20,000 and 100,000 characters of filler
+and at the end of a 300-line body, and 20,000 random combinations), each with a minimum count. It
+fails if the baseline refuses a variant that the current checker lets through, in a message, a PR
+title, a PR body or a file, and also runs a sample through `check_range` (files at `.md`,
+`.jsonl`, `.py` and dotfile paths), `check_pr_event` (title and body) and `check_message_text`.
+Only an exact pending text is skipped, and every pending text must be refused. Every allowed entry
+must also pass the baseline. CI prints the decoded text of every allowed and pending line a change
+adds, using the base branch's copy of `tools/corpus_added.py`. The baseline changes only in a
+commit that changes nothing else.
 
-The test that compares the lock with main's copy skips until main has a lock. It starts guarding
-once this change merges, and it protects main only when the main ruleset requires the `checks`
-status check (F1, for the repository owner) and CI runs it against the base branch.
+Next step after this change merges: a second baseline pinned to main's checker, so the test also
+fails on anything main refuses that a later change lets through.
+
+The test that compares the lock with main's copy skips only while main exists and has no lock; a
+missing `origin/main` or any other git error fails it. It starts guarding once this change merges,
+and it protects main only when the main ruleset requires the `checks` status check (F1, for the
+repository owner) and CI runs it against the base branch.
 
 The file rule reads CLAUDE.md the way it is worded: a trailer line, a link, a footer line. CLAUDE.md
 itself names these things mid-sentence and passes. Rewrapping that paragraph so a line starts with

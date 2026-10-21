@@ -88,6 +88,12 @@ All notable changes to this repository are recorded here. The format follows
   dimensions (long separator runs, line-break splits, lookalikes, underscore prefixes, a fixed
   random set, a sample through range, event and message checks) and pins the baseline's sha256;
   allowed entries must pass the baseline; CI prints added allowed lines; the link scheme is unbounded.
+- Eighth audit round: the sentence rule crosses single line breaks and dots inside words and reaches
+  200 characters; a paragraph-wide near rule replaces the capital-letter one; the phrase includes
+  via and "w/", and the name may run into "AI"; the line rule covers every form of the phrase,
+  failing closed; spaced hosts and hyphenated session ids are refused; the baseline and CLAUDE.md
+  are pinned by sha256 instead of exempted by pattern; pending entries must be refused; the
+  no-narrowing test adds PR titles, long-text positions and sentence gaps; selftest checks titles.
 
 ### Changed
 
