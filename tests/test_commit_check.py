@@ -444,12 +444,7 @@ class AuditRevision2Tests(unittest.TestCase):
             with self.subTest(dot=hex(ord(dot))):
                 self.assertTrue(cc.content_findings("n.md", ("https://claude" + dot + "ai/x\n").encode()))
 
-    def test_f8_prose_about_the_rule_passes(self):
-        prose = ("The checker refuses a footer where the words " + GEN.lower() + " with come shortly before "
-                 + "Cla" + "ude.")
-        self.assertEqual(cc.text_findings(prose, "m"), [], "mid-line prose is not a footer")
-        self.assertEqual(cc.content_findings("doc.md", (prose + "\n").encode()), [])
-        self.assertEqual(cc.text_findings("Data " + GEN.lower() + " with hub poll", "m"), [])
+    # The F8 prose cases moved to tests/fixtures/allowed_corpus.jsonl (a3-f8-prose, repo-data-hub-poll).
 
     def test_f8_literal_reading_of_claude_md_still_holds(self):
         """Finding 7 (owner's call, implemented literally for now): a line opening with that phrase
@@ -563,30 +558,57 @@ class AuditRevision3Tests(unittest.TestCase):
         self.assertTrue(cc.text_findings("Add a\n\n" + CO + ": Smith <s@example.com>", "m"), "the trailer still fails")
 
     def test_n3_known_commits_on_main(self):
+        """Audit 3 N3 and audit 4 R3: an acknowledgement counts only when it follows the landing."""
+        repo = Scratch()
+        try:
+            known = "tools/main_history_known.txt"
+            repo.commit("README.md", b"x\n", "Add README")
+            base = repo.head()
+
+            def history():
+                repo.git("update-ref", "refs/remotes/origin/main", repo.head())
+                return loud(cc.check_range, f"{base}..HEAD", branch="main", cwd=repo.dir, main_history=True,
+                            verify=lambda sha: True)
+
+            repo.commit("m.txt", b"m\n", "Merge pull request 5\n\n" + SESSION + ": abc", extra=WEB)
+            bad = repo.head()
+            found, _ = history()
+            self.assertTrue(found, "an unacknowledged bad landing fails")
+            # A later pull request acknowledges it, merged through a merge commit as on GitHub.
+            repo.git("checkout", "-q", "-b", "ack")
+            repo.commit(known, ("# acknowledged\n" + bad + " landed before the check; accepted by the owner\n").encode(),
+                        "Acknowledge an earlier landing")
+            repo.git("checkout", "-q", "main")
+            repo.git("merge", "-q", "--no-ff", "ack", "-m", "Merge pull request 6", extra=WEB)
+            found, out = history()
+            self.assertEqual(found, [], "an acknowledgement that follows the landing is honoured")
+            self.assertIn("known, acknowledged", out)
+            # A pull request that carries a bad commit and acknowledges it in the same change.
+            repo.git("checkout", "-q", "-b", "sneak")
+            repo.commit("s.txt", b"s\n", "Sneak\n\n" + SESSION + ": def")
+            sneak = repo.head()
+            existing = (repo.dir / known).read_text(encoding="utf-8")
+            repo.commit(known, (existing + sneak + " pre-acknowledged\n").encode(), "Pre-acknowledge")
+            repo.git("checkout", "-q", "main")
+            repo.git("merge", "-q", "--no-ff", "sneak", "-m", "Merge pull request 7", extra=WEB)
+            found, _ = history()
+            self.assertTrue(any("same change that brought it" in f for f in found), found)
+            self.assertTrue(any(sneak[:7] in f and "session trailer" in f for f in found), found)
+        finally:
+            repo.close()
+
+    def test_n3_malformed_and_foreign_entries(self):
         repo = Scratch()
         try:
             repo.commit("README.md", b"x\n", "Add README")
             base = repo.head()
-            repo.commit("m.txt", b"m\n", "Merge pull request 5\n\n" + SESSION + ": abc", extra=WEB)
-            bad = repo.head()
-            rng = f"{base}..HEAD"
-            run = lambda: loud(cc.check_range, rng, branch="main", cwd=repo.dir, main_history=True,
-                               verify=lambda sha: True)
-            found, _ = run()
-            self.assertTrue(found, "an unacknowledged bad landing fails")
-            (repo.dir / "tools").mkdir(exist_ok=True)
-            (repo.dir / "tools" / "main_history_known.txt").write_text(
-                "# acknowledged\n" + bad + " landed before the check existed; accepted by the owner\n", encoding="utf-8")
-            found, out = run()
-            self.assertEqual(found, [], "an acknowledged commit no longer fails main-history")
-            self.assertIn("known, acknowledged", out)
-            repo.commit("n.txt", b"n\n", "Merge pull request 6\n\n" + SESSION + ": def", extra=WEB)
-            found, _ = loud(cc.check_range, rng.replace("HEAD", repo.head()), branch="main", cwd=repo.dir,
-                            main_history=True, verify=lambda sha: True)
-            self.assertTrue(found, "a new bad landing still fails")
-            (repo.dir / "tools" / "main_history_known.txt").write_text("abc not-a-sha\n", encoding="utf-8")
-            found, _ = run()
-            self.assertTrue(any("40-character sha" in f for f in found), "a malformed list fails")
+            repo.commit("tools/main_history_known.txt", ("abc not-a-sha\n" + "f" * 40 + " not in range\n").encode(),
+                        "Bad list")
+            repo.git("update-ref", "refs/remotes/origin/main", repo.head())
+            found = quiet(cc.check_range, f"{base}..HEAD", branch="main", cwd=repo.dir, main_history=True,
+                          verify=lambda sha: True)
+            self.assertTrue(any("40-character sha" in f for f in found), found)
+            self.assertTrue(any("not a commit in the range" in f for f in found), found)
         finally:
             repo.close()
 

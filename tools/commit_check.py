@@ -64,41 +64,61 @@ DASHES = (
 )
 
 # The banned strings are assembled from pieces so this file never contains what it hunts for.
-_CO = "co" + r"[\W_]*" + "author(?:ed)?" + r"[\W_]*" + "by"
-_SESSION = "claude" + r"[\W_]*" + "session"
+_CO = "co" + r"[\W_]{0,4}" + "author(?:ed)?" + r"[\W_]{0,4}" + "by"
+_SESSION = "claude" + r"[\W_]{0,4}" + "session"
 _HOST = "claude" + r"\." + "ai"
-# A line start may carry a short label ("Note:", "**Tooling:**") before a footer.
-_LINE_START = r"^[\W_\d]*(?:[a-z][a-z0-9 ]{0,24}[\W_]*:[\W_]*)?"
-_PHRASE = "generated" + r"[\W_]+(?:with|by|using)(?![a-z0-9])"
-# Three footer rules. Rules are only ever added, never narrowed to let one probe pass:
-#   line   any line opening with the generated-with phrase, whatever tool it names (CLAUDE.md read
-#          literally)
-#   tool   a line opening with the phrase, in any of its forms, that names the assistant within a
-#          few words
-#   product anywhere in a line, the phrase followed directly by the assistant's name, which is the
-#          shape of the stock footer however it is wrapped (HTML, bold labels, sentences)
-_GEN_LINE = _LINE_START + "generated" + r"[\W_]+with(?![a-z0-9])"
-_GEN_TOOL = _LINE_START + _PHRASE + r"[\W_]*.{0,24}?" + "claude"
-_GEN_PRODUCT = _PHRASE + r"[\W_]*\[?" + "claude" + r"(?![a-z0-9])"
+# Every rule below is checked against tests/fixtures/refused_corpus.jsonl (all must be refused) and
+# tests/fixtures/allowed_corpus.jsonl (all must pass). A rule may change only if both corpora pass.
+# Every quantifier that can meet a long run of one character class is bounded, and a timing test
+# runs each rule on 100,000-character lines, so no rule can backtrack quadratically.
+#
+# A line may open with a label before a footer: a letter, then up to 60 letters, digits, spaces or
+# apostrophes ("Note", "Tool's note", "Automatically produced release notes"), then a colon.
+_LABEL = r"(?:[a-z][a-z0-9 ']{0,60}[^a-z0-9:\n]{0,8}:[\W_]{0,16})?"
+_LINE_START = r"^[\W_\d]{0,16}" + _LABEL
+_PHRASE = "generated" + r"[\W_]{1,8}(?:with|by|using)(?![a-z0-9])"
+_NAME = "claude"
+# Footer rules:
+#   line     (cased) a line opening with "Generated with", capital G as CLAUDE.md writes it,
+#            whatever tool it names; a lowercase "generated with" in a sentence is ordinary prose
+#   tool     a line opening with any form of the phrase that names the assistant within a few words
+#   code     anywhere, the phrase and then the assistant's name and "code" within a few words
+#   paren    anywhere, the phrase and then the assistant's name in parentheses within a few words
+#   product  anywhere, the phrase directly followed by the assistant's name where that name closes
+#            the line or a bracket, or is followed by "code"
+_GEN_LINE_CASED = (r"^[\W_\d]{0,16}(?:(?i:[a-z][a-z0-9 ']{0,60})[^A-Za-z0-9:\n]{0,8}:[\W_]{0,16})?"
+                   + "G" + r"(?i:enerated)[\W_]{1,8}(?i:with)(?![A-Za-z0-9])")
+_GEN_TOOL = _LINE_START + _PHRASE + r"[\W_]{0,8}.{0,24}?" + _NAME
+_GEN_CODE = _PHRASE + r"[\W_]{0,8}.{0,24}?" + _NAME + r"[\W_]{0,8}code(?![a-z0-9])"
+_GEN_PAREN = _PHRASE + r"[\W_]{0,8}.{0,24}?\(\s{0,4}" + _NAME + r"\s{0,4}\)"
+_GEN_PRODUCT = _PHRASE + r"[\W_]{0,8}\[?" + _NAME + r"(?=[\W_]{0,8}(?:code(?![a-z0-9])|$)|[\])])"
 # Footer rules also run on a copy with HTML tags removed, so <p> or <sub> cannot hide a line start.
-_TAG = re.compile(r"<[^<>\n]*>")
+_TAG = re.compile(r"<[^<>\n]{0,400}>")
 FOOTER_RULES = (
-    ("generated footer", re.compile(_GEN_LINE, re.M)),
     ("generated footer", re.compile(_GEN_TOOL, re.M)),
-    ("generated footer", re.compile(_GEN_PRODUCT)),
+    ("generated footer", re.compile(_GEN_CODE)),
+    ("generated footer", re.compile(_GEN_PAREN)),
+    ("generated footer", re.compile(_GEN_PRODUCT, re.M)),
+)
+# Rules that need the original letter case (run on a normalised copy that keeps case).
+CASED_FOOTER_RULES = (
+    ("generated footer", re.compile(_GEN_LINE_CASED, re.M)),
 )
 
 MESSAGE_RULES = (
-    # A trailer is a line that opens with the key and a colon; prose such as "a paper the two of
-    # them co-wrote" passes. Session trailers and links are refused anywhere.
-    ("co-author trailer", re.compile(r"^[\W_]*" + _CO + r"[\W_]*:", re.M)),
+    # A co-author trailer: a line that opens with the key and a colon; or anywhere, the key joined
+    # by hyphens ("co-authored-by", which prose such as "co-authored by Smith" never is); or anywhere,
+    # the key followed within 60 characters by an address in angle brackets.
+    ("co-author trailer", re.compile(r"^[\W_]{0,16}" + _CO + r"[\W_]{0,8}:", re.M)),
+    ("co-author trailer", re.compile("co" + r"[\W_]{0,4}" + "author(?:ed)?-by")),
+    ("co-author trailer", re.compile(_CO + r".{0,60}?<[^<>\s@]{1,64}@[^<>\s]{1,255}>")),
     ("session trailer", re.compile(_SESSION)),
     ("session link", re.compile(_HOST + r"\b")),
 ) + FOOTER_RULES
 FILE_RULES = (
-    ("co-author trailer line", re.compile(r"^[\W_]*" + _CO + r"[\W_]*:", re.M)),
-    ("session trailer line", re.compile(r"^[\W_]*" + _SESSION + r"[\W_]*:", re.M)),
-    ("session link", re.compile(r"(?:[a-z][a-z0-9+.-]*:/*|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
+    ("co-author trailer line", re.compile(r"^[\W_]{0,16}" + _CO + r"[\W_]{0,8}:", re.M)),
+    ("session trailer line", re.compile(r"^[\W_]{0,16}" + _SESSION + r"[\W_]{0,8}:", re.M)),
+    ("session link", re.compile(r"(?:[a-z][a-z0-9+.-]{0,30}:/{0,3}|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
                                 + _HOST + r"(?=[/:?#])")),
 ) + FOOTER_RULES
 
@@ -153,7 +173,7 @@ def toplevel(cwd: Path | None = None) -> Path:
 
 # --------------------------------------------------------------------------- text checks
 
-def normalize(text: str) -> str:
+def normalize(text: str, keep_case: bool = False) -> str:
     """Fold the tricks that hide a banned string: entities, percent-encoding, compatibility forms
     (fullwidth letters and dots), format characters (zero-width, bidi), combining marks, Hangul
     fillers, ideographic dots, Unicode hyphens and lookalike letters in either case. Lowercased."""
@@ -166,7 +186,7 @@ def normalize(text: str) -> str:
     value = "".join(ch for ch in value
                     if unicodedata.category(ch) not in ("Cf", "Mn") and ch not in _FILLERS)
     value = value.translate(_DOTS).translate(_HYPHENS).translate(_CAPITAL_CONFUSABLES)
-    return value.lower().translate(_CONFUSABLES)
+    return value.translate(_CONFUSABLES) if keep_case else value.lower().translate(_CONFUSABLES)
 
 
 def _dash_findings(text: str, where: str) -> list[str]:
@@ -177,10 +197,17 @@ def _dash_findings(text: str, where: str) -> list[str]:
 
 def _rule_findings(text: str, where: str, rules) -> list[str]:
     folded = normalize(text)
-    untagged = _TAG.sub("", folded)
+    cased = normalize(text, keep_case=True)
+    views = {"plain": (folded, _TAG.sub("", folded)), "cased": (cased, _TAG.sub("", cased))}
+    footer = {id(r) for _, r in FOOTER_RULES}
     labels = []
-    for label, pattern in rules:
-        hit = pattern.search(folded) or (pattern in [r for _, r in FOOTER_RULES] and pattern.search(untagged))
+    checks = [(label, pattern, "plain") for label, pattern in rules]
+    if any(id(r) in footer for _, r in rules):
+        checks += [(label, pattern, "cased") for label, pattern in CASED_FOOTER_RULES]
+    for label, pattern, view in checks:
+        text_view, untagged = views[view]
+        is_footer = view == "cased" or id(pattern) in footer
+        hit = pattern.search(text_view) or (is_footer and pattern.search(untagged))
         if hit and label not in labels:
             labels.append(label)
     return [f"{where}: contains a {label}" for label in labels]
@@ -294,22 +321,41 @@ def changed_paths(rng: str, cwd: Path | None = None) -> tuple[str, list[str]]:
 KNOWN_FILE = "tools/main_history_known.txt"
 
 
-def load_known(cwd: Path | None = None) -> tuple[dict[str, str], list[str]]:
-    """Acknowledged commits on main: one 'full-sha reason' per line, '#' comments. Main cannot be
-    rewritten, so a commit that landed with a finding would otherwise keep every later main-history
-    run red and hide new problems. The list is tracked and reviewed like any other check file."""
+def load_known(tip: str, in_range: set[str], cwd: Path | None = None) -> tuple[dict[str, str], list[str]]:
+    """Acknowledged commits on main: one 'full-sha reason' per line, '#' comments, read from the tip
+    of the range being checked. Main cannot be rewritten, so a commit that landed with a finding
+    would otherwise keep every later main-history run red and hide new problems.
+
+    An entry is honoured only if the listed commit was already on main before the change that added
+    the entry: the first-parent commit on main that introduced the line must have the listed commit
+    in its first parent. So a pull request cannot carry a bad commit and acknowledge it in advance.
+    Entries for commits outside the range are flagged."""
     known: dict[str, str] = {}
     problems: list[str] = []
-    path = toplevel(cwd) / KNOWN_FILE
-    if not path.exists():
+    try:
+        text = git("show", f"{tip}:{KNOWN_FILE}", cwd=cwd).decode("utf-8")
+    except RuntimeError:
         return known, problems
-    for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+    for number, line in enumerate(text.splitlines(), start=1):
         line = line.strip()
         if not line or line.startswith("#"):
             continue
         sha, _, reason = line.partition(" ")
+        where = f"{KNOWN_FILE}:{number}"
         if not re.fullmatch(r"[0-9a-f]{40}", sha) or not reason.strip():
-            problems.append(f"{KNOWN_FILE}:{number}: expected a full 40-character sha and a reason")
+            problems.append(f"{where}: expected a full 40-character sha and a reason")
+            continue
+        if sha not in in_range:
+            problems.append(f"{where}: {sha[:7]} is not a commit in the range checked; remove the entry")
+            continue
+        # --first-parent also diffs each merge against its first parent, so the merge of the pull
+        # request that added the line is the commit found.
+        adders = git("log", "--first-parent", "--format=%H", f"-S{sha}", tip, "--", KNOWN_FILE,
+                     cwd=cwd).decode().split()
+        adder = adders[-1] if adders else None
+        if adder is None or not git_ok("merge-base", "--is-ancestor", sha, f"{adder}^1", cwd=cwd):
+            problems.append(f"{where}: {sha[:7]} was acknowledged by the same change that brought it to main "
+                            "(or before it landed); an acknowledgement must follow the landing")
             continue
         known[sha] = reason.strip()
     return known, problems
@@ -322,7 +368,8 @@ def check_range(rng: str, branch: str | None = None, cwd: Path | None = None, ma
         say(f"commit_check: 0 commit(s) in {rng}")
         return [f"{rng}: the range holds no commits; failing closed"]
     findings: list[str] = []
-    known, known_problems = load_known(cwd) if main_history else ({}, [])
+    tip = rng.partition("..")[2] or "HEAD"
+    known, known_problems = (load_known(tip, {c["sha"] for c in commits}, cwd) if main_history else ({}, []))
     findings += known_problems
     for c in commits:
         where = f"commit {c['sha'][:7]}"
