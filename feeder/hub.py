@@ -32,7 +32,7 @@ from feeder.adapters import feed as feed_adapter  # noqa: E402
 from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, item_tags,  # noqa: E402
                            json_files, lint, selected_sources)
 from feeder.schema_validate import validate  # noqa: E402
-from feeder.store import Store  # noqa: E402
+from feeder.store import DB_NAME, Store  # noqa: E402
 
 EXIT_OK, EXIT_DEFECT, EXIT_CONFIG, EXIT_ALL_FAILED = 0, 1, 2, 3
 DEFAULT_STATE_DIR = ROOT / ".cache"
@@ -82,6 +82,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
         try:
             parsed = feed_adapter.parse_feed(result.body)
         except feed_adapter.FeedParseError as exc:
+            # A 200 that is not a feed (a bot wall, an error page) is a failure, not a response.
+            record["failed"] += 1
             record.update(status="parse-error", error=type(exc).__name__, items=None)
             continue
         new = 0
@@ -393,13 +395,29 @@ def cmd_release(args, repo: Repo, now_fn) -> int:
     except (ConfigError, ValueError) as exc:
         warn(f"release: {exc}")
         return EXIT_CONFIG
+    state_dir = Path(args.state_dir) if args.state_dir else DEFAULT_STATE_DIR
+    if not (state_dir / DB_NAME).exists():
+        warn(f"release: no database at {state_dir.as_posix()}/{DB_NAME}; give --state-dir")
+        return EXIT_CONFIG
+    store = Store.open(state_dir, in_memory_copy=True)
+    item = store.item(sha)
+    store.conn.close()
+    if item is None:
+        warn(f"release: {sha} is not an item in the database; nothing to release")
+        return EXIT_CONFIG
+    if item["guard_level"] == guard.BLOCK:
+        warn(f"release: {sha} is BLOCK (pattern score {item['guard_score']}); BLOCK is never released")
+        return EXIT_CONFIG
+    if item["guard_level"] == guard.CLEAN:
+        warn(f"release: {sha} is CLEAN and not held; nothing to release")
+        return EXIT_CONFIG
     if any(r["sha"] == sha for r in data["releases"]):
         say(f"release: {sha} is already released")
         return EXIT_OK
     data = {"_comment": data.get("_comment") or RELEASES_COMMENT,
             "releases": data["releases"] + [{"sha": sha, "date": now_fn().date().isoformat(), "reason": reason}]}
     jsonio.dump_json(repo.releases_file, data)
-    say(f"release: appended {sha} to guard/releases.json (BLOCK items stay held regardless)")
+    say(f"release: appended {sha} ({item['guard_level']}, pattern score {item['guard_score']}) to guard/releases.json")
     return EXIT_OK
 
 
@@ -428,6 +446,7 @@ def build_parser() -> argparse.ArgumentParser:
     rel = sub.add_parser("release", help="release an item held by the guard")
     rel.add_argument("sha")
     rel.add_argument("--reason", required=True)
+    rel.add_argument("--state-dir", help="where feeder.db lives (default .cache)")
     return ap
 
 

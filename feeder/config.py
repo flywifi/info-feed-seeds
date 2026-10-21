@@ -16,7 +16,7 @@ SHA_RE = re.compile(r"^[0-9a-f]{64}$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 GUARD_RANK = {guard.CLEAN: 0, guard.REVIEW: 1, guard.QUARANTINE: 2, guard.BLOCK: 3}
 RELEASES_COMMENT = ("Items held by the injection guard and released by a person: "
-                    "{sha, date, reason}. Appended by hub release; never edited by a tool.")
+                    "{sha, date, reason}. Appended by hub release after a person checks the item; never edited by the poll.")
 PROFILE_DEFAULTS = {"window_days": 30, "backfill_days": 0, "outputs": ["md", "json"],
                     "guard": {"hold_at": guard.QUARANTINE}}
 
