@@ -2,16 +2,21 @@
 
 tests/fixtures/refused_corpus.jsonl holds every string an audit proved must be refused, and
 tests/fixtures/allowed_corpus.jsonl holds text that must pass (prose about the rules, real commit
-messages and pull request bodies). Each line is {"id", "source", "exact", "where", "b64"}; the text
-is base64 so no scanner ever sees the literals. "exact" says whether the audit gave the string byte
-for byte or it was reconstructed from the audit's description.
+messages and pull request bodies). tests/fixtures/pending_ruling.jsonl holds text whose verdict
+waits on a ruling (finding 7: any "Generated with" footer, or only ones that name the assistant);
+its current verdicts are printed, never asserted. Each line is {"id", "source", "exact", "where",
+"b64"}; the text is base64 so no scanner ever sees the literals. "exact" says whether the audit
+gave the string byte for byte or it was reconstructed from the audit's description.
 
-A rule change is acceptable only when both corpora pass. The corpora only grow: an id that exists
-on origin/main must still exist here."""
+A rule change is acceptable only when both corpora pass. The corpora only grow:
+tests/fixtures/corpus.lock pins every id to the sha256 of its text and its kind, and an id that
+exists on origin/main must still exist here."""
 import base64
+import hashlib
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -27,6 +32,9 @@ import commit_check as cc  # noqa: E402
 
 FIXTURES = ROOT / "tests" / "fixtures"
 CORPORA = {"refused": FIXTURES / "refused_corpus.jsonl", "allowed": FIXTURES / "allowed_corpus.jsonl"}
+PENDING = FIXTURES / "pending_ruling.jsonl"
+LOCK = FIXTURES / "corpus.lock"
+ALL = dict(CORPORA, pending=PENDING)
 PLACES = {"message", "body", "file", "main-history"}
 SOURCES = {"audit1", "audit2", "audit3", "audit4", "repo"}
 
@@ -52,9 +60,45 @@ def refused_in(place: str, text: str) -> bool:
     raise ValueError(place)
 
 
+def main_history_refused(entries: list[dict]) -> set[str]:
+    """Commit each entry's text as a message on a scratch main, committed by GitHub's web committer
+    and treated as verified, and return the ids main-history refuses."""
+    tmp = Path(tempfile.mkdtemp())
+    try:
+        env = dict(os.environ, GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1",
+                   GIT_AUTHOR_NAME=cc.AUTHOR[0], GIT_AUTHOR_EMAIL=cc.AUTHOR[1],
+                   GIT_COMMITTER_NAME=cc.WEB_COMMITTER[0], GIT_COMMITTER_EMAIL=cc.WEB_COMMITTER[1])
+
+        def git(*a):
+            return subprocess.run(["git", "-c", "core.hooksPath=" + os.devnull, "-c", "commit.gpgsign=false", *a],
+                                  cwd=tmp, env=env, capture_output=True, check=True)
+        git("init", "-q", "-b", "main")
+        (tmp / "base").write_text("base\n")
+        git("add", "base")
+        git("commit", "-q", "-m", "Base")
+        base = git("rev-parse", "HEAD").stdout.decode().strip()
+        shas = {}
+        for i, e in enumerate(entries):
+            (tmp / f"f{i}").write_text(f"{i}\n")
+            git("add", f"f{i}")
+            git("commit", "-q", "--cleanup=verbatim", "-m", e["text"])
+            shas[e["id"]] = git("rev-parse", "HEAD").stdout.decode().strip()
+        git("update-ref", "refs/remotes/origin/main", "HEAD")
+        with redirect_stdout(io.StringIO()):
+            found = cc.check_range(f"{base}..HEAD", branch="main", cwd=tmp, main_history=True,
+                                   verify=lambda sha: True)
+        return {i for i, sha in shas.items() if any(f"commit {sha[:7]}" in f for f in found)}
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 class CorpusShapeTests(unittest.TestCase):
+    maxDiff = None
+
     def test_entries_are_well_formed(self):
-        for name, path in CORPORA.items():
+        every = [e["id"] for path in ALL.values() for e in load(path)]
+        self.assertEqual(len(every), len(set(every)), "an id appears in more than one file")
+        for name, path in ALL.items():
             entries = load(path)
             self.assertGreater(len(entries), 0, name)
             ids = [e["id"] for e in entries]
@@ -66,17 +110,48 @@ class CorpusShapeTests(unittest.TestCase):
                 self.assertTrue(e["where"] and set(e["where"]) <= PLACES, e["id"])
 
     def test_corpora_only_grow(self):
-        for name, path in CORPORA.items():
+        now = {e["id"] for path in ALL.values() for e in load(path)}
+        for name, path in ALL.items():
             rel = path.relative_to(ROOT).as_posix()
             proc = subprocess.run(["git", "show", f"origin/main:{rel}"], cwd=ROOT, capture_output=True)
             if proc.returncode != 0:
                 continue  # not on main yet
             before = {e["id"] for e in load(proc.stdout.decode("utf-8"))}
-            now = {e["id"] for e in load(path)}
             self.assertEqual(before - now, set(), f"{name}: ids removed since main")
+
+    def test_lock_pins_every_id_and_text(self):
+        rows = [line.split() for line in LOCK.read_text(encoding="utf-8").splitlines()
+                if line.strip() and not line.startswith("#")]
+        self.assertTrue(all(len(r) == 3 for r in rows), "lock lines are: id kind sha256")
+        locked = {r[0]: (r[2], r[1]) for r in rows}
+        self.assertEqual(len(locked), len(rows), "an id is locked twice")
+        current = {e["id"]: (hashlib.sha256(e["text"].encode("utf-8")).hexdigest(), kind)
+                   for kind, path in ALL.items() for e in load(path)}
+        problems = []
+        for i, (sha, kind) in locked.items():
+            if i not in current:
+                problems.append(f"{i}: locked but missing")
+            elif current[i][0] != sha:
+                problems.append(f"{i}: text changed")
+            elif current[i][1] != kind and kind != "pending":
+                problems.append(f"{i}: moved from {kind} to {current[i][1]}")
+        problems += [f"{i}: not in the lock" for i in current if i not in locked]
+        self.assertEqual(problems, [], "corpus.lock")
+
+    def test_no_real_session_id(self):
+        # Only a made-up id of one repeated character may appear, never a real one.
+        found = []
+        for path in ALL.values():
+            for e in load(path):
+                for m in re.finditer(r"session_01([A-Za-z0-9]{20,})", e["text"]):
+                    if len(set(m.group(1))) != 1:
+                        found.append(e["id"])
+        self.assertEqual(found, [], "corpus entries carrying a session id that may be real")
 
 
 class RefusedCorpusTests(unittest.TestCase):
+    maxDiff = None
+
     def test_every_refused_entry_is_refused_in_every_listed_place(self):
         passed = []
         for e in load(CORPORA["refused"]):
@@ -87,45 +162,34 @@ class RefusedCorpusTests(unittest.TestCase):
 
     def test_every_main_history_entry_is_refused_in_main_history(self):
         entries = [e for e in load(CORPORA["refused"]) if "main-history" in e["where"]]
-        tmp = Path(tempfile.mkdtemp())
-        try:
-            env = dict(os.environ, GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1",
-                       GIT_AUTHOR_NAME=cc.AUTHOR[0], GIT_AUTHOR_EMAIL=cc.AUTHOR[1],
-                       GIT_COMMITTER_NAME=cc.WEB_COMMITTER[0], GIT_COMMITTER_EMAIL=cc.WEB_COMMITTER[1])
-
-            def git(*a):
-                return subprocess.run(["git", "-c", "core.hooksPath=" + os.devnull, "-c", "commit.gpgsign=false", *a],
-                                      cwd=tmp, env=env, capture_output=True, check=True)
-            git("init", "-q", "-b", "main")
-            (tmp / "base").write_text("base\n")
-            git("add", "base")
-            git("commit", "-q", "-m", "Base")
-            base = git("rev-parse", "HEAD").stdout.decode().strip()
-            shas = {}
-            for i, e in enumerate(entries):
-                (tmp / f"f{i}").write_text(f"{i}\n")
-                git("add", f"f{i}")
-                git("commit", "-q", "--cleanup=verbatim", "-m", e["text"])
-                shas[e["id"]] = git("rev-parse", "HEAD").stdout.decode().strip()
-            git("update-ref", "refs/remotes/origin/main", "HEAD")
-            with redirect_stdout(io.StringIO()):
-                found = cc.check_range(f"{base}..HEAD", branch="main", cwd=tmp, main_history=True,
-                                       verify=lambda sha: True)
-            missed = [i for i, sha in shas.items() if not any(f"commit {sha[:7]}" in f for f in found)]
-            self.assertEqual(missed, [], "refused corpus entries that main-history let through")
-        finally:
-            shutil.rmtree(tmp, ignore_errors=True)
+        missed = {e["id"] for e in entries} - main_history_refused(entries)
+        self.assertEqual(missed, set(), "refused corpus entries that main-history let through")
 
 
 class AllowedCorpusTests(unittest.TestCase):
+    maxDiff = None
+
     def test_every_allowed_entry_passes_in_every_listed_place(self):
         refused = []
-        for e in load(CORPORA["allowed"]):
+        entries = load(CORPORA["allowed"])
+        for e in entries:
             for place in e["where"]:
-                if refused_in(place, e["text"]):
+                if place != "main-history" and refused_in(place, e["text"]):
                     refused.append(f"{e['id']} refused in {place}")
+        history = [e for e in entries if "main-history" in e["where"]]
+        refused += [f"{i} refused in main-history" for i in sorted(main_history_refused(history))]
         self.assertEqual(refused, [], "allowed corpus entries that were refused")
 
+
+class PendingRulingTests(unittest.TestCase):
+    def test_print_current_verdicts(self):
+        lines = []
+        for e in load(PENDING):
+            places = [p for p in e["where"] if p != "main-history"]
+            verdict = " ".join(f"{p}={'refused' if refused_in(p, e['text']) else 'passes'}" for p in places)
+            lines.append(f"  pending {e['id']}: {verdict}")
+        sys.stdout.write("\npending ruling (main-history uses the message rules):\n" + "\n".join(lines) + "\n")
+        self.assertTrue(lines)
 
 
 class RuleTimingTests(unittest.TestCase):

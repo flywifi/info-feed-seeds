@@ -84,8 +84,8 @@ class TextTests(unittest.TestCase):
     def test_unicode_and_spacing_variants(self):
         variants = {
             "U+2011 hyphens": "co\u2011authored\u2011by: x",
-            "spaces": "Co authored by: x",
-            "underscores": "co_authored_by: x",
+            "spaces": "Co auth" + "ored by: x",
+            "underscores": "co_auth" + "ored_by: x",
             "cyrillic o": "C\u043e-Authored-By: x",
             "zero-width space": "Co-Auth\u200bored-By: x",
             "fullwidth host": "https://\uff43\uff4c\uff41\uff55\uff44\uff45\uff0e\uff41\uff49/x",
@@ -93,7 +93,7 @@ class TextTests(unittest.TestCase):
             "entity host": "https://claude&#46;" + "ai/x",
             "italic footer": "_" + GEN + " by [Claude Code](https://example.com)_",
             "using form": GEN + " using " + "Cla" + "ude",
-            "session spaces": "claude session: x",
+            "session spaces": "claude sess" + "ion: x",
             "any tool footer": GEN + " with SomeTool",
         }
         for label, text in variants.items():

@@ -79,15 +79,19 @@ _LINE_START = r"^[\W_\d]{0,16}" + _LABEL
 _PHRASE = "generated" + r"[\W_]{1,8}(?:with|by|using)(?![a-z0-9])"
 _NAME = "claude"
 # Footer rules:
-#   line     (cased) a line opening with "Generated with", capital G as CLAUDE.md writes it,
-#            whatever tool it names; a lowercase "generated with" in a sentence is ordinary prose
+#   line     a line opening with "Generated with" in any case, after an optional label, whatever
+#            tool it names (finding 7, read literally until it is ruled on)
+#   near     (cased) a capital "Generated" with, by or using anywhere, and the assistant's name later
+#            on the same line within 64 characters; a lowercase "generated" in a sentence that
+#            mentions the assistant is prose, such as a description of these rules
 #   tool     a line opening with any form of the phrase that names the assistant within a few words
 #   code     anywhere, the phrase and then the assistant's name and "code" within a few words
 #   paren    anywhere, the phrase and then the assistant's name in parentheses within a few words
 #   product  anywhere, the phrase directly followed by the assistant's name where that name closes
 #            the line or a bracket, or is followed by "code"
-_GEN_LINE_CASED = (r"^[\W_\d]{0,16}(?:(?i:[a-z][a-z0-9 ']{0,60})[^A-Za-z0-9:\n]{0,8}:[\W_]{0,16})?"
-                   + "G" + r"(?i:enerated)[\W_]{1,8}(?i:with)(?![A-Za-z0-9])")
+_GEN_LINE = _LINE_START + "generated" + r"[\W_]{1,8}with(?![a-z0-9])"
+_GEN_NEAR_CASED = ("G" + r"(?i:enerated)[\W_]{1,8}(?i:with|by|using)(?![A-Za-z0-9])[^\n]{0,64}?(?<![A-Za-z0-9])"
+                   + "(?i:" + _NAME + ")(?![A-Za-z0-9])")
 _GEN_TOOL = _LINE_START + _PHRASE + r"[\W_]{0,8}.{0,24}?" + _NAME
 _GEN_CODE = _PHRASE + r"[\W_]{0,8}.{0,24}?" + _NAME + r"[\W_]{0,8}code(?![a-z0-9])"
 _GEN_PAREN = _PHRASE + r"[\W_]{0,8}.{0,24}?\(\s{0,4}" + _NAME + r"\s{0,4}\)"
@@ -95,6 +99,7 @@ _GEN_PRODUCT = _PHRASE + r"[\W_]{0,8}\[?" + _NAME + r"(?=[\W_]{0,8}(?:code(?![a-
 # Footer rules also run on a copy with HTML tags removed, so <p> or <sub> cannot hide a line start.
 _TAG = re.compile(r"<[^<>\n]{0,400}>")
 FOOTER_RULES = (
+    ("generated footer", re.compile(_GEN_LINE, re.M)),
     ("generated footer", re.compile(_GEN_TOOL, re.M)),
     ("generated footer", re.compile(_GEN_CODE)),
     ("generated footer", re.compile(_GEN_PAREN)),
@@ -102,22 +107,34 @@ FOOTER_RULES = (
 )
 # Rules that need the original letter case (run on a normalised copy that keeps case).
 CASED_FOOTER_RULES = (
-    ("generated footer", re.compile(_GEN_LINE_CASED, re.M)),
+    ("generated footer", re.compile(_GEN_NEAR_CASED)),
 )
 
+# A trailer line: a line that opens (after bullets, numbers or a short label) with the key and
+# then a colon or an equals sign.
+_CO_LINE = _LINE_START + _CO + r"[\W_]{0,8}[:=]"
+_SESSION_LINE = _LINE_START + _SESSION + r"[\W_]{0,8}[:=]"
+# Anywhere, the co-author key followed within 60 characters by an address in angle brackets.
+_CO_ADDRESS = _CO + r".{0,60}?<[^<>\s@]{1,64}@[^<>\s]{1,255}>"
+# A bare session id: "session_" and at least 20 letters or digits.
+_SESSION_ID = r"(?<![a-z0-9])session_[a-z0-9]{20}"
 MESSAGE_RULES = (
-    # A co-author trailer: a line that opens with the key and a colon; or anywhere, the key joined
-    # by hyphens ("co-authored-by", which prose such as "co-authored by Smith" never is); or anywhere,
-    # the key followed within 60 characters by an address in angle brackets.
-    ("co-author trailer", re.compile(r"^[\W_]{0,16}" + _CO + r"[\W_]{0,8}:", re.M)),
+    # A co-author trailer: a trailer line; or anywhere, the key joined by hyphens
+    # ("co-authored-by", which prose such as "co-authored by Smith" never is); or the key and an
+    # address.
+    ("co-author trailer", re.compile(_CO_LINE, re.M)),
     ("co-author trailer", re.compile("co" + r"[\W_]{0,4}" + "author(?:ed)?-by")),
-    ("co-author trailer", re.compile(_CO + r".{0,60}?<[^<>\s@]{1,64}@[^<>\s]{1,255}>")),
+    ("co-author trailer", re.compile(_CO_ADDRESS)),
     ("session trailer", re.compile(_SESSION)),
     ("session link", re.compile(_HOST + r"\b")),
+    ("session id", re.compile(_SESSION_ID)),
 ) + FOOTER_RULES
+# Files name the banned items in prose (CLAUDE.md does), so only their real forms are refused.
 FILE_RULES = (
-    ("co-author trailer line", re.compile(r"^[\W_]{0,16}" + _CO + r"[\W_]{0,8}:", re.M)),
-    ("session trailer line", re.compile(r"^[\W_]{0,16}" + _SESSION + r"[\W_]{0,8}:", re.M)),
+    ("co-author trailer line", re.compile(_CO_LINE, re.M)),
+    ("co-author trailer", re.compile(_CO_ADDRESS)),
+    ("session trailer line", re.compile(_SESSION_LINE, re.M)),
+    ("session id", re.compile(_SESSION_ID)),
     ("session link", re.compile(r"(?:[a-z][a-z0-9+.-]{0,30}:/{0,3}|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
                                 + _HOST + r"(?=[/:?#])")),
 ) + FOOTER_RULES
@@ -134,8 +151,9 @@ _CAPITAL_CONFUSABLES = {ord(k): v for k, v in {
     "\u039a": "K", "\u039c": "M", "\u039d": "N", "\u039f": "O", "\u03a1": "P", "\u03a4": "T",
     "\u03a5": "Y", "\u03a7": "X",
 }.items()}
-# Characters that render as nothing but are not format (Cf) characters: Hangul fillers.
-_FILLERS = frozenset("\u3164\u115f\u1160\uffa0")
+# Characters that render as blank but are not format (Cf) characters: Hangul fillers and the blank
+# braille pattern.
+_FILLERS = frozenset("\u3164\u115f\u1160\uffa0\u2800")
 # Dots that IDNA treats as the label separator, so "claude" + ideographic dot + "ai" opens the host.
 _DOTS = {ord(c): "." for c in "\u3002\uff61\uff0e"}
 _CONFUSABLES = {ord(k): v for k, v in {
@@ -175,8 +193,9 @@ def toplevel(cwd: Path | None = None) -> Path:
 
 def normalize(text: str, keep_case: bool = False) -> str:
     """Fold the tricks that hide a banned string: entities, percent-encoding, compatibility forms
-    (fullwidth letters and dots), format characters (zero-width, bidi), combining marks, Hangul
-    fillers, ideographic dots, Unicode hyphens and lookalike letters in either case. Lowercased."""
+    (fullwidth letters and dots), format characters (zero-width, bidi), combining and enclosing
+    marks, Hangul fillers, the blank braille pattern, ideographic dots, Unicode hyphens and
+    lookalike letters in either case. Lowercased."""
     value = html.unescape(text or "")
     for _ in range(2):
         value = unquote(value)
@@ -184,7 +203,7 @@ def normalize(text: str, keep_case: bool = False) -> str:
     # combining mark) always leaves a combining mark (Mn) behind, which the next line removes.
     value = unicodedata.normalize("NFKD", value)
     value = "".join(ch for ch in value
-                    if unicodedata.category(ch) not in ("Cf", "Mn") and ch not in _FILLERS)
+                    if unicodedata.category(ch) not in ("Cf", "Mn", "Me") and ch not in _FILLERS)
     value = value.translate(_DOTS).translate(_HYPHENS).translate(_CAPITAL_CONFUSABLES)
     return value.translate(_CONFUSABLES) if keep_case else value.lower().translate(_CONFUSABLES)
 

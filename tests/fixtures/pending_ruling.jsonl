@@ -1,0 +1,8 @@
+{"b64": "QWRkIGYKCi0gR2VuZXJhdGVkIHdpdGggbGluZXMgYXJlIHJlZnVzZWQgYXQgbGluZSBzdGFydA==", "exact": true, "id": "audit2_fp_rule_prose_line_start", "source": "audit2", "where": ["message", "body", "file"]}
+{"b64": "QWRkIGYKCkdlbmVyYXRlZCB3aXRoIGh1YiBwb2xs", "exact": true, "id": "audit2_fp_hub_generated", "source": "audit2", "where": ["message", "body", "file"]}
+{"b64": "R2VuZXJhdGVkIGJ5IGluZm8tZmVlZC1zZWVkcyBodWIgcG9sbA==", "exact": true, "id": "audit2_fp_generated_by_hub", "source": "audit2", "where": ["message", "body", "file"]}
+{"b64": "QXV0b21hdGljYWxseSBwcm9kdWNlZCByZWxlYXNlIG5vdGVzOiBHZW5lcmF0ZWQgd2l0aCBTb21lVG9vbA==", "exact": true, "id": "audit4_r4_label_long", "source": "audit4", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VG9vbCdzIG5vdGU6IEdlbmVyYXRlZCB3aXRoIFNvbWVUb29s", "exact": true, "id": "audit4_r4_label_apos", "source": "audit4", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhlIGRpZ2VzdCBpcyBnZW5lcmF0ZWQgYnkgQ2xhdWRlIGVhY2ggbW9ybmluZw==", "exact": true, "id": "audit4_fp_docs_generated_by_claude", "source": "audit4", "where": ["message", "body", "file", "main-history"]}
+{"b64": "RG9jczogZ2VuZXJhdGVkIHdpdGggdGhlIGh1YiB0b29s", "exact": true, "id": "a4-r8-docs", "source": "audit4", "where": ["message", "body", "file"]}
+{"b64": "Rml4OiBnZW5lcmF0ZWQgd2l0aCBjYXJl", "exact": true, "id": "a4-r8-fix", "source": "audit4", "where": ["message", "body", "file"]}
