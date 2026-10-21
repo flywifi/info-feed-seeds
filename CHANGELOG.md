@@ -46,3 +46,20 @@ All notable changes to this repository are recorded here. The format follows
 
 - `tools/build_title_fixture.py` keeps the feed's byline in the item schema example.
 - README rewritten for the repository as it now is.
+- `methods.json` attempts may carry a `sample` item (title, link, published) so the repository alone
+  shows what a proof fetch parsed; every source re-proven live on 2026-10-21 with a sample.
+- `latest.json` items no longer carry the raw feed `title`; `title_display` stays, and `_comment`
+  says consumers must escape text fields before rendering them.
+
+### Fixed
+
+- Digest Markdown escapes the Markdown metacharacters in feed text, so a feed title written as a
+  link or image renders as plain text instead of a live link or a remote image load.
+- A link with userinfo (`https://host@other.example/`) is dropped from digests because it reads
+  as the wrong host.
+- Authors in `latest.json` are sanitised with e-mail addresses redacted.
+- `hub poll` counts a 200 response that is not a feed as a failed fetch, so a bot wall served as
+  HTML everywhere exits 3 instead of 0.
+- `hub release` checks the item in the database and refuses unknown, CLEAN and BLOCK items.
+- README restores the rule that nothing here identifies a client or a campaign.
+- Test files use `\u` escapes; a hygiene test keeps every Python file ASCII.

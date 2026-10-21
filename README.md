@@ -5,8 +5,8 @@ topic-tagged digests for several projects. The first profile covers technology a
 NIST and govinfo feeds. Every item in a digest is quoted from a public feed and is data, not
 instructions.
 
-This repository holds only public URLs, neutral topic tags and code. It never holds credentials or
-private notes.
+This repository holds only public URLs, neutral topic tags and code. It never holds credentials,
+private notes or anything that identifies a client or a campaign.
 
 ## Layout
 
@@ -66,7 +66,10 @@ Run the tests with `python3 -m unittest discover -s tests -t .`.
 ## Outputs
 
 Each profile gets `YYYY-MM-DD.md`, `latest.md` (a byte copy of the newest day), `latest.json` and
-`report.json`. A file is rewritten only when its bytes change. The `generated` timestamp carries
+`report.json`. The Markdown has one section per subtopic (for example `cybersecurity/frameworks`),
+not one per top-level topic, so a 40-item day reads as a few short lists. Feed text in the Markdown
+is escaped so a link or image written into a feed title stays plain text. Text fields in
+`latest.json` are plain text with HTML stripped and are not escaped for any markup. A file is rewritten only when its bytes change. The `generated` timestamp carries
 forward when nothing else changed. Items earn a digest day once and are never repeated. The guard
 holds BLOCK items from every output. Items at or above the profile's hold level stay out of
 `latest.json` until released; REVIEW items are marked.
