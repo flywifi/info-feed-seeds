@@ -41,6 +41,15 @@ All notable changes to this repository are recorded here. The format follows
 - `profiles/technology-regulation.json` and an empty `guard/releases.json`.
 - Profile schema fields `window_days`, `backfill_days`, `outputs`, `guard.hold_at` and
   `subtopic_keywords` (include and exclude per subtopic).
+- `tools/commit_check.py`: commit hygiene for staged files, commit messages, pushes, commit ranges,
+  changed source folders and pull request text, with a selftest. Web-flow merges by GitHub are
+  allowed as committer; every author must be flywifi.
+- Tracked hooks in `tools/hooks/` (pre-commit, commit-msg, pre-push), installed with
+  `git config core.hooksPath tools/hooks`, with a loud `IFS_SKIP_HOOKS=1` bypass.
+- `.github/workflows/ci.yml`: commit checks, selftest, unit tests, lint, format, em dash scan,
+  source proof check and doctor on every pull request and job-branch push; pull request text
+  checked on every edit.
+- `tools/doctor.py check` with a required lint check and an advisory hooks check.
 
 ### Changed
 

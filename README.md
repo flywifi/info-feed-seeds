@@ -63,6 +63,32 @@ Other commands:
 
 Run the tests with `python3 -m unittest discover -s tests -t .`.
 
+## Checks before commit, push and merge
+
+Every clone that pushes runs the tracked hooks. Install them once per clone:
+
+```
+git config core.hooksPath tools/hooks
+```
+
+- `pre-commit` checks staged files and the author identity.
+- `commit-msg` refuses co-author and session trailers, Claude footers and dashes in the message.
+- `pre-push` checks every commit and changed file being pushed, confirms the push URL names
+  flywifi/info-feed-seeds, and refuses pushes to `main` and `data`.
+
+All three call `tools/commit_check.py`. Run it by hand with `--range origin/main..HEAD`, check a
+pull request with `--pr N`, or prove the checks fire with `--selftest`. In an emergency,
+`IFS_SKIP_HOOKS=1` skips a hook and prints a warning block; CI still runs every check.
+
+The hub never requires the hooks: it also runs in GitHub Actions and on pull-only clones. Instead,
+`python3 tools/doctor.py check` reports a clone that can push without them.
+
+CI (`.github/workflows/ci.yml`) runs on every pull request and every push to a job branch. It runs
+the commit checks over the whole branch, the checker selftest, the unit tests, `hub lint`,
+`hub fmt --check`, the em dash scan, a proof check on every changed source folder, and the doctor.
+A second job checks the pull request title and description. It re-runs when the description is
+edited, so removing a footer turns it green without a new push.
+
 ## Outputs
 
 Each profile gets `YYYY-MM-DD.md`, `latest.md` (a byte copy of the newest day), `latest.json` and
