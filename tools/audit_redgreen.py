@@ -2,16 +2,17 @@
 """Red-then-green evidence for the PR 7 audits: every audit probe, run through older copies of
 tools/commit_check.py and through the working tree's copy, side by side.
 
-Usage: python3 tools/audit_redgreen.py [--old REF ...]     (default: ba76314, 6686d0a, 512e818)
+Usage: python3 tools/audit_redgreen.py [--old REF ...]     (default: ba76314, 6686d0a, 512e818, f8473e6)
 
-Rows come from the refused and allowed corpora (tests/fixtures/*_corpus.jsonl) plus scenario
-probes that need a repository (main-history, acknowledgements) or a clock (rule timing).
+Rows come from the refused and allowed corpora (tests/fixtures/*_corpus.jsonl), the pending
+ruling file (shown, never scored) and scenario probes that need a repository (main-history, acknowledgements) or a clock (rule timing).
 
 Each older checker is read with `git show REF:tools/commit_check.py`; the newest is the file next to
 this script. The result column compares the working tree with the LAST --old ref:
   red->green   the last ref got it wrong and the working tree gets it right
   kept         both get it right (a regression test)
   WRONG        the working tree gets it wrong
+  pending      waits on a ruling; the column shows how many places refuse it
 Probes the auditor gave as exact strings are byte for byte. Where the auditor named only the code
 point and not its position, the probe sweeps that character through every position of the token
 and reports how many positions were refused. Banned strings are assembled from pieces at run
@@ -185,7 +186,7 @@ def seconds_on_colon_line(mod) -> float:
 def corpus(name: str) -> list[dict]:
     import base64
     import json
-    path = HERE.parent / "tests" / "fixtures" / f"{name}_corpus.jsonl"
+    path = HERE.parent / "tests" / "fixtures" / (f"{name}_corpus.jsonl" if name != "pending" else "pending_ruling.jsonl")
     out = []
     for line in path.read_text(encoding="utf-8").splitlines():
         if line.strip():
@@ -228,6 +229,10 @@ def rows():
     real = [e for e in corpus("allowed") if e["id"].startswith(("repo-commit-", "repo-pr-"))]
     out.append(("repo", f"allowed corpus: {len(real)} real commit messages and PR bodies pass",
                 (lambda m, es=real: sum(corpus_count(m, e) == 0 for e in es)), len(real)))
+    for entry in corpus("pending"):
+        e = dict(entry, where=[p for p in entry["where"] if p != "main-history"])
+        out.append((entry["source"], f"pending ruling {entry['id']} ({'+'.join(e['where'])})",
+                    (lambda m, e=e: corpus_count(m, e)), ("pending", len(e["where"]))))
     out.append(("audit3", "N1 footers refused in main-history", scenario_n1_main_history, True))
     out.append(("audit3", "N6 forged GitHub merge, unverified, in main-history", scenario_n6_forged_merge, True))
     out.append(("audit3", "N3 later acknowledgement clears main-history", lambda m: not scenario_n3_known(m), False))
@@ -239,7 +244,7 @@ def rows():
 
 
 def main(argv: list[str]) -> int:
-    refs = [argv[i + 1] for i, a in enumerate(argv) if a == "--old"] or ["ba76314", "6686d0a", "512e818"]
+    refs = [argv[i + 1] for i, a in enumerate(argv) if a == "--old"] or ["ba76314", "6686d0a", "512e818", "f8473e6"]
     olds = []
     for ref in refs:
         src = subprocess.run(["git", "show", f"{ref}:tools/commit_check.py"], cwd=HERE, capture_output=True)
@@ -251,6 +256,8 @@ def main(argv: list[str]) -> int:
     checkers = olds + [("new", new)]
 
     def show(value, want):
+        if isinstance(want, tuple) and want[0] == "pending":
+            return f"{value}/{want[1]} ref"
         if isinstance(want, tuple):
             return f"{value:.2f}s"
         if isinstance(want, bool):
@@ -263,6 +270,9 @@ def main(argv: list[str]) -> int:
     lines = []
     for finding, label, probe, want in rows():
         values = [probe(mod) for _, mod in checkers]
+        if isinstance(want, tuple) and want[0] == "pending":
+            lines.append((finding, label, [show(v, want) for v in values], "pending"))
+            continue
         right = [correct(v, want) for v in values]
         result = "WRONG" if not right[-1] else ("kept" if right[-2] else "red->green")
         lines.append((finding, label, [show(v, want) for v in values], result))
@@ -271,8 +281,9 @@ def main(argv: list[str]) -> int:
     print(f"{'finding':7} | {'probe':{width}} | {head} | result (vs {refs[-1]})")
     for finding, label, shown, result in lines:
         print(f"{finding:7} | {label:{width}} | " + " | ".join(f"{s:8}" for s in shown) + f" | {result}")
-    counts = {r: sum(1 for *_, x in lines if x == r) for r in ("red->green", "kept", "WRONG")}
-    print(f"{len(lines)} probes: {counts['red->green']} red->green, {counts['kept']} kept, {counts['WRONG']} WRONG")
+    counts = {r: sum(1 for *_, x in lines if x == r) for r in ("red->green", "kept", "WRONG", "pending")}
+    print(f"{len(lines)} probes: {counts['red->green']} red->green, {counts['kept']} kept, {counts['WRONG']} WRONG,"
+          f" {counts['pending']} pending")
     return 1 if counts["WRONG"] else 0
 
 
