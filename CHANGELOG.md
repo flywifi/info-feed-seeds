@@ -82,6 +82,12 @@ All notable changes to this repository are recorded here. The format follows
   separator runs are unbounded again with linear line starts; any statement that something was
   made with, by or using the assistant is refused; more lookalike letters are folded; lock rows pin
   exact and where and are compared with main's; no text may be both pending and decided.
+- Seventh audit round: no exceptions; the snake_case lookbehind is gone and three corpus ids that
+  spelled banned phrases are renamed (recorded in `tests/fixtures/renamed_ids.txt`); a sentence rule
+  refuses the phrase and the assistant's name within 80 characters; the no-narrowing test gains
+  dimensions (long separator runs, line-break splits, lookalikes, underscore prefixes, a fixed
+  random set, a sample through range, event and message checks) and pins the baseline's sha256;
+  allowed entries must pass the baseline; CI prints added allowed lines; the link scheme is unbounded.
 
 ### Changed
 

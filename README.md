@@ -118,7 +118,8 @@ Two limits remain:
   planned as a separate change. Until then, any change to `ci.yml`, `tools/hooks/`,
   `tools/commit_check.py`, `tools/main_history_known.txt`, the corpora and their lock
   (`tests/fixtures/*_corpus.jsonl`, `pending_ruling.jsonl`, `corpus.lock`), the baseline checker
-  (`tests/fixtures/checker_baseline.py`), `tests/test_corpus.py` or `tests/test_no_narrowing.py`
+  (`tests/fixtures/checker_baseline.py`), `tests/fixtures/renamed_ids.txt`, `tests/test_corpus.py`,
+  `tests/test_no_narrowing.py` or `tools/corpus_added.py`
   needs a person's review, and the checker prints a notice when a range touches them.
 
 `tools/audit_redgreen.py` reruns every audit probe against older copies of the checker and the
@@ -138,11 +139,11 @@ What the checker refuses:
   statement that something was made with, by or using it; a capital "Generated" with the
   assistant's name later within 160 characters, across single line breaks; a line opening with
   the phrase that names the assistant within a few words; and, anywhere, the phrase followed
-  within a few words by the assistant's name and "code", or by the name in parentheses. Footer
-  rules also run with HTML tags removed. Two known exceptions pass: an identifier joined by
-  underscores, such as a corpus id (it is in the allowed corpus by name), and a lowercase sentence
-  that names the assistant several words after the phrase, which has the same shape as the
-  allowed description of these rules.
+  within a few words by the assistant's name and "code", or by the name in parentheses; and,
+  anywhere, the phrase and the assistant's name later in the same sentence, within 80 characters.
+  Footer rules also run with HTML tags removed. There are no exceptions: text that should pass
+  although the baseline refuses it waits in `tests/fixtures/pending_ruling.jsonl` for Matt's
+  ruling.
 - **Hidden characters:** text is folded before matching: entities, percent-encoding,
   compatibility forms, format characters, combining and enclosing marks, Hangul fillers, the
   blank braille pattern, the null notehead, ideographic dots, Unicode hyphens and lookalike letters
@@ -161,11 +162,20 @@ when its ruling is made). New ids are appended to the lock in the same commit. E
 to finish within a second on a 100,000-character line.
 
 **Nothing may pass that the baseline refused.** `tests/fixtures/checker_baseline.py` is a copy of
-the checker at `512e818`. `tests/test_no_narrowing.py` builds more than 70,000 variants with a
-fixed seed (separator runs of 0 to 40 characters between every token, prefixes, leading spaces,
-quote markers, sentence openings, suffixes and case changes) and fails if the baseline refuses one
-that the current checker lets through, unless that exact text is in the allowed corpus. The
-baseline changes only in a commit that changes nothing else.
+the checker at `512e818`, pinned by its sha256. `tests/test_no_narrowing.py` builds more than
+130,000 variants with fixed seeds in named dimensions (separator runs of 0 to 40, 41, 64, 100 and
+200 characters, line-break splits, prefixes and leading spaces, underscore-joined prefixes, every
+lookalike letter the baseline folds, sentence openings and suffixes, the refused corpus, and 20,000
+random combinations), each with a minimum count. It fails if the baseline refuses a variant that
+the current checker lets through, in a message, a PR body or a file, and also runs a sample through
+`check_range` (files at `.md`, `.jsonl`, `.py` and dotfile paths), `check_pr_event` and
+`check_message_text`. Only an exact pending text is skipped. Every allowed entry must also pass the
+baseline. CI prints the decoded text of every allowed line a change adds. The baseline changes
+only in a commit that changes nothing else.
+
+The test that compares the lock with main's copy skips until main has a lock. It starts guarding
+once this change merges, and it protects main only when the main ruleset requires the `checks`
+status check (F1, for the repository owner) and CI runs it against the base branch.
 
 The file rule reads CLAUDE.md the way it is worded: a trailer line, a link, a footer line. CLAUDE.md
 itself names these things mid-sentence and passes. Rewrapping that paragraph so a line starts with
