@@ -12,85 +12,155 @@ Usage:
   python3 tools/commit_check.py --selftest               prove the checks fire, in a scratch repository
 
 Checks
-  messages   no co-author trailer, no session trailer, no claude.ai link, no "generated with/by"
-             Claude footer, no em or en dash
-  identity   author is flywifi <236871844+flywifi@users.noreply.github.com>; the committer is the
-             same, or GitHub <noreply@github.com> for commits made on github.com (web merges)
-  files      UTF-8, no CR line endings, no em or en dash, ASCII-only .py files; never local/, .cache/,
-             logs/, .venv-crawl/, *.local.json or .secrets.local.json; never digests/, state/ or
-             ledger/ outside the data branch
-  pushes     the push URL names flywifi/info-feed-seeds; never to main or data
+  messages   no co-author or session trailer, no session link, no generated footer (a line that
+             opens with the generated-with phrase, or that phrase or its by/using forms shortly
+             before the assistant's name), no em or en dash. Text is normalised first (NFKC, format characters removed, Unicode hyphens and
+             common lookalike letters folded, HTML entities and percent-encoding decoded).
+  files      the same rules read as CLAUDE.md words them: a trailer LINE, a LINK, a footer LINE, so
+             a sentence that names the rule (as CLAUDE.md does) passes. Also UTF-8, no CR, no em or
+             en dash, ASCII-only .py; never local/, .cache/, logs/, .venv-crawl/, *.local.json or
+             .secrets.local.json; never digests/, state/ or ledger/ off the data branch.
+  identity   author and committer are flywifi <236871844+flywifi@users.noreply.github.com>. GitHub's
+             web-flow committer is accepted only on a commit already on origin/main (it landed
+             through GitHub); anywhere else it is treated as forged.
+  pushes     the push URL is exactly github.com/flywifi/info-feed-seeds; never to main or data.
+  ranges     an empty range is a failure (fail closed), except a branch deletion in pre-push.
 
 `--range auto` uses origin/$BASE_REF (default main)..HEAD, falls back to the policy boundary commit
-(BOUNDARY_SHA) and fails closed when neither resolves. Output is ASCII only. Exit 0 clean, 1 on any
-finding, 2 on a usage error. Standard library only.
+(BOUNDARY_SHA), and fails closed when neither resolves. The checker works from any copy of this file
+(CI runs the base branch's copy) and always inspects the repository in the current directory.
+Output is ASCII only. Exit 0 clean, 1 on any finding or error, 2 on a usage error. Standard library.
 """
 from __future__ import annotations
 
+import html
 import json
 import os
 import re
 import subprocess
 import sys
 import tempfile
+import unicodedata
 from pathlib import Path
+from urllib.parse import unquote
 
-ROOT = Path(__file__).resolve().parent.parent
 REPO_SLUG = "flywifi/info-feed-seeds"
 BOUNDARY_SHA = "5436f99"
 AUTHOR = ("flywifi", "236871844+flywifi@users.noreply.github.com")
 WEB_COMMITTER = ("GitHub", "noreply@github.com")
 PROTECTED_BRANCHES = ("main", "data")
 ZERO_SHA = "0" * 40
+SCISSORS = "# ------------------------ >8 ------------------------"
+SELF_PATHS = ("tools/commit_check.py", "tools/hooks/", ".github/workflows/")
 
 EM_DASH, EN_DASH = "\u2014", "\u2013"
-BANNED_TEXT = (
-    ("co-author trailer", re.compile(r"co-authored-by", re.I)),
-    ("session trailer", re.compile(r"claude-session", re.I)),
-    ("claude.ai link", re.compile(r"claude\.ai\b", re.I)),
-    ("generated-by footer", re.compile(r"generated\s+(?:with|by)\W{0,4}claude", re.I)),
+
+# The banned strings are assembled from pieces so this file never contains what it hunts for.
+_CO = "co" + r"[\W_]*" + "author(?:ed)?" + r"[\W_]*" + "by"
+_SESSION = "claude" + r"[\W_]*" + "session"
+_HOST = "claude" + r"\." + "ai"
+_GEN_LINE = r"^[\W_\d]*" + "generated" + r"[\W_]+with\b"
+_GEN_TOOL = "generated" + r"[\W_]+(?:with|by|using)\b[\W_].{0,24}?" + "claude"
+
+MESSAGE_RULES = (
+    ("co-author trailer", re.compile(_CO)),
+    ("session trailer", re.compile(_SESSION)),
+    ("session link", re.compile(_HOST + r"\b")),
+    ("generated footer", re.compile(_GEN_LINE, re.M)),
+    ("generated footer", re.compile(_GEN_TOOL)),
 )
+FILE_RULES = (
+    ("co-author trailer line", re.compile(r"^[\W_]*" + _CO + r"[\W_]*:", re.M)),
+    ("session trailer line", re.compile(r"^[\W_]*" + _SESSION + r"[\W_]*:", re.M)),
+    ("session link", re.compile(r"(?:[a-z][a-z0-9+.-]*:/*|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
+                                + _HOST + r"(?=[/:?#])")),
+    ("generated footer", re.compile(_GEN_LINE, re.M)),
+    ("generated footer", re.compile(_GEN_TOOL)),
+)
+
+_HYPHENS = {ord(c): "-" for c in "\u00ad\u2010\u2011\u2012\u2013\u2014\u2015\u2212\ufe58\ufe63\uff0d"}
+# Letters from other scripts that render like the ASCII letters in the banned words.
+_CONFUSABLES = {ord(k): v for k, v in {
+    "\u0430": "a", "\u0441": "c", "\u0435": "e", "\u043e": "o", "\u0440": "p", "\u0443": "y",
+    "\u0445": "x", "\u0456": "i", "\u0455": "s", "\u0501": "d", "\u04bb": "h", "\u051d": "w",
+    "\u04cf": "l", "\u0261": "g", "\u0131": "i", "\u03b1": "a", "\u03bf": "o", "\u03b5": "e",
+    "\u03b9": "i", "\u03bd": "v", "\u03c1": "p", "\u03c4": "t", "\u03c5": "u", "\u0251": "a",
+}.items()}
+
 FORBIDDEN_PREFIXES = ("local/", ".cache/", "logs/", ".venv-crawl/")
 FORBIDDEN_NAMES = re.compile(r"(?:^|/)(?:[^/]*\.local\.json|\.secrets\.local\.json)$")
 DATA_PREFIXES = ("digests/", "state/", "ledger/")
+_GITHUB_URL = (re.compile(r"^(?:https?|ssh|git)://(?:[^@/]+@)?github\.com(?::\d+)?/([^/]+)/([^/]+?)(?:\.git)?/?$", re.I),
+               re.compile(r"^(?:[^@/]+@)?github\.com:([^/]+)/([^/]+?)(?:\.git)?/?$", re.I))
 
 
 def say(message: str = "") -> None:
     sys.stdout.write(message.encode("ascii", "backslashreplace").decode("ascii") + "\n")
 
 
-def git(*args: str, cwd: Path | None = None, input_bytes: bytes | None = None) -> bytes:
-    proc = subprocess.run(["git", *args], cwd=str(cwd or ROOT), input=input_bytes,
-                          capture_output=True, check=False)
+def git(*args: str, cwd: Path | None = None) -> bytes:
+    proc = subprocess.run(["git", *args], cwd=str(cwd) if cwd else None, capture_output=True, check=False)
     if proc.returncode != 0:
         raise RuntimeError(f"git {' '.join(args)}: {proc.stderr.decode('utf-8', 'replace').strip()}")
     return proc.stdout
 
 
 def git_ok(*args: str, cwd: Path | None = None) -> bool:
-    return subprocess.run(["git", *args], cwd=str(cwd or ROOT), capture_output=True).returncode == 0
+    return subprocess.run(["git", *args], cwd=str(cwd) if cwd else None, capture_output=True).returncode == 0
+
+
+def toplevel(cwd: Path | None = None) -> Path:
+    return Path(git("rev-parse", "--show-toplevel", cwd=cwd).decode("utf-8").strip())
 
 
 # --------------------------------------------------------------------------- text checks
 
-def text_findings(text: str, where: str) -> list[str]:
-    """Banned footer and trailer text, and dashes, in a message, title or body."""
+def normalize(text: str) -> str:
+    """Fold the tricks that hide a banned string: entities, percent-encoding, compatibility forms
+    (fullwidth letters and dots), format characters (zero-width, bidi), Unicode hyphens and common
+    lookalike letters. Lowercased."""
+    value = html.unescape(text or "")
+    for _ in range(2):
+        value = unquote(value)
+    value = unicodedata.normalize("NFKC", value)
+    value = "".join(ch for ch in value if unicodedata.category(ch) != "Cf")
+    return value.translate(_HYPHENS).translate(_CONFUSABLES).lower()
+
+
+def _dash_findings(text: str, where: str) -> list[str]:
     out = []
-    for label, pattern in BANNED_TEXT:
-        if pattern.search(text or ""):
-            out.append(f"{where}: contains a {label}")
     for dash, name in ((EM_DASH, "em dash"), (EN_DASH, "en dash")):
         if dash in (text or ""):
             out.append(f"{where}: contains an {name}")
     return out
 
 
-def identity_findings(author: tuple[str, str], committer: tuple[str, str] | None, where: str) -> list[str]:
+def _rule_findings(text: str, where: str, rules) -> list[str]:
+    folded = normalize(text)
+    labels = []
+    for label, pattern in rules:
+        if pattern.search(folded) and label not in labels:
+            labels.append(label)
+    return [f"{where}: contains a {label}" for label in labels]
+
+
+def text_findings(text: str, where: str) -> list[str]:
+    """Commit messages, pull request titles and bodies: any mention is refused."""
+    return _rule_findings(text, where, MESSAGE_RULES) + _dash_findings(text, where)
+
+
+def identity_findings(author, committer, where: str, on_main: bool = False) -> list[str]:
     out = []
     if tuple(author) != AUTHOR:
         out.append(f"{where}: author is {author[0]} <{author[1]}>, expected {AUTHOR[0]} <{AUTHOR[1]}>")
-    if committer is not None and tuple(committer) not in (AUTHOR, WEB_COMMITTER):
-        out.append(f"{where}: committer is {committer[0]} <{committer[1]}>, expected {AUTHOR[0]} <{AUTHOR[1]}>")
+    if committer is not None and tuple(committer) != AUTHOR:
+        if tuple(committer) == WEB_COMMITTER and on_main:
+            pass  # landed on main through GitHub (web merge or web edit)
+        elif tuple(committer) == WEB_COMMITTER:
+            out.append(f"{where}: committer claims to be GitHub but the commit is not on main; "
+                       "a web-flow committer is accepted only on main")
+        else:
+            out.append(f"{where}: committer is {committer[0]} <{committer[1]}>, expected {AUTHOR[0]} <{AUTHOR[1]}>")
     return out
 
 
@@ -110,7 +180,7 @@ def content_findings(path: str, data: bytes) -> list[str]:
         text = data.decode("utf-8")
     except UnicodeDecodeError as exc:
         return [f"{path}: not UTF-8 (byte {exc.start})"]
-    out = []
+    out = _rule_findings(text, path, FILE_RULES)
     if "\r" in text:
         out.append(f"{path}: has CR line endings")
     for dash, name in ((EM_DASH, "em dash"), (EN_DASH, "en dash")):
@@ -128,32 +198,35 @@ def content_findings(path: str, data: bytes) -> list[str]:
 
 # --------------------------------------------------------------------------- ranges
 
+def base_ref() -> str:
+    return f"origin/{os.environ.get('BASE_REF') or 'main'}"
+
+
 def resolve_range(spec: str, cwd: Path | None = None) -> str | None:
     """'auto' -> origin/<BASE_REF>..HEAD, else BOUNDARY..HEAD, else None (fail closed)."""
     if spec != "auto":
         return spec
-    base = f"origin/{os.environ.get('BASE_REF') or 'main'}"
-    if git_ok("rev-parse", "--verify", "--quiet", base + "^{commit}", cwd=cwd):
-        return f"{base}..HEAD"
+    if git_ok("rev-parse", "--verify", "--quiet", base_ref() + "^{commit}", cwd=cwd):
+        return f"{base_ref()}..HEAD"
     if git_ok("rev-parse", "--verify", "--quiet", BOUNDARY_SHA + "^{commit}", cwd=cwd):
         return f"{BOUNDARY_SHA}..HEAD"
     return None
 
 
 def commits_in(rng: str, cwd: Path | None = None) -> list[dict]:
-    raw = git("log", "--format=%H%x00%an%x00%ae%x00%cn%x00%ce%x00%B%x1e", rng, cwd=cwd)
+    shas = git("rev-list", "--reverse", rng, cwd=cwd).decode().split()
+    main_ok = git_ok("rev-parse", "--verify", "--quiet", "origin/main^{commit}", cwd=cwd)
     out = []
-    for record in raw.decode("utf-8", "replace").split("\x1e"):
-        record = record.strip("\n")
-        if not record:
-            continue
-        sha, an, ae, cn, ce, body = record.split("\x00", 5)
-        out.append({"sha": sha, "author": (an, ae), "committer": (cn, ce), "message": body})
+    for sha in shas:
+        raw = git("show", "-s", "--format=%an%x00%ae%x00%cn%x00%ce%x00%B", sha, cwd=cwd)
+        an, ae, cn, ce, body = raw.decode("utf-8", "replace").split("\x00", 4)
+        on_main = main_ok and git_ok("merge-base", "--is-ancestor", sha, "origin/main", cwd=cwd)
+        out.append({"sha": sha, "author": (an, ae), "committer": (cn, ce), "message": body, "on_main": on_main})
     return out
 
 
 def changed_paths(rng: str, cwd: Path | None = None) -> tuple[str, list[str]]:
-    """(tip, paths added or modified between the range's base and tip)."""
+    """(tip, paths added or modified between the range's merge base and its tip)."""
     start, _, tip = rng.partition("..")
     tip = tip or "HEAD"
     raw = git("diff", "--name-only", "-z", "--no-renames", "--diff-filter=d", f"{start}...{tip}", cwd=cwd)
@@ -161,16 +234,23 @@ def changed_paths(rng: str, cwd: Path | None = None) -> tuple[str, list[str]]:
 
 
 def check_range(rng: str, branch: str | None = None, cwd: Path | None = None) -> list[str]:
-    findings: list[str] = []
     commits = commits_in(rng, cwd=cwd)
+    if not commits:
+        say(f"commit_check: 0 commit(s) in {rng}")
+        return [f"{rng}: the range holds no commits; failing closed"]
+    findings: list[str] = []
     for c in commits:
         where = f"commit {c['sha'][:7]}"
         findings += text_findings(c["message"], where + " message")
-        findings += identity_findings(c["author"], c["committer"], where)
+        findings += identity_findings(c["author"], c["committer"], where, on_main=c["on_main"])
     tip, paths = changed_paths(rng, cwd=cwd)
     for path in paths:
         findings += path_findings(path, branch)
         findings += content_findings(path, git("show", f"{tip}:{path}", cwd=cwd))
+    touched = sorted(p for p in paths if p.startswith(SELF_PATHS))
+    if touched:
+        say("commit_check: NOTICE: this range changes the checks themselves (" + ", ".join(touched)
+            + "); CI runs the base branch's checker, and a person must review these files")
     say(f"commit_check: {len(commits)} commit(s), {len(paths)} changed file(s) in {rng}")
     return findings
 
@@ -201,20 +281,29 @@ def check_staged(cwd: Path | None = None) -> list[str]:
     return findings
 
 
-def check_message_file(path: str) -> list[str]:
-    text = Path(path).read_text(encoding="utf-8", errors="replace")
-    lines = [l for l in text.splitlines() if not l.startswith("#")]
-    return text_findings("\n".join(lines), "commit message")
+def check_message_text(text: str) -> list[str]:
+    """Everything above git's scissors line is checked, comment lines included: whether git strips
+    them depends on the cleanup mode, so a banned line hidden behind '#' is still refused."""
+    kept = text.split(SCISSORS, 1)[0]
+    return text_findings(kept, "commit message")
+
+
+def remote_names_repo(url: str) -> bool:
+    for pattern in _GITHUB_URL:
+        m = pattern.match((url or "").strip())
+        if m:
+            return f"{m.group(1)}/{m.group(2)}".lower() == REPO_SLUG
+    return False
 
 
 def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = None) -> list[str]:
     findings: list[str] = []
-    if REPO_SLUG not in (url or ""):
-        findings.append(f"push URL {url!r} does not name {REPO_SLUG}")
+    if not remote_names_repo(url):
+        findings.append(f"push URL {url!r} is not github.com/{REPO_SLUG}")
     try:
         push_url = git("remote", "get-url", "--push", "origin", cwd=cwd).decode().strip()
-        if REPO_SLUG not in push_url:
-            findings.append(f"origin push URL {push_url!r} does not name {REPO_SLUG}")
+        if not remote_names_repo(push_url):
+            findings.append(f"origin push URL {push_url!r} is not github.com/{REPO_SLUG}")
     except RuntimeError as exc:
         findings.append(str(exc))
     for line in lines:
@@ -228,7 +317,7 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
                             "requests (main) or the poll workflow (data)")
             continue
         if local_sha == ZERO_SHA:
-            continue  # deleting a job branch
+            continue  # deleting a job branch: the one empty push allowed
         if remote_sha != ZERO_SHA and git_ok("cat-file", "-e", remote_sha + "^{commit}", cwd=cwd):
             rng = f"{remote_sha}..{local_sha}"
         else:
@@ -244,7 +333,9 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
 def check_sources(rng: str, cwd: Path | None = None) -> list[str]:
     """Every added or changed sources/<id>/ folder carries a live proof with a sample item.
     Stands in for `hub check --prove` until that command exists."""
-    root = Path(cwd or ROOT)
+    if not git("rev-list", rng, cwd=cwd).split():
+        return [f"{rng}: the range holds no commits; failing closed"]
+    root = toplevel(cwd)
     _, paths = changed_paths(rng, cwd=cwd)
     ids = sorted({p.split("/")[1] for p in paths
                   if p.startswith("sources/") and p.count("/") >= 2 and p.split("/")[1] != "retired"})
@@ -280,6 +371,17 @@ def check_pr_text(title: str, body: str, where: str) -> list[str]:
     return text_findings(title or "", f"{where} title") + text_findings(body or "", f"{where} body")
 
 
+def check_pr_event(path: str) -> list[str]:
+    try:
+        event = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return [f"cannot read the event payload {path!r}: {type(exc).__name__}: {exc}"]
+    pr = event.get("pull_request") if isinstance(event, dict) else None
+    if not isinstance(pr, dict) or not isinstance(pr.get("number"), int):
+        return ["the event payload has no pull_request with a number; failing closed"]
+    return check_pr_text(pr.get("title") or "", pr.get("body") or "", f"pull request {pr['number']}")
+
+
 def pr_from_api(number: str) -> tuple[str, str]:
     proc = subprocess.run(["gh", "api", f"repos/{REPO_SLUG}/pulls/{number}"], capture_output=True)
     if proc.returncode != 0:
@@ -290,14 +392,47 @@ def pr_from_api(number: str) -> tuple[str, str]:
 
 # --------------------------------------------------------------------------- selftest
 
+def banned_samples() -> dict[str, str]:
+    """Planted texts, assembled at run time so no file holds them."""
+    co, sess = "Co-" + "Authored-By", "Claude" + "-Session"
+    link = "https://" + "claude" + ".ai/code/session_x"
+    return {
+        "trailer": "Add b\n\n" + co + ": Someone <x@example.com>",
+        "trailer variant": "Add b\n\nco\u2011authored\u2011by: x",
+        "trailer spaces": "Add b\n\nCo authored by: x",
+        "trailer cyrillic": "Add b\n\nC\u043e-Authored-By: x",
+        "trailer zero-width": "Add b\n\nCo-Auth\u200bored-By: x",
+        "session": "Add b\n\n" + sess + ": abc",
+        "link": "Add b\n\nsee " + link,
+        "link fullwidth": "Add b\n\nsee https://\uff43\uff4c\uff41\uff55\uff44\uff45\uff0e\uff41\uff49/x",
+        "link percent": "Add b\n\nsee https://" + "claude" + "%2E" + "ai/x",
+        "footer": "Add b\n\n" + "Gener" + "ated" + " with SomeTool",
+        "footer italic": "Body\n\n---\n_" + "Gener" + "ated" + " by [Claude Code](" + link + ")_",
+        "footer using": "Add b\n\n" + "Gener" + "ated" + " using " + "Claude",
+        "footer robot": "Add b\n\n\U0001F916 " + "Gener" + "ated" + " with [" + "Claude" + " Code]",
+    }
+
+
 def selftest() -> list[str]:
-    """Build a scratch repository and prove each check fires and a clean commit passes."""
+    """Build a scratch repository and prove each check fires and clean cases pass."""
     failures: list[str] = []
+    samples = banned_samples()
+    for label, text in samples.items():
+        if not text_findings(text, label):
+            failures.append(f"selftest text {label!r}: expected a finding")
+    for label in ("Generated by info-feed-seeds hub poll", "Add the co-author rule", "Written by hand"):
+        if text_findings(label, "clean"):
+            failures.append(f"selftest text {label!r}: expected clean")
+    named = ("Commit messages never contain a " + "Co-" + "Authored-By line, a " + "Claude" + "-Session line,\n"
+             "a session or " + "claude" + ".ai link, or a \"" + "Gener" + "ated" + " with\" footer.\n")
+    if content_findings("RULES.md", named.encode()):
+        failures.append("selftest: a sentence that names the rules must pass the file check")
     with tempfile.TemporaryDirectory() as td:
         repo = Path(td)
         env = dict(os.environ, GIT_AUTHOR_NAME=AUTHOR[0], GIT_AUTHOR_EMAIL=AUTHOR[1],
                    GIT_COMMITTER_NAME=AUTHOR[0], GIT_COMMITTER_EMAIL=AUTHOR[1],
                    GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1")
+        env.pop("BASE_REF", None)
 
         def run(*args, extra=None):
             subprocess.run(["git", "-c", "core.hooksPath=" + os.devnull, "-c", "commit.gpgsign=false", *args],
@@ -311,40 +446,52 @@ def selftest() -> list[str]:
             run("commit", "-q", "-m", message, extra=extra)
             return git("rev-parse", "HEAD", cwd=repo).decode().strip()
 
-        run("init", "-q", "-b", "main")
-        base = commit("README.md", b"clean\n", "Add README")
-
-        def expect(label, sha_range, want_hit):
-            hits = check_range(sha_range, branch="job", cwd=repo)
+        def expect(label, rng, want_hit, branch="job"):
+            hits = check_range(rng, branch=branch, cwd=repo)
             if bool(hits) != want_hit:
                 failures.append(f"selftest {label}: expected {'a finding' if want_hit else 'clean'}, got {hits}")
 
+        web = {"GIT_COMMITTER_NAME": WEB_COMMITTER[0], "GIT_COMMITTER_EMAIL": WEB_COMMITTER[1]}
+        run("init", "-q", "-b", "main")
+        base = commit("README.md", b"clean\n", "Add README")
+        merged = commit("m.txt", b"x\n", "Merge pull request 1 from the web", extra=web)
+        run("update-ref", "refs/remotes/origin/main", merged)
+        expect("web-flow committer on main", f"{base}..{merged}", False, branch=None)
+        expect("empty range", f"{merged}..{merged}", True)
+        last = merged
         clean = commit("a.txt", b"plain text\n", "Add a plain file")
-        expect("clean commit", f"{base}..{clean}", False)
-        trailer = commit("b.txt", b"x\n", "Add b\n\nCo-Authored-By: Someone <x@example.com>")
-        expect("co-author trailer", f"{clean}..{trailer}", True)
-        footer = commit("c.txt", b"x\n", "Add c\n\nGenerated with [Claude Code]")
-        expect("generated footer", f"{trailer}..{footer}", True)
-        dash = commit("d.txt", b"x\n", "Add d \u2014 with a dash")
-        expect("em dash in message", f"{footer}..{dash}", True)
-        crlf = commit("e.txt", b"one\r\ntwo\r\n", "Add e")
-        expect("CR line endings", f"{dash}..{crlf}", True)
-        forbidden = commit("local/f.txt", b"x\n", "Add f")
-        expect("forbidden path", f"{crlf}..{forbidden}", True)
-        data = commit("digests/p/latest.md", b"x\n", "Add digest")
-        expect("data path off the data branch", f"{forbidden}..{data}", True)
+        expect("clean commit", f"{last}..{clean}", False)
+        last = clean
+        forged = commit("w.txt", b"x\n", "Forged web commit", extra=web)
+        expect("web-flow committer off main", f"{last}..{forged}", True)
+        last = forged
+        for label in ("trailer", "footer", "link fullwidth"):
+            sha = commit(f"{label.replace(' ', '-')}.txt", b"x\n", samples[label])
+            expect(f"message {label}", f"{last}..{sha}", True)
+            last = sha
+        cases = (
+            ("dash in message", "d.txt", b"x\n", "Add d \u2014 with a dash"),
+            ("CR line endings", "e.txt", b"one\r\ntwo\r\n", "Add e"),
+            ("forbidden path", "local/f.txt", b"x\n", "Add f"),
+            ("data path off the data branch", "digests/p/latest.md", b"x\n", "Add digest"),
+            ("non-ASCII Python", "h.py", "x = '\u00e9'\n".encode("utf-8"), "Add h"),
+            ("trailer line in a file", "notes.md", samples["trailer"].encode(), "Add notes"),
+            ("link in a file", "links.md", samples["link"].encode(), "Add links"),
+        )
+        for label, name, data, message in cases:
+            sha = commit(name, data, message)
+            expect(label, f"{last}..{sha}", True)
+            last = sha
         stranger = commit("g.txt", b"x\n", "Add g", extra={"GIT_AUTHOR_NAME": "Someone",
                                                            "GIT_AUTHOR_EMAIL": "someone@example.com"})
-        expect("wrong author", f"{data}..{stranger}", True)
-        py = commit("h.py", "x = '\u00e9'\n".encode("utf-8"), "Add h")
-        expect("non-ASCII Python", f"{stranger}..{py}", True)
-        web = commit("i.txt", b"x\n", "Merge from the web", extra={"GIT_COMMITTER_NAME": WEB_COMMITTER[0],
-                                                                   "GIT_COMMITTER_EMAIL": WEB_COMMITTER[1]})
-        expect("web-flow committer", f"{py}..{web}", False)
-        if not check_pr_text("Job 1c", "Body\n\n---\n_Generated by [Claude Code](https://claude.ai/code/x)_", "pr"):
-            failures.append("selftest pull request footer: expected a finding")
-        if check_pr_text("Job 1c: checks", "A plain description.", "pr"):
-            failures.append("selftest clean pull request text: expected clean")
+        expect("wrong author", f"{last}..{stranger}", True)
+        footer_merge = commit("n.txt", b"x\n", "Merge pull request 2\n\n" + samples["footer italic"], extra=web)
+        run("update-ref", "refs/remotes/origin/main", footer_merge)
+        expect("footer in a merge already on main", f"{stranger}..{footer_merge}", True, branch=None)
+    if check_pr_text("Job 1c", samples["footer italic"], "pr") == []:
+        failures.append("selftest pull request footer: expected a finding")
+    if check_pr_text("Job 1c: checks", "A plain description.", "pr"):
+        failures.append("selftest clean pull request text: expected clean")
     return failures
 
 
@@ -362,20 +509,21 @@ def report(findings: list[str], label: str) -> int:
 
 def main(argv: list[str]) -> int:
     if not argv or argv[0] in ("-h", "--help"):
-        say(__doc__.strip().splitlines()[2] if argv else __doc__.strip())
-        return 2 if not argv else 0
+        say(__doc__.strip())
+        return 0 if argv else 2
     mode, rest = argv[0], argv[1:]
     try:
         if mode == "--staged" and not rest:
             return report(check_staged(), "staged")
         if mode == "--message-file" and len(rest) == 1:
-            return report(check_message_file(rest[0]), "commit message")
+            text = Path(rest[0]).read_text(encoding="utf-8", errors="replace")
+            return report(check_message_text(text), "commit message")
         if mode == "--pre-push" and len(rest) == 2:
             return report(check_pre_push(rest[0], rest[1], sys.stdin.read().splitlines()), "pre-push")
         if mode in ("--range", "--sources") and len(rest) == 1:
             rng = resolve_range(rest[0])
             if rng is None:
-                say(f"commit_check: cannot resolve a range: origin/main and {BOUNDARY_SHA} are both missing "
+                say(f"commit_check: cannot resolve a range: {base_ref()} and {BOUNDARY_SHA} are both missing "
                     "(fetch with full history); failing closed")
                 return 1
             if mode == "--range":
@@ -385,14 +533,11 @@ def main(argv: list[str]) -> int:
             title, body = pr_from_api(rest[0])
             return report(check_pr_text(title, body, f"pull request {rest[0]}"), "pull request")
         if mode == "--pr-event" and len(rest) == 1:
-            event = json.loads(Path(rest[0]).read_text(encoding="utf-8"))
-            pr = event.get("pull_request") or {}
-            return report(check_pr_text(pr.get("title") or "", pr.get("body") or "",
-                                        f"pull request {pr.get('number')}"), "pull request")
+            return report(check_pr_event(rest[0]), "pull request")
         if mode == "--selftest" and not rest:
             return report(selftest(), "selftest")
-    except RuntimeError as exc:
-        say(f"commit_check: {exc}")
+    except (RuntimeError, OSError, ValueError) as exc:
+        say(f"commit_check: could not run: {type(exc).__name__}: {exc}")
         return 1
     say(f"commit_check: unknown arguments {' '.join(argv)!r}; see --help")
     return 2
