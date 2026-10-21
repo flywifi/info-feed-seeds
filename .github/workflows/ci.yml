@@ -65,8 +65,20 @@ jobs:
           fi
       # Every step after this one runs even when an earlier one failed, so one red step does not
       # hide the others; the job still fails.
-      - name: Allowed corpus lines this change adds (read each one)
-        run: python3 -I tools/corpus_added.py "origin/$BASE_REF"
+      - name: Allowed and pending corpus lines this change adds (read each one)
+        # The base branch's copy, like the checker; only the bootstrap pull request uses its own.
+        run: |
+          if git cat-file -e "origin/$BASE_REF:tools/corpus_added.py" 2>/dev/null; then
+            git show "origin/$BASE_REF:tools/corpus_added.py" > "$RUNNER_TEMP/corpus_added.py"
+          elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ] \
+               && { [ "$PR_NUMBER" = "$BOOTSTRAP_PR" ] || [ "$GITHUB_REF" = "refs/heads/$BOOTSTRAP_BRANCH" ]; }; then
+            cp tools/corpus_added.py "$RUNNER_TEMP/corpus_added.py"
+            echo "::warning::bootstrap: origin/main has no corpus_added.py; using this branch's copy"
+          else
+            echo "::error::origin/$BASE_REF has no tools/corpus_added.py and this is not the bootstrap pull request"
+            exit 1
+          fi
+          python3 -I "$RUNNER_TEMP/corpus_added.py" "origin/$BASE_REF" "$GITHUB_WORKSPACE"
       - name: Commit hygiene (messages, identity, changed files)
         if: ${{ !cancelled() }}
         run: python3 -I "$RUNNER_TEMP/commit_check.py" --range auto
