@@ -115,9 +115,11 @@ Two limits remain:
   from the pull request itself, so a pull request that edits `ci.yml` can remove the step that
   takes the checker from the base branch. Closing that gap needs the hygiene checks moved to a
   `pull_request_target` workflow that runs the base branch's checker over git data only; that is
-  planned as a separate change. Until then, any change to `ci.yml`, `tools/hooks/` or
-  `tools/commit_check.py` needs a person's review, and the checker prints a notice when a range
-  touches them.
+  planned as a separate change. Until then, any change to `ci.yml`, `tools/hooks/`,
+  `tools/commit_check.py`, `tools/main_history_known.txt`, the corpora and their lock
+  (`tests/fixtures/*_corpus.jsonl`, `pending_ruling.jsonl`, `corpus.lock`), the baseline checker
+  (`tests/fixtures/checker_baseline.py`), `tests/test_corpus.py` or `tests/test_no_narrowing.py`
+  needs a person's review, and the checker prints a notice when a range touches them.
 
 `tools/audit_redgreen.py` reruns every audit probe against older copies of the checker and the
 current one, side by side, as the evidence for each fix.
@@ -132,15 +134,19 @@ What the checker refuses:
   trailer line, a real link, or a bare session id ("session_" and 20 or more letters or digits).
 - **Generated footer:** a line opening with the phrase "generated with" in any case, after an
   optional label such as "Note:", whatever tool it names (finding 7, read literally until it is
-  ruled on); a capital "Generated" with, by or using anywhere, with the assistant's name later on
-  the same line within 64 characters; a line opening with any form of the phrase that names the
-  assistant within a few words; and, anywhere, the phrase followed within a few words by the
-  assistant's name and "code", or by the name in parentheses, or directly by a name that closes
-  the line or a bracket. A lowercase sentence that mentions the assistant after the phrase, such as
-  a description of these rules, passes. Footer rules also run with HTML tags removed.
+  ruled on); anywhere, the phrase followed by separators only and then the assistant's name, so any
+  statement that something was made with, by or using it; a capital "Generated" with the
+  assistant's name later within 160 characters, across single line breaks; a line opening with
+  the phrase that names the assistant within a few words; and, anywhere, the phrase followed
+  within a few words by the assistant's name and "code", or by the name in parentheses. Footer
+  rules also run with HTML tags removed. Two known exceptions pass: an identifier joined by
+  underscores, such as a corpus id (it is in the allowed corpus by name), and a lowercase sentence
+  that names the assistant several words after the phrase, which has the same shape as the
+  allowed description of these rules.
 - **Hidden characters:** text is folded before matching: entities, percent-encoding,
   compatibility forms, format characters, combining and enclosing marks, Hangul fillers, the
-  blank braille pattern, ideographic dots, Unicode hyphens and lookalike letters.
+  blank braille pattern, the null notehead, ideographic dots, Unicode hyphens and lookalike letters
+  (Cyrillic, Greek, Armenian, Cherokee, Lisu and Latin small capitals).
 
 **What may and may not pass is fixed by corpora, not by the rules.**
 `tests/fixtures/refused_corpus.jsonl` holds every string an audit proved must be refused, and
@@ -148,10 +154,18 @@ What the checker refuses:
 that must pass. `tests/fixtures/pending_ruling.jsonl` holds text whose verdict waits on a ruling;
 the tests print its current verdicts without asserting them. The text is base64 so no scanner sees
 it. A rule may change only when both corpora still pass, and the corpora only grow:
-`tests/fixtures/corpus.lock` pins every id to the sha256 of its text and to its kind, and a test
-fails if a locked id is missing, its text changed, or it moved between refused and allowed. New
-ids are appended to the lock in the same commit. Every rule also has to finish within a second on a
-100,000-character line.
+`tests/fixtures/corpus.lock` pins every id to its kind, its exact flag, the places it is checked
+in and the sha256 of its text. A test fails if a locked id is missing or any of those changed, and
+once main has the lock, every row on main must appear unchanged (a pending row may change kind
+when its ruling is made). New ids are appended to the lock in the same commit. Every rule also has
+to finish within a second on a 100,000-character line.
+
+**Nothing may pass that the baseline refused.** `tests/fixtures/checker_baseline.py` is a copy of
+the checker at `512e818`. `tests/test_no_narrowing.py` builds more than 70,000 variants with a
+fixed seed (separator runs of 0 to 40 characters between every token, prefixes, leading spaces,
+quote markers, sentence openings, suffixes and case changes) and fails if the baseline refuses one
+that the current checker lets through, unless that exact text is in the allowed corpus. The
+baseline changes only in a commit that changes nothing else.
 
 The file rule reads CLAUDE.md the way it is worded: a trailer line, a link, a footer line. CLAUDE.md
 itself names these things mid-sentence and passes. Rewrapping that paragraph so a line starts with

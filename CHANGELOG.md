@@ -77,6 +77,11 @@ All notable changes to this repository are recorded here. The format follows
   footer rule is case-insensitive again; a capital "Generated" naming the assistant later on the
   line is refused; files refuse numbered, labelled, equals-sign and address-bearing co-author
   forms and bare session ids; enclosing marks and the blank braille pattern are folded away.
+- Sixth audit round: `tests/fixtures/checker_baseline.py` (the checker at `512e818`) and
+  `tests/test_no_narrowing.py`, which fails when a generated variant the baseline refused passes;
+  separator runs are unbounded again with linear line starts; any statement that something was
+  made with, by or using the assistant is refused; more lookalike letters are folded; lock rows pin
+  exact and where and are compared with main's; no text may be both pending and decided.
 
 ### Changed
 
