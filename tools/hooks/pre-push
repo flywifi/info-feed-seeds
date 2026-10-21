@@ -1,0 +1,6 @@
+#!/bin/sh
+# info-feed-seeds pre-push: push URL, protected branches, and every commit and file being pushed.
+. "$(dirname "$0")/_common.sh"
+skip_if_bypassed pre-push
+find_python
+exec $PY -I "$ROOT/tools/commit_check.py" --pre-push "$1" "$2"
