@@ -12,12 +12,27 @@
           "result": "ok",
           "source_label": "live",
           "tried_at": "2026-10-20T20:42:25Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 100 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://www.govinfo.gov/bulkdata/FR/2022/04/FR-2022-04-07.xml",
+            "published": "2026-06-24T00:25:00Z",
+            "title": "FR-2022-04-07"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-21T04:00:59Z"
         }
       ],
       "last_success": {
         "method": "conditional-get",
         "source_label": "live",
-        "tried_at": "2026-10-20T20:42:25Z"
+        "tried_at": "2026-10-21T04:00:59Z"
       },
       "url": "https://www.govinfo.gov/rss/fr-bulkdata.xml"
     },
