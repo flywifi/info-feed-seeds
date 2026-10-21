@@ -66,6 +66,11 @@ All notable changes to this repository are recorded here. The format follows
   GitHub's committer on main needs GitHub's verification, merges included; acknowledged commits on
   main are listed in `tools/main_history_known.txt`; the checker bootstrap is tied to PR 7;
   `tools/audit_redgreen.py` reruns every audit probe against older checkers.
+- Fourth audit round: `tests/fixtures/refused_corpus.jsonl` and `allowed_corpus.jsonl` (base64)
+  fix what must be refused and what must pass, and only grow; footer and co-author rules rebuilt
+  against them; every rule bounded and timed on 100,000-character lines; an acknowledgement in
+  `tools/main_history_known.txt` counts only after the commit landed; the red-green harness runs
+  the corpora.
 
 ### Changed
 

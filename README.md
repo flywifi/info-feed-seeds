@@ -102,7 +102,9 @@ push to `main`:
   GitHub's web-flow committer passes only on a commit GitHub marks verified, merges included.
   Main cannot be rewritten, so a commit that landed with a finding is listed, with a reason, in
   `tools/main_history_known.txt` once a person accepts it; it is then reported as known and only
-  new findings fail. That file is reviewed like any other check.
+  new findings fail. An entry counts only if the commit was already on main before the change that
+  added the entry, so a pull request cannot acknowledge its own bad commit. That file is reviewed
+  like any other check.
 
 Two limits remain:
 
@@ -122,14 +124,24 @@ current one, side by side, as the evidence for each fix.
 
 What the checker refuses:
 
-- **Co-author trailer:** a line that opens with the key and a colon. Prose about co-authorship
-  passes.
+- **Co-author trailer:** in messages and pull request text, a line that opens with the key and a
+  colon, the key joined by hyphens anywhere, or the key followed by an address in angle brackets.
+  Prose such as "co-authored by Smith" passes. In files, only a trailer line.
 - **Session trailer and session link:** anywhere in a message or pull request text; in files, a
   trailer line or a real link.
-- **Generated footer:** a line opening with the generated-with phrase, whatever tool it names
-  (CLAUDE.md read literally); a line opening with any form of the phrase that names the assistant
-  within a few words; and, anywhere, the phrase followed directly by the assistant's name. Footer
-  rules also run with HTML tags removed. They are only ever added to, never narrowed.
+- **Generated footer:** a line opening with "Generated with" (capital G, as CLAUDE.md writes it,
+  after an optional label such as "Note:"), whatever tool it names; a line opening with any form of
+  the phrase that names the assistant within a few words; and, anywhere, the phrase followed within
+  a few words by the assistant's name and "code", or by the name in parentheses, or directly by a
+  name that closes the line or a bracket. A lowercase "generated with" in a sentence is ordinary
+  prose. Footer rules also run with HTML tags removed.
+
+**What may and may not pass is fixed by two corpora, not by the rules.**
+`tests/fixtures/refused_corpus.jsonl` holds every string an audit proved must be refused, and
+`tests/fixtures/allowed_corpus.jsonl` holds prose and real commit messages and pull request bodies
+that must pass. The text is base64 so no scanner sees it. A rule may change only when both corpora
+still pass, and the corpora only grow: a test fails if an id that is on main disappears. Every rule
+also has to finish within a second on a 100,000-character line.
 
 The file rule reads CLAUDE.md the way it is worded: a trailer line, a link, a footer line. CLAUDE.md
 itself names these things mid-sentence and passes. Rewrapping that paragraph so a line starts with
