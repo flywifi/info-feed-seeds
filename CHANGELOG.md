@@ -61,6 +61,11 @@ All notable changes to this repository are recorded here. The format follows
   with no or malformed ref lines; pre-commit checks the committer; `main-history` re-checks main
   from the boundary and trusts GitHub's committer only on first-parent merges or verified
   commits; the checker bootstrap is limited to the one base that has no checker.
+- Third audit round: footer rules restored and extended (the stock footer however it is wrapped,
+  labelled lines, HTML-wrapped lines); co-author trailers must have trailer shape in messages too;
+  GitHub's committer on main needs GitHub's verification, merges included; acknowledged commits on
+  main are listed in `tools/main_history_known.txt`; the checker bootstrap is tied to PR 7;
+  `tools/audit_redgreen.py` reruns every audit probe against older checkers.
 
 ### Changed
 

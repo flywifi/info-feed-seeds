@@ -99,8 +99,10 @@ push to `main`:
   a footer turns it green without a new push.
 - `main-history` runs on every push to `main` and re-checks every commit since the policy boundary,
   so a merge or edit made on github.com is caught even if an earlier run never happened. There,
-  GitHub's web-flow committer passes only on a first-parent merge or on a commit GitHub marks
-  verified.
+  GitHub's web-flow committer passes only on a commit GitHub marks verified, merges included.
+  Main cannot be rewritten, so a commit that landed with a finding is listed, with a reason, in
+  `tools/main_history_known.txt` once a person accepts it; it is then reported as known and only
+  new findings fail. That file is reviewed like any other check.
 
 Two limits remain:
 
@@ -114,6 +116,20 @@ Two limits remain:
   planned as a separate change. Until then, any change to `ci.yml`, `tools/hooks/` or
   `tools/commit_check.py` needs a person's review, and the checker prints a notice when a range
   touches them.
+
+`tools/audit_redgreen.py` reruns every audit probe against older copies of the checker and the
+current one, side by side, as the evidence for each fix.
+
+What the checker refuses:
+
+- **Co-author trailer:** a line that opens with the key and a colon. Prose about co-authorship
+  passes.
+- **Session trailer and session link:** anywhere in a message or pull request text; in files, a
+  trailer line or a real link.
+- **Generated footer:** a line opening with the generated-with phrase, whatever tool it names
+  (CLAUDE.md read literally); a line opening with any form of the phrase that names the assistant
+  within a few words; and, anywhere, the phrase followed directly by the assistant's name. Footer
+  rules also run with HTML tags removed. They are only ever added to, never narrowed.
 
 The file rule reads CLAUDE.md the way it is worded: a trailer line, a link, a footer line. CLAUDE.md
 itself names these things mid-sentence and passes. Rewrapping that paragraph so a line starts with
