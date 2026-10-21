@@ -13,10 +13,13 @@ sha256 is pinned below). This test builds variants with fixed seeds in named dim
              banned word
   suffix     sentence openings and text after the name
   corpus     every refused corpus line with prefixes, suffixes and case changes
+  sentence   the phrase, 0 to 80 characters of words, then the name
+  position   every shape after 8,000, 20,000 and 100,000 characters of filler, and as the last line
+             of a 300-line body
   random     20,000 seeded random combinations, always added
 
-Each variant is checked as a commit message, a pull request body and a file; a sample also goes
-through check_range (files at .md, .jsonl, .py and dotfile paths, and messages), check_pr_event and
+Each variant is checked as a commit message, a pull request title, a pull request body and a file;
+a sample also goes through check_range (files at .md, .jsonl, .py and dotfile paths, and messages), check_pr_event and
 check_message_text in a scratch repository. A variant the baseline refuses and the current checker
 lets through fails the test. There are no exceptions here: a text that should pass although the
 baseline refuses it goes to tests/fixtures/pending_ruling.jsonl for a ruling, and only its exact
@@ -46,8 +49,10 @@ BASELINE_SHA256 = "fd224233c718939f7f4ce29cd1b758efeb49dc1550901e3339f42bdd782ad
 SEED = 20261021
 RANDOM_COUNT = 20_000
 MINIMUM = {"gap": 30_000, "split": 400, "prefix": 20_000, "lookalike": 1_000, "suffix": 1_000,
-           "corpus": 3_000, "random": RANDOM_COUNT}
-PLACES = ("message", "body", "file")
+           "sentence": 1_000, "corpus": 3_000, "position": 64, "random": RANDOM_COUNT}
+PLACES = ("message", "title", "body", "file")
+FILLER_LINE = "The poll fetched the feed, parsed the items and wrote the digest for the day.\n"
+WORDS = ("the", "help", "of", "a", "model", "named", "version", "tool", "and", "review", "some")
 
 CO, AUTH, BY = "Co", "Auth" + "ored", "By"
 CL, SESS, CODE = "Cla" + "ude", "Sess" + "ion", "Code"
@@ -192,6 +197,26 @@ def variants(baseline) -> dict[str, list[str]]:
                         add("lookalike", text)
                         add("lookalike", MIDLINE[2] + text)
             offset += len(token) + (len(sep) if t_index < gaps else 0)
+    # The phrase, then 0 to 80 characters of words, then the name, in every case form.
+    for prep in ("with", "by", "using"):
+        for length in range(81):
+            words = []
+            while len(" ".join(words)) < length:
+                words.append(rng.choice(WORDS))
+            gap = (" ".join(words))[:length]
+            for text in (f"This was {GEN.lower()} {prep} {gap} {CL}", f"{GEN} {prep} {gap} {CL}.",
+                         f"x {GEN.lower()} {prep} {gap}{' ' if gap else ''}{CL.lower()} today"):
+                add("sentence", text)
+                add("sentence", text.lower())
+                add("sentence", text.upper())
+                add("sentence", "Note: " + text)
+    # Every shape deep in a long text: after filler, and as the last line of a 300-line body.
+    for tokens, tail in base:
+        core = join(tokens, [default_sep(tokens)] * (len(tokens) - 1), tail)
+        for size in (8_000, 20_000, 100_000):
+            filler = (FILLER_LINE * (size // len(FILLER_LINE) + 1))[:size]
+            add("position", filler + "\n" + core)
+        add("position", FILLER_LINE * 299 + core)
     for line in lines:
         for prefix in PREFIXES:
             add("corpus", prefix + line)
@@ -224,6 +249,8 @@ def variants(baseline) -> dict[str, list[str]]:
 def refused(module, place: str, text: str) -> bool:
     if place == "message":
         return bool(module.text_findings(text, "m"))
+    if place == "title":
+        return bool(module.check_pr_text(text, "", "pr"))
     if place == "body":
         return bool(module.check_pr_text("Title", text, "pr"))
     return bool(module.content_findings("variant.md", (text + "\n").encode("utf-8")))
@@ -265,9 +292,10 @@ class NoNarrowingTests(unittest.TestCase):
                     continue
                 for place in PLACES:
                     if refused(self.baseline, place, text) and not refused(self.current, place, text):
-                        narrowed.append(f"{dim} {place}: {text!a}")
+                        shown = ascii(text) if len(text) <= 400 else f"[{len(text)} chars, ending] {ascii(text[-200:])}"
+                        narrowed.append(f"{dim} {place}: {shown}")
         distinct = len({n.split(": ", 1)[1] for n in narrowed})
-        sys.stdout.write(f"\nno narrowing: {total} variants x 3 places, {len(narrowed)} narrowed"
+        sys.stdout.write(f"\nno narrowing: {total} variants x {len(PLACES)} places, {len(narrowed)} narrowed"
                          f" ({distinct} distinct texts)\n")
         self.assertEqual(narrowed, [], "refused by the baseline, passed by this checker")
 
@@ -314,9 +342,10 @@ class NoNarrowingTests(unittest.TestCase):
                     narrowed.append(f"check_range {label_}: {text!a}")
             for i, text in enumerate(sample):
                 event = tmp / f"event{i}.json"
-                event.write_text(json.dumps({"pull_request": {"number": 7, "title": "T", "body": text}}))
-                if self.baseline.check_pr_event(str(event)) and not self.current.check_pr_event(str(event)):
-                    narrowed.append(f"check_pr_event: {text!a}")
+                for title, body in (("T", text), (text, "")):
+                    event.write_text(json.dumps({"pull_request": {"number": 7, "title": title, "body": body}}))
+                    if self.baseline.check_pr_event(str(event)) and not self.current.check_pr_event(str(event)):
+                        narrowed.append(f"check_pr_event {'title' if body == '' else 'body'}: {text!a}")
                 if self.baseline.check_message_text(text) and not self.current.check_message_text(text):
                     narrowed.append(f"check_message_text: {text!a}")
         finally:
