@@ -52,7 +52,7 @@ WEB_COMMITTER = ("GitHub", "noreply@github.com")
 PROTECTED_BRANCHES = ("main", "data")
 ZERO_SHA = "0" * 40
 SCISSORS = "# ------------------------ >8 ------------------------"
-SELF_PATHS = ("tools/commit_check.py", "tools/hooks/", ".github/workflows/")
+SELF_PATHS = ("tools/commit_check.py", "tools/hooks/", ".github/workflows/", "tools/main_history_known.txt")
 
 EM_DASH, EN_DASH = "\u2014", "\u2013"
 # Every dash-like character a renderer could show as an em or en dash. Checked after HTML entities
@@ -67,25 +67,40 @@ DASHES = (
 _CO = "co" + r"[\W_]*" + "author(?:ed)?" + r"[\W_]*" + "by"
 _SESSION = "claude" + r"[\W_]*" + "session"
 _HOST = "claude" + r"\." + "ai"
-_GEN_LINE = r"^[\W_\d]*" + "generated" + r"[\W_]+with(?![a-z0-9])"
-_GEN_TOOL = (r"^[\W_\d]*" + "generated" + r"[\W_]+(?:with|by|using)(?![a-z0-9])[\W_]*.{0,24}?"
-             + "claude")
-
-MESSAGE_RULES = (
-    ("co-author trailer", re.compile(_CO)),
-    ("session trailer", re.compile(_SESSION)),
-    ("session link", re.compile(_HOST + r"\b")),
+# A line start may carry a short label ("Note:", "**Tooling:**") before a footer.
+_LINE_START = r"^[\W_\d]*(?:[a-z][a-z0-9 ]{0,24}[\W_]*:[\W_]*)?"
+_PHRASE = "generated" + r"[\W_]+(?:with|by|using)(?![a-z0-9])"
+# Three footer rules. Rules are only ever added, never narrowed to let one probe pass:
+#   line   any line opening with the generated-with phrase, whatever tool it names (CLAUDE.md read
+#          literally)
+#   tool   a line opening with the phrase, in any of its forms, that names the assistant within a
+#          few words
+#   product anywhere in a line, the phrase followed directly by the assistant's name, which is the
+#          shape of the stock footer however it is wrapped (HTML, bold labels, sentences)
+_GEN_LINE = _LINE_START + "generated" + r"[\W_]+with(?![a-z0-9])"
+_GEN_TOOL = _LINE_START + _PHRASE + r"[\W_]*.{0,24}?" + "claude"
+_GEN_PRODUCT = _PHRASE + r"[\W_]*\[?" + "claude" + r"(?![a-z0-9])"
+# Footer rules also run on a copy with HTML tags removed, so <p> or <sub> cannot hide a line start.
+_TAG = re.compile(r"<[^<>\n]*>")
+FOOTER_RULES = (
     ("generated footer", re.compile(_GEN_LINE, re.M)),
     ("generated footer", re.compile(_GEN_TOOL, re.M)),
+    ("generated footer", re.compile(_GEN_PRODUCT)),
 )
+
+MESSAGE_RULES = (
+    # A trailer is a line that opens with the key and a colon; prose such as "a paper the two of
+    # them co-wrote" passes. Session trailers and links are refused anywhere.
+    ("co-author trailer", re.compile(r"^[\W_]*" + _CO + r"[\W_]*:", re.M)),
+    ("session trailer", re.compile(_SESSION)),
+    ("session link", re.compile(_HOST + r"\b")),
+) + FOOTER_RULES
 FILE_RULES = (
     ("co-author trailer line", re.compile(r"^[\W_]*" + _CO + r"[\W_]*:", re.M)),
     ("session trailer line", re.compile(r"^[\W_]*" + _SESSION + r"[\W_]*:", re.M)),
     ("session link", re.compile(r"(?:[a-z][a-z0-9+.-]*:/*|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
                                 + _HOST + r"(?=[/:?#])")),
-    ("generated footer", re.compile(_GEN_LINE, re.M)),
-    ("generated footer", re.compile(_GEN_TOOL, re.M)),
-)
+) + FOOTER_RULES
 
 _HYPHENS = {ord(c): "-" for c in "\u00ad\u2010\u2011\u2012\u2013\u2014\u2015\u2212\ufe58\ufe63\uff0d"}
 # Letters from other scripts that render like the ASCII letters in the banned words.
@@ -162,9 +177,11 @@ def _dash_findings(text: str, where: str) -> list[str]:
 
 def _rule_findings(text: str, where: str, rules) -> list[str]:
     folded = normalize(text)
+    untagged = _TAG.sub("", folded)
     labels = []
     for label, pattern in rules:
-        if pattern.search(folded) and label not in labels:
+        hit = pattern.search(folded) or (pattern in [r for _, r in FOOTER_RULES] and pattern.search(untagged))
+        if hit and label not in labels:
             labels.append(label)
     return [f"{where}: contains a {label}" for label in labels]
 
@@ -183,7 +200,7 @@ def identity_findings(author, committer, where: str, on_main: bool = False) -> l
             pass  # landed on main through GitHub (web merge or web edit)
         elif tuple(committer) == WEB_COMMITTER:
             out.append(f"{where}: committer claims to be GitHub but is not trusted here: not on main "
-                       "(job ranges), or neither a first-parent merge nor GitHub-verified (main history)")
+                       "(job ranges), or not GitHub-verified (main history)")
         else:
             out.append(f"{where}: committer is {committer[0]} <{committer[1]}>, expected {AUTHOR[0]} <{AUTHOR[1]}>")
     return out
@@ -250,19 +267,16 @@ def github_verified(sha: str) -> bool:
 def commits_in(rng: str, cwd: Path | None = None, main_history: bool = False, verify=github_verified) -> list[dict]:
     """Every commit in the range. On a job-branch range a web-flow committer is trusted when the
     commit is already on origin/main, because main-history checked it when it landed. In
-    main-history mode it is trusted only on a first-parent merge of the range or on a commit
-    GitHub marks verified."""
+    main-history mode it is trusted only on a commit GitHub marks verified, merges included: a
+    forged merge has the right shape but no GitHub signature."""
     shas = git("rev-list", "--reverse", rng, cwd=cwd).decode().split()
     main_ok = git_ok("rev-parse", "--verify", "--quiet", "origin/main^{commit}", cwd=cwd)
-    first_parent = set()
-    if main_history:
-        first_parent = set(git("rev-list", "--first-parent", "--merges", rng, cwd=cwd).decode().split())
     out = []
     for sha in shas:
         raw = git("show", "-s", "--format=%an%x00%ae%x00%cn%x00%ce%x00%B", sha, cwd=cwd)
         an, ae, cn, ce, body = raw.decode("utf-8", "replace").split("\x00", 4)
         if main_history:
-            web_ok = (cn, ce) == WEB_COMMITTER and (sha in first_parent or verify(sha))
+            web_ok = (cn, ce) == WEB_COMMITTER and verify(sha)
         else:
             web_ok = main_ok and git_ok("merge-base", "--is-ancestor", sha, "origin/main", cwd=cwd)
         out.append({"sha": sha, "author": (an, ae), "committer": (cn, ce), "message": body, "on_main": web_ok})
@@ -277,6 +291,30 @@ def changed_paths(rng: str, cwd: Path | None = None) -> tuple[str, list[str]]:
     return tip, [p for p in raw.decode("utf-8", "replace").split("\x00") if p]
 
 
+KNOWN_FILE = "tools/main_history_known.txt"
+
+
+def load_known(cwd: Path | None = None) -> tuple[dict[str, str], list[str]]:
+    """Acknowledged commits on main: one 'full-sha reason' per line, '#' comments. Main cannot be
+    rewritten, so a commit that landed with a finding would otherwise keep every later main-history
+    run red and hide new problems. The list is tracked and reviewed like any other check file."""
+    known: dict[str, str] = {}
+    problems: list[str] = []
+    path = toplevel(cwd) / KNOWN_FILE
+    if not path.exists():
+        return known, problems
+    for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        sha, _, reason = line.partition(" ")
+        if not re.fullmatch(r"[0-9a-f]{40}", sha) or not reason.strip():
+            problems.append(f"{KNOWN_FILE}:{number}: expected a full 40-character sha and a reason")
+            continue
+        known[sha] = reason.strip()
+    return known, problems
+
+
 def check_range(rng: str, branch: str | None = None, cwd: Path | None = None, main_history: bool = False,
                 verify=github_verified) -> list[str]:
     commits = commits_in(rng, cwd=cwd, main_history=main_history, verify=verify)
@@ -284,10 +322,17 @@ def check_range(rng: str, branch: str | None = None, cwd: Path | None = None, ma
         say(f"commit_check: 0 commit(s) in {rng}")
         return [f"{rng}: the range holds no commits; failing closed"]
     findings: list[str] = []
+    known, known_problems = load_known(cwd) if main_history else ({}, [])
+    findings += known_problems
     for c in commits:
         where = f"commit {c['sha'][:7]}"
-        findings += text_findings(c["message"], where + " message")
-        findings += identity_findings(c["author"], c["committer"], where, on_main=c["on_main"])
+        mine = text_findings(c["message"], where + " message")
+        mine += identity_findings(c["author"], c["committer"], where, on_main=c["on_main"])
+        if mine and c["sha"] in known:
+            for f in mine:
+                say(f"commit_check: known, acknowledged in {KNOWN_FILE} ({known[c['sha']]}): {f}")
+            continue
+        findings += mine
     tip, paths = changed_paths(rng, cwd=cwd)
     for path in paths:
         findings += path_findings(path, branch)

@@ -497,7 +497,11 @@ class AuditRevision2Tests(unittest.TestCase):
             repo.git("merge", "-q", "--no-ff", "side", "-m", "Merge pull request 3", extra=WEB)
             merged = quiet(cc.check_range, f"{forged}..HEAD", branch="main", cwd=repo.dir,
                            main_history=True, verify=lambda sha: False)
-            self.assertEqual(merged, [], "a first-parent merge by GitHub passes without verification")
+            self.assertTrue(any("committer" in f for f in merged),
+                            "audit 3, N6: a merge by GitHub needs verification too")
+            verified_merge = quiet(cc.check_range, f"{forged}..HEAD", branch="main", cwd=repo.dir,
+                                   main_history=True, verify=lambda sha: True)
+            self.assertEqual(verified_merge, [])
         finally:
             repo.close()
 
@@ -512,6 +516,77 @@ class AuditRevision2HookTests(unittest.TestCase):
                                  extra={"GIT_COMMITTER_NAME": "Someone", "GIT_COMMITTER_EMAIL": "s@example.com"})
             self.assertNotEqual(result.returncode, 0)
             self.assertIn(b"committer for this commit", result.stdout + result.stderr)
+        finally:
+            repo.close()
+
+
+# Third audit of head 6686d0a. The N1 strings are the auditor's, byte for byte, assembled from
+# pieces; "(robot)" is kept as the auditor wrote it, and the emoji form is tested as well.
+CL = "Cla" + "ude"
+N1_FOOTERS = {
+    "sub robot": "<sub>(robot) " + GEN + " with [" + CL + " Code](https://" + CL.lower() + ".com/"
+                 + CL.lower() + "-code)</sub>",
+    "sub robot emoji": "<sub>\U0001F916 " + GEN + " with [" + CL + " Code](https://" + CL.lower() + ".com/"
+                       + CL.lower() + "-code)</sub>",
+    "note label": "Note: " + GEN + " with [...]",
+    "sentence": "This PR was " + GEN.lower() + " with " + CL + " Code",
+    "html p": '<p align="center">' + GEN + " with " + CL + " Code</p>",
+    "bold label": "**Tooling:** " + GEN + " by " + CL,
+    "version prefix": "v2 " + GEN + " using " + CL + " Code",
+}
+
+
+class AuditRevision3Tests(unittest.TestCase):
+    def test_n1_footer_shapes_are_refused_everywhere(self):
+        for label, text in N1_FOOTERS.items():
+            with self.subTest(footer=label):
+                self.assertTrue(cc.text_findings("Add a\n\n" + text, "m"), "commit message")
+                self.assertTrue(cc.check_pr_text("Job", "Body\n\n" + text, "pr"), "pull request body")
+                self.assertTrue(cc.content_findings("notes.md", (text + "\n").encode()), "file")
+
+    def test_n1_footer_shapes_in_main_history(self):
+        repo = Scratch()
+        try:
+            repo.commit("README.md", b"x\n", "Add README")
+            base = repo.head()
+            for label, text in N1_FOOTERS.items():
+                repo.commit(label.replace(" ", "-") + ".txt", b"x\n", "Merge pull request 1\n\n" + text, extra=WEB)
+            found = quiet(cc.check_range, f"{base}..HEAD", branch="main", cwd=repo.dir,
+                          main_history=True, verify=lambda sha: True)
+            self.assertEqual(sum("generated footer" in f for f in found), len(N1_FOOTERS), found)
+        finally:
+            repo.close()
+
+    def test_n9_prose_about_coauthorship_passes(self):
+        prose = "Cite the paper co-" + "authored by Smith"
+        self.assertEqual(cc.text_findings(prose, "m"), [])
+        self.assertTrue(cc.text_findings("Add a\n\n" + CO + ": Smith <s@example.com>", "m"), "the trailer still fails")
+
+    def test_n3_known_commits_on_main(self):
+        repo = Scratch()
+        try:
+            repo.commit("README.md", b"x\n", "Add README")
+            base = repo.head()
+            repo.commit("m.txt", b"m\n", "Merge pull request 5\n\n" + SESSION + ": abc", extra=WEB)
+            bad = repo.head()
+            rng = f"{base}..HEAD"
+            run = lambda: loud(cc.check_range, rng, branch="main", cwd=repo.dir, main_history=True,
+                               verify=lambda sha: True)
+            found, _ = run()
+            self.assertTrue(found, "an unacknowledged bad landing fails")
+            (repo.dir / "tools").mkdir(exist_ok=True)
+            (repo.dir / "tools" / "main_history_known.txt").write_text(
+                "# acknowledged\n" + bad + " landed before the check existed; accepted by the owner\n", encoding="utf-8")
+            found, out = run()
+            self.assertEqual(found, [], "an acknowledged commit no longer fails main-history")
+            self.assertIn("known, acknowledged", out)
+            repo.commit("n.txt", b"n\n", "Merge pull request 6\n\n" + SESSION + ": def", extra=WEB)
+            found, _ = loud(cc.check_range, rng.replace("HEAD", repo.head()), branch="main", cwd=repo.dir,
+                            main_history=True, verify=lambda sha: True)
+            self.assertTrue(found, "a new bad landing still fails")
+            (repo.dir / "tools" / "main_history_known.txt").write_text("abc not-a-sha\n", encoding="utf-8")
+            found, _ = run()
+            self.assertTrue(any("40-character sha" in f for f in found), "a malformed list fails")
         finally:
             repo.close()
 

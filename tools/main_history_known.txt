@@ -1,0 +1,4 @@
+# Commits on main acknowledged by a person after main-history flagged them. Main cannot be
+# rewritten, so a listed commit is reported as known instead of failing every later run.
+# One line per commit: the full 40-character sha, a space, then the reason and who accepted it.
+# Changes to this file need review like any other check (commit_check prints a notice).
