@@ -16,6 +16,8 @@ def _git(root: Path, *args: str) -> str | None:
 
 
 def run(root: Path) -> tuple[str, str]:
+    if _git(root, "rev-parse", "--is-inside-work-tree") != "true":
+        return "blocked", "not a git work tree; cannot tell whether hooks are installed"
     push_url = _git(root, "remote", "get-url", "--push", "origin")
     if push_url is None:
         return "ok", "no origin remote; nothing pushes from here"
@@ -24,4 +26,5 @@ def run(root: Path) -> tuple[str, str]:
     hooks_path = _git(root, "config", "--get", "core.hooksPath")
     if hooks_path in ("tools/hooks", str(root / "tools" / "hooks")):
         return "ok", "tracked hooks are installed"
-    return "advisory", f"this clone can push but the tracked hooks are not installed; run: {INSTALL}"
+    return "advisory", (f"this clone can push but the tracked hooks are not installed; run: {INSTALL}. "
+                        "Hooks are opt-in, and git commit --no-verify or git push --no-verify skips them silently")

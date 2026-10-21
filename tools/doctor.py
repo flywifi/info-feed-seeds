@@ -3,8 +3,10 @@
 
 Usage: python3 tools/doctor.py check
 
-Exit codes: 0 clean (advisories allowed), 1 a repository defect, 2 a usage error, 3 the environment
-was blocked or a required check did not run. 3 is never reported as clean.
+Exit codes: 0 clean (advisories allowed and counted), 1 a repository defect, 2 a usage error, 3 the
+environment was blocked or a required check did not run, 4 the command is not implemented yet. 3 is
+never reported as clean. An advisory check that cannot run is reported as "advisory: blocked" and
+does not change the exit code.
 
 Only `check` exists so far. `fix --safe` and `propose`, described in CLAUDE.md, are planned.
 Output is ASCII only. Standard library only.
@@ -25,7 +27,7 @@ def say(message: str) -> None:
 
 
 def check(root: Path = ROOT) -> int:
-    defects = blocked = 0
+    defects = blocked = advisories = 0
     for module in CHECKS:
         try:
             status, message = module.run(root)
@@ -37,13 +39,15 @@ def check(root: Path = ROOT) -> int:
             defects += 1
         elif status == "blocked" and module.REQUIRED:
             blocked += 1
+        elif status in ("advisory", "blocked"):
+            advisories += 1
     if blocked:
         say(f"doctor: {blocked} required check(s) did not run; not clean")
         return 3
     if defects:
         say(f"doctor: {defects} defect(s)")
         return 1
-    say("doctor: clean")
+    say(f"doctor: clean, {advisories} advisory note(s)" if advisories else "doctor: clean")
     return 0
 
 
@@ -52,7 +56,7 @@ def main(argv: list[str]) -> int:
         return check()
     if argv and argv[0] in ("fix", "propose"):
         say(f"doctor: {argv[0]} is not implemented yet; only check exists")
-        return 2
+        return 4
     say("usage: python3 tools/doctor.py check")
     return 2
 
