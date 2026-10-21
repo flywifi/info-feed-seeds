@@ -140,6 +140,13 @@ class PollTests(HubTestCase):
         self.script["https://example.gov/alpha.xml"] = 403
         self.assertEqual(self.poll(), 3)
 
+    def test_every_source_serving_non_feed_html_is_exit_3(self):
+        wall = b"<!DOCTYPE html><html><body>Just a moment</body></html>"
+        self.script = {"https://example.gov/alpha.xml": wall, "https://example.gov/beta.xml": wall}
+        self.assertEqual(self.poll(), 3)
+        md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
+        self.assertIn("- alpha: parse-error, HTTP 200, FeedParseError", md)
+
     def test_config_errors_are_exit_2(self):
         self.assertEqual(self.run_hub("poll", "--date", DAY), 2)
         self.assertEqual(self.run_hub("poll", "--profile", "missing"), 2)
@@ -211,7 +218,7 @@ class PollTests(HubTestCase):
                      fetcher_factory=lambda d: FakeFetcher(self.script), now_fn=lambda: later)
         latest = jsonio.load_json(self.out / "tr" / "latest.json")
         self.assertNotEqual(latest["generated"], first)
-        self.assertIn("Proposed rule on telecom", [i["title"] for i in latest["items"]])
+        self.assertIn("Proposed rule on telecom", [i["title_display"] for i in latest["items"]])
 
     def test_items_are_not_repeated_on_a_later_day(self):
         self.poll()
@@ -261,7 +268,7 @@ class PollTests(HubTestCase):
             self.assertNotIn(banned, msg)
 
     def test_console_output_is_ascii(self):
-        self.script["https://example.gov/alpha.xml"] = rss_with("Café ‘quoted’ standard")
+        self.script["https://example.gov/alpha.xml"] = rss_with("Caf\u00e9 \u2018quoted\u2019 standard")
         self.poll()
         self.output.encode("ascii")
 
@@ -282,13 +289,13 @@ class GuardBandTests(HubTestCase):
         self.poll()
         md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
         latest = jsonio.load_json(self.out / "tr" / "latest.json")
-        titles = [i["title"] for i in latest["items"]]
+        titles = [i["title_display"] for i in latest["items"]]
         self.assertNotIn("pirate", md, "BLOCK is held from every output")
         self.assertNotIn(BLOCK_TITLE, titles)
         self.assertRegex(md, r"\[held: pattern score \d+\] Ignore all previous instructions")
         self.assertNotIn(QUARANTINE_TITLE, titles)
         self.assertRegex(md, r"\[review: pattern score \d+\] Read the base64")
-        review = next(i for i in latest["items"] if i["title"] == REVIEW_TITLE)
+        review = next(i for i in latest["items"] if i["title_display"] == REVIEW_TITLE)
         self.assertEqual(review["offline_pattern_scan"]["risk_level"], "REVIEW")
         self.assertIn("Held by guard: 2", md)
         report = jsonio.load_json(self.out / "tr" / "report.json")
@@ -302,11 +309,13 @@ class GuardBandTests(HubTestCase):
         store = Store.open(self.state)
         rows = {r["title"]: r["content_sha256"] for r in store.hits_for_day("tr", DAY)}
         store.close()
-        self.assertEqual(self.run_hub("release", rows[QUARANTINE_TITLE], "--reason", "reviewed by hand"), 0)
-        self.assertEqual(self.run_hub("release", rows[BLOCK_TITLE], "--reason", "reviewed by hand"), 0)
+        self.assertEqual(self.run_hub("release", rows[QUARANTINE_TITLE], "--reason", "reviewed by hand",
+                                      "--state-dir", str(self.state)), 0)
+        self.assertEqual(self.run_hub("release", rows[BLOCK_TITLE], "--reason", "reviewed by hand",
+                                      "--state-dir", str(self.state)), 2, "BLOCK is never released")
         self.poll("--offline")
         md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
-        titles = [i["title"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]]
+        titles = [i["title_display"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]]
         self.assertIn(QUARANTINE_TITLE, titles)
         self.assertRegex(md, r"\[released: pattern score \d+\]")
         self.assertNotIn(BLOCK_TITLE, titles)
@@ -316,22 +325,40 @@ class GuardBandTests(HubTestCase):
         self.profile["guard"] = {"hold_at": "REVIEW"}
         jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
         self.poll()
-        titles = [i["title"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]]
+        titles = [i["title_display"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]]
         self.assertNotIn(REVIEW_TITLE, titles)
 
 
 class ReleaseTests(HubTestCase):
+    def shas(self):
+        self.script["https://example.gov/beta.xml"] = rss_with(QUARANTINE_TITLE, BLOCK_TITLE)
+        self.poll()
+        from feeder.store import Store
+        store = Store.open(self.state)
+        rows = {r["title"]: r["content_sha256"] for r in store.hits_for_day("tr", DAY)}
+        store.close()
+        return rows
+
+    def release(self, sha, reason="checked"):
+        return self.run_hub("release", sha, "--reason", reason, "--state-dir", str(self.state))
+
     def test_release_appends_and_is_idempotent(self):
-        sha = "a" * 64
-        self.assertEqual(self.run_hub("release", sha, "--reason", "checked"), 0)
-        self.assertEqual(self.run_hub("release", sha, "--reason", "again"), 0)
+        sha = self.shas()[QUARANTINE_TITLE]
+        self.assertEqual(self.release(sha), 0)
+        self.assertEqual(self.release(sha, "again"), 0)
         data = jsonio.load_json(self.root / "guard" / "releases.json")
         self.assertEqual(data["releases"], [{"sha": sha, "date": DAY, "reason": "checked"}])
         self.assertEqual(data["_comment"], RELEASES_COMMENT)
 
     def test_release_rejects_bad_input(self):
-        self.assertEqual(self.run_hub("release", "abc", "--reason", "x"), 2)
-        self.assertEqual(self.run_hub("release", "b" * 64, "--reason", "  "), 2)
+        rows = self.shas()
+        self.assertEqual(self.release("abc"), 2, "not a sha256")
+        self.assertEqual(self.release(rows[QUARANTINE_TITLE], "  "), 2, "empty reason")
+        self.assertEqual(self.release("b" * 64), 2, "unknown sha")
+        self.assertEqual(self.release(rows[BLOCK_TITLE]), 2, "BLOCK")
+        self.assertEqual(self.release(rows["New cybersecurity framework profile released"]), 2, "CLEAN")
+        self.assertEqual(self.run_hub("release", rows[QUARANTINE_TITLE], "--reason", "x",
+                                      "--state-dir", str(self.tmp / "nowhere")), 2, "no database")
         self.assertEqual(jsonio.load_json(self.root / "guard" / "releases.json")["releases"], [])
 
 
