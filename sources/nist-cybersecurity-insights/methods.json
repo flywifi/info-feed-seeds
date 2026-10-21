@@ -12,12 +12,27 @@
           "result": "ok",
           "source_label": "live",
           "tried_at": "2026-10-20T20:41:54Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 40 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://www.nist.gov/blogs/cybersecurity-insights/kicking-cybersecurity-career-week-nist",
+            "published": "2026-10-14T12:00:00Z",
+            "title": "Kicking off Cybersecurity Career Week with NIST!"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-21T04:01:07Z"
         }
       ],
       "last_success": {
         "method": "conditional-get",
         "source_label": "live",
-        "tried_at": "2026-10-20T20:41:54Z"
+        "tried_at": "2026-10-21T04:01:07Z"
       },
       "url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml"
     },
