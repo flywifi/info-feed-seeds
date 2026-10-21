@@ -2,7 +2,10 @@
 """Red-then-green evidence for the PR 7 audits: every audit probe, run through older copies of
 tools/commit_check.py and through the working tree's copy, side by side.
 
-Usage: python3 tools/audit_redgreen.py [--old REF ...]     (default: --old ba76314 --old 6686d0a)
+Usage: python3 tools/audit_redgreen.py [--old REF ...]     (default: ba76314, 6686d0a, 512e818)
+
+Rows come from the refused and allowed corpora (tests/fixtures/*_corpus.jsonl) plus scenario
+probes that need a repository (main-history, acknowledgements) or a clock (rule timing).
 
 Each older checker is read with `git show REF:tools/commit_check.py`; the newest is the file next to
 this script. The result column compares the working tree with the LAST --old ref:
@@ -136,38 +139,107 @@ def scenario_n6_forged_merge(mod) -> bool:
     return bool(main_history(mod, repo, f"{base}..HEAD", verify=lambda sha: False))
 
 
+def write(path: Path, text: str) -> None:
+    """LF on every platform; CRLF on Windows once broke the scenarios below (audit 4, R5)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8", newline="\n")
+
+
 def scenario_n3_known(mod) -> bool:
-    """True when an acknowledged bad landing no longer fails main-history."""
+    """True when an acknowledgement made after the landing clears main-history."""
     repo = Repo()
     base = repo.head()
     bad = repo.commit("m", "Merge pull request 3\n\n" + SESSION + ": abc", extra=WEB)
-    (repo.dir / "tools").mkdir()
-    (repo.dir / "tools" / "main_history_known.txt").write_text(bad + " acknowledged by the owner\n")
+    write(repo.dir / "tools" / "main_history_known.txt", bad + " acknowledged by the owner\n")
+    repo.git("add", "tools")
+    repo.git("commit", "-q", "-m", "Acknowledge an earlier landing")
     repo.git("update-ref", "refs/remotes/origin/main", repo.head())
     return not main_history(mod, repo, f"{base}..HEAD", verify=lambda sha: True)
+
+
+def scenario_r3_preacknowledged(mod) -> bool:
+    """True when a pull request that carries a bad commit and acknowledges it in the same change is
+    still refused in main-history."""
+    repo = Repo()
+    base = repo.head()
+    repo.git("checkout", "-q", "-b", "sneak")
+    sneak = repo.commit("s", "Sneak\n\n" + SESSION + ": def")
+    write(repo.dir / "tools" / "main_history_known.txt", sneak + " pre-acknowledged\n")
+    repo.git("add", "tools")
+    repo.git("commit", "-q", "-m", "Pre-acknowledge")
+    repo.git("checkout", "-q", "main")
+    repo.git("merge", "-q", "--no-ff", "sneak", "-m", "Merge pull request 7", extra=WEB)
+    repo.git("update-ref", "refs/remotes/origin/main", repo.head())
+    return bool(main_history(mod, repo, f"{base}..HEAD", verify=lambda sha: True))
+
+
+def seconds_on_colon_line(mod) -> float:
+    """Audit 4, R4: 'a' then 5,000 colons (20,000 took 55 s at 512e818)."""
+    import time
+    line = "a" + ":" * 5000
+    start = time.perf_counter()
+    mod.text_findings(line, "m")
+    return round(time.perf_counter() - start, 2)
+
+
+def corpus(name: str) -> list[dict]:
+    import base64
+    import json
+    path = HERE.parent / "tests" / "fixtures" / f"{name}_corpus.jsonl"
+    out = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            entry = json.loads(line)
+            entry["text"] = base64.b64decode(entry["b64"]).decode("utf-8")
+            out.append(entry)
+    return out
+
+
+def corpus_count(mod, entry: dict) -> int:
+    """How many of the entry's listed places (message, body, file) refuse it."""
+    count = 0
+    for place in entry["where"]:
+        text = entry["text"]
+        if place == "message":
+            count += bool(mod.text_findings(text, "m"))
+        elif place == "body":
+            count += bool(mod.check_pr_text("Title", text, "pr"))
+        elif place == "file":
+            count += bool(mod.content_findings("corpus.md", (text + "\n").encode("utf-8")))
+    return count
 
 
 # --------------------------------------------------------------------------- table
 
 def rows():
     out = []
-    for label, text in N1_FOOTERS.items():
-        for where, fn in (("message", lambda m, t: m.text_findings("Add a\n\n" + t, "m")),
-                          ("PR body", lambda m, t: m.check_pr_text("Job", "Body\n\n" + t, "pr")),
-                          ("file", lambda m, t: m.content_findings("notes.md", (t + "\n").encode()))):
-            out.append(("N1", f"{label} in {where}", (lambda m, f=fn, t=text: bool(f(m, t))), True))
-    out.append(("N1", "all seven footers refused in main-history", scenario_n1_main_history, True))
-    out.append(("N9", "prose: Cite the paper co-" + "authored by Smith",
-                lambda m: bool(m.text_findings("Cite the paper co-" + "authored by Smith", "m")), False))
-    out.append(("N6", "forged GitHub merge, unverified, in main-history", scenario_n6_forged_merge, True))
-    out.append(("N3", "acknowledged bad landing in main-history", lambda m: not scenario_n3_known(m), False))
+    for entry in corpus("refused"):
+        places = [p for p in entry["where"] if p != "main-history"]
+        if places:
+            e = dict(entry, where=places)
+            out.append((entry["source"], f"refused corpus {entry['id']} ({'+'.join(places)})",
+                        (lambda m, e=e: corpus_count(m, e)), len(places)))
+    for entry in corpus("allowed"):
+        if entry["source"] == "repo" and entry["id"].startswith(("repo-commit-", "repo-pr-")):
+            continue  # summarised in one row below
+        e = dict(entry)
+        out.append((entry["source"], f"allowed corpus {entry['id']} ({'+'.join(e['where'])})",
+                    (lambda m, e=e: len(e["where"]) - corpus_count(m, e)), len(e["where"])))
+    real = [e for e in corpus("allowed") if e["id"].startswith(("repo-commit-", "repo-pr-"))]
+    out.append(("repo", f"allowed corpus: {len(real)} real commit messages and PR bodies pass",
+                (lambda m, es=real: sum(corpus_count(m, e) == 0 for e in es)), len(real)))
+    out.append(("audit3", "N1 footers refused in main-history", scenario_n1_main_history, True))
+    out.append(("audit3", "N6 forged GitHub merge, unverified, in main-history", scenario_n6_forged_merge, True))
+    out.append(("audit3", "N3 later acknowledgement clears main-history", lambda m: not scenario_n3_known(m), False))
+    out.append(("audit4", "R3 pre-acknowledged bad commit still refused", scenario_r3_preacknowledged, True))
+    out.append(("audit4", "R4 seconds on 'a' + 5,000 colons (ceiling 1 s)", seconds_on_colon_line, ("max", 1.0)))
     for label, variants in sweeps():
-        out.append(("N4", label, (lambda m, vs=variants: sum(bool(m.text_findings(v, "m")) for v in vs)), len(variants)))
+        out.append(("audit2", label, (lambda m, vs=variants: sum(bool(m.text_findings(v, "m")) for v in vs)), len(variants)))
     return out
 
 
 def main(argv: list[str]) -> int:
-    refs = [argv[i + 1] for i, a in enumerate(argv) if a == "--old"] or ["ba76314", "6686d0a"]
+    refs = [argv[i + 1] for i, a in enumerate(argv) if a == "--old"] or ["ba76314", "6686d0a", "512e818"]
     olds = []
     for ref in refs:
         src = subprocess.run(["git", "show", f"{ref}:tools/commit_check.py"], cwd=HERE, capture_output=True)
@@ -179,14 +251,19 @@ def main(argv: list[str]) -> int:
     checkers = olds + [("new", new)]
 
     def show(value, want):
+        if isinstance(want, tuple):
+            return f"{value:.2f}s"
         if isinstance(want, bool):
             return "REFUSED" if value else "passed"
         return f"{value}/{want}"
 
+    def correct(value, want):
+        return value <= want[1] if isinstance(want, tuple) else value == want
+
     lines = []
     for finding, label, probe, want in rows():
         values = [probe(mod) for _, mod in checkers]
-        right = [v == want for v in values]
+        right = [correct(v, want) for v in values]
         result = "WRONG" if not right[-1] else ("kept" if right[-2] else "red->green")
         lines.append((finding, label, [show(v, want) for v in values], result))
     width = max(len(label) for _, label, _, _ in lines)
