@@ -30,6 +30,9 @@ jobs:
     env:
       BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
       BOOTSTRAP_BASE: 2bbdbf270a6893d377ed014aada503f89ecb0327
+      BOOTSTRAP_PR: "7"
+      BOOTSTRAP_BRANCH: claude/trusting-bell-uix1sd
+      PR_NUMBER: ${{ github.event.pull_request.number }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,20 +44,23 @@ jobs:
         with:
           python-version: "3.12"
       - name: Take the checker from the base branch
-        # A pull request must not be able to weaken its own check, so the range, source and text
-        # checks run the base branch's copy. Only the very first pull request, before the base has a
-        # checker, falls back to its own copy, and says so.
+        # The range, source and text checks run the base branch's copy, so editing
+        # tools/commit_check.py in a pull request does not change what checks that pull request.
+        # This workflow file itself still comes from the pull request (see README). Only the pull
+        # request that adds the checker falls back to its own copy, and says so.
         run: |
           if git cat-file -e "origin/$BASE_REF:tools/commit_check.py" 2>/dev/null; then
             git show "origin/$BASE_REF:tools/commit_check.py" > "$RUNNER_TEMP/commit_check.py"
             echo "Using the checker from origin/$BASE_REF"
-          elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ]; then
-            # One-time bootstrap: the pull request that adds the checker merges into a main that has
-            # none. Remove this branch in the next pull request after it merges.
+          elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ] \
+               && { [ "$PR_NUMBER" = "$BOOTSTRAP_PR" ] || [ "$GITHUB_REF" = "refs/heads/$BOOTSTRAP_BRANCH" ]; }; then
+            # One-time bootstrap, tied to the base commit AND to pull request 7 (or a push of its
+            # branch): the pull request that adds the checker merges into a main that has none.
+            # Remove this branch in the first pull request after it merges.
             cp tools/commit_check.py "$RUNNER_TEMP/commit_check.py"
             echo "::warning::bootstrap: origin/main is $BOOTSTRAP_BASE, which has no checker; using this branch's copy"
           else
-            echo "::error::origin/$BASE_REF has no tools/commit_check.py and is not the bootstrap base; refusing to run a checker this pull request supplies"
+            echo "::error::origin/$BASE_REF has no tools/commit_check.py and this is not the bootstrap pull request at the bootstrap base; refusing to run a checker this pull request supplies"
             exit 1
           fi
       - name: Commit hygiene (messages, identity, changed files)
@@ -83,6 +89,9 @@ jobs:
     env:
       BASE_REF: ${{ github.event.pull_request.base.ref }}
       BOOTSTRAP_BASE: 2bbdbf270a6893d377ed014aada503f89ecb0327
+      BOOTSTRAP_PR: "7"
+      BOOTSTRAP_BRANCH: claude/trusting-bell-uix1sd
+      PR_NUMBER: ${{ github.event.pull_request.number }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -95,11 +104,12 @@ jobs:
         run: |
           if git cat-file -e "origin/$BASE_REF:tools/commit_check.py" 2>/dev/null; then
             git show "origin/$BASE_REF:tools/commit_check.py" > "$RUNNER_TEMP/commit_check.py"
-          elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ]; then
+          elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ] \
+               && { [ "$PR_NUMBER" = "$BOOTSTRAP_PR" ] || [ "$GITHUB_REF" = "refs/heads/$BOOTSTRAP_BRANCH" ]; }; then
             cp tools/commit_check.py "$RUNNER_TEMP/commit_check.py"
             echo "::warning::bootstrap: origin/main is $BOOTSTRAP_BASE, which has no checker; using this branch's copy"
           else
-            echo "::error::origin/$BASE_REF has no tools/commit_check.py and is not the bootstrap base; refusing to run a checker this pull request supplies"
+            echo "::error::origin/$BASE_REF has no tools/commit_check.py and this is not the bootstrap pull request at the bootstrap base; refusing to run a checker this pull request supplies"
             exit 1
           fi
       - name: Pull request title and body
