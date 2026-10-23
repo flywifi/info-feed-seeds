@@ -4,6 +4,10 @@
     "allow": ["Bash", "Read", "Edit", "Write", "Glob", "Grep", "NotebookEdit", "WebFetch", "WebSearch", "Agent", "TodoWrite"],
     "deny": ["Bash(git push --force:*)", "Bash(git push -f:*)", "Bash(git push origin main:*)"]
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "crossSessionInbound": "accept",
     "enabledPlugins": {
     "install-checkpoint@synced": false
