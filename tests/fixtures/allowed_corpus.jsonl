@@ -77,3 +77,10 @@
 {"b64": "RWFjaCBpdGVtIGlzIHNlbnQgdG8gQ2xhdWRlIGFuZCB0aGUgcmVwbHkgaXMgc3RvcmVk", "exact": true, "id": "ruling_fn_sent_to", "source": "ruling", "where": ["message", "body", "file", "main-history"]}
 {"b64": "Q2xhdWRlIHN1bW1hcml6ZXMgZWFjaCBpdGVtIGluIHRoZSBkaWdlc3Q=", "exact": true, "id": "ruling_fn_summarizes", "source": "ruling", "where": ["message", "body", "file", "main-history"]}
 {"b64": "VGhlIHN1bW1hcml6ZSBzdGVwIHVzZXMgQ2xhdWRlIHRvIGxhYmVsIGl0ZW1z", "exact": true, "id": "ruling_fn_uses_to_label", "source": "builder", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhlIGRpZ2VzdCBpcyBtYWRlIGJ5IHRoZSBodWIsIGFuZCB0aGVuIHJhbmtlZA==", "exact": true, "id": "ruling9_digest_then_ranked", "source": "ruling", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhlIHNjaGVtYSB3YXMgZGVzaWduZWQgYnkgTWF0dA==", "exact": true, "id": "ruling9_schema_designed", "source": "ruling", "where": ["message", "body", "file", "main-history"]}
+{"b64": "UnVsZXMgd3JpdHRlbiBieSB0aGUgbWFpbnRhaW5lciBhcmUgaW4gQ0xBVURFLm1k", "exact": true, "id": "ruling9_rules_maintainer", "source": "ruling", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhlIEFQSSB0aGVuIGhhZCBlYWNoIGl0ZW0gbGFiZWxlZA==", "exact": true, "id": "ruling9_api_had_labeled", "source": "ruling", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhlIENMSSBjYW4gdXNlIENsYXVkZSB0byBsYWJlbCBpdGVtcy4=", "exact": true, "id": "audit9_fp_cli_use", "source": "audit9", "where": ["message", "body", "file", "main-history"]}
+{"b64": "bGFiZWxfYnlfY2xhdWRl", "exact": true, "id": "audit9_fp_label_by", "source": "audit9", "where": ["message", "body", "file"]}
+{"b64": "b3JkZXJfYnk9Y2xhdWRlX3Njb3Jl", "exact": true, "id": "audit9_fp_order_by", "source": "audit9", "where": ["message", "body", "file"]}

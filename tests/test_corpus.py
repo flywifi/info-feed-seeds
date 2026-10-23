@@ -37,7 +37,7 @@ PENDING = FIXTURES / "pending_ruling.jsonl"
 LOCK = FIXTURES / "corpus.lock"
 ALL = dict(CORPORA, pending=PENDING)
 PLACES = {"message", "body", "file", "main-history"}
-SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "audit6", "audit7", "audit8", "builder", "repo", "ruling"}
+SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "audit6", "audit7", "audit8", "audit9", "builder", "repo", "ruling"}
 
 
 def load(path_or_text) -> list[dict]:
@@ -301,6 +301,14 @@ class RuleTimingTests(unittest.TestCase):
         "capital phrase": ("Gener" + "ated with ") * (N // 15), "capital phrase lines": ("Gener" + "ated by\n") * (N // 13),
         "tagged phrase": ("<b>x gener" + "ated with ") * (N // 20),
         "tagged phrase and name": ("<b>x gener" + "ated with cla" + "ude. ") * (N // 33),
+        # Audit 9, HIGH 1: runs that overlapped a gap separator and a gap word.
+        "verb then apostrophes": "Built" + "'" * N, "pronoun then apostrophes": "I" + "'" * N,
+        "name then apostrophes": "Cla" + "ude" + "'" * N + " wrote",
+        "using then quotes": "using cla" + "ude" + " '" * (N // 2),
+        "quote comma list": "api = [" + "'', " * (N // 4) + "]",
+        "version dots": "cla" + "ude " + "1." * (N // 2), "escape runs": "\x1b[" * (N // 2),
+        "percent layers": "%25" * (N // 3),
+        "name then in-word dots": "Cla" + "ude" + ".a" * (N // 2) + " wrote",
     }
 
     def test_every_rule_on_long_lines(self):
