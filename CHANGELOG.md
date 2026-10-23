@@ -99,6 +99,11 @@ All notable changes to this repository are recorded here. The format follows
   statements are refused anywhere, while feature descriptions that name the assistant pass. The
   "Assisted-by" trailer and percent-encoded dashes are refused. `.claude/settings.json` hides the
   commit and pull request attribution lines. The exact round-7 probe strings join the corpora.
+- Ninth audit round. The authorship rules match inside longer words and allow a few words in each
+  gap. "By" or an "author:" label before the name is refused. No rule keeps a left-boundary
+  lookbehind. Files with a NUL byte still get the text rules. Percent-encoding is decoded until
+  nothing changes. The settings file also hides the session link. Feature sentences the rules now
+  refuse, and possible gaps in the ruling, wait in pending for Matt.
 
 ### Changed
 

@@ -141,20 +141,31 @@ What the checker refuses:
   few words before "code" or in parentheses, later in the same sentence within 200 characters
   (across single line breaks and dots inside words or numbers), or later in the same paragraph
   within 1,000 characters (a bound for speed only). Footer rules also run with HTML tags removed.
-  There are no exceptions in the rules. One file is pinned by path and sha256 because it describes
-  the rules in the words the rules refuse: the baseline checker. Any change to it makes it an
-  ordinary file again. Every text that might pass although the rules refuse it waits in
+  One file is pinned by path and sha256 because it describes the rules in the words the rules
+  refuse: the baseline checker. Any change to it makes it an ordinary file again. No rule keeps a
+  left-boundary lookbehind, so a name or verb inside a longer word counts. Every gap is bounded
+  for speed (a word in a gap is at most 30 characters; the sentence window is 200 characters, the
+  paragraph window 1,000). Every text that might pass although the rules refuse it waits in
   `tests/fixtures/pending_ruling.jsonl` for Matt's ruling, and is refused until then.
 - **Authorship statements:** commit messages, pull request text and files say what changed, why,
-  and how it works, never which tool wrote them (Matt's ruling of 2026-10-23). Refused anywhere: a
-  making verb (built, made, created, written, authored, assisted and similar) followed by with, by,
-  using, via, w/, through or alongside and the assistant's name later in the same sentence; "thanks
-  to", "courtesy of", "with the help of", "with help from", "powered by" or "in collaboration with"
-  directly before the name; "I" or "we" used, asked or let the name, or "using" the name followed by
-  "I" or "we"; and the name followed by wrote, built, made, created, authored, drafted, coded,
-  produced, generated or helped me or us. A feature that uses the assistant may name it in the
-  present tense: "the classifier calls the API", "each item is sent to it", "it summarizes each
-  item". Describe the step, not the authorship.
+  and how it works, never which tool wrote them (Matt's ruling of 2026-10-23). Refused anywhere:
+  - a making verb (built, made, created, written, authored, assisted and similar, also inside a
+    longer word such as "rebuilt"), up to three words, then with, by, using, via, w/, through,
+    alongside or together with, and the assistant's name later in the same sentence;
+  - "thanks to", "courtesy of", "with the help of", "with help from", "powered by" or "in
+    collaboration with" directly before the name, and "by" directly before the name;
+  - an "author:" label before the name;
+  - "I" or "we", up to two words, then used, use, asked, had or let, up to two words, then the
+    name; or "using" the name, up to two words, then "I" or "we";
+  - the name, up to two words (such as a product name), then wrote, built, made, created,
+    authored, drafted, coded, produced, generated or helped.
+
+  A feature that uses the assistant may name it, but only where no making verb, "by" or
+  first-person use shares the sentence: "the classifier calls the API" and "each item is sent to
+  it" pass, while "the digest is made by the hub and then it ranks the items" is refused (pending
+  for Matt). Describe the step, not the authorship.
+- **Known limit:** HTML entities are decoded once, as a browser shows them; percent-encoding is
+  decoded until nothing changes, up to eight rounds.
 - **Hidden characters:** text is folded before matching: entities, percent-encoding,
   compatibility forms, format characters, combining and enclosing marks, Hangul fillers, the
   blank braille pattern, the null notehead, ideographic dots, Unicode hyphens and lookalike letters
