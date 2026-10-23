@@ -4,7 +4,6 @@
 {"b64": "R2VuZXJhdGVkIGRhdGEgZm9yIHRoZSBkaWdlc3Q=", "exact": true, "id": "repo-generated-data", "source": "repo", "where": ["message", "body", "file"]}
 {"b64": "Q2xhdWRlIHJldmlld2VkIGl0", "exact": true, "id": "repo-claude-reviewed", "source": "repo", "where": ["message", "body", "file"]}
 {"b64": "RGF0YSBnZW5lcmF0ZWQgd2l0aCBodWIgcG9sbA==", "exact": true, "id": "repo-data-hub-poll", "source": "repo", "where": ["message", "body", "file"]}
-{"b64": "LSBDb21taXQgbWVzc2FnZXMsIHB1bGwgcmVxdWVzdCB0aXRsZXMgYW5kIGRlc2NyaXB0aW9ucywgYW5kIGV2ZXJ5IGZpbGUgaW4gdGhpcyByZXBvc2l0b3J5IG5ldmVyIGNvbnRhaW4gYQogIENvLUF1dGhvcmVkLUJ5IGxpbmUsIGEgQ2xhdWRlLVNlc3Npb24gbGluZSwgYSBzZXNzaW9uIG9yIGNsYXVkZS5haSBsaW5rLCBvciBhICJHZW5lcmF0ZWQgd2l0aCIgZm9vdGVyLiBTdHJpcAogIGFueSB0aGF0IGEgdG9vbCBhZGRzIGJ5IGRlZmF1bHQuIFdoZW4gbWVyZ2luZywgd3JpdGUgdGhlIG1lcmdlIGNvbW1pdCBtZXNzYWdlIGV4cGxpY2l0bHkgc28gbm9uZSBhcmUgY29waWVkIGluLgo=", "exact": true, "id": "repo-claude-md-rule-paragraph", "source": "repo", "where": ["file"]}
 {"b64": "QWRkIFJFQURNRS5tZAoK", "exact": true, "id": "repo-commit-5436f99", "source": "repo", "where": ["message"]}
 {"b64": "QWRkIC5naXRpZ25vcmUKCg==", "exact": true, "id": "repo-commit-1a0e409", "source": "repo", "where": ["message"]}
 {"b64": "QWRkIHNlZWRzLzIwMjYtMTAtMjBfaW5pdGlhbC1zb3VyY2VzLm1kCgo=", "exact": true, "id": "repo-commit-4e7ae0e", "source": "repo", "where": ["message"]}
@@ -74,3 +73,7 @@
 {"b64": "zpHOuM6uzr3OsSBuZXdzIHNvdXJjZQ==", "exact": true, "id": "audit3_fp_greek_prose", "source": "audit3", "where": ["message", "body", "file"]}
 {"b64": "QWRkIGEgcGxhaW4gY2hhbmdl", "exact": true, "id": "audit4_fp_plain", "source": "audit4", "where": ["message", "body", "file", "main-history"]}
 {"b64": "Q29ycG9yYTogcmVuYW1lIG9uZSByZWZ1c2VkIGlkLCBhZGQgdGhpcyByb3VuZCdzIGZpdmUgY29tbWl0IG1lc3NhZ2VzIHRvIHRoZSBhbGxvd2VkIGNvcnB1cw==", "exact": true, "id": "repo-commit-f8473e6", "source": "repo", "where": ["message"]}
+{"b64": "VGhlIGNsYXNzaWZpZXIgY2FsbHMgdGhlIENsYXVkZSBBUEkgZm9yIGVhY2ggdGl0bGU=", "exact": true, "id": "ruling_fn_calls_api", "source": "ruling", "where": ["message", "body", "file", "main-history"]}
+{"b64": "RWFjaCBpdGVtIGlzIHNlbnQgdG8gQ2xhdWRlIGFuZCB0aGUgcmVwbHkgaXMgc3RvcmVk", "exact": true, "id": "ruling_fn_sent_to", "source": "ruling", "where": ["message", "body", "file", "main-history"]}
+{"b64": "Q2xhdWRlIHN1bW1hcml6ZXMgZWFjaCBpdGVtIGluIHRoZSBkaWdlc3Q=", "exact": true, "id": "ruling_fn_summarizes", "source": "ruling", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhlIHN1bW1hcml6ZSBzdGVwIHVzZXMgQ2xhdWRlIHRvIGxhYmVsIGl0ZW1z", "exact": true, "id": "ruling_fn_uses_to_label", "source": "ruling", "where": ["message", "body", "file", "main-history"]}

@@ -265,7 +265,7 @@ class PollTests(HubTestCase):
         msg = (self.tmp / "c.txt").read_text(encoding="utf-8")
         self.assertTrue(msg.startswith("data: poll 2026-10-20 (tr)"))
         # Assembled from pieces so this file never holds the strings themselves.
-        for banned in ("Co-" + "Authored-By", "Claude" + "-Session", "claude" + ".ai", "Gener" + "ated with"):
+        for banned in ("Co-" + "Auth" + "ored-By", "Claude" + "-Session", "claude" + ".ai", "Gener" + "ated with"):
             self.assertNotIn(banned, msg)
 
     def test_console_output_is_ascii(self):

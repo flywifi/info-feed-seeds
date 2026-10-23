@@ -107,17 +107,17 @@ _GEN_PRODUCT = _PHRASE + _SEP + r"\[?" + _NAME + _NAME_END
 
 
 class _PhraseThenName:
-    """The phrase, then the assistant's name starting within `reach` characters, in a window that
-    ends at the first `stop` match. Equivalent to the phrase, a lazy gap of up to `reach`
-    characters that never contains `stop`, and the name, but linear: each phrase is followed by
-    one window, searched twice in C."""
+    """A start phrase (by default the footer phrase), then the assistant's name starting within
+    `reach` characters, in a window that ends at the first `stop` match. Equivalent to the phrase,
+    a lazy gap of up to `reach` characters that never contains `stop`, and the name, but linear:
+    each phrase is followed by one window, searched twice in C."""
 
-    def __init__(self, reach: int, stop: str):
+    def __init__(self, reach: int, stop: str, start: str = _PHRASE):
         self.reach = reach
-        self.start = re.compile(_PHRASE)
+        self.start = re.compile(start)
         self.stop = re.compile(stop)
         self.name = re.compile(r"(?<![a-z0-9])" + _NAME + _NAME_END)
-        self.pattern = f"{_PHRASE} ...{reach} (stop {stop}) {_NAME}"
+        self.pattern = f"{start} ...{reach} (stop {stop}) {_NAME}"
 
     def search(self, text: str):
         for m in self.start.finditer(text):
@@ -137,8 +137,31 @@ class _PhraseThenName:
 
 # sentence: stop at a blank line, a line break followed by another, "!" or "?", or a dot that is not
 # inside a word or number. near: stop only at a blank line.
-_GEN_SENTENCE = _PhraseThenName(200, r"\n\n|[!?]|\.(?![a-z0-9])")
+_SENTENCE_STOP = r"\n\n|[!?]|\.(?![a-z0-9])"
+_GEN_SENTENCE = _PhraseThenName(200, _SENTENCE_STOP)
 _GEN_NEAR = _PhraseThenName(1000, r"\n\n")
+# Authorship statements (Matt's ruling, 2026-10-23): text says what changed, why and how it works,
+# never which tool wrote it. A feature that uses the assistant may name it ("the classifier calls
+# the API"); a claim that it made the work may not.
+#   made-by  a making verb (assisted included, so an "Assisted-by:" trailer is refused), then with, by, using, via, w/, through, alongside or together with, then
+#            the name later in the same sentence, within 200 characters
+#   credit   thanks to, courtesy of, with the help of, with help from, powered by or in
+#            collaboration with, directly before the name
+#   first    I or we, then used, use, asked, had or let, then the name; or "using" the name, then I
+#            or we
+#   author   the name, then wrote, built, made, created, authored, drafted, coded, produced,
+#            generated, or helped me or us
+_WHO = r"(?<![a-z0-9])" + _NAME + _NAME_END
+_MADE = (r"(?<![a-z0-9])(?:built|made|created|written|wrote|authored|produced|coded|developed|drafted|"
+         r"composed|crafted|prepared|designed|assisted)[\W_]+(?:(?:with|by|using|via|through|alongside|"
+         r"together[\W_]+with)(?![a-z0-9])|w/)")
+_AUTHOR_MADE = _PhraseThenName(200, _SENTENCE_STOP, start=_MADE)
+_AUTHOR_CREDIT = (r"(?<![a-z0-9])(?:thanks[\W_]+to|courtesy[\W_]+of|with[\W_]+the[\W_]+help[\W_]+of|"
+                  r"with[\W_]+help[\W_]+from|powered[\W_]+by|in[\W_]+collaboration[\W_]+with)[\W_]+" + _WHO)
+_AUTHOR_FIRST = (r"(?<![a-z0-9])(?:i|we)[\W_]+(?:used|use|asked|had|let)[\W_]+" + _WHO
+                 + r"|(?<![a-z0-9])using[\W_]+" + _WHO + r"[\W_]+(?:i|we)(?![a-z0-9])")
+_AUTHOR_NAME = (_WHO + r"[\W_]+(?:wrote|built|made|created|authored|drafted|coded|produced|generated|"
+                r"helped[\W_]+(?:me|us))(?![a-z0-9])")
 _GEN_TOOL = _LINE_START + _PHRASE + _SEP + ".{0,24}?" + _NAME
 _GEN_CODE = _PHRASE + _SEP + ".{0,24}?" + _NAME + _SEP + "code(?![a-z0-9])"
 _GEN_PAREN = _PHRASE + _SEP + r".{0,24}?\(\s*" + _NAME + r"\s*\)"
@@ -152,6 +175,10 @@ FOOTER_RULES = (
     ("generated footer", re.compile(_GEN_TOOL, re.M)),
     ("generated footer", re.compile(_GEN_CODE)),
     ("generated footer", re.compile(_GEN_PAREN)),
+    ("authorship statement", _AUTHOR_MADE),
+    ("authorship statement", re.compile(_AUTHOR_CREDIT)),
+    ("authorship statement", re.compile(_AUTHOR_FIRST)),
+    ("authorship statement", re.compile(_AUTHOR_NAME)),
 )
 # Rules that need the original letter case (run on a normalised copy that keeps case).
 CASED_FOOTER_RULES = ()  # none at present; the near rule no longer depends on letter case
@@ -272,8 +299,16 @@ def normalize(text: str, keep_case: bool = False) -> str:
     return value.translate(_CONFUSABLES) if keep_case else value.lower().translate(_CONFUSABLES)
 
 
+def _decode_dashes(text: str) -> str:
+    """Entities and percent-encoding decoded (twice), as a renderer or a browser would show them."""
+    value = html.unescape(text or "")
+    for _ in range(2):
+        value = unquote(value)
+    return value
+
+
 def _dash_findings(text: str, where: str) -> list[str]:
-    decoded = html.unescape(text or "")
+    decoded = _decode_dashes(text)
     return [f"{where}: contains an {name}" if name[0] in "ae" else f"{where}: contains a {name}"
             for ch, name in DASHES if ch in decoded]
 
@@ -329,16 +364,14 @@ def path_findings(path: str, branch: str | None) -> list[str]:
     return out
 
 
-# Two files describe the rules in words the rules refuse: the 512e818 checker, kept as the
-# no-narrowing baseline, and CLAUDE.md, whose rule paragraph puts the footer phrase and the
-# assistant's name in one paragraph. Only these exact paths with exactly these bytes skip the text
-# rules; any change to either file makes it an ordinary file again (audit 7, M3). The texts they
-# protect are in tests/fixtures/pending_ruling.jsonl for Matt's ruling.
+# One file describes the rules in words the rules refuse: the 512e818 checker, kept byte for byte
+# as the no-narrowing baseline. Only that exact path with exactly these bytes skips the text rules;
+# any change to it makes it an ordinary file again (audit 7, M3). CLAUDE.md was pinned too until
+# its rule paragraph was split (Matt's ruling, 2026-10-23); it is now checked like any file.
 BASELINE_PATH = "tests/fixtures/checker_baseline.py"
 BASELINE_SHA256 = "fd224233c718939f7f4ce29cd1b758efeb49dc1550901e3339f42bdd782ad05a"
 PINNED_FILES = {
     BASELINE_PATH: BASELINE_SHA256,
-    "CLAUDE.md": "0b07b25dd6ac49927c61ea18000fdf2882f6edce4863a89f22aa5a2440daac86",
 }
 
 
@@ -353,7 +386,7 @@ def content_findings(path: str, data: bytes) -> list[str]:
     out = [] if pinned else _rule_findings(text, path, FILE_RULES)
     if "\r" in text:
         out.append(f"{path}: has CR line endings")
-    decoded = html.unescape(text)
+    decoded = _decode_dashes(text)
     for ch, name in DASHES:
         if ch in decoded:
             line = decoded[: decoded.index(ch)].count("\n") + 1
@@ -643,13 +676,13 @@ def pr_from_api(number: str) -> tuple[str, str]:
 
 def banned_samples() -> dict[str, str]:
     """Planted texts, assembled at run time so no file holds them."""
-    co, sess = "Co-" + "Authored-By", "Claude" + "-Session"
+    co, sess = "Co-" + "Auth" + "ored-By", "Claude" + "-Session"
     link = "https://" + "claude" + ".ai/code/session_x"
     return {
         "trailer": "Add b\n\n" + co + ": Someone <x@example.com>",
         "trailer variant": "Add b\n\nco\u2011authored\u2011by: x",
         "trailer spaces": "Add b\n\nCo authored by: x",
-        "trailer cyrillic": "Add b\n\nC\u043e-Authored-By: x",
+        "trailer cyrillic": "Add b\n\nC\u043e-Auth" + "ored-By: x",
         "trailer zero-width": "Add b\n\nCo-Auth\u200bored-By: x",
         "session": "Add b\n\n" + sess + ": abc",
         "link": "Add b\n\nsee " + link,
@@ -661,11 +694,11 @@ def banned_samples() -> dict[str, str]:
         "footer robot": "Add b\n\n\U0001F916 " + "Gener" + "ated" + " with [" + "Claude" + " Code]",
         # The first audit's italic probe, byte for byte: underscore right after "with".
         "footer italic audit": "_" + "Gener" + "ated" + " with_ [" + "Cla" + "ude Code](...)",
-        "trailer capital cyrillic": "Add b\n\n\u0421o-Authored-By: x",
-        "trailer capital cyrillic o": "Add b\n\nC\u041e-Authored-By: x",
+        "trailer capital cyrillic": "Add b\n\n\u0421o-Auth" + "ored-By: x",
+        "trailer capital cyrillic o": "Add b\n\nC\u041e-Auth" + "ored-By: x",
         "session capital greek": "Add b\n\nCl\u0391ude-Session: x",
-        "trailer combining mark": "Add b\n\nCo\u0336-Authored-By: x",
-        "trailer precomposed accent": "Add b\n\nC\u00f3-Authored-By: x",
+        "trailer combining mark": "Add b\n\nCo\u0336-Auth" + "ored-By: x",
+        "trailer precomposed accent": "Add b\n\nC\u00f3-Auth" + "ored-By: x",
         "trailer hangul filler": "Add b\n\nCo-Auth\u3164ored-By: x",
         "link ideographic dot": "Add b\n\nsee https://" + "claude" + "\u3002" + "ai/x",
         "link halfwidth dot": "Add b\n\nsee https://" + "claude" + "\uff61" + "ai/x",
@@ -682,11 +715,11 @@ def selftest() -> list[str]:
             failures.append(f"selftest text {label!r}: expected a finding")
         if not check_pr_text(text, "", "selftest"):
             failures.append(f"selftest title {label!r}: expected a finding")
-    for label in ("Add the co-author rule", "Written by hand", "Data for the digest"):
+    for label in ("Add the co-author rule", "Writ" + "ten by hand", "Data for the digest"):
         if text_findings(label, "clean"):
             failures.append(f"selftest text {label!r}: expected clean")
-    named = ("Commit messages never contain a " + "Co-" + "Authored-By line, a " + "Claude" + "-Session line,\n"
-             "a session or " + "claude" + ".ai link, or a \"" + "Gener" + "ated" + " with\" footer.\n")
+    named = ("Commit messages never contain a " + "Claude" + "-Session line, a session or " + "claude" + ".ai link,\n"
+             "a \"" + "Gener" + "ated" + " with\" footer, or a " + "Co-" + "Auth" + "ored-By line.\n")
     if content_findings("RULES.md", named.encode()):
         failures.append("selftest: a sentence that names the rules must pass the file check")
     with tempfile.TemporaryDirectory() as td:

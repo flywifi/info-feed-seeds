@@ -37,7 +37,7 @@ PENDING = FIXTURES / "pending_ruling.jsonl"
 LOCK = FIXTURES / "corpus.lock"
 ALL = dict(CORPORA, pending=PENDING)
 PLACES = {"message", "body", "file", "main-history"}
-SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "audit6", "audit7", "repo"}
+SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "audit6", "audit7", "repo", "ruling"}
 
 
 def load(path_or_text) -> list[dict]:
@@ -68,6 +68,17 @@ def checked_places(e: dict) -> list[str]:
     a body is listed (audit 7, HIGH 1)."""
     places = [p for p in e["where"] if p != "main-history"]
     return places + (["title"] if {"message", "body"} & set(places) else [])
+
+
+def pending_passes(entries: list[dict]) -> list[str]:
+    """Every place where the current checker lets a pending entry through."""
+    passed = [f"{e['id']} passes in {place}" for e in entries for place in checked_places(e)
+              if not refused_in(place, e["text"])]
+    history = [e for e in entries if "main-history" in e["where"]]
+    if history:
+        refused = main_history_refused(history)
+        passed += [f"{e['id']} passes in main-history" for e in history if e["id"] not in refused]
+    return passed
 
 
 def lock_rows(text: str) -> list[list[str]]:
@@ -119,7 +130,8 @@ class CorpusShapeTests(unittest.TestCase):
         self.assertEqual(len(every), len(set(every)), "an id appears in more than one file")
         for name, path in ALL.items():
             entries = load(path)
-            self.assertGreater(len(entries), 0, name)
+            if name != "pending":  # pending may be empty once every ruling is made
+                self.assertGreater(len(entries), 0, name)
             ids = [e["id"] for e in entries]
             self.assertEqual(len(ids), len(set(ids)), f"{name}: duplicate ids")
             for e in entries:
@@ -250,12 +262,16 @@ class PendingRulingTests(unittest.TestCase):
     def test_every_pending_entry_is_refused_until_ruled(self):
         # Pending fails closed: until Matt rules, every pending text is refused wherever it is
         # listed, so adding a text to pending can never let it through (audit 7, MED 4).
-        passed = [f"{e['id']} passes in {place}" for e in load(PENDING) for place in checked_places(e)
-                  if not refused_in(place, e["text"])]
-        history = [e for e in load(PENDING) if "main-history" in e["where"]]
-        passed += [f"{e['id']} passes in main-history" for e in history
-                   if e["id"] not in main_history_refused(history)]
-        self.assertEqual(passed, [], "pending entries the current checker lets through")
+        self.assertEqual(pending_passes(load(PENDING)), [], "pending entries the current checker lets through")
+
+    def test_a_pending_text_the_checker_passes_is_caught(self):
+        # Even with the pending file empty, a new pending line whose text the checker passes must
+        # turn this test red (audit 7, addition b).
+        planted = {"id": "planted", "source": "repo", "exact": True, "where": ["message", "body", "file"],
+                   "text": "Add a plain change"}
+        self.assertEqual(pending_passes([planted]),
+                         ["planted passes in message", "planted passes in body", "planted passes in file",
+                          "planted passes in title"])
 
     def test_print_current_verdicts(self):
         lines = []
@@ -263,8 +279,8 @@ class PendingRulingTests(unittest.TestCase):
             places = [p for p in e["where"] if p != "main-history"]
             verdict = " ".join(f"{p}={'refused' if refused_in(p, e['text']) else 'passes'}" for p in places)
             lines.append(f"  pending {e['id']}: {verdict}")
-        sys.stdout.write("\npending ruling (main-history uses the message rules):\n" + "\n".join(lines) + "\n")
-        self.assertTrue(lines)
+        sys.stdout.write("\npending ruling (main-history uses the message rules):\n"
+                         + ("\n".join(lines) if lines else "  none") + "\n")
 
 
 class RuleTimingTests(unittest.TestCase):

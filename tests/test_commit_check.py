@@ -22,7 +22,7 @@ import doctor  # noqa: E402
 FLYWIFI = {"GIT_AUTHOR_NAME": cc.AUTHOR[0], "GIT_AUTHOR_EMAIL": cc.AUTHOR[1],
            "GIT_COMMITTER_NAME": cc.AUTHOR[0], "GIT_COMMITTER_EMAIL": cc.AUTHOR[1]}
 WEB = {"GIT_COMMITTER_NAME": cc.WEB_COMMITTER[0], "GIT_COMMITTER_EMAIL": cc.WEB_COMMITTER[1]}
-CO = "Co-" + "Authored-By"
+CO = "Co-" + "Auth" + "ored-By"
 SESSION = "Claude" + "-Session"
 HOST = "claude" + ".ai"
 GEN = "Gener" + "ated"
@@ -86,7 +86,7 @@ class TextTests(unittest.TestCase):
             "U+2011 hyphens": "co\u2011authored\u2011by: x",
             "spaces": "Co auth" + "ored by: x",
             "underscores": "co_auth" + "ored_by: x",
-            "cyrillic o": "C\u043e-Authored-By: x",
+            "cyrillic o": "C\u043e-Auth" + "ored-By: x",
             "zero-width space": "Co-Auth\u200bored-By: x",
             "fullwidth host": "https://\uff43\uff4c\uff41\uff55\uff44\uff45\uff0e\uff41\uff49/x",
             "percent host": "https://claude%2E" + "ai/x",
@@ -101,7 +101,7 @@ class TextTests(unittest.TestCase):
                 self.assertTrue(cc.text_findings(text, "m"), label)
 
     def test_ordinary_text_passes(self):
-        for text in ("Written by info-feed-seeds hub poll", "Add the co-author rule to the docs",
+        for text in ("Writ" + "ten by info-feed-seeds hub poll", "Add the co-author rule to the docs",
                      "Generated data for the digest", "Claude reviewed it"):
             self.assertEqual(cc.text_findings(text, "m"), [], text)
 
@@ -154,8 +154,10 @@ class FileTests(unittest.TestCase):
                 self.assertTrue(cc.content_findings("notes.md", data), label)
 
     def test_a_sentence_naming_the_rules_passes(self):
-        text = ("- Commit messages never contain a\n  " + CO + " line, a " + SESSION + " line, a session or "
-                + HOST + " link, or a \"" + GEN + " with\" footer. Strip\n")
+        # CLAUDE.md's order since Matt's ruling: the co-author key ends the sentence, so no sentence
+        # pairs it with the assistant's name.
+        text = ("- Commit messages never contain a\n  " + SESSION + " line, a session or " + HOST
+                + " link, a \"" + GEN + " with\" footer, or a " + CO + " line.\n  Strip any that a tool adds.\n")
         self.assertEqual(cc.content_findings("RULES.md", text.encode()), [])
 
     def test_this_repository_passes_the_file_rules(self):
