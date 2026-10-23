@@ -94,6 +94,11 @@ All notable changes to this repository are recorded here. The format follows
   failing closed; spaced hosts and hyphenated session ids are refused; the baseline and CLAUDE.md
   are pinned by sha256 instead of exempted by pattern; pending entries must be refused; the
   no-narrowing test adds PR titles, long-text positions and sentence gaps; selftest checks titles.
+- Matt's rulings (2026-10-23). The commit-rules paragraph in CLAUDE.md is split and reordered,
+  gains a wording rule, and is no longer pinned. Every pending entry is refused. Authorship
+  statements are refused anywhere, while feature descriptions that name the assistant pass. The
+  "Assisted-by" trailer and percent-encoded dashes are refused. `.claude/settings.json` hides the
+  commit and pull request attribution lines. The exact round-7 probe strings join the corpora.
 
 ### Changed
 

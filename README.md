@@ -141,11 +141,20 @@ What the checker refuses:
   few words before "code" or in parentheses, later in the same sentence within 200 characters
   (across single line breaks and dots inside words or numbers), or later in the same paragraph
   within 1,000 characters (a bound for speed only). Footer rules also run with HTML tags removed.
-  There are no exceptions in the rules. Two files are pinned by path and sha256 because they
-  describe the rules in the words the rules refuse: the baseline checker and CLAUDE.md. Any change
-  to either makes it an ordinary file again. The texts they protect, and every other text that
-  might pass although the rules refuse it, wait in `tests/fixtures/pending_ruling.jsonl` for
-  Matt's ruling, and are refused until then.
+  There are no exceptions in the rules. One file is pinned by path and sha256 because it describes
+  the rules in the words the rules refuse: the baseline checker. Any change to it makes it an
+  ordinary file again. Every text that might pass although the rules refuse it waits in
+  `tests/fixtures/pending_ruling.jsonl` for Matt's ruling, and is refused until then.
+- **Authorship statements:** commit messages, pull request text and files say what changed, why,
+  and how it works, never which tool wrote them (Matt's ruling of 2026-10-23). Refused anywhere: a
+  making verb (built, made, created, written, authored, assisted and similar) followed by with, by,
+  using, via, w/, through or alongside and the assistant's name later in the same sentence; "thanks
+  to", "courtesy of", "with the help of", "with help from", "powered by" or "in collaboration with"
+  directly before the name; "I" or "we" used, asked or let the name, or "using" the name followed by
+  "I" or "we"; and the name followed by wrote, built, made, created, authored, drafted, coded,
+  produced, generated or helped me or us. A feature that uses the assistant may name it in the
+  present tense: "the classifier calls the API", "each item is sent to it", "it summarizes each
+  item". Describe the step, not the authorship.
 - **Hidden characters:** text is folded before matching: entities, percent-encoding,
   compatibility forms, format characters, combining and enclosing marks, Hangul fillers, the
   blank braille pattern, the null notehead, ideographic dots, Unicode hyphens and lookalike letters
@@ -187,9 +196,11 @@ and it protects main only when the main ruleset requires the `checks` status che
 repository owner) and CI runs it against the base branch.
 
 The file rule reads CLAUDE.md the way it is worded: a trailer line, a link, a footer line. CLAUDE.md
-itself names these things mid-sentence and passes. Rewrapping that paragraph so a line starts with
-the quoted footer phrase would make CLAUDE.md fail the check, so keep the phrase off the start of a
-line.
+itself names these things mid-sentence and passes, with no pin, because of how its commit-rules
+paragraph is laid out. Keep three things as they are: the quoted footer phrase never starts a line;
+the co-author key comes last in that sentence, so no sentence pairs it with the assistant's name;
+and a blank line separates that bullet from the next one, which names the assistant, so the two
+never share a paragraph.
 
 ## Outputs
 
