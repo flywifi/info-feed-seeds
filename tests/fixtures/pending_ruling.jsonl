@@ -2,3 +2,11 @@
 {"b64": "VGhpcyBQUiB3YXMgZ2VuZXJhdGVkIHdpdGggdGhlIGhlbHAgb2YgQ2xhdWRlLm1k", "exact": true, "id": "audit7x_md_name", "source": "audit7", "where": ["message", "body", "file", "main-history"]}
 {"b64": "Tm90ZXMgZ2VuZXJhdGVkIHdpdGggaGVscCBmcm9tIENsYXVkZS5tZCBmaWxlcyBpbiB0aGUgcmVwbw==", "exact": true, "id": "audit7x_md_files", "source": "audit7", "where": ["message", "body", "file", "main-history"]}
 {"b64": "Rml4ICVFMiU4MCU5NCB0aGluZw==", "exact": true, "id": "audit7x_pct_dash", "source": "audit7", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhlIGRpZ2VzdCBpcyBtYWRlIGJ5IHRoZSBodWIgYW5kIHRoZW4gQ2xhdWRlIHJhbmtzIGl0", "exact": true, "id": "audit8_m4_made_by_hub", "source": "audit8", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhlIHNjaGVtYSB3YXMgZGVzaWduZWQgYnkgTWF0dCBmb3IgdGhlIENsYXVkZSBzdGVw", "exact": false, "id": "audit8_m4_designed_by", "source": "audit8", "where": ["message", "body", "file", "main-history"]}
+{"b64": "UnVsZXMgd3JpdHRlbiBieSBNYXR0IGFyZSBpbiBDTEFVREUubWQ=", "exact": true, "id": "audit8_m4_rules_written", "source": "audit8", "where": ["message", "body", "file", "main-history"]}
+{"b64": "VGhlIEFQSSB1c2VkIENsYXVkZSB0byBsYWJlbCBlYWNoIGl0ZW0=", "exact": false, "id": "audit8_m3_api_used", "source": "builder", "where": ["message", "body", "file", "main-history"]}
+{"b64": "Q29kZSBieSBDbGF1ZGU=", "exact": true, "id": "audit8_l7_code_by", "source": "audit8", "where": ["message", "body", "file", "main-history"]}
+{"b64": "QXV0aG9yOiBDbGF1ZGU=", "exact": true, "id": "audit8_l7_author_label", "source": "audit8", "where": ["message", "body", "file", "main-history"]}
+{"b64": "Q2xhdWRlIGhlbHBlZCB3cml0ZSB0aGlz", "exact": true, "id": "audit8_l7_helped_write", "source": "audit8", "where": ["message", "body", "file", "main-history"]}
+{"b64": "SSB3cm90ZSB0aGlzIHVzaW5nIENsYXVkZQ==", "exact": true, "id": "audit8_l7_wrote_using", "source": "audit8", "where": ["message", "body", "file", "main-history"]}

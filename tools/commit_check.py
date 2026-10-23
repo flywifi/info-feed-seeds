@@ -116,7 +116,7 @@ class _PhraseThenName:
         self.reach = reach
         self.start = re.compile(start)
         self.stop = re.compile(stop)
-        self.name = re.compile(r"(?<![a-z0-9])" + _NAME + _NAME_END)
+        self.name = re.compile(_NAME + _NAME_END)
         self.pattern = f"{start} ...{reach} (stop {stop}) {_NAME}"
 
     def search(self, text: str):
@@ -128,7 +128,7 @@ class _PhraseThenName:
             cut = self.stop.search(window)
             if cut:
                 window = window[:cut.start()]
-            # One character of context before the window, for the name's left boundary.
+            # One character of context before the window keeps offsets comparable with `reach`.
             hit = self.name.search(text[end - 1:end] + window)
             if hit and hit.start() - 1 <= self.reach:
                 return hit
@@ -143,25 +143,35 @@ _GEN_NEAR = _PhraseThenName(1000, r"\n\n")
 # Authorship statements (Matt's ruling, 2026-10-23): text says what changed, why and how it works,
 # never which tool wrote it. A feature that uses the assistant may name it ("the classifier calls
 # the API"); a claim that it made the work may not.
-#   made-by  a making verb (assisted included, so an "Assisted-by:" trailer is refused), then with, by, using, via, w/, through, alongside or together with, then
-#            the name later in the same sentence, within 200 characters
+#   made-by  a making verb, also inside a longer word ("rebuilt", "ghostwritten") and "assisted"
+#            (so an "Assisted-by:" trailer is refused), up to 3 words, then with, by, using, via,
+#            w/, through, alongside or together with, then the name later in the same sentence,
+#            within 200 characters
 #   credit   thanks to, courtesy of, with the help of, with help from, powered by or in
 #            collaboration with, directly before the name
-#   first    I or we, then used, use, asked, had or let, then the name; or "using" the name, then I
-#            or we
-#   author   the name, then wrote, built, made, created, authored, drafted, coded, produced,
-#            generated, or helped me or us
-_WHO = r"(?<![a-z0-9])" + _NAME + _NAME_END
-_MADE = (r"(?<![a-z0-9])(?:built|made|created|written|wrote|authored|produced|coded|developed|drafted|"
-         r"composed|crafted|prepared|designed|assisted)[\W_]+(?:(?:with|by|using|via|through|alongside|"
-         r"together[\W_]+with)(?![a-z0-9])|w/)")
+#   by       "by" directly before the name ("Code by ..."), failing closed until Matt rules
+#   label    an "author:" label before the name
+#   first    I or we, up to 2 words, then used, use, asked, had or let, up to 2 words, then the
+#            name; or "using" the name, up to 2 words, then I or we
+#   author   the name, up to 2 words (a product name such as "Code" or "Opus"), then wrote, built,
+#            made, created, authored, drafted, coded, produced, generated or helped
+# No rule has a left-boundary lookbehind (audit 8): a name or verb inside a longer word counts.
+# A word in a gap is 1 to 30 letters, digits or apostrophes, so every gap is bounded.
+_WHO = _NAME + _NAME_END
+_W2 = r"(?:[\W_]+[a-z0-9']{1,30}){0,2}?"
+_W3 = r"(?:[\W_]+[a-z0-9']{1,30}){0,3}?"
+_MADE = (r"(?:built|made|created|written|wrote|authored|produced|coded|developed|drafted|"
+         r"composed|crafted|prepared|designed|assisted)" + _W3 + r"[\W_]+(?:(?:with|by|using|via|through|"
+         r"alongside|together[\W_]+with)(?![a-z0-9])|w/)")
 _AUTHOR_MADE = _PhraseThenName(200, _SENTENCE_STOP, start=_MADE)
-_AUTHOR_CREDIT = (r"(?<![a-z0-9])(?:thanks[\W_]+to|courtesy[\W_]+of|with[\W_]+the[\W_]+help[\W_]+of|"
+_AUTHOR_CREDIT = (r"(?:thanks[\W_]+to|courtesy[\W_]+of|with[\W_]+the[\W_]+help[\W_]+of|"
                   r"with[\W_]+help[\W_]+from|powered[\W_]+by|in[\W_]+collaboration[\W_]+with)[\W_]+" + _WHO)
-_AUTHOR_FIRST = (r"(?<![a-z0-9])(?:i|we)[\W_]+(?:used|use|asked|had|let)[\W_]+" + _WHO
-                 + r"|(?<![a-z0-9])using[\W_]+" + _WHO + r"[\W_]+(?:i|we)(?![a-z0-9])")
-_AUTHOR_NAME = (_WHO + r"[\W_]+(?:wrote|built|made|created|authored|drafted|coded|produced|generated|"
-                r"helped[\W_]+(?:me|us))(?![a-z0-9])")
+_AUTHOR_BY = r"by[\W_]+" + _WHO
+_AUTHOR_LABEL = r"author[\W_]*[:=][\W_]*" + _WHO
+_AUTHOR_FIRST = (r"(?:i|we)" + _W2 + r"[\W_]+(?:used|use|asked|had|let)" + _W2 + r"[\W_]+" + _WHO
+                 + r"|using[\W_]+" + _WHO + _W2 + r"[\W_]+(?:i|we)(?![a-z0-9])")
+_AUTHOR_NAME = (_WHO + _W2 + r"[\W_]+(?:wrote|built|made|created|authored|drafted|coded|produced|generated|"
+                r"helped)(?![a-z0-9])")
 _GEN_TOOL = _LINE_START + _PHRASE + _SEP + ".{0,24}?" + _NAME
 _GEN_CODE = _PHRASE + _SEP + ".{0,24}?" + _NAME + _SEP + "code(?![a-z0-9])"
 _GEN_PAREN = _PHRASE + _SEP + r".{0,24}?\(\s*" + _NAME + r"\s*\)"
@@ -177,6 +187,8 @@ FOOTER_RULES = (
     ("generated footer", re.compile(_GEN_PAREN)),
     ("authorship statement", _AUTHOR_MADE),
     ("authorship statement", re.compile(_AUTHOR_CREDIT)),
+    ("authorship statement", re.compile(_AUTHOR_BY)),
+    ("authorship statement", re.compile(_AUTHOR_LABEL)),
     ("authorship statement", re.compile(_AUTHOR_FIRST)),
     ("authorship statement", re.compile(_AUTHOR_NAME)),
 )
@@ -190,7 +202,7 @@ _SESSION_LINE = _LINE_START + _SESSION + _SEP + "[:=]"
 # Anywhere, the co-author key followed within 60 characters by an address in angle brackets.
 _CO_ADDRESS = _CO + r".{0,60}?<[^<>\s@]{1,64}@[^<>\s]{1,255}>"
 # A bare session id: "session_" and at least 20 letters or digits.
-_SESSION_ID = r"(?<![a-z0-9])session_(?:[-_]?[a-z0-9]){20}"
+_SESSION_ID = r"session_(?:[-_]?[a-z0-9]){20}"
 MESSAGE_RULES = (
     # A co-author trailer: a trailer line; or anywhere, the key with a hyphen before "by" (which
     # prose such as "co-authored by Smith" never has); or the key and an address.
@@ -282,14 +294,26 @@ def toplevel(cwd: Path | None = None) -> Path:
 
 # --------------------------------------------------------------------------- text checks
 
+def _decode_layers(text: str) -> str:
+    """HTML entities decoded once, as a browser renders them (an escaped entity such as the one in
+    the allowed entry audit3_fp_amp_ndash_literal_word stays literal text), then percent-encoding
+    decoded until nothing changes (at most 8 rounds), so a text encoded several times over
+    ("%2525E2...") is read as it finally reads (audit 8)."""
+    value = html.unescape(text or "")
+    for _ in range(8):
+        decoded = unquote(value)
+        if decoded == value:
+            break
+        value = decoded
+    return value
+
+
 def normalize(text: str, keep_case: bool = False) -> str:
     """Fold the tricks that hide a banned string: entities, percent-encoding, compatibility forms
     (fullwidth letters and dots), format characters (zero-width, bidi), combining and enclosing
     marks, Hangul fillers, the blank braille pattern, ideographic dots, Unicode hyphens and
     lookalike letters in either case. Lowercased."""
-    value = html.unescape(text or "")
-    for _ in range(2):
-        value = unquote(value)
+    value = _decode_layers(text)
     # NFKD, not NFKC: decomposing first means an accented letter (precomposed or built from a
     # combining mark) always leaves a combining mark (Mn) behind, which the next line removes.
     value = unicodedata.normalize("NFKD", value)
@@ -300,11 +324,9 @@ def normalize(text: str, keep_case: bool = False) -> str:
 
 
 def _decode_dashes(text: str) -> str:
-    """Entities and percent-encoding decoded (twice), as a renderer or a browser would show them."""
-    value = html.unescape(text or "")
-    for _ in range(2):
-        value = unquote(value)
-    return value
+    """Entities and percent-encoding decoded to a fixed point, as a renderer or a browser would
+    show them."""
+    return _decode_layers(text)
 
 
 def _dash_findings(text: str, where: str) -> list[str]:
@@ -377,7 +399,10 @@ PINNED_FILES = {
 
 def content_findings(path: str, data: bytes) -> list[str]:
     if b"\x00" in data[:8192]:
-        return []  # binary
+        # Binary by git's test. A NUL byte must not hide text, so the text rules still run on a
+        # decoded copy (audit 8); the line-ending, dash and ASCII checks apply to text files only.
+        pinned = path in PINNED_FILES and hashlib.sha256(data).hexdigest() == PINNED_FILES[path]
+        return [] if pinned else _rule_findings(data.decode("utf-8", "replace").replace("\x00", ""), path, FILE_RULES)
     try:
         text = data.decode("utf-8")
     except UnicodeDecodeError as exc:
@@ -676,7 +701,7 @@ def pr_from_api(number: str) -> tuple[str, str]:
 
 def banned_samples() -> dict[str, str]:
     """Planted texts, assembled at run time so no file holds them."""
-    co, sess = "Co-" + "Auth" + "ored-By", "Claude" + "-Session"
+    co, sess = "Co-" + "Auth" + "ored-B" + "y", "Cla" + "ude" + "-Session"
     link = "https://" + "claude" + ".ai/code/session_x"
     return {
         "trailer": "Add b\n\n" + co + ": Someone <x@example.com>",
@@ -689,7 +714,7 @@ def banned_samples() -> dict[str, str]:
         "link fullwidth": "Add b\n\nsee https://\uff43\uff4c\uff41\uff55\uff44\uff45\uff0e\uff41\uff49/x",
         "link percent": "Add b\n\nsee https://" + "claude" + "%2E" + "ai/x",
         "footer": "Add b\n\n" + "Gener" + "ated" + " with SomeTool",
-        "footer italic": "Body\n\n---\n_" + "Gener" + "ated" + " by [Claude Code](" + link + ")_",
+        "footer italic": "Body\n\n---\n_" + "Gener" + "ated" + " b" + "y [Claude Code](" + link + ")_",
         "footer using": "Add b\n\n" + "Gener" + "ated" + " using " + "Claude",
         "footer robot": "Add b\n\n\U0001F916 " + "Gener" + "ated" + " with [" + "Claude" + " Code]",
         # The first audit's italic probe, byte for byte: underscore right after "with".

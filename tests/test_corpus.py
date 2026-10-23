@@ -37,7 +37,7 @@ PENDING = FIXTURES / "pending_ruling.jsonl"
 LOCK = FIXTURES / "corpus.lock"
 ALL = dict(CORPORA, pending=PENDING)
 PLACES = {"message", "body", "file", "main-history"}
-SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "audit6", "audit7", "repo", "ruling"}
+SOURCES = {"audit1", "audit2", "audit3", "audit4", "audit5", "audit6", "audit7", "audit8", "builder", "repo", "ruling"}
 
 
 def load(path_or_text) -> list[dict]:

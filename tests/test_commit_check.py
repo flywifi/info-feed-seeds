@@ -91,7 +91,7 @@ class TextTests(unittest.TestCase):
             "fullwidth host": "https://\uff43\uff4c\uff41\uff55\uff44\uff45\uff0e\uff41\uff49/x",
             "percent host": "https://claude%2E" + "ai/x",
             "entity host": "https://claude&#46;" + "ai/x",
-            "italic footer": "_" + GEN + " by [Claude Code](https://example.com)_",
+            "italic footer": "_" + GEN + " b" + "y [Claude Code](https://example.com)_",
             "using form": GEN + " using " + "Cla" + "ude",
             "session spaces": "claude sess" + "ion: x",
             "any tool footer": GEN + " with SomeTool",
