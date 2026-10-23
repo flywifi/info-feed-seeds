@@ -112,12 +112,12 @@ class _PhraseThenName:
     a lazy gap of up to `reach` characters that never contains `stop`, and the name, but linear:
     each phrase is followed by one window, searched twice in C."""
 
-    def __init__(self, reach: int, stop: str, start: str = _PHRASE):
+    def __init__(self, reach: int, stop: str, start: str = _PHRASE, name: str = _NAME + _NAME_END):
         self.reach = reach
         self.start = re.compile(start)
         self.stop = re.compile(stop)
-        self.name = re.compile(_NAME + _NAME_END)
-        self.pattern = f"{start} ...{reach} (stop {stop}) {_NAME}"
+        self.name = re.compile(name)
+        self.pattern = f"{start} ...{reach} (stop {stop}) {name}"
 
     def search(self, text: str):
         for m in self.start.finditer(text):
@@ -143,35 +143,55 @@ _GEN_NEAR = _PhraseThenName(1000, r"\n\n")
 # Authorship statements (Matt's ruling, 2026-10-23): text says what changed, why and how it works,
 # never which tool wrote it. A feature that uses the assistant may name it ("the classifier calls
 # the API"); a claim that it made the work may not.
-#   made-by  a making verb, also inside a longer word ("rebuilt", "ghostwritten") and "assisted"
-#            (so an "Assisted-by:" trailer is refused), up to 3 words, then with, by, using, via,
-#            w/, through, alongside or together with, then the name later in the same sentence,
-#            within 200 characters
+#   made-by  a making verb at the start of a word, optionally after re, co, ghost, hand, over or pre
+#            ("rebuilt", "ghostwritten"), "programmed" ("pair-programmed", Matt's ruling of
+#            2026-10-23) and "assisted" (so an "Assisted-by:" trailer is refused),
+#            up to 3 words, then with, by, using, via, w/, through, alongside or together with, then
+#            the name later in the same sentence, within 200 characters
 #   credit   thanks to, courtesy of, with the help of, with help from, powered by or in
-#            collaboration with, directly before the name
-#   by       "by" directly before the name ("Code by ..."), failing closed until Matt rules
+#            collaboration with, then the name, which may close a run of up to 30 letters or digits
+#            ("AnthropicClaude"); or "with" the name's help ("Done with ...'s help", Matt's ruling)
+#   byline   at a line start, after an optional label, up to 3 words, "by" and the name ("Code by
+#            ..."); "order_by=claude_score" in code is not a byline
 #   label    an "author:" label before the name
-#   first    I or we, up to 2 words, then used, use, asked, had or let, up to 2 words, then the
-#            name; or "using" the name, up to 2 words, then I or we
-#   author   the name, up to 2 words (a product name such as "Code" or "Opus"), then wrote, built,
-#            made, created, authored, drafted, coded, produced, generated or helped
-# No rule has a left-boundary lookbehind (audit 8): a name or verb inside a longer word counts.
-# A word in a gap is 1 to 30 letters, digits or apostrophes, so every gap is bounded.
+#   first    I or we, up to 2 words, then used, use, asked, had, let, leveraged, leverage,
+#            utilized, utilised or employed (with the same prefixes), up to 2 words, then the name
+#            ("I leveraged ...", Matt's ruling); or "using" the name, up to 2 words, then I or we
+#   tool     used, asked or had (past tense), up to 2 words, the name, then "to" ("The API used ...
+#            to label each item", Matt's ruling 8); present-tense feature text ("uses ... to") passes
+#   author   the name, up to 2 words (a product name and version such as "Code", "Opus 4.5" or "3.5
+#            Sonnet"), then wrote, built, made, created, authored, drafted, coded, produced,
+#            generated or helped, with the same prefixes
+# The name may sit inside a longer word (audit 8). A verb, I, we and "using" start a word (audit 9):
+# "encoded with" is not "coded with", and the "i" in "CLI" is not a pronoun. In these rules only,
+# the name directly followed by ".md" is the file CLAUDE.md, not the assistant (Matt's ruling 7).
+# A gap word is 1 to 30 letters or digits, plus up to three ".digits" parts for a version; a gap
+# separator is any run of other characters that is not a sentence end: "!", "?", a blank line, or
+# a dot that is not inside a word or number (so "Claude.ai" and "4.5" do not end a gap). Words and separators never overlap, so a gap cannot backtrack (audit 9, HIGH 1).
 _WHO = _NAME + _NAME_END
-_W2 = r"(?:[\W_]+[a-z0-9']{1,30}){0,2}?"
-_W3 = r"(?:[\W_]+[a-z0-9']{1,30}){0,3}?"
-_MADE = (r"(?:built|made|created|written|wrote|authored|produced|coded|developed|drafted|"
-         r"composed|crafted|prepared|designed|assisted)" + _W3 + r"[\W_]+(?:(?:with|by|using|via|through|"
-         r"alongside|together[\W_]+with)(?![a-z0-9])|w/)")
-_AUTHOR_MADE = _PhraseThenName(200, _SENTENCE_STOP, start=_MADE)
+_WHO_AUTHOR = _WHO + r"(?!\.md(?![a-z0-9]))"
+_GAP = r"(?:[^\w.!?\n]|_|\n(?!\n)|\.(?=[a-z0-9]))+"
+_WORD = r"[a-z0-9]{1,30}(?:\.[0-9]{1,6}){0,3}"
+_W2 = r"(?:" + _GAP + _WORD + r"){0,2}?"
+_W3 = r"(?:" + _GAP + _WORD + r"){0,3}?"
+_BOW = r"(?<![a-z0-9])"
+_PREFIX = r"(?:re|co|ghost|hand|over|pre)?"
+_MADE = (_BOW + _PREFIX + r"(?:built|made|created|written|wrote|authored|produced|coded|developed|drafted|"
+         r"composed|crafted|prepared|designed|programmed|assisted)" + _W3 + _GAP + r"(?:(?:with|by|using|via|through|"
+         r"alongside|together" + _GAP + r"with)(?![a-z0-9])|w/)")
+_AUTHOR_MADE = _PhraseThenName(200, _SENTENCE_STOP, start=_MADE, name=_WHO_AUTHOR)
 _AUTHOR_CREDIT = (r"(?:thanks[\W_]+to|courtesy[\W_]+of|with[\W_]+the[\W_]+help[\W_]+of|"
-                  r"with[\W_]+help[\W_]+from|powered[\W_]+by|in[\W_]+collaboration[\W_]+with)[\W_]+" + _WHO)
-_AUTHOR_BY = r"by[\W_]+" + _WHO
-_AUTHOR_LABEL = r"author[\W_]*[:=][\W_]*" + _WHO
-_AUTHOR_FIRST = (r"(?:i|we)" + _W2 + r"[\W_]+(?:used|use|asked|had|let)" + _W2 + r"[\W_]+" + _WHO
-                 + r"|using[\W_]+" + _WHO + _W2 + r"[\W_]+(?:i|we)(?![a-z0-9])")
-_AUTHOR_NAME = (_WHO + _W2 + r"[\W_]+(?:wrote|built|made|created|authored|drafted|coded|produced|generated|"
-                r"helped)(?![a-z0-9])")
+                  r"with[\W_]+help[\W_]+from|powered[\W_]+by|in[\W_]+collaboration[\W_]+with)[\W_]+"
+                  r"[a-z0-9]{0,30}?" + _WHO_AUTHOR
+                  + r"|with[\W_]+[a-z0-9]{0,30}?" + _WHO_AUTHOR + r"(?:[\W_]{1,3}s)?[\W_]+help(?![a-z0-9])")
+_AUTHOR_BY = (r"^(?:[^\w\n]|[_\d])*" + _LABEL + r"(?:[a-z0-9]{1,30}[ \t]+){0,3}by[^\w\n]+[a-z0-9]{0,30}?"
+              + _WHO_AUTHOR)
+_AUTHOR_LABEL = r"author[\W_]*[:=][\W_]*" + _WHO_AUTHOR
+_AUTHOR_FIRST = (_BOW + r"(?:i|we)" + _W2 + _GAP + _PREFIX + r"(?:used|use|asked|had|let|leveraged|leverage|utili[sz]ed|employed)" + _W2 + _GAP
+                 + _WHO_AUTHOR + r"|" + _BOW + r"using" + _GAP + _WHO_AUTHOR + _W2 + _GAP + r"(?:i|we)(?![a-z0-9])")
+_AUTHOR_TOOL = (_BOW + _PREFIX + r"(?:used|asked|had)" + _W2 + _GAP + _WHO_AUTHOR + _GAP + r"to(?![a-z0-9])")
+_AUTHOR_NAME = (_WHO_AUTHOR + _W2 + _GAP + _PREFIX + r"(?:wrote|built|made|created|authored|drafted|coded|"
+                r"produced|generated|helped)(?![a-z0-9])")
 _GEN_TOOL = _LINE_START + _PHRASE + _SEP + ".{0,24}?" + _NAME
 _GEN_CODE = _PHRASE + _SEP + ".{0,24}?" + _NAME + _SEP + "code(?![a-z0-9])"
 _GEN_PAREN = _PHRASE + _SEP + r".{0,24}?\(\s*" + _NAME + r"\s*\)"
@@ -187,9 +207,10 @@ FOOTER_RULES = (
     ("generated footer", re.compile(_GEN_PAREN)),
     ("authorship statement", _AUTHOR_MADE),
     ("authorship statement", re.compile(_AUTHOR_CREDIT)),
-    ("authorship statement", re.compile(_AUTHOR_BY)),
+    ("authorship statement", re.compile(_AUTHOR_BY, re.M)),
     ("authorship statement", re.compile(_AUTHOR_LABEL)),
     ("authorship statement", re.compile(_AUTHOR_FIRST)),
+    ("authorship statement", re.compile(_AUTHOR_TOOL)),
     ("authorship statement", re.compile(_AUTHOR_NAME)),
 )
 # Rules that need the original letter case (run on a normalised copy that keeps case).
@@ -294,26 +315,42 @@ def toplevel(cwd: Path | None = None) -> Path:
 
 # --------------------------------------------------------------------------- text checks
 
-def _decode_layers(text: str) -> str:
-    """HTML entities decoded once, as a browser renders them (an escaped entity such as the one in
-    the allowed entry audit3_fp_amp_ndash_literal_word stays literal text), then percent-encoding
-    decoded until nothing changes (at most 8 rounds), so a text encoded several times over
-    ("%2525E2...") is read as it finally reads (audit 8)."""
+def _decode_layers(text: str) -> list[str]:
+    """Every reading of the text: HTML entities decoded once, as a browser renders them (an escaped
+    entity such as the one in the allowed entry audit3_fp_amp_ndash_literal_word stays literal
+    text), then each round of percent-decoding until nothing changes (at most 8 rounds). The rules
+    run on every layer, because one more round can glue a letter to the name and hide it (audit 9,
+    HIGH 2); no single layer is taken as the true reading."""
     value = html.unescape(text or "")
+    layers = [value]
     for _ in range(8):
         decoded = unquote(value)
         if decoded == value:
             break
         value = decoded
-    return value
+        layers.append(value)
+    return layers
 
 
-def normalize(text: str, keep_case: bool = False) -> str:
-    """Fold the tricks that hide a banned string: entities, percent-encoding, compatibility forms
-    (fullwidth letters and dots), format characters (zero-width, bidi), combining and enclosing
-    marks, Hangul fillers, the blank braille pattern, ideographic dots, Unicode hyphens and
-    lookalike letters in either case. Lowercased."""
-    value = _decode_layers(text)
+# Terminal control sequences (ECMA-48: ESC "[", parameter bytes 0x30-0x3F, intermediate bytes
+# 0x20-0x2F, a final byte 0x40-0x7E; or ESC and one byte 0x40-0x5F) and C0 control characters other
+# than tab and newline. They render as nothing, so each layer is also read with them removed
+# (audit 9, MEDIUM 6 and LOW 10); the copy with them kept still treats one as a separator.
+_ESCAPES = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]|\x1b[@-_]")
+_CONTROLS = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
+
+
+def _views(text: str) -> list[str]:
+    """Each decoding layer, and each layer with control sequences and characters removed."""
+    out = []
+    for layer in _decode_layers(text):
+        for view in (layer, _CONTROLS.sub("", _ESCAPES.sub("", layer))):
+            if view not in out:
+                out.append(view)
+    return out
+
+
+def _fold(value: str, keep_case: bool = False) -> str:
     # NFKD, not NFKC: decomposing first means an accented letter (precomposed or built from a
     # combining mark) always leaves a combining mark (Mn) behind, which the next line removes.
     value = unicodedata.normalize("NFKD", value)
@@ -323,37 +360,52 @@ def normalize(text: str, keep_case: bool = False) -> str:
     return value.translate(_CONFUSABLES) if keep_case else value.lower().translate(_CONFUSABLES)
 
 
-def _decode_dashes(text: str) -> str:
-    """Entities and percent-encoding decoded to a fixed point, as a renderer or a browser would
-    show them."""
-    return _decode_layers(text)
+def normalize(text: str, keep_case: bool = False) -> str:
+    """Fold the tricks that hide a banned string: entities, percent-encoding, compatibility forms
+    (fullwidth letters and dots), format characters (zero-width, bidi), combining and enclosing
+    marks, Hangul fillers, the blank braille pattern, ideographic dots, Unicode hyphens and
+    lookalike letters in either case. Lowercased. This is the last decoding layer; the rules read
+    every layer through _views."""
+    return _fold(_decode_layers(text)[-1], keep_case)
+
+
+def _dash_hits(text: str) -> list[tuple[str, str, int]]:
+    """Each dash found in any view, with its line in the first view that shows it."""
+    views = _views(text)
+    hits = []
+    for ch, name in DASHES:
+        for view in views:
+            if ch in view:
+                hits.append((ch, name, view[: view.index(ch)].count("\n") + 1))
+                break
+    return hits
 
 
 def _dash_findings(text: str, where: str) -> list[str]:
-    decoded = _decode_dashes(text)
     return [f"{where}: contains an {name}" if name[0] in "ae" else f"{where}: contains a {name}"
-            for ch, name in DASHES if ch in decoded]
+            for _, name, _ in _dash_hits(text)]
 
 
 def _rule_findings(text: str, where: str, rules) -> list[str]:
-    folded = normalize(text)
-    views = {"plain": (folded, _TAG.sub("", folded))}
-    if CASED_FOOTER_RULES:
-        cased = normalize(text, keep_case=True)
-        views["cased"] = (cased, _TAG.sub("", cased))
     footer = {id(r) for _, r in FOOTER_RULES}
-    labels = []
-    checks = [(label, pattern, "plain") for label, pattern in rules]
+    checks = [(label, pattern, False) for label, pattern in rules]
     if any(id(r) in footer for _, r in rules):
-        checks += [(label, pattern, "cased") for label, pattern in CASED_FOOTER_RULES]
-    for label, pattern, view in checks:
-        if label in labels:
-            continue  # one finding per label is enough
-        text_view, untagged = views[view]
-        is_footer = view == "cased" or id(pattern) in footer
-        hit = pattern.search(text_view) or (is_footer and untagged != text_view and pattern.search(untagged))
-        if hit:
-            labels.append(label)
+        checks += [(label, pattern, True) for label, pattern in CASED_FOOTER_RULES]
+    labels = []
+    for view in _views(text):
+        folded = {False: _fold(view)}
+        if CASED_FOOTER_RULES:
+            folded[True] = _fold(view, keep_case=True)
+        untagged = {k: _TAG.sub("", v) for k, v in folded.items()}
+        for label, pattern, cased in checks:
+            if label in labels:
+                continue  # one finding per label is enough
+            text_view = folded[cased]
+            is_footer = cased or id(pattern) in footer
+            hit = pattern.search(text_view) or (is_footer and untagged[cased] != text_view
+                                                and pattern.search(untagged[cased]))
+            if hit:
+                labels.append(label)
     return [f"{where}: contains a {label}" for label in labels]
 
 
@@ -411,11 +463,8 @@ def content_findings(path: str, data: bytes) -> list[str]:
     out = [] if pinned else _rule_findings(text, path, FILE_RULES)
     if "\r" in text:
         out.append(f"{path}: has CR line endings")
-    decoded = _decode_dashes(text)
-    for ch, name in DASHES:
-        if ch in decoded:
-            line = decoded[: decoded.index(ch)].count("\n") + 1
-            out.append(f"{path}:{line}: contains {'an' if name[0] in 'ae' else 'a'} {name}")
+    for ch, name, line in _dash_hits(text):
+        out.append(f"{path}:{line}: contains {'an' if name[0] in 'ae' else 'a'} {name}")
     if path.endswith(".py"):
         for index, ch in enumerate(text):
             if ord(ch) > 127:
