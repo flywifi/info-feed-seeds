@@ -104,6 +104,13 @@ All notable changes to this repository are recorded here. The format follows
   lookbehind. Files with a NUL byte still get the text rules. Percent-encoding is decoded until
   nothing changes. The settings file also hides the session link. Feature sentences the rules now
   refuse, and possible gaps in the ruling, wait in pending for Matt.
+- Tenth audit round and Matt's rulings on the pending texts. Gap words and separators no longer
+  overlap, so no rule backtracks; gaps end at a sentence end and accept version numbers. Every
+  percent-decoding layer is checked, also with control characters and terminal colour codes
+  removed. Making verbs take an explicit prefix list and start a word, as do "I", "we" and "using".
+  "By" counts only in a byline. Pair programming, "with" the name's help and "leveraged" are
+  refused, as is past-tense use of the name to do a task. In the authorship rules a ".md" after the
+  name is the file CLAUDE.md. Eleven pending texts are refused and four reworded forms allowed.
 
 ### Changed
 

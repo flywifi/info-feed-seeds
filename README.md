@@ -142,30 +142,52 @@ What the checker refuses:
   (across single line breaks and dots inside words or numbers), or later in the same paragraph
   within 1,000 characters (a bound for speed only). Footer rules also run with HTML tags removed.
   One file is pinned by path and sha256 because it describes the rules in the words the rules
-  refuse: the baseline checker. Any change to it makes it an ordinary file again. No rule keeps a
-  left-boundary lookbehind, so a name or verb inside a longer word counts. Every gap is bounded
-  for speed (a word in a gap is at most 30 characters; the sentence window is 200 characters, the
-  paragraph window 1,000). Every text that might pass although the rules refuse it waits in
-  `tests/fixtures/pending_ruling.jsonl` for Matt's ruling, and is refused until then.
+  refuse: the baseline checker. Any change to it makes it an ordinary file again. Every text that
+  might pass although the rules refuse it waits in `tests/fixtures/pending_ruling.jsonl` for
+  Matt's ruling, and is refused until then.
 - **Authorship statements:** commit messages, pull request text and files say what changed, why,
   and how it works, never which tool wrote them (Matt's ruling of 2026-10-23). Refused anywhere:
-  - a making verb (built, made, created, written, authored, assisted and similar, also inside a
-    longer word such as "rebuilt"), up to three words, then with, by, using, via, w/, through,
-    alongside or together with, and the assistant's name later in the same sentence;
+  - a making verb (built, made, created, written, authored, designed, programmed, assisted and
+    similar, optionally after re, co, ghost, hand, over or pre, as in "rebuilt" or
+    "pair-programmed"), up to three words, then with, by, using, via, w/, through, alongside or
+    together with, and the assistant's name later in the same sentence;
   - "thanks to", "courtesy of", "with the help of", "with help from", "powered by" or "in
-    collaboration with" directly before the name, and "by" directly before the name;
+    collaboration with" before the name, and "with" the name's help;
+  - a byline: at a line start, after an optional label, up to three words, "by" and the name;
   - an "author:" label before the name;
-  - "I" or "we", up to two words, then used, use, asked, had or let, up to two words, then the
-    name; or "using" the name, up to two words, then "I" or "we";
-  - the name, up to two words (such as a product name), then wrote, built, made, created,
-    authored, drafted, coded, produced, generated or helped.
+  - "I" or "we", up to two words, then used, use, asked, had, let, leveraged, utilized or
+    employed, up to two words, then the name; or "using" the name, up to two words, then "I" or
+    "we";
+  - used, asked or had (past tense), up to two words, the name, then "to";
+  - the name, up to two words (a product name and version such as "Code", "Opus 4.5" or "3.5
+    Sonnet"), then wrote, built, made, created, authored, drafted, coded, produced, generated or
+    helped, with the same prefixes.
 
-  A feature that uses the assistant may name it, but only where no making verb, "by" or
-  first-person use shares the sentence: "the classifier calls the API" and "each item is sent to
-  it" pass, while "the digest is made by the hub and then it ranks the items" is refused (pending
-  for Matt). Describe the step, not the authorship.
-- **Known limit:** HTML entities are decoded once, as a browser shows them; percent-encoding is
-  decoded until nothing changes, up to eight rounds.
+  The name counts inside a longer word ("AnthropicX" for a name X). A verb, "I", "we" and "using"
+  must start a word, so "encoded with" is not "coded with" and the "i" in "CLI" is not a pronoun.
+  In these rules only, the name directly followed by ".md" is the file CLAUDE.md (Matt's ruling 7);
+  the footer rules still count it. A feature that uses the assistant may name it in the present
+  tense when no making verb, "by", byline or first-person use shares the sentence: "the classifier
+  calls the API", "each item is sent to it" and "the summarize step uses it to label items" pass.
+  Describe the step, not the authorship.
+- **Bounds:** every bound exists for speed, and each lets the text past it through:
+  - a label before a trailer or footer line: up to 61 characters ("Note:");
+  - a footer phrase and the name in the tool, code and parenthesis rules: up to 24 characters;
+  - a co-author key and its address: up to 60 characters;
+  - a gap word: up to 30 letters or digits, plus three ".digits" parts; gaps of two words (first
+    person, "using", tool and name rules) or three words (making verb to preposition, byline);
+  - a run of letters joined to the name in the credit and byline rules: up to 30;
+  - the sentence window: 200 characters; the paragraph window: 1,000;
+  - percent-decoding: up to eight rounds.
+
+  A gap word and a gap separator never overlap, so no rule can backtrack: an apostrophe is a
+  separator ("I've" is two words), and a gap ends at "!", "?", a blank line or a dot that is not
+  inside a word or number.
+- **Every reading:** HTML entities are decoded once, as a browser shows them. Then each round of
+  percent-decoding is a separate layer, up to eight. Each layer is also read with control
+  characters removed: NUL and the other C0 characters except tab and newline, and ECMA-48 terminal
+  sequences such as colour codes. Every rule and the dash check run on every reading; a finding in
+  any one refuses the text.
 - **Hidden characters:** text is folded before matching: entities, percent-encoding,
   compatibility forms, format characters, combining and enclosing marks, Hangul fillers, the
   blank braille pattern, the null notehead, ideographic dots, Unicode hyphens and lookalike letters
