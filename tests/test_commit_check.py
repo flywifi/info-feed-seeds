@@ -181,7 +181,7 @@ class FileTests(unittest.TestCase):
                     "title: Essays by " + NAME + "\n")
         for text in imported:
             self.assertEqual(cc.content_findings("seeds/2026-10-24_x.md", text.encode()), [], text)
-        for text in imported[:5] + imported[7:8]:  # the Markdown and tag shapes block outside seeds/
+        for text in imported[:5]:  # the Markdown shapes block outside seeds/; quoted values pass everywhere
             self.assertTrue(cc.content_findings("docs/x.md", text.encode()), text)
         for prose in ("Notes compiled by " + NAME + ".\n", "Essays by " + NAME + " are listed below.\n"):
             self.assertTrue(cc.content_findings("seeds/2026-10-24_x.md", prose.encode()), prose)
