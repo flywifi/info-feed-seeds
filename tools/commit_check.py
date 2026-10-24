@@ -68,6 +68,11 @@ import unicodedata
 from pathlib import Path
 from urllib.parse import unquote
 
+# The rules use possessive quantifiers, which need Python 3.11. An older interpreter stops here, which
+# fails the hook closed with a reason instead of a regex error.
+if sys.version_info < (3, 11):
+    sys.exit("commit_check: needs Python 3.11 or later; this is " + sys.version.split()[0])
+
 REPO_SLUG = "flywifi/info-feed-seeds"
 BOUNDARY_SHA = "5436f99"
 # The newest commit whose message was written before these rules. It and its ancestors are checked
@@ -274,7 +279,10 @@ _ASSISTANT = (r"(?=[acdglmop])(?:" + _NAME + _GLUE
               + _S
               + r"{1,3}ai|an?" + _S + r"{1,3}ai" + _S + r"{1,3}(?:assistant|model|tool))" + _GLUE
               + r"|(?<![a-z0-9])(?:(?-i:C)opilot|(?-i:C)odex|(?-i:L)lama|(?-i:M)istral|(?-i:G)rok"
-              r"|(?-i:P)erplexity)" + _GLUE + ")")
+              r"|(?-i:P)erplexity)" + _GLUE
+              # These six are ordinary words too: in title case or capitals, any capitalised word after
+              # one that is not a tier makes it the ordinary word ("The Copilot Wrote The Flight Log").
+              + r"(?![ \t]{1,3}(?=(?-i:[A-Z]))(?!" + _TIER + r"(?![a-z0-9]))[a-z]{2,30})" + ")")
 # The name directly followed by ".md" is a file such as CLAUDE.md.
 _WHO = _ASSISTANT + r"(?!\.md(?![a-z0-9]))" + _ENTITY
 # A word allowed between the name and its verb: a product tier, a version, or an adverb.
@@ -283,7 +291,7 @@ _MID = (r"(?:" + _TIER + r"|[a-z]?\d{1,3}(?:\.\d{1,3}){0,2}[a-z]?|then|also|just
 _BOW = r"(?<![a-z0-9])"
 # "built-in", "made-up" and "made-to-order" are adjectives, not a claim of making, unless a connective
 # follows ("built-in with").
-_NOT_ADJ = r"(?!-(?:in|up|to)(?![a-z])(?![ \t-]{1,3}(?:with|by|using|via)(?![a-z])))"
+_NOT_ADJ = r"(?!-(?:in|up|to)(?![a-z])(?![ \t-]{1,3}(?:with|by(?![ \t]{1,3}default)|using|via)(?![a-z])))"
 _MADE = (_BOW + r"(?:re|co|ghost|hand|over|pre|auto|self|semi|copy|pair" + _S + r"?)?(?:built|made|created|"
          r"written|wrote|authored|produced|coded|developed|drafted|composed|crafted|prepared|designed|"
          r"programmed|assisted|done|generated)(?![a-z])" + _NOT_ADJ)
@@ -300,9 +308,11 @@ AUTHORSHIP_RULES = (
          + r"{1,5}collaboration" + _S + r"{1,5}with)" + _S + r"{1,5}(?:[a-z0-9]{1,30}" + _S + r"{1,5}){0,2}?"
          r"[a-z0-9]{0,30}?" + _WHO + r"|with" + _S + r"{1,5}[a-z0-9]{0,30}?" + _WHO + _S + r"{0,3}s?" + _S
          + r"{1,3}help(?![a-z0-9])"
-         r"|(?<![a-z])(?:thanks|thank" + _LS + r"{1,5}+you|kudos(?:" + _LS + r"{1,5}+to)?|credits?(?:[ \t]{0,3}[:=]|"
-         + _LS + r"{1,5}+to))(?:" + _LS + r"{1,5}+" + _WHO + r"|" + _LS + r"{0,5}+\n[ \t]{0,10}+" + _WHO
-         + r"[ \t!.,]{0,5}+(?=\n|\Z))",
+         r"|(?<![a-z])(?:thanks|thank" + _GS + r"{1,5}+you|kudos)(?:(?:" + _LS + r"|\.(?=[a-z])){1,5}+" + _WHO
+         + r"|" + _LS + r"{0,5}+\n[ \t]{0,10}+(?:[-*>~]{1,2}[ \t]{0,3})?" + _WHO
+         + r"(?:[ \t]{1,3}(?:" + _TIER + r"|[a-z]?\d{1,3}(?:\.\d{1,3}){0,2}[a-z]?)(?![a-z0-9])){0,3}+"
+         + r"[^\w\n]{0,5}+(?=\n|\Z))"
+         r"|(?<![a-z])(?:(?:kudos|credits?)" + _GS + r"{1,5}+to|credits?[ \t]{0,3}[:=])" + _GS + r"{1,5}+" + _WHO,
          "Limit: at most two words between the credit phrase and the name, and plain thanks or credit "
          "only with the name right after it; \"thanks again to\" passes.", re.I, cased=True),
     Rule("byline", "authorship wording (byline)", True, BOTH,
@@ -326,9 +336,10 @@ AUTHORSHIP_RULES = (
          r"(?:wrote|written|built|made|created|authored|drafted|coded|produced|generated|helped|designed|"
          r"developed)(?![a-z0-9])" + _NOT_ADJ + r"|(?:was|were|been|got)" + _GS + r"{1,5}+(?:re)?(?:used|asked|"
          r"leveraged|utili[sz]ed|employed)" + _GS + r"{1,5}+to(?![a-z0-9]))",
-         "Limit: at most two words between the name and the verb, each a product tier, a version or an "
-         "adverb; a form of \"be\" only in the passive \"was used to\"; other words between them (\"the "
-         "Gemini program developed\") and passive feature text (\"the ... prompt is built\") pass.",
+         "Limit: at most two words between the name and the verb, each a product tier, a version, an "
+         "adverb, \"and\", \"I\", \"we\" or \"the\"; a form of \"be\" only in the passive \"was used to\"; other "
+         "words between them (\"the Gemini program developed\") and passive feature text (\"the ... prompt "
+         "is built\") pass.",
          re.I, cased=True),
 )
 ADVISORY_RULES = (

@@ -230,3 +230,7 @@
 {"b64": "RGlza3MgYXJlIGNyZWF0ZWQgd2l0aCBHUFQgcGFydGl0aW9uIHRhYmxlcy4=", "expect": "pass", "id": "disk-format-acronym", "kind": "control", "note": "the disk format with a format word after it", "rule": "made-by"}
 {"b64": "TWFueSB0aGFua3MKR2VtaW5pIDIuNSBGbGFzaCBpcyBub3cgZ2VuZXJhbGx5IGF2YWlsYWJsZS4=", "expect": "pass", "id": "thanks-then-a-new-line", "kind": "control", "note": "thanks at a line end and a sentence that opens with a name", "rule": "credit"}
 {"b64": "R1BUIGFsc28gbWFkZSB0aGUgMiBUQiBsaW1pdCBnbyBhd2F5Lg==", "expect": "block", "id": "disk-format-alone", "kind": "decided", "note": "the bare acronym reads as the assistant without a format word", "rule": "name-as-author"}
+{"b64": "S3Vkb3MgdG8KQ2xhdWRlIGZvciB0aGUgcGFyc2VyLg==", "expect": "block", "id": "credit-phrase-across-a-line", "kind": "planted", "note": "a credit phrase that wraps before the name", "rule": "credit"}
+{"b64": "VGhhbmtzLApDbGF1ZGUgQ29kZQ==", "expect": "block", "id": "sign-off-with-a-tier", "kind": "planted", "note": "a sign-off whose next line holds the name and a tier", "rule": "credit"}
+{"b64": "VGhlIENvcGlsb3QgV3JvdGUgVGhlIEZsaWdodCBMb2cu", "expect": "pass", "id": "title-case-ordinary-word", "kind": "control", "note": "title case keeps an ordinary word ordinary", "rule": "name-as-author"}
+{"b64": "UmV0cmllcyBhcmUgYnVpbHQtaW4gYnkgZGVmYXVsdCB3aXRoIHRoZSBPcGVuQUkgY2xpZW50Lg==", "expect": "pass", "id": "built-in-by-default", "kind": "control", "note": "built-in by default describes a feature", "rule": "made-by"}

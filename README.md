@@ -182,7 +182,11 @@ Known limits, each pinned or listed so a change to them is deliberate:
   list.
 - A name followed on the same line by a title-case word that is not a tier, a making verb or a short
   function word, such as a surname. In all capitals the name always counts, and a surname on the
-  next line does not count.
+  next line does not count. The six names that are also ordinary words (copilot, codex, llama,
+  mistral, perplexity, grok) count in title case or capitals only before a lowercase word, a tier or
+  punctuation.
+- A sign-off with words in parentheses after the name on its own line.
+- The checker needs Python 3.11 or later and stops with that reason on an older interpreter.
 - A making verb and a connective block when any listed name comes later in the same sentence, even
   when that name is not the maker, so end the sentence first.
 - GPT, the disk format, counts as the name unless a word such as partition, disk or table follows.
