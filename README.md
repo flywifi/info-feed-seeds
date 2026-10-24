@@ -224,10 +224,6 @@ a written reason of at least 25 characters. Hooks and CI read the list from `ori
 entry counts only after the owner merges it. The golden test fails on an entry whose path is not
 tracked or that no longer exempts anything. Advisory lines are never exempted.
 
-**History boundary.** Commits at or before `HISTORY_BOUNDARY` in `tools/commit_check.py` were
-written before these rules; where the repository has that commit, they get the identity check
-only. History is never rewritten to satisfy a check.
-
 ## Outputs
 
 Each profile gets `YYYY-MM-DD.md`, `latest.md` (a byte copy of the newest day), `latest.json` and

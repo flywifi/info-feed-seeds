@@ -37,9 +37,7 @@ percent-encoding decoded, terminal control sequences removed) and every reading 
 Exemptions: tools/commit_exemptions.json lists exact texts in files that one BLOCK rule may skip:
 path, rule id, the sha256 of the matched text (printed beside the finding) and a reason of at least
 25 characters. Ranges, pushes and staged checks read it from origin/<BASE_REF>, so an entry counts
-only once it is on main. History boundary: commits at or before HISTORY_BOUNDARY, when the
-repository has it, are checked for identity only; their messages predate these rules and history is
-never rewritten.
+only once it is on main.
 
 identity   author and committer are flywifi <236871844+flywifi@users.noreply.github.com>. GitHub's
            web-flow committer is accepted only on a commit already on origin/main (it landed through
@@ -75,10 +73,6 @@ if sys.version_info < (3, 11):
 
 REPO_SLUG = "flywifi/info-feed-seeds"
 BOUNDARY_SHA = "5436f99"
-# The newest commit whose message was written before these rules. It and its ancestors are checked
-# for identity only. Where the repository does not have it (after a squash merge drops the branch),
-# every commit gets every rule.
-HISTORY_BOUNDARY = "b454c3902fc08011f0a3df92ec5fb9fd4e9d0c05"
 AUTHOR = ("flywifi", "236871844+flywifi@users.noreply.github.com")
 WEB_COMMITTER = ("GitHub", "noreply@github.com")
 PROTECTED_BRANCHES = ("main", "data")
@@ -706,12 +700,6 @@ def resolve_range(spec: str, cwd: Path | None = None) -> str | None:
     return None
 
 
-def before_history_boundary(sha: str, cwd: Path | None = None) -> bool:
-    """True when the repository has HISTORY_BOUNDARY and the commit is it or one of its ancestors."""
-    return (git_ok("cat-file", "-e", HISTORY_BOUNDARY + "^{commit}", cwd=cwd)
-            and git_ok("merge-base", "--is-ancestor", sha, HISTORY_BOUNDARY, cwd=cwd))
-
-
 def github_verified(sha: str) -> bool:
     """True when GitHub's API marks the commit as verified (signed by GitHub for web commits).
     Any failure to ask counts as not verified, so the check fails closed."""
@@ -802,15 +790,11 @@ def check_range(rng: str, branch: str | None = None, cwd: Path | None = None, ma
     findings += known_problems
     exemptions, problems = base_exemptions(cwd)
     findings += problems
-    old = 0
     for c in commits:
         where = f"commit {c['sha'][:7]}"
         mine = identity_findings(c["author"], c["committer"], where, on_main=c["on_main"])
-        if before_history_boundary(c["sha"], cwd):
-            old += 1
-        else:
-            mine = text_findings(c["message"], where + " message") + mine
-            advise(text_advisories(c["message"], where + " message"))
+        mine = text_findings(c["message"], where + " message") + mine
+        advise(text_advisories(c["message"], where + " message"))
         if mine and c["sha"] in known:
             for f in mine:
                 say(f"commit_check: known, acknowledged in {KNOWN_FILE} ({known[c['sha']]}): {f}")
@@ -822,9 +806,6 @@ def check_range(rng: str, branch: str | None = None, cwd: Path | None = None, ma
         data = git("show", f"{tip}:{path}", cwd=cwd)
         findings += content_findings(path, data, exemptions)
         advise(content_advisories(path, data))
-    if old:
-        say(f"commit_check: {old} commit(s) at or before the history boundary {HISTORY_BOUNDARY[:7]}: "
-            "identity checked, message rules not re-run")
     touched = sorted(p for p in paths if p.startswith(SELF_PATHS))
     if touched:
         say("commit_check: NOTICE: this range changes the checks themselves (" + ", ".join(touched)

@@ -6,10 +6,8 @@ the text as a commit message, a pull request title, a pull request body and a fi
 "advisory" or "pass". Ids describe the shape of the text, never where a case came from.
 
 Also here: every rule has a "Limit:" text and a case pinning it, the exemptions file holds no stale
-entry, exemptions cover one exact text, the history boundary is a full sha, advisory lines never
-change the exit code, every rule is fast on 100,000-character lines, and four mutations of the
-checker turn the golden comparison red, and commits at or before the history boundary
-get the identity check only.
+entry, exemptions cover one exact text, advisory lines never change the exit code, every rule is
+fast on 100,000-character lines, and four mutations of the checker turn the golden comparison red.
 
 The banned words are assembled from pieces so this file never contains them."""
 import base64
@@ -192,26 +190,7 @@ class ExemptionTests(unittest.TestCase):
         self.assertEqual(cc.load_exemptions(None), ([], []))
 
 
-class BoundaryAndOutputTests(unittest.TestCase):
-    def test_history_boundary_is_a_full_sha(self):
-        self.assertRegex(cc.HISTORY_BOUNDARY, r"^[0-9a-f]{40}$")
-
-    def test_commits_at_the_history_boundary_get_identity_only(self):
-        if subprocess.run(["git", "cat-file", "-e", cc.HISTORY_BOUNDARY + "^{commit}"], cwd=ROOT,
-                          capture_output=True).returncode != 0:
-            self.skipTest("this clone does not have the history boundary commit")
-        rng = f"{cc.HISTORY_BOUNDARY}~1..{cc.HISTORY_BOUNDARY}"
-        buf = io.StringIO()
-        with redirect_stdout(buf):
-            findings = cc.check_range(rng, cwd=ROOT)
-        self.assertEqual([f for f in findings if f.startswith("commit ")], [])
-        self.assertIn("at or before the history boundary", buf.getvalue())
-        # The boundary commit's own message predates the rules: without the boundary it is refused.
-        with mock.patch.object(cc, "before_history_boundary", lambda sha, cwd=None: False), \
-                redirect_stdout(io.StringIO()):
-            unbounded = cc.check_range(rng, cwd=ROOT)
-        self.assertTrue([f for f in unbounded if f.startswith("commit ") and " message: " in f])
-
+class OutputTests(unittest.TestCase):
     def test_advisory_lines_never_fail(self):
         buf = io.StringIO()
         with redirect_stdout(buf):
