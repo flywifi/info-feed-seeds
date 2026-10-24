@@ -234,3 +234,4 @@
 {"b64": "VGhhbmtzLApDbGF1ZGUgQ29kZQ==", "expect": "block", "id": "sign-off-with-a-tier", "kind": "planted", "note": "a sign-off whose next line holds the name and a tier", "rule": "credit"}
 {"b64": "VGhlIENvcGlsb3QgV3JvdGUgVGhlIEZsaWdodCBMb2cu", "expect": "pass", "id": "title-case-ordinary-word", "kind": "control", "note": "title case keeps an ordinary word ordinary", "rule": "name-as-author"}
 {"b64": "UmV0cmllcyBhcmUgYnVpbHQtaW4gYnkgZGVmYXVsdCB3aXRoIHRoZSBPcGVuQUkgY2xpZW50Lg==", "expect": "pass", "id": "built-in-by-default", "kind": "control", "note": "built-in by default describes a feature", "rule": "made-by"}
+{"b64": "Q3JlZGl0OgogICAgIENsYXVkZQ==", "expect": "block", "id": "credit-label-sign-off-indented", "kind": "planted", "note": "a credit label with the name indented on the next line", "rule": "credit"}

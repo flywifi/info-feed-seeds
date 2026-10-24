@@ -297,6 +297,12 @@ _MADE = (_BOW + r"(?:re|co|ghost|hand|over|pre|auto|self|semi|copy|pair" + _S + 
          r"programmed|assisted|done|generated)(?![a-z])" + _NOT_ADJ)
 _VIA = _BOW + r"(?:with|by|using|via|through|alongside|w/)(?![a-z0-9])"
 
+# A sign-off: the name alone on the next line, after up to 10 spaces or tabs and a list or quote mark, with
+# up to three tiers or versions and closing punctuation after it.
+_SIGNOFF = (_LS + r"{0,5}+\n[ \t]{0,10}+(?:[-*>~]{1,2}[ \t]{0,3})?" + _WHO
+            + r"(?:[ \t]{1,3}(?:" + _TIER + r"|[a-z]?\d{1,3}(?:\.\d{1,3}){0,2}[a-z]?)(?![a-z0-9])){0,3}+"
+            + r"[^\w\n]{0,5}+(?=\n|\Z)")
+
 AUTHORSHIP_RULES = (
     Rule("made-by", "authorship wording (made with or by the assistant)", True, BOTH,
          _PhraseThenName(_MADE, 200, _SENTENCE_STOP, name=_WHO, via=_VIA, via_reach=60, flags=re.I),
@@ -309,10 +315,9 @@ AUTHORSHIP_RULES = (
          r"[a-z0-9]{0,30}?" + _WHO + r"|with" + _S + r"{1,5}[a-z0-9]{0,30}?" + _WHO + _S + r"{0,3}s?" + _S
          + r"{1,3}help(?![a-z0-9])"
          r"|(?<![a-z])(?:thanks|thank" + _GS + r"{1,5}+you|kudos)(?:(?:" + _LS + r"|\.(?=[a-z])){1,5}+" + _WHO
-         + r"|" + _LS + r"{0,5}+\n[ \t]{0,10}+(?:[-*>~]{1,2}[ \t]{0,3})?" + _WHO
-         + r"(?:[ \t]{1,3}(?:" + _TIER + r"|[a-z]?\d{1,3}(?:\.\d{1,3}){0,2}[a-z]?)(?![a-z0-9])){0,3}+"
-         + r"[^\w\n]{0,5}+(?=\n|\Z))"
-         r"|(?<![a-z])(?:(?:kudos|credits?)" + _GS + r"{1,5}+to|credits?[ \t]{0,3}[:=])" + _GS + r"{1,5}+" + _WHO,
+         + r"|" + _SIGNOFF + ")"
+         r"|(?<![a-z])(?:(?:kudos|credits?)" + _GS + r"{1,5}+to|credits?[ \t]{0,3}[:=])(?:" + _GS + r"{1,5}+" + _WHO
+         + r"|" + _SIGNOFF + ")",
          "Limit: at most two words between the credit phrase and the name, and plain thanks or credit "
          "only with the name right after it; \"thanks again to\" passes.", re.I, cased=True),
     Rule("byline", "authorship wording (byline)", True, BOTH,
