@@ -262,20 +262,25 @@ _AUX = r"(?!(?:is|are|was|were|be|been|being|gets?|got)(?![a-z0-9]))"
 # Assistant names the authorship rules read, so the rules hold whichever tool is in use. Claude may be
 # glued into a longer token (AnthropicClaude) but not into another name such as Claudette; the other
 # names stand as words. Any name may carry a product tier glued on (ClaudeOpus, MistralAI). Names that
-# are also ordinary words (a copilot, a codex, a llama, the mistral wind, perplexity, grok) count only
-# with a capital first letter. GPT followed by partition, disk or table is the disk format. The
-# authorship rules read the text with its case kept, under re.I; the (?-i:...) parts need the capitals.
+# are also ordinary words or given names (a copilot, a codex, a llama, the mistral wind, perplexity,
+# grok, windsurfing, Devin, Jules, Junie, Kimi) count only with a capital first letter. GPT followed by
+# partition, disk or table is the disk format. The generic phrases (an AI assistant, a coding agent, a
+# language model) count like a name, so a product the list does not have is still read when the text
+# calls it what it is. The authorship rules read the text with its case kept, under re.I; the
+# (?-i:...) parts need the capitals.
 _GLUE = r"(?:" + _TIER + r")?(?![a-z])"
 # Every name starts with one of these letters; the lookahead turns most positions away in one test.
-_ASSISTANT = (r"(?=[acdglmop])(?:" + _NAME + _GLUE
+_ASSISTANT = (r"(?=[acdgjklmopqrw])(?:" + _NAME + _GLUE
               + r"|(?<![a-z0-9])(?:chat" + _S + r"?gpt|gpts?(?![ \t-]{0,3}(?:partition|disk|table|header|"
-              r"entr|label|format|boot|uefi)[a-z]{0,6}(?![a-z]))|openai|anthropic|gemini|deepseek|codellama|llms?|cursor"
-              + _S
-              + r"{1,3}ai|an?" + _S + r"{1,3}ai" + _S + r"{1,3}(?:assistant|model|tool))" + _GLUE
+              r"entr|label|format|boot|uefi)[a-z]{0,6}(?![a-z]))|openai|anthropic|gemini|deepseek|codellama|llms?|"
+              r"qwen|aider|replit|cursor" + _S + r"{1,3}ai|an?" + _S + r"{1,3}ai" + _S
+              + r"{1,3}(?:assistant|model|tool|agent)|(?:coding|ai)" + _S + r"{1,3}agents?|(?:large" + _S
+              + r"{1,3})?language" + _S + r"{1,3}models?)" + _GLUE
               + r"|(?<![a-z0-9])(?:(?-i:C)opilot|(?-i:C)odex|(?-i:L)lama|(?-i:M)istral|(?-i:G)rok"
-              r"|(?-i:P)erplexity)" + _GLUE
-              # These six are ordinary words too: in title case or capitals, any capitalised word after
-              # one that is not a tier makes it the ordinary word ("The Copilot Wrote The Flight Log").
+              r"|(?-i:P)erplexity|(?-i:W)indsurf|(?-i:D)evin|(?-i:J)ules|(?-i:J)unie|(?-i:K)imi)" + _GLUE
+              # These names are ordinary words or given names too: in title case or capitals, any
+              # capitalised word after one that is not a tier makes it the ordinary word or a person
+              # ("The Copilot Wrote The Flight Log", "Jules Verne wrote").
               + r"(?![ \t]{1,3}(?=(?-i:[A-Z]))(?!" + _TIER + r"(?![a-z0-9]))[a-z]{2,30})" + ")")
 # The name directly followed by ".md" is a file such as CLAUDE.md.
 _WHO = _ASSISTANT + r"(?!\.md(?![a-z0-9]))" + _ENTITY

@@ -158,8 +158,11 @@ sentence that names a rule passes.
 
 **Authorship and credit** (block): public text credits no one. Where a credit is needed at all, it
 says "the creator". The checks block authorship or help wording that names an AI assistant: Claude,
-other assistants and their makers (such as ChatGPT, GPT, OpenAI, Anthropic, Copilot, Gemini), or "an
-AI assistant".
+other assistants and their makers (such as ChatGPT, GPT, OpenAI, Anthropic, Copilot, Gemini, Qwen,
+Devin, Aider), or a generic phrase ("an AI assistant", "a coding agent", "a language model"). The
+rulebook every coding tool reads, `AGENTS.md`, states the same rule; `CLAUDE.md` is an import of it.
+`tests/test_instruction_files.py` keeps the rulebook free of product names, within the size its
+readers accept, and the only file in the tree that carries a rule.
 
 - A making verb (built, made, written, generated, designed and similar, with prefixes such as re,
   co, auto or pair-) followed by with, by, using or a similar connective and the assistant's name.

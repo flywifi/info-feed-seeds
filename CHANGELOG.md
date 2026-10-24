@@ -8,8 +8,15 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- `AGENTS.md` is the one rulebook every coding tool reads, and `CLAUDE.md` is an import of it. The
+  rulebook names no AI product, imports nothing, stays under 24 KiB and 200 lines, and no other
+  instruction file in the tree carries a rule; `tests/test_instruction_files.py` holds that shape.
+  Job branches are named `job/<name>`.
+- The authorship rules also read Qwen, Kimi, Devin, Aider, Windsurf, Replit, Jules and Junie (the
+  given names and the sport only when capitalised, and never with a capitalised surname after them),
+  and the phrases "coding agent", "AI agent" and "language model".
 - Authorship and credit wording that names an AI assistant (Claude, other assistants or their
-  makers) is blocked in commit messages, pull request text and files, and CLAUDE.md states the same
+  makers) is blocked in commit messages, pull request text and files, and AGENTS.md states the same
   rule: public text credits no one, and says "the creator" where a credit is needed. Names are read
   as words; product names that are also ordinary words count only when capitalised; a capitalised
   non-tier word after the name (a person's surname, an observatory) makes it another name; the
