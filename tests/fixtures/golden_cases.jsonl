@@ -1,0 +1,190 @@
+{"b64": "QWRkIGEKCkNvLUF1dGhvcmVkLUJ5OiBTb21lb25lIDx4QGV4YW1wbGUuY29tPg==", "expect": "block", "id": "trailer-plain", "kind": "planted", "note": "the stock trailer line", "rule": "coauthor-trailer"}
+{"b64": "QWRkIGEKCmNvLWF1dGhvcmVkLWJ5OiBTb21lb25lIDx4QGV4YW1wbGUuY29tPg==", "expect": "block", "id": "trailer-lowercase", "kind": "planted", "note": "any letter case", "rule": "coauthor-trailer"}
+{"b64": "QWRkIGEKCmNv4oCRYXV0aG9yZWTigJFieTogeA==", "expect": "block", "id": "trailer-nonbreaking-hyphens", "kind": "planted", "note": "Unicode hyphens fold to ASCII", "rule": "coauthor-trailer"}
+{"b64": "QWRkIGEKCkPQvi1BdXRob3JlZC1CeTogeA==", "expect": "block", "id": "trailer-cyrillic-o", "kind": "planted", "note": "a lookalike small letter", "rule": "coauthor-trailer"}
+{"b64": "0KHQni1BVVRIT1JFRC1CWTogeA==", "expect": "block", "id": "trailer-capital-lookalikes", "kind": "planted", "note": "lookalike capitals", "rule": "coauthor-trailer"}
+{"b64": "Q28tQXV0aOKAi29yZWQtQnk6IHg=", "expect": "block", "id": "trailer-zero-width", "kind": "planted", "note": "a format character inside the key", "rule": "coauthor-trailer"}
+{"b64": "Q28tQXV0aOOFpG9yZWQtQnk6IHg=", "expect": "block", "id": "trailer-hangul-filler", "kind": "planted", "note": "a blank filler inside the key", "rule": "coauthor-trailer"}
+{"b64": "QWRkIGEKCkNvIGF1dGhvcmVkIGJ5OiB4", "expect": "block", "id": "trailer-spaced-words", "kind": "planted", "note": "spaces for hyphens", "rule": "coauthor-trailer"}
+{"b64": "Q28gLSAtIC0gQXV0aG9yZWQtQnk6IHg=", "expect": "block", "id": "trailer-spaced-hyphens", "kind": "planted", "note": "a run of separators", "rule": "coauthor-trailer"}
+{"b64": "MS4gQ28tQXV0aG9yZWQtQnk6IENsYXVkZSA8bm9yZXBseUBhbnRocm9waWMuY29tPg==", "expect": "block", "id": "trailer-numbered", "kind": "planted", "note": "after a list number", "rule": "coauthor-trailer"}
+{"b64": "Tm90ZTogQ28tQXV0aG9yZWQtQnk6IHg=", "expect": "block", "id": "trailer-labelled", "kind": "planted", "note": "after a short label", "rule": "coauthor-trailer"}
+{"b64": "Q28tQXV0aG9yZWQtQnk9IHg=", "expect": "block", "id": "trailer-equals", "kind": "planted", "note": "an equals sign for the colon", "rule": "coauthor-trailer"}
+{"b64": "Q28tQXV0aG9yZWQtQnkgQ2xhdWRlIDx4Pg==", "expect": "block", "id": "trailer-no-colon-names-assistant", "kind": "planted", "note": "no colon, the assistant named", "rule": "coauthor-trailer"}
+{"b64": "PiA+ID4gPiA+IENvLUF1dGhvcmVkLUJ5OiB4", "expect": "block", "id": "trailer-quote-markers", "kind": "planted", "note": "inside quote markers", "rule": "coauthor-trailer"}
+{"b64": "ICAgICAgICAgICAgICAgICAgICBDby1BdXRob3JlZC1CeTogeA==", "expect": "block", "id": "trailer-twenty-spaces", "kind": "planted", "note": "indented", "rule": "coauthor-trailer"}
+{"b64": "QWRkIGENCg0KQ28tQXV0aG9yZWQtQnk6IHgNCg==", "expect": "block", "id": "trailer-crlf", "kind": "planted", "note": "CR LF line endings", "rule": "coauthor-trailer"}
+{"b64": "VGhhbmtzLiBDby1BdXRob3JlZC1CeTogQ2xhdWRlIDxub3JlcGx5QGFudGhyb3BpYy5jb20+", "expect": "block", "id": "trailer-address-midline", "kind": "planted", "note": "mid-line, with an address", "rule": "coauthor-address"}
+{"b64": "U3RyaXAgdGhlIENvLUF1dGhvcmVkLUJ5IGxpbmUgYSB0b29sIGFkZHM=", "expect": {"body": "block", "file": "pass", "message": "block", "title": "block"}, "id": "trailer-key-named-in-message", "kind": "planted", "note": "messages refuse the hyphenated key anywhere", "rule": "coauthor-key"}
+{"b64": "Q29tbWl0IHRleHQgbmV2ZXIgY2FycmllcyBhIENvLUF1dGhvcmVkLUJ5IGxpbmUu", "expect": {"body": "block", "file": "pass", "message": "block", "title": "block"}, "id": "trailer-key-named-in-file", "kind": "limit", "note": "a file may name the key in a sentence", "rule": "coauthor-trailer"}
+{"b64": "Q28tYXV0aG9yZWQgYnkgdGhlIHRlYW0gYXQgdGhlIGxhYiwgc2VlIHRoZSBwYXBlciBhbmQgd3JpdGUgdG8gdGhlIGdyb3VwIGF0IDxhQGIuZXhhbXBsZT4=", "expect": "pass", "id": "trailer-address-far", "kind": "limit", "note": "the address is more than 60 characters after the key", "rule": "coauthor-address"}
+{"b64": "Q2l0ZSB0aGUgcGFwZXIgY28tYXV0aG9yZWQgYnkgU21pdGg=", "expect": "pass", "id": "coauthor-prose", "kind": "limit", "note": "prose without the hyphen before by", "rule": "coauthor-key"}
+{"b64": "QWRkIHRoZSBjby1hdXRob3IgcnVsZSB0byB0aGUgZG9jcw==", "expect": "pass", "id": "coauthor-rule-prose", "kind": "control", "note": "naming the rule", "rule": "coauthor-trailer"}
+{"b64": "QWRkIGEKCkNsYXVkZS1TZXNzaW9uOiBhYmM=", "expect": "block", "id": "session-trailer-plain", "kind": "planted", "note": "the stock session trailer", "rule": "session-trailer"}
+{"b64": "Q2zOkXVkZS1TZXNzaW9uOiB4", "expect": "block", "id": "session-trailer-greek-alpha", "kind": "planted", "note": "a lookalike capital", "rule": "session-trailer"}
+{"b64": "Q2xhdWRl44WkU2Vzc2lvbjogeA==", "expect": "block", "id": "session-trailer-filler", "kind": "planted", "note": "a blank filler for the hyphen", "rule": "session-trailer"}
+{"b64": "TmV2ZXIgYWRkIGEgQ2xhdWRlLVNlc3Npb24gbGluZS4=", "expect": {"body": "block", "file": "pass", "message": "block", "title": "block"}, "id": "session-key-named", "kind": "limit", "note": "a file may name the key in a sentence", "rule": "session-trailer"}
+{"b64": "UmVtb3ZlIHRoZSBDbGF1ZGUtU2Vzc2lvbiBsaW5l", "expect": {"body": "block", "file": "pass", "message": "block", "title": "block"}, "id": "session-mention-message", "kind": "planted", "note": "messages refuse any mention", "rule": "session-mention"}
+{"b64": "QWRkIHNlc3Npb24gaGFuZGxpbmcgdG8gdGhlIHBvbGw=", "expect": "pass", "id": "session-word-alone", "kind": "limit", "note": "the word session without the name", "rule": "session-mention"}
+{"b64": "c2VlIGh0dHBzOi8vY2xhdWRlLmFpL2NvZGUveA==", "expect": "block", "id": "session-link-plain", "kind": "planted", "note": "a session link", "rule": "session-link"}
+{"b64": "c2VlIGh0dHBzOi8vY2xhdWRlJTJFYWkvY29kZS94", "expect": "block", "id": "session-link-percent-dot", "kind": "planted", "note": "a percent-encoded dot", "rule": "session-link"}
+{"b64": "c2VlIGh0dHBzOi8v772D772M772B772V772E772F77yO772B772JL3g=", "expect": "block", "id": "session-link-fullwidth", "kind": "planted", "note": "fullwidth letters", "rule": "session-link"}
+{"b64": "c2VlIGh0dHBzOi8vY2xhdWRl44CCYWkveA==", "expect": "block", "id": "session-link-ideographic-dot", "kind": "planted", "note": "an ideographic dot", "rule": "session-link"}
+{"b64": "c2VlIGh0dHBzOi8vY2xhdWRl772hYWkveA==", "expect": "block", "id": "session-link-halfwidth-dot", "kind": "planted", "note": "a halfwidth dot", "rule": "session-link"}
+{"b64": "c2VlIGh0dHBzOi8vY2xhdWRlJiN4MmU7YWkveA==", "expect": "block", "id": "session-link-entity-dot", "kind": "planted", "note": "a hex entity dot", "rule": "session-link"}
+{"b64": "c2VlIGh0dHBzOi8vY2xhdWRlJnBlcmlvZDthaS94", "expect": "block", "id": "session-link-named-entity-dot", "kind": "planted", "note": "a named entity dot", "rule": "session-link"}
+{"b64": "c2VlIGh0dHBzOi8vY2xhdWRl4oCkYWkveA==", "expect": "block", "id": "session-link-leader-dot", "kind": "planted", "note": "a one dot leader", "rule": "session-link"}
+{"b64": "c2VlIGh0dHBzOi8vY2xhdWRlIC5haS94", "expect": "block", "id": "session-link-spaced-host", "kind": "planted", "note": "a space before the dot", "rule": "session-link"}
+{"b64": "c2VlIGh0dHBzOi8vY2xhdWRlLmFpJTI1MjU0MS9jb2RlL3g=", "expect": "block", "id": "session-link-percent-glued", "kind": "planted", "note": "a letter glued on after three decoding rounds", "rule": "session-link"}
+{"b64": "TWVyZ2UgcHVsbCByZXF1ZXN0IDkKCi0tLQpHZW5lcmF0ZWQgd2l0aCBbQ2xhdWRlIENvZGVdKGh0dHBzOi8vY2xhdWRlLmFpL2NvZGUveCk=", "expect": "block", "id": "session-link-merge-footer", "kind": "planted", "note": "a merge body with a footer and a link", "rule": "session-link"}
+{"b64": "TmV2ZXIgcGFzdGUgYSBzZXNzaW9uIG9yIGNsYXVkZS5haSBsaW5rLg==", "expect": {"body": "block", "file": "pass", "message": "block", "title": "block"}, "id": "session-host-in-prose", "kind": "limit", "note": "a file may name the host in a sentence", "rule": "session-link-file"}
+{"b64": "TWVudGlvbiBjbGF1ZGUuYWlt", "expect": "pass", "id": "session-host-longer-word", "kind": "limit", "note": "a longer word after the dot", "rule": "session-link"}
+{"b64": "c2Vzc2lvbl8wMVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUQ==", "expect": "block", "id": "session-id-bare", "kind": "planted", "note": "a bare session id", "rule": "session-id"}
+{"b64": "c2VlIHNlc3Npb25fMDEtUVFhYmNkZWZnaGlqa2xtbm9wcXJzdHV2", "expect": "block", "id": "session-id-hyphenated", "kind": "planted", "note": "hyphens between the characters", "rule": "session-id"}
+{"b64": "c2VlIHhzZXNzaW9uXzAxUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFR", "expect": "block", "id": "session-id-in-word", "kind": "planted", "note": "inside a longer word", "rule": "session-id"}
+{"b64": "c2VlIHNlc3Npb25fYWJjMTIz", "expect": "pass", "id": "session-id-short", "kind": "limit", "note": "fewer than 20 characters", "rule": "session-id"}
+{"b64": "R2VuZXJhdGVkIHdpdGggU29tZVRvb2w=", "expect": "block", "id": "footer-line-any-tool", "kind": "planted", "note": "a footer line naming any tool", "rule": "footer-line"}
+{"b64": "X0dlbmVyYXRlZCB3aXRoXyBbQ2xhdWRlIENvZGVdKC4uLik=", "expect": "block", "id": "footer-line-italic", "kind": "planted", "note": "italic, a bracketed name and a link", "rule": "footer-line"}
+{"b64": "PHN1Yj7wn6SWIEdlbmVyYXRlZCB3aXRoIFtDbGF1ZGUgQ29kZV0oaHR0cHM6Ly9jbGF1ZGUuY29tL2NsYXVkZS1jb2RlKTwvc3ViPg==", "expect": "block", "id": "footer-line-robot", "kind": "planted", "note": "the stock footer in a sub tag", "rule": "footer-line"}
+{"b64": "Tm90ZTogR2VuZXJhdGVkIHdpdGggWy4uLl0=", "expect": "block", "id": "footer-line-label", "kind": "planted", "note": "after a label", "rule": "footer-line"}
+{"b64": "KipUb29saW5nOioqIEdlbmVyYXRlZCBieSBDbGF1ZGU=", "expect": "block", "id": "footer-line-bold-label", "kind": "planted", "note": "after a bold label", "rule": "footer-line"}
+{"b64": "PHAgYWxpZ249ImNlbnRlciI+R2VuZXJhdGVkIHdpdGggQ2xhdWRlIENvZGU8L3A+", "expect": "block", "id": "footer-line-paragraph-tag", "kind": "planted", "note": "inside a paragraph tag", "rule": "footer-line"}
+{"b64": "yaJlbmVyYXRlZCB3aXRoIFNvbWVUb29s", "expect": "block", "id": "footer-line-small-capital", "kind": "planted", "note": "a small capital letter", "rule": "footer-line"}
+{"b64": "ICAgICAgICAgICAgICAgICAgICBHZW5lcmF0ZWQgd2l0aCBTb21lVG9vbA==", "expect": "block", "id": "footer-line-indented", "kind": "planted", "note": "indented", "rule": "footer-line"}
+{"b64": "R2VuZXJhdGVkIHdpdGggaHViIHBvbGw=", "expect": "block", "id": "footer-line-hub-tool", "kind": "planted", "note": "a footer line naming this repository's tool", "rule": "footer-line"}
+{"b64": "Rml4DQoNCkdlbmVyYXRlZCB3aXRoIFNvbWVUb29sDQo=", "expect": "block", "id": "footer-line-crlf", "kind": "planted", "note": "CR LF line endings", "rule": "footer-line"}
+{"b64": "QXV0b21hdGljYWxseSBwcm9kdWNlZCByZWxlYXNlIG5vdGVzOiBHZW5lcmF0ZWQgd2l0aCBTb21lVG9vbA==", "expect": "block", "id": "footer-line-long-label", "kind": "planted", "note": "a long label", "rule": "footer-line"}
+{"b64": "LSBHZW5lcmF0ZWQgd2l0aCBsaW5lcyBhcmUgcmVmdXNlZCBhdCBsaW5lIHN0YXJ0", "expect": "pass", "id": "footer-line-long-sentence", "kind": "limit", "note": "more than four words after the phrase", "rule": "footer-line"}
+{"b64": "djIgR2VuZXJhdGVkIHVzaW5nIFNvbWVUb29s", "expect": "pass", "id": "footer-line-words-before", "kind": "limit", "note": "a word before the phrase that is not a label", "rule": "footer-line"}
+{"b64": "R2VuZXJhdGVkIGRhdGEgZm9yIHRoZSBkaWdlc3Q=", "expect": "pass", "id": "generated-data", "kind": "control", "note": "the word without a connective", "rule": "footer-line"}
+{"b64": "RGF0YSBnZW5lcmF0ZWQgd2l0aCBodWIgcG9sbA==", "expect": "pass", "id": "generated-midline-tool", "kind": "control", "note": "mid-line, naming another tool", "rule": "footer-line"}
+{"b64": "VGhpcyBQUiB3YXMgZ2VuZXJhdGVkIHdpdGggQ2xhdWRlIENvZGU=", "expect": "block", "id": "generated-sentence", "kind": "planted", "note": "the phrase and the name in one sentence", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyBQUiB3YXMgZ2VuZXJhdGVkIHdpdGggdGhlIGhlbHAgb2YgQ2xhdWRlIENvZGU=", "expect": "block", "id": "generated-help-of", "kind": "planted", "note": "words between", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyBQUiB3YXMgZ2VuZXJhdGVkIHdpdGggQW50aHJvcGljJ3MgQ2xhdWRlIENvZGU=", "expect": "block", "id": "generated-vendor", "kind": "planted", "note": "the vendor's name between", "rule": "generated-by-assistant"}
+{"b64": "Qm9keSB0ZXh0LCBnZW5lcmF0ZWQgd2l0aCBBSSAoQ2xhdWRlKQ==", "expect": "block", "id": "generated-paren", "kind": "planted", "note": "the name in parentheses", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyBQUiB3YXMgZ2VuZXJhdGVkIHdpdGggdGhlIGhlbHAgb2YKQ2xhdWRlLg==", "expect": "block", "id": "generated-wrapped", "kind": "planted", "note": "wrapped onto the next line", "rule": "generated-by-assistant"}
+{"b64": "PiBUaGlzIFBSIHdhcyBnZW5lcmF0ZWQgd2l0aCB0aGUgaGVscCBvZgo+IENsYXVkZS4=", "expect": "block", "id": "generated-quoted-wrap", "kind": "planted", "note": "wrapped inside quote markers", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyBQUiB3YXMgZ2VuZXJhdGVkIHdpdGggdGhlIGhlbHAgb2YNCkNsYXVkZS4=", "expect": "block", "id": "generated-crlf-wrap", "kind": "planted", "note": "wrapped with CR LF", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyBmaWxlIHdhcyBnZW5lcmF0ZWQgYnkgdmVyc2lvbiA0LjUgb2YgQ2xhdWRlLg==", "expect": "block", "id": "generated-version", "kind": "planted", "note": "a version number between", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyBmaWxlIHdhcyBhdXRvZ2VuZXJhdGVkIGJ5IENsYXVkZS4=", "expect": "block", "id": "generated-prefixed", "kind": "planted", "note": "a prefix on the phrase", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyBmaWxlIHdhcyByZWdlbmVyYXRlZCB1c2luZyB0aGUgQ2xhdWRlIENMSS4=", "expect": "block", "id": "generated-regenerated", "kind": "planted", "note": "another prefix", "rule": "generated-by-assistant"}
+{"b64": "dGhpc193YXNfZ2VuZXJhdGVkX2J5X2NsYXVkZQ==", "expect": "block", "id": "generated-snake", "kind": "planted", "note": "joined by underscores", "rule": "generated-by-assistant"}
+{"b64": "Tm90ZXMgZ2VuZXJhdGVkIHcvIENsYXVkZQ==", "expect": "block", "id": "generated-w-slash", "kind": "planted", "note": "the w/ connective", "rule": "generated-by-assistant"}
+{"b64": "Tm90ZXMgZ2VuZXJhdGVkIHZpYSBDbGF1ZGU=", "expect": "block", "id": "generated-via", "kind": "planted", "note": "the via connective", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyBSRUFETUUgd2FzIGdlbmVyYXRlZCB3aXRoIENsYXVkZUFJLg==", "expect": "block", "id": "generated-name-ai", "kind": "planted", "note": "the name run into AI", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyBQUiB3YXMgZ2VuZXJhdGVkIHdpdGggdGhlIGhlbHAgb2YgQW50aHJvcGljQ2xhdWRlLg==", "expect": "block", "id": "generated-glued-name", "kind": "planted", "note": "the name inside a longer word", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyB3YXMgZ2VuZXJhdGVkIHdpdGggQ2xhdWRlJTI1MjU0MSB0b2RheQ==", "expect": "block", "id": "generated-percent-glued", "kind": "planted", "note": "a letter glued on after three decoding rounds", "rule": "generated-by-assistant"}
+{"b64": "R2VuZXIbWzBtYXRlZCB3aXRoIENsYXVkZQ==", "expect": "block", "id": "generated-escape-in-word", "kind": "planted", "note": "a colour code inside the word", "rule": "generated-by-assistant"}
+{"b64": "R2VuZXIbXTg7OwdhdGVkIHdpdGggQ2xhdWRl", "expect": "block", "id": "generated-osc-in-word", "kind": "planted", "note": "an OSC string inside the word", "rule": "generated-by-assistant"}
+{"b64": "R2VuZXLCmzBtYXRlZCB3aXRoIENsYXVkZQ==", "expect": "block", "id": "generated-c1-in-word", "kind": "planted", "note": "a C1 control sequence inside the word", "rule": "generated-by-assistant"}
+{"b64": "R2VuZXIAYXRlZCB3aXRoIENsYXVkZQ==", "expect": "block", "id": "generated-nul-in-word", "kind": "planted", "note": "a NUL byte inside the word", "rule": "generated-by-assistant"}
+{"b64": "VGhlIGRpZ2VzdCBpcyBnZW5lcmF0ZWQgYnkgQ2xhdWRlIGVhY2ggbW9ybmluZw==", "expect": "block", "id": "generated-digest", "kind": "decided", "note": "any statement that something was generated by the assistant", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyBQUiB3YXMgZ2VuZXJhdGVkIHdpdGggdGhlIGhlbHAgb2YgQ2xhdWRlLm1k", "expect": "block", "id": "generated-md-name", "kind": "decided", "note": "the footer rules still count the name before .md", "rule": "generated-by-assistant"}
+{"b64": "Tm90ZXMgZ2VuZXJhdGVkIHdpdGggaGVscCBmcm9tIENsYXVkZS5tZCBmaWxlcyBpbiB0aGUgcmVwbw==", "expect": "block", "id": "generated-md-files", "kind": "decided", "note": "the footer rules still count the name before .md", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyB0ZXh0IHdhcyBnZW5lcmF0ZWQgd2l0aC4uLiB0aGUgaGVscCBvZiBDbGF1ZGU=", "expect": "advisory", "id": "generated-ellipsis", "kind": "limit", "note": "an ellipsis ends the sentence; the paragraph rule advises", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyB3YXMgZ2VuZXJhdGVkIHdpdGggY2FyZSEgQ2xhdWRlIGhlbHBlZC4=", "expect": "advisory", "id": "generated-exclamation", "kind": "limit", "note": "an exclamation mark ends the sentence", "rule": "generated-by-assistant"}
+{"b64": "VGhpcyB0ZXh0IHdhcyBnZW5lcmF0ZWQgd2l0aCBjYXJlLgpBIGxvbmcgcmV2aWV3IGZvbGxvd2VkIGFuZCB0aGUgbW9kZWwgQ2xhdWRlIGNoZWNrZWQgaXQu", "expect": "advisory", "id": "generated-near-paragraph", "kind": "planted", "note": "the phrase and the name in one paragraph", "rule": "generated-near"}
+{"b64": "VGhlIGRpZ2VzdCB3YXMgZ2VuZXJhdGVkIHdpdGggY2FyZS4KClRoZSBDbGF1ZGUgc3RlcCBsYWJlbHMgaXRlbXMu", "expect": "pass", "id": "generated-near-blank-line", "kind": "limit", "note": "a blank line ends the paragraph", "rule": "generated-near"}
+{"b64": "QXNzaXN0ZWQtYnk6IENsYXVkZQ==", "expect": "block", "id": "assistant-trailer-assisted-by", "kind": "planted", "note": "an assisted-by trailer", "rule": "assistant-trailer"}
+{"b64": "QXV0aG9yOiBDbGF1ZGU=", "expect": "block", "id": "assistant-trailer-author-label", "kind": "decided", "note": "an author label naming the assistant", "rule": "assistant-trailer"}
+{"b64": "QnVpbHQtYnk6IEdlbmVyYXRlZCB3aXRoIENsYXVkZSBDb2Rl", "expect": "block", "id": "assistant-trailer-built-by", "kind": "planted", "note": "a built-by key", "rule": "assistant-trailer"}
+{"b64": "U2lnbmVkLW9mZi1ieTogQ2xhdWRlIDxub3JlcGx5QGFudGhyb3BpYy5jb20+", "expect": "block", "id": "assistant-trailer-signed-off", "kind": "planted", "note": "a sign-off naming the assistant", "rule": "assistant-trailer"}
+{"b64": "ICAiYXV0aG9yIjogIkNsYXVkZSIs", "expect": "block", "id": "assistant-trailer-json", "kind": "planted", "note": "a JSON author key", "rule": "assistant-trailer"}
+{"b64": "Tm90ZTogQ2xhdWRlIGxhYmVscyBlYWNoIGl0ZW0=", "expect": "pass", "id": "assistant-trailer-note-key", "kind": "limit", "note": "a key that is not a role", "rule": "assistant-trailer"}
+{"b64": "TW9kZWw6IGNsYXVkZS1oYWlrdQ==", "expect": "pass", "id": "assistant-trailer-model-key", "kind": "limit", "note": "a model key in configuration text", "rule": "assistant-trailer"}
+{"b64": "QWRkIGQg4oCUIHdpdGggYSBkYXNo", "expect": "block", "id": "dash-em", "kind": "planted", "note": "an em dash", "rule": "dash"}
+{"b64": "YSDigJMgYg==", "expect": "block", "id": "dash-en", "kind": "planted", "note": "an en dash", "rule": "dash"}
+{"b64": "YSAmbWRhc2g7IGI=", "expect": "block", "id": "dash-entity", "kind": "planted", "note": "a named entity", "rule": "dash"}
+{"b64": "QWRkIGYgJiM4MjEyOyBkYXNo", "expect": "block", "id": "dash-numeric-entity", "kind": "planted", "note": "a numeric entity", "rule": "dash"}
+{"b64": "Rml4ICVFMiU4MCU5NCB0aGluZw==", "expect": "block", "id": "dash-percent", "kind": "decided", "note": "a percent-encoded em dash", "rule": "dash"}
+{"b64": "Rml4ICUyNTI1RTIlMjUyNTgwJTI1MjU5NCB0aGluZw==", "expect": "block", "id": "dash-triple-percent", "kind": "planted", "note": "three rounds of percent-encoding", "rule": "dash"}
+{"b64": "YSDigJUgYg==", "expect": "block", "id": "dash-horizontal-bar", "kind": "planted", "note": "a horizontal bar", "rule": "dash"}
+{"b64": "YSDiuLogYg==", "expect": "block", "id": "dash-two-em", "kind": "planted", "note": "a two-em dash", "rule": "dash"}
+{"b64": "YSDvuZggYg==", "expect": "block", "id": "dash-small-em", "kind": "planted", "note": "a small em dash", "rule": "dash"}
+{"b64": "YSDvuLEgYg==", "expect": "block", "id": "dash-vertical-em", "kind": "planted", "note": "a vertical em dash", "rule": "dash"}
+{"b64": "UGFnZXMgMyB0byA1IC0tIHNlZSDigJIgYW5kIOKIkg==", "expect": "pass", "id": "dash-lookalikes", "kind": "limit", "note": "double hyphen, figure dash and minus sign", "rule": "dash"}
+{"b64": "VXNlICZhbXA7bmRhc2g7IGluIEhUTUwgZG9jcw==", "expect": "pass", "id": "dash-escaped-entity", "kind": "control", "note": "an escaped entity stays literal text", "rule": "dash"}
+{"b64": "Rml4ZXMgZnJvbSB0aGUgYXVkaXQgOSBmaW5kaW5ncw==", "expect": "block", "id": "review-number", "kind": "planted", "note": "a review round number", "rule": "audit-record"}
+{"b64": "YXVkaXQ5X2ZwX29yZGVyX2J5", "expect": "block", "id": "review-fixture-id", "kind": "planted", "note": "a review number in an identifier", "rule": "audit-record"}
+{"b64": "Um91bmQtOSBmaXhlcw==", "expect": "block", "id": "review-round-fixes", "kind": "planted", "note": "a round number before fixes", "rule": "audit-record"}
+{"b64": "NSBISUdILCAyIE1FRElVTSwgMyBMT1c=", "expect": "block", "id": "review-tally", "kind": "planted", "note": "a severity tally", "rule": "audit-record"}
+{"b64": "Y2xvc2VzIGZpbmRpbmcgNw==", "expect": "block", "id": "review-finding-number", "kind": "planted", "note": "a finding number", "rule": "audit-record"}
+{"b64": "cGVyIHJ1bGluZyA3", "expect": "block", "id": "review-ruling-number", "kind": "planted", "note": "a ruling number", "rule": "audit-record"}
+{"b64": "VGVudGggYXVkaXQgcm91bmQ=", "expect": "block", "id": "review-ordinal-round", "kind": "planted", "note": "a named review round", "rule": "audit-record"}
+{"b64": "VGhlIGF1ZGl0IGxvZyBpbiBhdWRpdC5qc29uIGNvdmVycyAyMDI2", "expect": "pass", "id": "review-word-only", "kind": "limit", "note": "the word without a number", "rule": "audit-record"}
+{"b64": "VGhlIGF1ZGl0b3IgcnVucyBhZnRlciB0aGUgY3Jhd2w=", "expect": "pass", "id": "review-crawler-word", "kind": "control", "note": "a longer word", "rule": "audit-record"}
+{"b64": "SElHSCAxLCBzbG93IG1hdGNoaW5n", "expect": "block", "id": "severity-id", "kind": "planted", "note": "a capital severity id", "rule": "audit-severity"}
+{"b64": "YSBoaWdoIDUgcGVyY2VudCBlcnJvciByYXRl", "expect": "pass", "id": "severity-lowercase", "kind": "limit", "note": "lowercase prose", "rule": "audit-severity"}
+{"b64": "QnVpbHQgd2l0aCBDbGF1ZGU=", "expect": "advisory", "id": "made-by-built", "kind": "decided", "note": "a made-with statement", "rule": "made-by"}
+{"b64": "TWFkZSB3aXRoIENsYXVkZQ==", "expect": "advisory", "id": "made-by-made", "kind": "decided", "note": "a made-with statement", "rule": "made-by"}
+{"b64": "VGhpcyBjaGFuZ2Ugd2FzIHdyaXR0ZW4gd2l0aCB0aGUgaGVscCBvZiBDbGF1ZGU=", "expect": "advisory", "id": "made-by-written-help", "kind": "decided", "note": "written with help", "rule": "made-by"}
+{"b64": "Q3JlYXRlZCBieSBDbGF1ZGU=", "expect": "advisory", "id": "made-by-created", "kind": "decided", "note": "created by the assistant", "rule": "made-by"}
+{"b64": "cmVidWlsdCB3aXRoIENsYXVkZQ==", "expect": "advisory", "id": "made-by-rebuilt", "kind": "planted", "note": "a prefix on the verb", "rule": "made-by"}
+{"b64": "R2hvc3R3cml0dGVuIGJ5IENsYXVkZQ==", "expect": "advisory", "id": "made-by-ghostwritten", "kind": "planted", "note": "another prefix", "rule": "made-by"}
+{"b64": "QXV0b2J1aWx0IHdpdGggQ2xhdWRl", "expect": "advisory", "id": "made-by-autobuilt", "kind": "planted", "note": "the auto prefix", "rule": "made-by"}
+{"b64": "UGFpci1wcm9ncmFtbWVkIHdpdGggQ2xhdWRl", "expect": "advisory", "id": "made-by-pair-programmed", "kind": "decided", "note": "pair programming with the assistant", "rule": "made-by"}
+{"b64": "VGhlIGRpZ2VzdCBpcyBtYWRlIGJ5IHRoZSBodWIgYW5kIHRoZW4gQ2xhdWRlIHJhbmtzIGl0", "expect": "advisory", "id": "made-by-digest-ranks", "kind": "decided", "note": "a making verb and the name in one sentence", "rule": "made-by"}
+{"b64": "VGhlIHNjaGVtYSB3YXMgZGVzaWduZWQgYnkgdGhlIG1haW50YWluZXIgZm9yIHRoZSBDbGF1ZGUgc3RlcA==", "expect": "advisory", "id": "made-by-schema-step", "kind": "decided", "note": "a making verb and the name in one sentence", "rule": "made-by"}
+{"b64": "SSB3cm90ZSB0aGlzIHVzaW5nIENsYXVkZQ==", "expect": "advisory", "id": "made-by-wrote-using", "kind": "decided", "note": "wrote this using the assistant", "rule": "made-by"}
+{"b64": "UnVsZXMgd3JpdHRlbiBieSB0aGUgbWFpbnRhaW5lciBhcmUgaW4gQ0xBVURFLm1k", "expect": "pass", "id": "made-by-md-file", "kind": "decided", "note": "the name before .md is the file", "rule": "made-by"}
+{"b64": "QnVpbHQgZHVyaW5nIHRoZSBmaXJzdCB0d28gd2Vla3Mgb2YgdGhlIGxvbmcgd2ludGVyIHByb2plY3QgdG9nZXRoZXIgd2l0aCBDbGF1ZGU=", "expect": "pass", "id": "made-by-far-connective", "kind": "limit", "note": "the connective is more than 60 characters from the verb", "rule": "made-by"}
+{"b64": "RWFjaCBpdGVtIGlzIGVuY29kZWQgd2l0aCBiYXNlNjQgYmVmb3JlIGl0IGlzIHNlbnQgdG8gQ2xhdWRlLg==", "expect": "pass", "id": "made-by-encoded", "kind": "control", "note": "a verb inside a longer word", "rule": "made-by"}
+{"b64": "VGhhbmtzIHRvIENsYXVkZSBmb3IgdGhlIGNvZGU=", "expect": "advisory", "id": "credit-thanks", "kind": "decided", "note": "thanks to the assistant", "rule": "credit"}
+{"b64": "UG93ZXJlZCBieSBDbGF1ZGU=", "expect": "advisory", "id": "credit-powered", "kind": "decided", "note": "powered by the assistant", "rule": "credit"}
+{"b64": "VGhhbmtzIHRvIEFudGhyb3BpY0NsYXVkZQ==", "expect": "advisory", "id": "credit-glued", "kind": "planted", "note": "the name inside a longer word", "rule": "credit"}
+{"b64": "RG9uZSB3aXRoIENsYXVkZSdzIGhlbHA=", "expect": "advisory", "id": "credit-help-ascii", "kind": "decided", "note": "with the assistant's help", "rule": "credit"}
+{"b64": "RG9uZSB3aXRoIENsYXVkZeKAmXMgaGVscA==", "expect": "advisory", "id": "credit-help-curly", "kind": "decided", "note": "with a curly apostrophe", "rule": "credit"}
+{"b64": "VGhhbmtzIGFnYWluIHRvIENsYXVkZSB1c2Vycw==", "expect": "pass", "id": "credit-thanks-again", "kind": "limit", "note": "a word inside the credit phrase", "rule": "credit"}
+{"b64": "Q29kZSBieSBDbGF1ZGU=", "expect": "advisory", "id": "byline-code", "kind": "decided", "note": "a byline", "rule": "byline"}
+{"b64": "Q29kZSBieQpDbGF1ZGU=", "expect": "advisory", "id": "byline-wrapped", "kind": "planted", "note": "wrapped", "rule": "byline"}
+{"b64": "PiBDb2RlIGJ5Cj4gQ2xhdWRl", "expect": "advisory", "id": "byline-quoted-wrap", "kind": "planted", "note": "wrapped inside quote markers", "rule": "byline"}
+{"b64": "Rml4IHRoZSBwb2xsLiBDb2RlIGJ5IENsYXVkZS4=", "expect": "advisory", "id": "byline-after-sentence", "kind": "planted", "note": "after a sentence", "rule": "byline"}
+{"b64": "Rml4IHRoZSBwb2xsIChjb2RlIGJ5IENsYXVkZSk=", "expect": "advisory", "id": "byline-parenthesis", "kind": "planted", "note": "in parentheses", "rule": "byline"}
+{"b64": "UkVBRE1FLCBjb2RlIGFuZCB0ZXN0cyBieSBDbGF1ZGU=", "expect": "advisory", "id": "byline-list", "kind": "planted", "note": "a list before by", "rule": "byline"}
+{"b64": "Q29kZS1ieS1DbGF1ZGU=", "expect": "advisory", "id": "byline-hyphen-joined", "kind": "planted", "note": "joined by hyphens", "rule": "byline"}
+{"b64": "RWFjaCB0aXRsZSBpcyByYW5rZWQgYnkgQ2xhdWRlIGJlZm9yZSB0aGUgZGlnZXN0IGlzIHdyaXR0ZW4u", "expect": "pass", "id": "byline-long-clause", "kind": "limit", "note": "four words before by", "rule": "byline"}
+{"b64": "bGFiZWxfYnlfY2xhdWRl", "expect": "pass", "id": "byline-identifier", "kind": "control", "note": "an identifier", "rule": "byline"}
+{"b64": "b3JkZXJfYnk9Y2xhdWRlX3Njb3Jl", "expect": "pass", "id": "byline-keyword-argument", "kind": "control", "note": "a keyword argument", "rule": "byline"}
+{"b64": "Rml4IHRoZSBwb2xsIChhdXRob3I6IENsYXVkZSk=", "expect": "advisory", "id": "author-label-midline", "kind": "planted", "note": "an author label mid-line", "rule": "author-label"}
+{"b64": "VGhlIGF1dGhvciBmaWVsZCBuYW1lcyBDbGF1ZGU=", "expect": "pass", "id": "author-label-no-colon", "kind": "limit", "note": "no colon", "rule": "author-label"}
+{"b64": "SSB1c2VkIENsYXVkZSB0byB3cml0ZSB0aGlzIFBS", "expect": "advisory", "id": "first-person-used", "kind": "decided", "note": "I used the assistant", "rule": "first-person"}
+{"b64": "SSd2ZSB1c2VkIENsYXVkZSB0byB3cml0ZSB0aGlz", "expect": "advisory", "id": "first-person-contraction", "kind": "planted", "note": "a contraction", "rule": "first-person"}
+{"b64": "SSBsZXZlcmFnZWQgQ2xhdWRl", "expect": "advisory", "id": "first-person-leveraged", "kind": "decided", "note": "leveraged", "rule": "first-person"}
+{"b64": "VXNpbmcgQ2xhdWRlLCBJIG1hZGUgdGhpcw==", "expect": "advisory", "id": "first-person-using-i", "kind": "decided", "note": "using the assistant, I", "rule": "first-person"}
+{"b64": "VXNpbmcgQ2xhdWRlIE9wdXMgNC41LCBJIG1hZGUgdGhpcw==", "expect": "advisory", "id": "first-person-version", "kind": "planted", "note": "a product name and version", "rule": "first-person"}
+{"b64": "SSByZXVzZWQgQ2xhdWRlIHRvIHdyaXRlIHRoaXM=", "expect": "advisory", "id": "first-person-reused", "kind": "planted", "note": "a prefix on the verb", "rule": "first-person"}
+{"b64": "SSB0aGVuIHF1aWNrbHkgYWxzbyB1c2VkIENsYXVkZQ==", "expect": "pass", "id": "first-person-three-words", "kind": "limit", "note": "three words between", "rule": "first-person"}
+{"b64": "VGhlIENMSSBjYW4gdXNlIENsYXVkZSB0byBsYWJlbCBpdGVtcy4=", "expect": "pass", "id": "first-person-cli", "kind": "control", "note": "the i in CLI is not a pronoun", "rule": "first-person"}
+{"b64": "VGhlIEFQSSB1c2VkIENsYXVkZSB0byBsYWJlbCBlYWNoIGl0ZW0=", "expect": "advisory", "id": "tool-past-api", "kind": "decided", "note": "past-tense use to do a task", "rule": "tool-past"}
+{"b64": "VGhlIEFQSSB0aGVuIGhhZCBlYWNoIGl0ZW0gbGFiZWxlZA==", "expect": "pass", "id": "tool-past-reworded", "kind": "decided", "note": "reworded without the name", "rule": "tool-past"}
+{"b64": "VGhlIHN1bW1hcml6ZSBzdGVwIHVzZXMgQ2xhdWRlIHRvIGxhYmVsIGl0ZW1z", "expect": "pass", "id": "tool-present", "kind": "limit", "note": "present tense", "rule": "tool-past"}
+{"b64": "Q2xhdWRlIHdyb3RlIHRoaXM=", "expect": "advisory", "id": "name-wrote", "kind": "decided", "note": "the name as author", "rule": "name-as-author"}
+{"b64": "Q2xhdWRlIE9wdXMgNC41IHdyb3RlIHRoaXMgUFI=", "expect": "advisory", "id": "name-opus-version", "kind": "planted", "note": "a product name and version", "rule": "name-as-author"}
+{"b64": "Q2xhdWRlIDMuNSBTb25uZXQgd3JvdGUgdGhpcyBQUg==", "expect": "advisory", "id": "name-sonnet-version", "kind": "planted", "note": "a version first", "rule": "name-as-author"}
+{"b64": "Q2xhdWRlIHJld3JvdGUgdGhpcyBQUg==", "expect": "advisory", "id": "name-rewrote", "kind": "planted", "note": "a prefix on the verb", "rule": "name-as-author"}
+{"b64": "Q2xhdWRlIGhlbHBlZCB3cml0ZSB0aGlz", "expect": "advisory", "id": "name-helped", "kind": "decided", "note": "helped write", "rule": "name-as-author"}
+{"b64": "Q2xhdWRlIGhhcyB3cml0dGVuIHRoaXM=", "expect": "advisory", "id": "name-has-written", "kind": "planted", "note": "a perfect tense", "rule": "name-as-author"}
+{"b64": "Q2xhdWRlIFNvbm5ldCA0LjUgKDFNKSB3cm90ZSB0aGlzIFBS", "expect": "pass", "id": "name-three-words", "kind": "limit", "note": "three words between", "rule": "name-as-author"}
+{"b64": "VGhlIENsYXVkZSBwcm9tcHQgaXMgYnVpbHQgZnJvbSB0aGUgaXRlbSB0aXRsZS4=", "expect": "pass", "id": "name-passive-prompt", "kind": "control", "note": "passive feature text", "rule": "name-as-author"}
+{"b64": "Q2xhdWRlIHJldmlld2VkIGl0", "expect": "pass", "id": "name-reviewed", "kind": "control", "note": "not a making verb", "rule": "name-as-author"}
+{"b64": "Rml4ZXMgdGhlIHBhcnNlciAoSDEsIE0yKQ==", "expect": "advisory", "id": "finding-id-list", "kind": "planted", "note": "a parenthesised list of ids", "rule": "finding-id"}
+{"b64": "ZGVmIHRlc3RfZjJfaXRhbGljX3Byb2JlKHNlbGYpOg==", "expect": "advisory", "id": "finding-id-test-name", "kind": "planted", "note": "an id in a test name", "rule": "finding-id"}
+{"b64": "U2V0IEYxIGJlZm9yZSB0aGUgbWVyZ2U=", "expect": "pass", "id": "finding-id-bare", "kind": "limit", "note": "a bare id", "rule": "finding-id"}
+{"b64": "LSBDb21taXQgbWVzc2FnZXMsIHB1bGwgcmVxdWVzdCB0aXRsZXMgYW5kIGRlc2NyaXB0aW9ucywgYW5kIGV2ZXJ5IGZpbGUgaW4gdGhpcyByZXBvc2l0b3J5IG5ldmVyIGNvbnRhaW4gYQogIENvLUF1dGhvcmVkLUJ5IGxpbmUsIGEgQ2xhdWRlLVNlc3Npb24gbGluZSwgYSBzZXNzaW9uIG9yIGNsYXVkZS5haSBsaW5rLCBvciBhICJHZW5lcmF0ZWQgd2l0aCIgZm9vdGVyLiBTdHJpcAogIGFueSB0aGF0IGEgdG9vbCBhZGRzIGJ5IGRlZmF1bHQuIFdoZW4gbWVyZ2luZywgd3JpdGUgdGhlIG1lcmdlIGNvbW1pdCBtZXNzYWdlIGV4cGxpY2l0bHkgc28gbm9uZSBhcmUgY29waWVkIGluLgo=", "expect": {"body": "block", "file": "advisory", "message": "block", "title": "block"}, "id": "rules-paragraph", "kind": "decided", "note": "a file may name the rules; messages may not", "rule": "made-by"}
+{"b64": "V3JpdHRlbiBieSBpbmZvLWZlZWQtc2VlZHMgaHViIHBvbGw=", "expect": "pass", "id": "written-by-hub", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "RWRpdCBDTEFVREUubWQgcnVsZXM=", "expect": "pass", "id": "edit-rules-file", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "Q2Fmw6kgbm90ZQ==", "expect": "pass", "id": "accented-word", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "zpHOuM6uzr3OsSBuZXdzIHNvdXJjZQ==", "expect": "pass", "id": "greek-prose", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "VGhlIGNsYXNzaWZpZXIgY2FsbHMgdGhlIENsYXVkZSBBUEkgZm9yIGVhY2ggdGl0bGU=", "expect": "pass", "id": "feature-calls-api", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "RWFjaCBpdGVtIGlzIHNlbnQgdG8gQ2xhdWRlIGFuZCB0aGUgcmVwbHkgaXMgc3RvcmVk", "expect": "pass", "id": "feature-sent-to", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "Q2xhdWRlIHN1bW1hcml6ZXMgZWFjaCBpdGVtIGluIHRoZSBkaWdlc3Q=", "expect": "pass", "id": "feature-summarizes", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "VGhlIHN1bW1hcml6ZSBzdGVwIHVzZXMgQ2xhdWRlIHRvIGxhYmVsIGl0ZW1z", "expect": "pass", "id": "feature-uses-to-label", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "VGhlIGRpZ2VzdCBpcyBtYWRlIGJ5IHRoZSBodWIsIGFuZCB0aGVuIHJhbmtlZA==", "expect": "pass", "id": "digest-then-ranked", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "VGhlIHNjaGVtYSB3YXMgZGVzaWduZWQgYnkgdGhlIG1haW50YWluZXI=", "expect": "pass", "id": "schema-designed", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "QWRkIGEgcGxhaW4gY2hhbmdl", "expect": "pass", "id": "plain-change", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "TWVyZ2UgcHVsbCByZXF1ZXN0ICM2OiBKb2IgMWIgZml4ZXM6IE1hcmtkb3duIGVzY2FwaW5nLCByZWxlYXNlIGNoZWNrcywgcHJvb2Ygc2FtcGxlcw==", "expect": "pass", "id": "merge-title", "kind": "control", "note": "ordinary text", "rule": "made-by"}
+{"b64": "RG9jczogaHR0cHM6Ly9jbGF1ZGUuYWkvY29kZS94", "expect": "block", "id": "session-link-in-file", "kind": "planted", "note": "a link in a file", "rule": "session-link-file"}
+{"b64": "VGhlIGRpZ2VzdCBpcyBnZW5lcmF0ZWQgdmlhCnRoZSBodWIgcG9sbC4=", "expect": "pass", "id": "footer-phrase-ends-line", "kind": "limit", "note": "the footer line never reads past a line break", "rule": "footer-line"}
+{"b64": "Q28tPHNwYW4gY2xhc3M9ImsiPkF1dGhvcmVkPC9zcGFuPi1CeTogeA==", "expect": "block", "id": "trailer-split-by-tags", "kind": "planted", "note": "HTML tags inside the key", "rule": "coauthor-trailer"}
+{"b64": "PGI+R2VuZXJhdGVkPC9iPiA8aT53aXRoPC9pPiBTb21lVG9vbA==", "expect": "block", "id": "footer-line-tagged", "kind": "planted", "note": "HTML tags around the words", "rule": "footer-line"}
+{"b64": "U3RyaXAgdGhlIENv4oCRQXV0aG9yZWTigJFCeSBsaW5l", "expect": {"body": "block", "file": "pass", "message": "block", "title": "block"}, "id": "trailer-key-unicode-hyphens", "kind": "planted", "note": "Unicode hyphens fold to ASCII before the key is read", "rule": "coauthor-key"}

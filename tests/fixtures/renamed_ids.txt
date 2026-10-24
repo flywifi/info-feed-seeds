@@ -1,7 +1,0 @@
-# Corpus ids renamed or dropped once, before main had corpus.lock (audit 6, N1): the old ids spelled
-# banned phrases. Each line: new id (or DROPPED), then the old id in base64, so this file never
-# spells them.
-audit2_genwith_2spaces_asst_far YXVkaXQyX2dlbmVyYXRlZF93aXRoXzJzcGFjZXNfY2xhdWRlX2Zhcg==
-audit4_fp_docs_genby_asst YXVkaXQ0X2ZwX2RvY3NfZ2VuZXJhdGVkX2J5X2NsYXVkZQ==
-a2-hangul-3164-restored-session YTItaGFuZ3VsLTMxNjQtY2xhdWRlLXNlc3Npb24=
-DROPPED cmVwby1pZGVudGlmaWVyLWdlbmVyYXRlZC1ieQ==

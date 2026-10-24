@@ -154,8 +154,7 @@ class FileTests(unittest.TestCase):
                 self.assertTrue(cc.content_findings("notes.md", data), label)
 
     def test_a_sentence_naming_the_rules_passes(self):
-        # CLAUDE.md's order since Matt's ruling: the co-author key ends the sentence, so no sentence
-        # pairs it with the assistant's name.
+        # A sentence that names the rules is prose, not a trailer, link or footer line.
         text = ("- Commit messages never contain a\n  " + SESSION + " line, a session or " + HOST
                 + " link, a \"" + GEN + " with\" footer, or a " + CO + " line.\n  Strip any that a tool adds.\n")
         self.assertEqual(cc.content_findings("RULES.md", text.encode()), [])
@@ -238,7 +237,7 @@ class RangeTests(unittest.TestCase):
     def test_banned_line_in_a_committed_file(self):
         self.repo.commit("notes.md", (CO + ": X <x@example.com>\nhttps://" + HOST + "/code/x\n").encode(), "Add notes")
         found = quiet(cc.check_range, f"{self.base}..HEAD", cwd=self.repo.dir)
-        self.assertTrue(any("trailer line" in f for f in found))
+        self.assertTrue(any("co-author trailer" in f for f in found))
         self.assertTrue(any("session link" in f for f in found))
 
     def test_spoofed_github_committer(self):
@@ -410,30 +409,29 @@ class DoctorTests(unittest.TestCase):
 
 
 
-# Re-audit of head ba76314. Each probe is the auditor's string where the audit gave one, byte for
-# byte (assembled from pieces so this file never holds it); reconstructed probes say so.
-AUDIT_ITALIC = "_" + GEN + " with_ [" + "Cla" + "ude Code](...)"
+# Footer, folding and range cases, assembled from pieces so this file never holds them.
+ITALIC_FOOTER = "_" + GEN + " with_ [" + "Cla" + "ude Code](...)"
 
 
-class AuditRevision2Tests(unittest.TestCase):
-    def test_f2_italic_probe_everywhere(self):
-        self.assertTrue(cc.text_findings("Add a\n\n" + AUDIT_ITALIC, "m"), "commit message")
-        self.assertTrue(cc.check_pr_text("Job", "Body\n\n" + AUDIT_ITALIC, "pr"), "pull request body")
-        self.assertTrue(cc.content_findings("notes.md", (AUDIT_ITALIC + "\n").encode()), "file")
+class FooterAndFoldingTests(unittest.TestCase):
+    def test_italic_footer_everywhere(self):
+        self.assertTrue(cc.text_findings("Add a\n\n" + ITALIC_FOOTER, "m"), "commit message")
+        self.assertTrue(quiet(cc.check_pr_text, "Job", "Body\n\n" + ITALIC_FOOTER, "pr"), "pull request body")
+        self.assertTrue(cc.content_findings("notes.md", (ITALIC_FOOTER + "\n").encode()), "file")
 
-    def test_f2_italic_probe_in_main_history(self):
+    def test_italic_footer_in_main_history(self):
         repo = Scratch()
         try:
             repo.commit("README.md", b"x\n", "Add README")
             base = repo.head()
-            repo.commit("m.txt", b"m\n", "Merge pull request 9\n\n" + AUDIT_ITALIC, extra=WEB)
+            repo.commit("m.txt", b"m\n", "Merge pull request 9\n\n" + ITALIC_FOOTER, extra=WEB)
             found = quiet(cc.check_range, f"{base}..HEAD", branch="main", cwd=repo.dir,
                           main_history=True, verify=lambda sha: True)
             self.assertTrue(any("generated footer" in f for f in found), found)
         finally:
             repo.close()
 
-    def test_f2_lookalikes_and_hidden_characters(self):
+    def test_lookalikes_and_hidden_characters(self):
         for key in ("trailer capital cyrillic", "trailer capital cyrillic o", "session capital greek",
                     "trailer combining mark", "trailer precomposed accent", "trailer hangul filler",
                     "link ideographic dot", "link halfwidth dot", "link fullwidth dot"):
@@ -446,21 +444,18 @@ class AuditRevision2Tests(unittest.TestCase):
             with self.subTest(dot=hex(ord(dot))):
                 self.assertTrue(cc.content_findings("n.md", ("https://claude" + dot + "ai/x\n").encode()))
 
-    # The F8 prose cases moved to tests/fixtures/allowed_corpus.jsonl (a3-f8-prose, repo-data-hub-poll).
-
-    def test_f8_literal_reading_of_claude_md_still_holds(self):
-        """Finding 7 (owner's call, implemented literally for now): a line opening with that phrase
-        is refused whatever tool it names."""
+    def test_footer_line_naming_any_tool(self):
+        """A line holding only the footer phrase and a tool is refused whatever tool it names."""
         self.assertTrue(cc.text_findings(GEN + " with hub poll", "m"))
 
-    def test_f9_dash_entities_and_more_dashes(self):
+    def test_dash_entities_and_more_dashes(self):
         for text in ("a &" + "mdash; b", "a &" + "ndash; b", "a &#" + "8212; b", "a \u2015 b", "a \u2e3a b",
                      "a \u2e3b b", "a \ufe58 b", "a \ufe31 b"):
             with self.subTest(text=text.encode("ascii", "backslashreplace")):
                 self.assertTrue(cc.text_findings(text, "m"))
                 self.assertTrue(cc.content_findings("d.md", (text + "\n").encode()))
 
-    def test_f10_pre_push_with_no_or_malformed_lines(self):
+    def test_pre_push_with_no_or_malformed_lines(self):
         repo = Scratch()
         try:
             repo.commit("README.md", b"x\n", "Add README")
@@ -475,7 +470,7 @@ class AuditRevision2Tests(unittest.TestCase):
         finally:
             repo.close()
 
-    def test_f11_main_history_web_committer(self):
+    def test_main_history_web_committer(self):
         repo = Scratch()
         try:
             repo.commit("README.md", b"x\n", "Add README")
@@ -495,7 +490,7 @@ class AuditRevision2Tests(unittest.TestCase):
             merged = quiet(cc.check_range, f"{forged}..HEAD", branch="main", cwd=repo.dir,
                            main_history=True, verify=lambda sha: False)
             self.assertTrue(any("committer" in f for f in merged),
-                            "audit 3, N6: a merge by GitHub needs verification too")
+                            "a merge by GitHub needs verification too")
             verified_merge = quiet(cc.check_range, f"{forged}..HEAD", branch="main", cwd=repo.dir,
                                    main_history=True, verify=lambda sha: True)
             self.assertEqual(verified_merge, [])
@@ -504,8 +499,8 @@ class AuditRevision2Tests(unittest.TestCase):
 
 
 @unittest.skipIf(shutil.which("sh") is None, "the hooks are sh scripts")
-class AuditRevision2HookTests(unittest.TestCase):
-    def test_f13_pre_commit_checks_the_committer(self):
+class CommitterHookTests(unittest.TestCase):
+    def test_pre_commit_checks_the_committer(self):
         repo = Scratch(hooks=True)
         try:
             repo.commit("README.md", b"x\n", "Add README")
@@ -517,10 +512,9 @@ class AuditRevision2HookTests(unittest.TestCase):
             repo.close()
 
 
-# Third audit of head 6686d0a. The N1 strings are the auditor's, byte for byte, assembled from
-# pieces; "(robot)" is kept as the auditor wrote it, and the emoji form is tested as well.
+# Footer shapes, assembled from pieces; "(robot)" is the text form, and the emoji form is tested as well.
 CL = "Cla" + "ude"
-N1_FOOTERS = {
+FOOTER_SHAPES = {
     "sub robot": "<sub>(robot) " + GEN + " with [" + CL + " Code](https://" + CL.lower() + ".com/"
                  + CL.lower() + "-code)</sub>",
     "sub robot emoji": "<sub>\U0001F916 " + GEN + " with [" + CL + " Code](https://" + CL.lower() + ".com/"
@@ -533,34 +527,34 @@ N1_FOOTERS = {
 }
 
 
-class AuditRevision3Tests(unittest.TestCase):
-    def test_n1_footer_shapes_are_refused_everywhere(self):
-        for label, text in N1_FOOTERS.items():
+class FooterShapeAndKnownCommitTests(unittest.TestCase):
+    def test_footer_shapes_are_refused_everywhere(self):
+        for label, text in FOOTER_SHAPES.items():
             with self.subTest(footer=label):
                 self.assertTrue(cc.text_findings("Add a\n\n" + text, "m"), "commit message")
-                self.assertTrue(cc.check_pr_text("Job", "Body\n\n" + text, "pr"), "pull request body")
+                self.assertTrue(quiet(cc.check_pr_text, "Job", "Body\n\n" + text, "pr"), "pull request body")
                 self.assertTrue(cc.content_findings("notes.md", (text + "\n").encode()), "file")
 
-    def test_n1_footer_shapes_in_main_history(self):
+    def test_footer_shapes_in_main_history(self):
         repo = Scratch()
         try:
             repo.commit("README.md", b"x\n", "Add README")
             base = repo.head()
-            for label, text in N1_FOOTERS.items():
+            for label, text in FOOTER_SHAPES.items():
                 repo.commit(label.replace(" ", "-") + ".txt", b"x\n", "Merge pull request 1\n\n" + text, extra=WEB)
             found = quiet(cc.check_range, f"{base}..HEAD", branch="main", cwd=repo.dir,
                           main_history=True, verify=lambda sha: True)
-            self.assertEqual(sum("generated footer" in f for f in found), len(N1_FOOTERS), found)
+            self.assertEqual(len({f.split()[1] for f in found if "generated footer" in f}), len(FOOTER_SHAPES), found)
         finally:
             repo.close()
 
-    def test_n9_prose_about_coauthorship_passes(self):
+    def test_prose_about_coauthorship_passes(self):
         prose = "Cite the paper co-" + "authored by Smith"
         self.assertEqual(cc.text_findings(prose, "m"), [])
         self.assertTrue(cc.text_findings("Add a\n\n" + CO + ": Smith <s@example.com>", "m"), "the trailer still fails")
 
-    def test_n3_known_commits_on_main(self):
-        """Audit 3 N3 and audit 4 R3: an acknowledgement counts only when it follows the landing."""
+    def test_known_commits_on_main(self):
+        """An acknowledgement counts only when it follows the landing."""
         repo = Scratch()
         try:
             known = "tools/main_history_known.txt"
@@ -599,7 +593,7 @@ class AuditRevision3Tests(unittest.TestCase):
         finally:
             repo.close()
 
-    def test_n3_malformed_and_foreign_entries(self):
+    def test_known_commits_malformed_and_foreign_entries(self):
         repo = Scratch()
         try:
             repo.commit("README.md", b"x\n", "Add README")
