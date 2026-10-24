@@ -14,7 +14,7 @@ This repository is the only one you write to. Any other repository you can see i
 
 ## Branches
 
-- `main`: code, sources, profiles, schemas, docs. Changes arrive only through pull requests that Matt merges.
+- `main`: code, sources, profiles, schemas, docs. Changes arrive only through pull requests that the maintainer merges.
   Never push to main directly, never force-push, never rewrite history.
 - `data`: machine output only (`digests/`, `state/`, `ledger/`). Written only by the poll workflow. Never
   edit it by hand or in a pull request.
@@ -22,7 +22,7 @@ This repository is the only one you write to. Any other repository you can see i
   failures with backoff) and open one pull request into main per job through the REST API
   (`gh api repos/flywifi/info-feed-seeds/pulls`); the cloud proxy does not accept GraphQL, so `gh pr` does
   not work. Deleted after merge.
-- `doctor/<fix>`: proposal branches opened by the doctor workflow. Matt merges or closes them.
+- `doctor/<fix>`: proposal branches opened by the doctor workflow. The maintainer merges or closes them.
 - Small commits with descriptive messages, one topic per commit. Add a CHANGELOG line under [Unreleased].
 - Commit messages, pull request titles and descriptions, and every file in this repository never contain a
   Claude-Session line, a session or claude.ai link, a "Generated with" footer, or a Co-Authored-By line.
@@ -40,7 +40,7 @@ This repository is the only one you write to. Any other repository you can see i
 
 ## Content rules
 
-- Never add credentials, tokens, private notes, or anything about Matt personally: his name, email, phone,
+- Never add credentials, tokens, private notes, or anything about the maintainer personally: his name, email, phone,
   address, accounts, employer, clients, campaigns or business relationships. Information imported from public
   sources, including bylines and author names, may be kept.
 - Storage: anything fetched may be stored in full. Every claim that leaves the system (digest line, report,
@@ -72,7 +72,7 @@ This repository is the only one you write to. Any other repository you can see i
   (`feeder/jsonio.py`). Machine state lives in `state/`, never in source manifests.
 - No secrets anywhere in the repository. The repository needs no environment variables to run.
   Credential-gated sources are optional: a manifest names a credential (`"auth": {"credential": "<name>"}`,
-  pattern `^[a-z][a-z0-9-]{2,40}$`, never a person or company name), the value is resolved on Matt's PC only,
+  pattern `^[a-z][a-z0-9-]{2,40}$`, never a person or company name), the value is resolved on the maintainer's PC only,
   and such sources carry `"runs_on": ["local"]`, live in ignored `*.local.json` files and never run in
   GitHub Actions.
 
@@ -91,10 +91,10 @@ This repository is the only one you write to. Any other repository you can see i
 ## Layout
 
 - `sources/<id>/`: one folder per source; the folder name is the id. `source.json` is the manifest with every
-  route Matt has for that source (page URL, RSS or Atom feed, XML sitemap, API endpoint), `discovered_from`,
+  route the maintainer has for that source (page URL, RSS or Atom feed, XML sitemap, API endpoint), `discovered_from`,
   topics, authority, tier and `classification_review`. `methods.json` records each route and acquisition
   method tried, which worked last, confirmed archive URLs, OCR use and dates; the poller and crawler try the
-  method that worked last first. Screen grabs, saved pages and other media stay on Matt's PC under the
+  method that worked last first. Screen grabs, saved pages and other media stay on the maintainer's PC under the
   ignored `local/sources/<id>/media/` and are referenced from `methods.json` by filename and sha256. A source
   is written only by `hub add` (which proves it with a real fetch) or by hand followed by `hub lint`.
 - `sources/retired/`: retired source folders, moved with `git mv`, with a `"##"` line giving date and reason.
@@ -143,9 +143,9 @@ This repository is the only one you write to. Any other repository you can see i
 - Captures are deleted only after `audit.json` passes, by a different session or agent than the one that
   crawled.
 
-## Matt's PC
+## The maintainer's PC
 
-- Matt keeps a pull-only clone at `C:\Users\matth\Claude\projects\info-feed-seeds` (push URL disabled). It
+- The maintainer keeps a pull-only clone at `C:\Users\matth\Claude\projects\info-feed-seeds` (push URL disabled). It
   tracks main and fetches `data`. Everything it produces goes under the ignored `local/`. It never pushes; new
   sources or fixes found there are handed to the cloud session by message.
 
