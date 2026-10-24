@@ -2,7 +2,8 @@
 # merge or an edit made on github.com). data is written only by the poll workflow and never runs this.
 #
 # These checks are advisory until the main ruleset requires the `checks` and `pr-text` status
-# checks; only the repository owner can add that rule.
+# checks; only the repository owner can add that rule. The checker's ADVISORY lines are warning
+# annotations and never fail a job.
 name: ci
 
 on:
@@ -65,20 +66,20 @@ jobs:
           fi
       # Every step after this one runs even when an earlier one failed, so one red step does not
       # hide the others; the job still fails.
-      - name: Allowed and pending corpus lines this change adds (read each one)
+      - name: Golden cases this change adds (read each one)
         # The base branch's copy, like the checker; only the bootstrap pull request uses its own.
         run: |
-          if git cat-file -e "origin/$BASE_REF:tools/corpus_added.py" 2>/dev/null; then
-            git show "origin/$BASE_REF:tools/corpus_added.py" > "$RUNNER_TEMP/corpus_added.py"
+          if git cat-file -e "origin/$BASE_REF:tools/golden_added.py" 2>/dev/null; then
+            git show "origin/$BASE_REF:tools/golden_added.py" > "$RUNNER_TEMP/golden_added.py"
           elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ] \
                && { [ "$PR_NUMBER" = "$BOOTSTRAP_PR" ] || [ "$GITHUB_REF" = "refs/heads/$BOOTSTRAP_BRANCH" ]; }; then
-            cp tools/corpus_added.py "$RUNNER_TEMP/corpus_added.py"
-            echo "::warning::bootstrap: origin/main has no corpus_added.py; using this branch's copy"
+            cp tools/golden_added.py "$RUNNER_TEMP/golden_added.py"
+            echo "::warning::bootstrap: origin/main has no golden_added.py; using this branch's copy"
           else
-            echo "::error::origin/$BASE_REF has no tools/corpus_added.py and this is not the bootstrap pull request"
+            echo "::error::origin/$BASE_REF has no tools/golden_added.py and this is not the bootstrap pull request"
             exit 1
           fi
-          python3 -I "$RUNNER_TEMP/corpus_added.py" "origin/$BASE_REF" "$GITHUB_WORKSPACE"
+          python3 -I "$RUNNER_TEMP/golden_added.py" "origin/$BASE_REF" "$GITHUB_WORKSPACE"
       - name: Commit hygiene (messages, identity, changed files)
         if: ${{ !cancelled() }}
         run: python3 -I "$RUNNER_TEMP/commit_check.py" --range auto
@@ -103,6 +104,15 @@ jobs:
       - name: Doctor
         if: ${{ !cancelled() }}
         run: python3 -I tools/doctor.py check
+      # Last, so every step above ran on 3.12: the same golden cases on the newer interpreter, whose
+      # Unicode tables differ.
+      - uses: actions/setup-python@v5
+        if: ${{ !cancelled() }}
+        with:
+          python-version: "3.13"
+      - name: Golden cases on Python 3.13
+        if: ${{ !cancelled() }}
+        run: python3 --version && python3 -m unittest tests.test_commit_check_golden
 
   pr-text:
     # Runs on every pull request event, including edits, so removing a footer from the description
