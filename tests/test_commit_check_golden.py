@@ -36,7 +36,7 @@ KINDS = ("planted", "control", "limit", "decided")
 VERDICTS = ("block", "advisory", "pass")
 ID_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 NAME = "Cla" + "ude"
-RULE_SECONDS = 0.5  # per rule and input on CI; about 0.05 s on a desktop
+RULE_SECONDS = 0.25  # per rule and input on CI; under 0.07 s on a desktop
 
 
 def golden_text() -> str:
@@ -105,6 +105,8 @@ def timing_inputs() -> dict:
         "made and spaces": "made " * (n // 5), "made and newlines": "made\n" * (n // 5),
         "thanks and spaces": "thanks " * (n // 7), "name and surname": (NAME + " Shannon ") * (n // 15),
         "passive use": (NAME + " was used ") * (n // 16),
+        "verbs then a name": ("done " * 38 + NAME + " ") * (n // 197), "verb and short name": "had    gpt    " * (n // 14),
+        "pronoun and verb": "we     had     " * (n // 15), "split name": "chat gpt     " * (n // 13),
     }
 
 

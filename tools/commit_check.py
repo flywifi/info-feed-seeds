@@ -55,6 +55,7 @@ error. Standard library only.
 """
 from __future__ import annotations
 
+import bisect
 import hashlib
 import html
 import json
@@ -117,8 +118,13 @@ _SEV = r"(?:high|medium|med|low|critical)"
 # other capitalised word right after the name makes it a different name: Claude Shannon, Gemini
 # Observatory, Mistral Press. Rules that use _ENTITY read the text with its case kept, under re.I.
 _TIER = (r"(?:code|opus|sonnet|haiku|instant|pro|plus|flash|ultra|nano|max|mini|turbo|advanced|ai|api|"
-         r"assistant|chat|desktop|cli|app|sdk|agent|x)")
-_ENTITY = r"(?![ \t]{1,3}(?=(?-i:[A-Z]))(?!" + _TIER + r"(?![a-z0-9]))[a-z]{2,30})"
+         r"assistant|chat|desktop|cli|app|sdk|agent|bot|enterprise|team|edu|gov|live|large|medium|small|"
+         r"workspace|studio|x)")
+# In Title Case a making verb or a short function word after the name is not a surname.
+_TITLE_WORDS = (r"(?:wrote|written|built|made|created|authored|drafted|coded|produced|generated|helped|designed|"
+                r"developed|was|were|is|has|had|and|or|for|to|the|in|on|with|by|from|of|at|as|did|does|do)")
+_ENTITY = (r"(?![ \t]{1,3}(?=(?-i:[A-Z][a-z]))(?!(?:" + _TIER + r"|" + _TITLE_WORDS + r")(?![a-z0-9]))"
+           r"[a-z]{2,30})")
 
 
 class _Hit:
@@ -134,8 +140,8 @@ class _Hit:
 class _PhraseThenName:
     """A start pattern, then the name within `reach` characters, in a window that ends at the first
     `stop` match. With `via`, a connective must start in the first `via_reach` characters and the name
-    must come after it. Linear: one forward search finds the next name, and a start whose window
-    cannot reach it is skipped before any window is read."""
+    must come after it. Linear: names, stops and connectives are each found once in the whole text,
+    and every start looks up the first of each in its window instead of searching a slice."""
 
     def __init__(self, start: str, reach: int, stop: str, name: str = _NAME, via: str | None = None,
                  via_reach: int = 0, flags: int = 0):
@@ -144,29 +150,27 @@ class _PhraseThenName:
         self.via, self.via_reach = (re.compile(via, flags) if via else None), via_reach
 
     def finditer(self, text: str):
-        nxt = None
+        names = [(h.start(), h.end()) for h in self.name.finditer(text)]
+        if not names:
+            return
+        name_starts = [a for a, _ in names]
+        stops = [s.start() for s in self.stop.finditer(text)]
+        vias = [(v.start(), v.end()) for v in self.via.finditer(text)] if self.via is not None else []
+        via_starts = [a for a, _ in vias]
         for m in self.start.finditer(text):
-            if nxt is None or nxt.start() < m.end():
-                nxt = self.name.search(text, m.end())
-                if nxt is None:
-                    return
-            if nxt.start() >= m.end() + self.reach:
-                continue
-            window = text[m.end():m.end() + self.reach]
-            if not self.name.search(window):
-                continue
-            cut = self.stop.search(window)
-            if cut:
-                window = window[:cut.start()]
-            offset = 0
+            lo, hi = m.end(), m.end() + self.reach
+            i = bisect.bisect_left(stops, lo)
+            if i < len(stops) and stops[i] < hi:
+                hi = stops[i]
+            offset = lo
             if self.via is not None:
-                v = self.via.search(window[:self.via_reach])
-                if not v:
+                j = bisect.bisect_left(via_starts, lo)
+                if j == len(vias) or vias[j][1] > min(lo + self.via_reach, hi):
                     continue
-                offset = v.end()
-            hit = self.name.search(window, offset)
-            if hit:
-                yield _Hit(text[m.start():m.end() + hit.end()])
+                offset = vias[j][1]
+            k = bisect.bisect_left(name_starts, offset)
+            if k < len(names) and names[k][1] <= hi:
+                yield _Hit(text[m.start():names[k][1]])
 
     def search(self, text: str):
         return next(self.finditer(text), None)
@@ -229,7 +233,7 @@ BLOCK_RULES = (
          _LEAD + _ROLE_KEY + r"[^\w\n]{0,3}[:=][^\n]{0,200}?" + _NAME + _ENTITY,
          "Limit: the key must open a line and end in by, assisted, assistant, generated, author, "
          "authors, authored or ai; other keys (\"Note:\", \"Model:\") pass, and so does the name "
-         "followed by a capitalised word that is not a product tier (a person such as Claude Shannon).",
+         "followed by a capitalised word that is not a product tier (a person who shares the name).",
          re.M | re.I, cased=True),
     Rule("audit-record", "review record", True, BOTH,
          r"(?<![a-z])" + _AUD + r"(?:[ _-]?round)?[ _-]?\d{1,3}(?!\d)"
@@ -249,27 +253,37 @@ BLOCK_RULES = (
 # a blank line or a sentence-ending dot; a word is 1 to 30 letters or digits plus up to three
 # ".digits" parts (a version such as 4.5). The two never share a character.
 _GS = r"(?:[^\w.!?\n]|_|\n(?!\n)|\.(?=[a-z]))"
-_GW = r"[a-z0-9]{1,30}(?:\.[0-9]{1,6}){0,3}"
-_W2 = r"(?:" + _GS + "{1,5}" + _GW + r"){0,2}?" + _GS + "{1,5}"
+_GW = r"[a-z0-9]{1,30}+(?:\.[0-9]{1,6}){0,3}+"
+# Separator runs and words never share a character, so they are possessive ({1,5}+): a run is taken
+# whole and never re-split, which keeps the authorship rules linear without changing a verdict.
+_W2 = r"(?:" + _GS + "{1,5}+" + _GW + r"){0,2}?" + _GS + "{1,5}+"
+# A separator that stays on the same line.
+_LS = r"(?:[^\w.!?\n]|_)"
 _AUX = r"(?!(?:is|are|was|were|be|been|being|gets?|got)(?![a-z0-9]))"
 # Assistant names the authorship rules read, so the rules hold whichever tool is in use. Claude may be
-# glued into a longer token (ClaudeAI, AnthropicClaude) but not into another name such as Claudette;
-# the other names stand as words. Names that are also ordinary words (a copilot, a codex, a llama, the
-# mistral wind, perplexity, grok) count only when capitalised. The authorship rules read the text with
-# its case kept, under re.I; the (?-i:...) parts need the capitals.
-_ASSISTANT = (r"(?:" + _NAME + r"(?:ai|code)?(?![a-z])"
-              r"|(?<![a-z0-9])(?:chat" + _S + r"?gpt|gpts?|openai|anthropic|gemini|deepseek|llms?|cursor" + _S
-              + r"{1,3}ai|an?" + _S + r"{1,3}ai" + _S + r"{1,3}(?:assistant|model|tool))(?![a-z])"
-              r"|(?-i:(?<![A-Za-z0-9])(?:Copilot|COPILOT|Codex|CODEX|Llama|LLAMA|Mistral|MISTRAL|Grok|GROK"
-              r"|Perplexity|PERPLEXITY)(?![A-Za-z])))")
+# glued into a longer token (AnthropicClaude) but not into another name such as Claudette; the other
+# names stand as words. Any name may carry a product tier glued on (ClaudeOpus, MistralAI). Names that
+# are also ordinary words (a copilot, a codex, a llama, the mistral wind, perplexity, grok) count only
+# with a capital first letter. GPT followed by partition, disk or table is the disk format. The
+# authorship rules read the text with its case kept, under re.I; the (?-i:...) parts need the capitals.
+_GLUE = r"(?:" + _TIER + r")?(?![a-z])"
+# Every name starts with one of these letters; the lookahead turns most positions away in one test.
+_ASSISTANT = (r"(?=[acdglmop])(?:" + _NAME + _GLUE
+              + r"|(?<![a-z0-9])(?:chat" + _S + r"?gpt|gpts?(?![ \t-]{0,3}(?:partition|disk|table|header|"
+              r"entr|label|format|boot|uefi)[a-z]{0,6}(?![a-z]))|openai|anthropic|gemini|deepseek|codellama|llms?|cursor"
+              + _S
+              + r"{1,3}ai|an?" + _S + r"{1,3}ai" + _S + r"{1,3}(?:assistant|model|tool))" + _GLUE
+              + r"|(?<![a-z0-9])(?:(?-i:C)opilot|(?-i:C)odex|(?-i:L)lama|(?-i:M)istral|(?-i:G)rok"
+              r"|(?-i:P)erplexity)" + _GLUE + ")")
 # The name directly followed by ".md" is a file such as CLAUDE.md.
 _WHO = _ASSISTANT + r"(?!\.md(?![a-z0-9]))" + _ENTITY
 # A word allowed between the name and its verb: a product tier, a version, or an adverb.
-_MID = (r"(?:" + _TIER + r"|v?\d{1,3}(?:\.\d{1,3}){0,2}[a-z]?|then|also|just|has|have|had|itself|"
+_MID = (r"(?:" + _TIER + r"|[a-z]?\d{1,3}(?:\.\d{1,3}){0,2}[a-z]?|then|also|just|has|have|had|itself|and|i|we|the|"
         r"[a-z]{2,20}ly)(?![a-z0-9])")
 _BOW = r"(?<![a-z0-9])"
-# "built-in", "made-up" and "made-to-order" are adjectives, not a claim of making.
-_NOT_ADJ = r"(?!-(?:in|up|to)(?![a-z]))"
+# "built-in", "made-up" and "made-to-order" are adjectives, not a claim of making, unless a connective
+# follows ("built-in with").
+_NOT_ADJ = r"(?!-(?:in|up|to)(?![a-z])(?![ \t-]{1,3}(?:with|by|using|via)(?![a-z])))"
 _MADE = (_BOW + r"(?:re|co|ghost|hand|over|pre|auto|self|semi|copy|pair" + _S + r"?)?(?:built|made|created|"
          r"written|wrote|authored|produced|coded|developed|drafted|composed|crafted|prepared|designed|"
          r"programmed|assisted|done|generated)(?![a-z])" + _NOT_ADJ)
@@ -286,8 +300,9 @@ AUTHORSHIP_RULES = (
          + r"{1,5}collaboration" + _S + r"{1,5}with)" + _S + r"{1,5}(?:[a-z0-9]{1,30}" + _S + r"{1,5}){0,2}?"
          r"[a-z0-9]{0,30}?" + _WHO + r"|with" + _S + r"{1,5}[a-z0-9]{0,30}?" + _WHO + _S + r"{0,3}s?" + _S
          + r"{1,3}help(?![a-z0-9])"
-         r"|(?<![a-z])(?:thanks|thank" + _GS + r"{1,5}you|kudos(?:" + _GS + r"{1,5}to)?|credits?(?:[ \t]{0,3}[:=]|"
-         + _GS + r"{1,5}to))" + _GS + r"{1,5}" + _WHO,
+         r"|(?<![a-z])(?:thanks|thank" + _LS + r"{1,5}+you|kudos(?:" + _LS + r"{1,5}+to)?|credits?(?:[ \t]{0,3}[:=]|"
+         + _LS + r"{1,5}+to))(?:" + _LS + r"{1,5}+" + _WHO + r"|" + _LS + r"{0,5}+\n[ \t]{0,10}+" + _WHO
+         + r"[ \t!.,]{0,5}+(?=\n|\Z))",
          "Limit: at most two words between the credit phrase and the name, and plain thanks or credit "
          "only with the name right after it; \"thanks again to\" passes.", re.I, cased=True),
     Rule("byline", "authorship wording (byline)", True, BOTH,
@@ -300,20 +315,21 @@ AUTHORSHIP_RULES = (
          "Limit: needs a colon or an equals sign between the label and the name.", re.I, cased=True),
     Rule("first-person", "authorship wording (first person)", True, BOTH,
          _BOW + r"(?:i|we)" + _W2 + r"(?:re|co)?(?:used|use|asked|had|let|leveraged|leverage|utili[sz]ed|employed)"
-         + _W2 + _WHO + r"|" + _BOW + r"using" + _GS + r"{1,5}" + _WHO + _W2 + r"(?:i|we)(?![a-z0-9])",
+         + _W2 + _WHO + r"|" + _BOW + r"using" + _GS + r"{1,5}+" + _WHO + _W2 + r"(?:i|we)(?![a-z0-9])",
          "Limit: at most two words on each side of the verb; three words pass.", re.I, cased=True),
     Rule("tool-past", "authorship wording (past-tense use)", True, BOTH,
-         _BOW + r"(?:re)?(?:used|asked|had)" + _W2 + _WHO + _W2 + r"to(?![a-z0-9])"
-         r"|" + _WHO + r"(?:" + _GS + r"{1,5}" + _MID + r"){0,2}?" + _GS + r"{1,5}(?:was|were|been|got)" + _GS
-         + r"{1,5}(?:re)?(?:used|asked|leveraged|utili[sz]ed|employed)" + _GS + r"{1,5}to(?![a-z0-9])",
-         "Limit: past tense only; present-tense feature text (\"uses ... to\") passes.", re.I, cased=True),
+         _BOW + r"(?:re)?(?:used|asked|had)" + _W2 + _WHO + _W2 + r"to(?![a-z0-9])",
+         "Limit: past tense with the verb before the name; present-tense feature text (\"uses ... to\") "
+         "passes, and the passive form (\"was used to\") is read by the name-as-author rule.", re.I, cased=True),
     Rule("name-as-author", "authorship wording (the name as author)", True, BOTH,
-         _WHO + r"(?:" + _GS + "{1,5}" + _AUX + _MID + r"){0,2}?" + _GS + r"{1,5}(?:re|co|ghost|over|auto)?"
+         _WHO + r"(?:" + _GS + "{1,5}+" + _AUX + _MID + r"){0,2}?" + _GS + r"{1,5}+(?:(?:re|co|ghost|over|auto)?"
          r"(?:wrote|written|built|made|created|authored|drafted|coded|produced|generated|helped|designed|"
-         r"developed)(?![a-z0-9])" + _NOT_ADJ,
+         r"developed)(?![a-z0-9])" + _NOT_ADJ + r"|(?:was|were|been|got)" + _GS + r"{1,5}+(?:re)?(?:used|asked|"
+         r"leveraged|utili[sz]ed|employed)" + _GS + r"{1,5}+to(?![a-z0-9]))",
          "Limit: at most two words between the name and the verb, each a product tier, a version or an "
-         "adverb, never a form of \"be\"; other words between them (\"the Gemini program developed\") "
-         "and passive feature text (\"the ... prompt is built\") pass.", re.I, cased=True),
+         "adverb; a form of \"be\" only in the passive \"was used to\"; other words between them (\"the "
+         "Gemini program developed\") and passive feature text (\"the ... prompt is built\") pass.",
+         re.I, cased=True),
 )
 ADVISORY_RULES = (
     Rule("generated-near", "authorship wording (footer phrase and name in one paragraph)", False, BOTH,
@@ -375,6 +391,9 @@ _CONFUSABLES.update({ord(chr(k).lower()): v.lower() for k, v in _CAPITAL_CONFUSA
 _CAPITAL_FROM_SMALL = {ord(chr(k).upper()): v.upper() for k, v in _CONFUSABLES.items()
                        if len(chr(k).upper()) == 1 and chr(k).upper() != chr(k)
                        and ord(chr(k).upper()) not in _CAPITAL_CONFUSABLES}
+# Latin small capitals look like capitals, so a cased reading folds them to capitals.
+_CAPITAL_FROM_SMALL.update({k: v.upper() for k, v in _CONFUSABLES.items()
+                            if unicodedata.name(chr(k), "").startswith("LATIN LETTER SMALL CAPITAL")})
 
 FORBIDDEN_PREFIXES = ("local/", ".cache/", "logs/", ".venv-crawl/")
 FORBIDDEN_NAMES = re.compile(r"(?:^|/)(?:[^/]*\.local\.json|\.secrets\.local\.json)$")

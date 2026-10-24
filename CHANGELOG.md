@@ -13,7 +13,10 @@ All notable changes to this repository are recorded here. The format follows
   rule: public text credits no one, and says "the creator" where a credit is needed. Names are read
   as words; product names that are also ordinary words count only when capitalised; a capitalised
   non-tier word after the name (a person's surname, an observatory) makes it another name; the
-  generated verb, plain thanks or credit, and passive use ("was used to") are read too.
+  generated verb, plain thanks or credit, and passive use ("was used to") are read too, as are
+  product spellings with inner capitals, a tier glued onto a name, versions such as R1 or o3,
+  all-capital and title-case text, and a sign-off with the name on its own line. Every authorship
+  rule stays under 0.1 s on 100,000 characters.
 - The rehearsal and the checker's selftest drop the variables that point git at one repository
   (GIT_DIR and its relatives, which a hook in a linked worktree receives), so scratch repositories
   never write into the repository being checked.

@@ -173,14 +173,23 @@ The names are read as words, so "Hallmark", "Ullman" or "philanthropic" never co
 also ordinary words (copilot, codex, llama, mistral, perplexity, grok) count only when capitalised.
 A capitalised word after the name that is not a product tier makes it someone else: "Claude
 Shannon", "Gemini Observatory" and "Mistral Press" pass, while "Claude Code" and "ChatGPT Plus"
-still count. "Built-in", "made-up" and "made-to-order" are adjectives and pass.
+still count, as does a tier glued on ("ClaudeOpus", "MistralAI"). "Built-in", "made-up" and
+"made-to-order" are adjectives and pass, unless a connective follows ("built-in with").
 
-Known limits, each pinned or listed so a change to them is deliberate: verbs outside the lists
-("implemented with", "refactored with", "prompted"); names outside the list; a name followed by any
-capitalised word ("written by Claude Today"); "@author" without a colon; a footer phrase split by a
-tag or a blank line; sentence-ending dots in abbreviations, which end a sentence for the one-sentence
-rules; and review-record shapes in quoted third-party prose (a review word such as finding or ruling
-followed by a number), which block like any other.
+Known limits, each pinned or listed so a change to them is deliberate:
+
+- Verbs outside the lists ("implemented with", "refactored with", "prompted") and names outside the
+  list.
+- A name followed on the same line by a title-case word that is not a tier, a making verb or a short
+  function word, such as a surname. In all capitals the name always counts, and a surname on the
+  next line does not count.
+- A making verb and a connective block when any listed name comes later in the same sentence, even
+  when that name is not the maker, so end the sentence first.
+- GPT, the disk format, counts as the name unless a word such as partition, disk or table follows.
+- "@author" without a colon, and a footer phrase split by a tag or a blank line.
+- Dots in abbreviations end a sentence for the one-sentence rules.
+- Review-record shapes in quoted third-party prose (a review word such as finding or ruling followed
+  by a number) block like any other.
 
 **Advisory** (an `ADVISORY:` line, a warning annotation in GitHub Actions, exit code unchanged): the
 footer phrase and the name in one paragraph, and short finding ids in parentheses or test names.

@@ -201,8 +201,8 @@
 {"b64": "R1BUIHdyb3RlIHRoaXMgcHVsbCByZXF1ZXN0Lg==", "expect": "block", "id": "bare-short-name-as-author", "kind": "planted", "note": "the bare three-letter name with no version", "rule": "name-as-author"}
 {"b64": "VGhhbmtzLCBDbGF1ZGUh", "expect": "block", "id": "thanks-then-name", "kind": "planted", "note": "plain thanks with the name right after it", "rule": "credit"}
 {"b64": "Q3JlZGl0OiBDbGF1ZGU=", "expect": "block", "id": "credit-label-then-name", "kind": "planted", "note": "a credit label with the name right after it", "rule": "credit"}
-{"b64": "Q2xhdWRlIHdhcyB1c2VkIHRvIHdyaXRlIHRoaXMgcHVsbCByZXF1ZXN0Lg==", "expect": "block", "id": "passive-use-for-a-task", "kind": "planted", "note": "passive past-tense use", "rule": "tool-past"}
-{"b64": "VGhlIE9wZW5BSSBBUEkgd2FzIHVzZWQgdG8gcmFuayBpdGVtcy4=", "expect": "block", "id": "passive-use-with-a-tier", "kind": "planted", "note": "passive past-tense use of a named API", "rule": "tool-past"}
+{"b64": "Q2xhdWRlIHdhcyB1c2VkIHRvIHdyaXRlIHRoaXMgcHVsbCByZXF1ZXN0Lg==", "expect": "block", "id": "passive-use-for-a-task", "kind": "planted", "note": "passive past-tense use", "rule": "name-as-author"}
+{"b64": "VGhlIE9wZW5BSSBBUEkgd2FzIHVzZWQgdG8gcmFuayBpdGVtcy4=", "expect": "block", "id": "passive-use-with-a-tier", "kind": "planted", "note": "passive past-tense use of a named API", "rule": "name-as-author"}
 {"b64": "VGhhbmtzIHRvIEhhbGxtYXJrIGZvciB0aGUgY2FyZHMu", "expect": "pass", "id": "name-inside-hallmark", "kind": "control", "note": "a short name inside a longer word is not the name", "rule": "credit"}
 {"b64": "VGhlIHBhcnNlciBmb2xsb3dzIEFobywgU2V0aGkgYW5kIFVsbG1hbiwgYW5kIHdhcyB3cml0dGVuIGJ5IFVsbG1hbi4=", "expect": "pass", "id": "name-inside-ullman", "kind": "control", "note": "a citation whose last author contains a short name", "rule": "made-by"}
 {"b64": "RnVuZGVkIGJ5IHBoaWxhbnRocm9waWMgZ3JhbnRzLg==", "expect": "pass", "id": "name-inside-philanthropic", "kind": "control", "note": "a maker name inside an ordinary word", "rule": "byline"}
@@ -216,3 +216,17 @@
 {"b64": "VGhhbmtzLgoKQ2xhdWRlIHJlYWRzIHRoZSBkaWdlc3QgdGhyb3VnaCB0aGUgTUNQIHNlcnZlci4=", "expect": "pass", "id": "thanks-ends-a-paragraph", "kind": "control", "note": "thanks at the end of one paragraph and the name opening the next", "rule": "credit"}
 {"b64": "QXV0aG9yOiBDbGF1ZGUgQmFyZmllbGQ=", "expect": "pass", "id": "author-label-for-a-person", "kind": "limit", "note": "the name followed by a capitalised surname", "rule": "assistant-trailer"}
 {"b64": "VGhlIEdlbWluaSBwcm9ncmFtIGRldmVsb3BlZCBkb2NraW5nIHRlY2huaXF1ZXMu", "expect": "pass", "id": "other-words-between-name-and-verb", "kind": "limit", "note": "a noun between the name and the verb", "rule": "name-as-author"}
+{"b64": "TExhTUEgd3JvdGUgdGhpcyBzdW1tYXJ5Lg==", "expect": "block", "id": "mixed-case-product-spelling", "kind": "planted", "note": "a product name with a capital inside it", "rule": "name-as-author"}
+{"b64": "VGhhbmtzIHRvIENvUGlsb3QgZm9yIHRoZSBjb2RlLg==", "expect": "block", "id": "capital-inside-copilot", "kind": "planted", "note": "a capitalised product name with a second capital", "rule": "credit"}
+{"b64": "V3JpdHRlbiBieSBDbGF1ZGVPcHVzLg==", "expect": "block", "id": "tier-glued-to-the-name", "kind": "planted", "note": "a product tier glued onto the name", "rule": "made-by"}
+{"b64": "QnVpbHQgd2l0aCBNaXN0cmFsQUku", "expect": "block", "id": "maker-and-glued-tier", "kind": "planted", "note": "a maker name with a tier glued on", "rule": "made-by"}
+{"b64": "RGVlcFNlZWsgUjEgd3JvdGUgdGhpcyBzdW1tYXJ5Lg==", "expect": "block", "id": "letter-version-between", "kind": "planted", "note": "a version that starts with a letter", "rule": "name-as-author"}
+{"b64": "Q0xBVURFIFdST1RFIFRISVMu", "expect": "block", "id": "all-capitals", "kind": "planted", "note": "the whole sentence in capitals", "rule": "name-as-author"}
+{"b64": "VGhhbmtzLApDbGF1ZGU=", "expect": "block", "id": "sign-off-on-its-own-line", "kind": "planted", "note": "thanks on one line and the name alone on the next", "rule": "credit"}
+{"b64": "Q2xhdWRlIGFuZCBJIHdyb3RlIHRoaXMu", "expect": "block", "id": "name-and-pronoun", "kind": "planted", "note": "the name and a pronoun before the verb", "rule": "name-as-author"}
+{"b64": "V3JpdHRlbiBieSBDbGF1ZGUgRW50ZXJwcmlzZS4=", "expect": "block", "id": "named-tier-after-the-name", "kind": "planted", "note": "a plan name after the name is still the product", "rule": "made-by"}
+{"b64": "V3JpdHRlbiBieSDhtIThtI/htJjJqsqf4bSP4bSbLg==", "expect": "block", "id": "small-capital-letters", "kind": "planted", "note": "small capital letters fold to capitals", "rule": "made-by"}
+{"b64": "QnVpbHQtaW4gd2l0aCBDbGF1ZGUu", "expect": "block", "id": "adjective-then-connective", "kind": "planted", "note": "an adjective form followed by a connective is still a claim", "rule": "made-by"}
+{"b64": "RGlza3MgYXJlIGNyZWF0ZWQgd2l0aCBHUFQgcGFydGl0aW9uIHRhYmxlcy4=", "expect": "pass", "id": "disk-format-acronym", "kind": "control", "note": "the disk format with a format word after it", "rule": "made-by"}
+{"b64": "TWFueSB0aGFua3MKR2VtaW5pIDIuNSBGbGFzaCBpcyBub3cgZ2VuZXJhbGx5IGF2YWlsYWJsZS4=", "expect": "pass", "id": "thanks-then-a-new-line", "kind": "control", "note": "thanks at a line end and a sentence that opens with a name", "rule": "credit"}
+{"b64": "R1BUIGFsc28gbWFkZSB0aGUgMiBUQiBsaW1pdCBnbyBhd2F5Lg==", "expect": "block", "id": "disk-format-alone", "kind": "decided", "note": "the bare acronym reads as the assistant without a format word", "rule": "name-as-author"}
