@@ -1,0 +1,181 @@
+# Checks every pull request, every push to a job branch, and every push to main (which can only be a
+# merge or an edit made on github.com). data is written only by the poll workflow and never runs this.
+#
+# These checks are advisory until the main ruleset requires the `checks` and `pr-text` status
+# checks; only the repository owner can add that rule. The checker's ADVISORY lines are warning
+# annotations and never fail a job.
+name: ci
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches-ignore: [data]
+
+permissions:
+  contents: read
+
+# A newer pull request event replaces an older run for the same pull request. Push runs get one
+# group per commit, so no push run, above all a run on main, is ever cancelled or replaced.
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('ci-pr-{0}', github.event.pull_request.number) || format('ci-push-{0}', github.sha) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  checks:
+    # Runs on edits too: a skipped job reports success, so skipping it would let an edit made during
+    # a run replace a real result with a free pass.
+    if: github.event_name == 'pull_request' || github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
+      BOOTSTRAP_BASE: 2bbdbf270a6893d377ed014aada503f89ecb0327
+      BOOTSTRAP_PR: "7"
+      BOOTSTRAP_BRANCH: claude/trusting-bell-uix1sd
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # The pull request's own head, not GitHub's synthetic merge commit, so every commit checked
+          # is one a person made.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Take the checker from the base branch
+        # The range, source and text checks run the base branch's copy, so editing
+        # tools/commit_check.py in a pull request does not change what checks that pull request.
+        # This workflow file itself still comes from the pull request (see README). Only the pull
+        # request that adds the checker falls back to its own copy, and says so.
+        run: |
+          if git cat-file -e "origin/$BASE_REF:tools/commit_check.py" 2>/dev/null; then
+            git show "origin/$BASE_REF:tools/commit_check.py" > "$RUNNER_TEMP/commit_check.py"
+            echo "Using the checker from origin/$BASE_REF"
+          elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ] \
+               && { [ "$PR_NUMBER" = "$BOOTSTRAP_PR" ] || [ "$GITHUB_REF" = "refs/heads/$BOOTSTRAP_BRANCH" ]; }; then
+            # One-time bootstrap, tied to the base commit AND to pull request 7 (or a push of its
+            # branch): the pull request that adds the checker merges into a main that has none.
+            # Remove this branch in the first pull request after it merges.
+            cp tools/commit_check.py "$RUNNER_TEMP/commit_check.py"
+            echo "::warning::bootstrap: origin/main is $BOOTSTRAP_BASE, which has no checker; using this branch's copy"
+          else
+            echo "::error::origin/$BASE_REF has no tools/commit_check.py and this is not the bootstrap pull request at the bootstrap base; refusing to run a checker this pull request supplies"
+            exit 1
+          fi
+      # Every step after this one runs even when an earlier one failed, so one red step does not
+      # hide the others; the job still fails.
+      - name: Golden cases this change adds (read each one)
+        # The base branch's copy, like the checker; only the bootstrap pull request uses its own.
+        run: |
+          if git cat-file -e "origin/$BASE_REF:tools/golden_added.py" 2>/dev/null; then
+            git show "origin/$BASE_REF:tools/golden_added.py" > "$RUNNER_TEMP/golden_added.py"
+          elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ] \
+               && { [ "$PR_NUMBER" = "$BOOTSTRAP_PR" ] || [ "$GITHUB_REF" = "refs/heads/$BOOTSTRAP_BRANCH" ]; }; then
+            cp tools/golden_added.py "$RUNNER_TEMP/golden_added.py"
+            echo "::warning::bootstrap: origin/main has no golden_added.py; using this branch's copy"
+          else
+            echo "::error::origin/$BASE_REF has no tools/golden_added.py and this is not the bootstrap pull request"
+            exit 1
+          fi
+          python3 -I "$RUNNER_TEMP/golden_added.py" "origin/$BASE_REF" "$GITHUB_WORKSPACE"
+      - name: Commit hygiene (messages, identity, changed files)
+        if: ${{ !cancelled() }}
+        run: python3 -I "$RUNNER_TEMP/commit_check.py" --range auto
+      - name: Proof records of changed sources
+        if: ${{ !cancelled() }}
+        run: python3 -I "$RUNNER_TEMP/commit_check.py" --sources auto
+      - name: This branch's checker selftest
+        if: ${{ !cancelled() }}
+        run: python3 -I tools/commit_check.py --selftest
+      - name: Unit tests
+        if: ${{ !cancelled() }}
+        run: python3 -m unittest discover -s tests -t .
+      - name: hub lint
+        if: ${{ !cancelled() }}
+        run: python3 -I feeder/hub.py lint
+      - name: hub fmt --check
+        if: ${{ !cancelled() }}
+        run: python3 -I feeder/hub.py fmt --check
+      - name: Em dash scan
+        if: ${{ !cancelled() }}
+        run: python3 -I tools/emdash_scan.py
+      - name: Doctor
+        if: ${{ !cancelled() }}
+        run: python3 -I tools/doctor.py check
+      - name: Rehearsal parity and selftests of the preflight and CI status tools
+        if: ${{ !cancelled() }}
+        run: |
+          python3 -I tools/preflight.py --check-parity
+          python3 -I tools/preflight.py --selftest
+          python3 -I tools/ci_status.py --selftest
+      # Last, so every step above ran on 3.12: the same golden cases on the newer interpreter, whose
+      # Unicode tables differ.
+      - uses: actions/setup-python@v5
+        if: ${{ !cancelled() }}
+        with:
+          python-version: "3.13"
+      - name: Golden cases on Python 3.13
+        if: ${{ !cancelled() }}
+        run: python3 --version && python3 -m unittest tests.test_commit_check_golden
+
+  pr-text:
+    # Runs on every pull request event, including edits, so removing a footer from the description
+    # turns this green without a new push.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      BASE_REF: ${{ github.event.pull_request.base.ref }}
+      BOOTSTRAP_BASE: 2bbdbf270a6893d377ed014aada503f89ecb0327
+      BOOTSTRAP_PR: "7"
+      BOOTSTRAP_BRANCH: claude/trusting-bell-uix1sd
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Take the checker from the base branch
+        run: |
+          if git cat-file -e "origin/$BASE_REF:tools/commit_check.py" 2>/dev/null; then
+            git show "origin/$BASE_REF:tools/commit_check.py" > "$RUNNER_TEMP/commit_check.py"
+          elif [ "$BASE_REF" = "main" ] && [ "$(git rev-parse origin/main)" = "$BOOTSTRAP_BASE" ] \
+               && { [ "$PR_NUMBER" = "$BOOTSTRAP_PR" ] || [ "$GITHUB_REF" = "refs/heads/$BOOTSTRAP_BRANCH" ]; }; then
+            cp tools/commit_check.py "$RUNNER_TEMP/commit_check.py"
+            echo "::warning::bootstrap: origin/main is $BOOTSTRAP_BASE, which has no checker; using this branch's copy"
+          else
+            echo "::error::origin/$BASE_REF has no tools/commit_check.py and this is not the bootstrap pull request at the bootstrap base; refusing to run a checker this pull request supplies"
+            exit 1
+          fi
+      - name: Pull request title and body
+        # The text is read from the event payload file, never interpolated into the shell.
+        run: python3 -I "$RUNNER_TEMP/commit_check.py" --pr-event "$GITHUB_EVENT_PATH"
+
+  main-history:
+    # Every push to main is a merge or an edit made on github.com, whose message no hook or pull
+    # request run ever saw. Each run re-checks main from the policy boundary, not just
+    # before..after, so a run that never happened cannot leave a gap. A web-flow committer passes
+    # here only on a commit GitHub marks verified, merges included.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: main-history-${{ github.sha }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Every commit on main since the policy boundary
+        env:
+          AFTER: ${{ github.sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -I tools/commit_check.py --main-history "5436f99..$AFTER"

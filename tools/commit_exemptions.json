@@ -1,0 +1,4 @@
+{
+  "_comment": "Exact texts in tracked files that one BLOCK rule of tools/commit_check.py may skip. Each entry names the path, the rule id, the sha256 of the matched text (printed beside the finding) and a written reason of at least 25 characters. The checker reads this file from origin/main, so an entry counts only after it is merged; tests/test_commit_check_golden.py fails on an entry whose path is not tracked or that no longer exempts anything. Advisory lines are never exempted: they never fail a run.",
+  "exemptions": []
+}

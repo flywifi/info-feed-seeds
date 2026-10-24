@@ -26,7 +26,7 @@ class EmDashTests(unittest.TestCase):
 
 class StdlibOnlyTests(unittest.TestCase):
     def test_feeder_and_tools_import_only_the_standard_library(self):
-        allowed_local = {"feeder", "tests", "emdash_scan"}
+        allowed_local = {"feeder", "tests", "emdash_scan", "commit_check", "doctor", "doctor_checks"}
         offenders = []
         for folder in ("feeder", "tools"):
             for path in (ROOT / folder).rglob("*.py"):

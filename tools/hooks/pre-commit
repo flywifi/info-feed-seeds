@@ -1,0 +1,6 @@
+#!/bin/sh
+# info-feed-seeds pre-commit: staged files and the author identity.
+. "$(dirname "$0")/_common.sh"
+skip_if_bypassed pre-commit
+find_python
+exec $PY -I "$ROOT/tools/commit_check.py" --staged
