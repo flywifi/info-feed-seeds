@@ -8,6 +8,21 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Authorship and credit wording that names an AI assistant (Claude, other assistants or their
+  makers) is blocked in commit messages, pull request text and files, and CLAUDE.md states the same
+  rule: public text credits no one, and says "the creator" where a credit is needed. Names are read
+  as words; product names that are also ordinary words count only when capitalised; a capitalised
+  non-tier word after the name (a person's surname, an observatory) makes it another name; the
+  generated verb, plain thanks or credit, and passive use ("was used to") are read too, as are
+  product spellings with inner capitals, a tier glued onto a name, versions such as R1 or o3,
+  all-capital and title-case text, and a sign-off with the name on its own line. Every authorship
+  rule stays under 0.1 s on 100,000 characters.
+- The rehearsal and the checker's selftest drop the variables that point git at one repository
+  (GIT_DIR and its relatives, which a hook in a linked worktree receives), so scratch repositories
+  never write into the repository being checked.
+- The footer line and the footer phrase allow up to 40 separators, so a padded footer that renders
+  as the stock line is refused; the vertical en dash is a dash; forbidden and data paths match in
+  any letter case.
 - `VERSION` (0.1.0), `feeder/__init__.py` exposing `__version__`, `.gitattributes` (LF everywhere) and
   the ignore list for `.cache/`, `local/`, `logs/`, `.venv-crawl/`, `*.local.json` and `.secrets.local.json`.
 - JSON Schemas for sources, methods, profiles and items under `schema/`, the two-level topic registry
@@ -41,6 +56,50 @@ All notable changes to this repository are recorded here. The format follows
 - `profiles/technology-regulation.json` and an empty `guard/releases.json`.
 - Profile schema fields `window_days`, `backfill_days`, `outputs`, `guard.hold_at` and
   `subtopic_keywords` (include and exclude per subtopic).
+- `tools/commit_check.py`: commit hygiene for staged files, commit messages, pushes, commit ranges,
+  changed source folders and pull request text, with a selftest. Two kinds of result: block, for
+  fixed shapes (co-author and session trailer lines, trailer keys that name the assistant, session
+  links and ids, footer lines, the footer phrase and the assistant's name in one sentence, em and
+  en dashes, review-record tokens in public text, identity, forbidden paths, CR line endings and
+  non-ASCII Python, and authorship or credit wording that names an AI assistant), and advisory, for
+  the footer phrase and the name in one paragraph and short finding ids (printed as `ADVISORY:`
+  lines and GitHub Actions warnings, never failing a run). Text is folded before matching
+  (entities, every round of percent-encoding, terminal control sequences, compatibility forms,
+  format characters, Unicode hyphens and lookalike letters) and every reading is checked. Files are
+  held to the real forms: a trailer line, a link, a footer line. An empty range fails closed. Every
+  author and committer must be flywifi; GitHub's web-flow committer is accepted only on commits
+  already on main, and in `main-history` only on commits GitHub marks verified.
+- Every check rule states what it deliberately does not read in a `Limit:` text, and
+  `tests/test_commit_check_golden.py` pins a case for each limit with the golden cases in
+  `tests/fixtures/golden_cases.jsonl`: planted texts, negative controls and decided wording cases,
+  each with its verdict as a commit message, pull request title, pull request body and file. The
+  test also times every rule on 100,000-character lines and turns red under four deliberate
+  mutations of the checker.
+- `tools/commit_exemptions.json`: exact matched texts in files that one block rule may skip, each
+  with a written reason of at least 25 characters, read from `origin/main`; a stale entry fails the
+  golden test.
+- A history boundary in `tools/commit_check.py`: commits written before these rules get the
+  identity check only, so history is never rewritten to satisfy a check.
+- `tools/main_history_known.txt`: commits on main acknowledged after they landed; an entry counts
+  only if the commit was on main before the change that added it.
+- Tracked hooks in `tools/hooks/` (pre-commit, commit-msg, pre-push), opt-in with
+  `git config core.hooksPath tools/hooks`, with a loud `IFS_SKIP_HOOKS=1` bypass. The push URL must
+  be exactly github.com/flywifi/info-feed-seeds.
+- `.github/workflows/ci.yml`: `checks` and `pr-text` on every pull request event and job-branch
+  push, using the base branch's copy of the checker; `main-history` on every push to main. `checks`
+  prints every golden case a change adds (`tools/golden_added.py`) and runs the golden tests on
+  Python 3.12 and 3.13. Advisory until the main ruleset requires the `checks` and `pr-text` status
+  checks.
+- `tools/preflight.py`: a local rehearsal of the CI `checks` job read from `ci.yml`, with a timeout
+  per step, the `CI` and `GITHUB_ACTIONS` values Actions sets, a fast mode, a parity check run in CI,
+  and DID NOT RUN instead of a pass on a dirty tree, a missing shell or a timeout. The pre-push hook
+  runs it after the commit checks, and on Windows it finds Git Bash from inside the hook.
+- The pre-push hook checks every commit on the branch since `origin/main`, the range CI checks.
+- `tools/ci_status.py`: the CI result for one commit through the REST API, with a result, no result
+  yet and an error kept apart.
+- `tools/doctor.py check` with a required lint check and an advisory hooks check; exit 4 for a
+  command that is not implemented yet.
+- `.claude/settings.json` hides the commit and pull request attribution lines and the session link.
 
 ### Changed
 
@@ -63,3 +122,5 @@ All notable changes to this repository are recorded here. The format follows
 - `hub release` checks the item in the database and refuses unknown, CLEAN and BLOCK items.
 - README restores the rule that nothing here identifies a client or a campaign.
 - Test files use `\u` escapes; a hygiene test keeps every Python file ASCII.
+- Digest Markdown also stops bare URLs and `www.` text from autolinking and stops a leading `1.`,
+  `1)`, `+` or `-` from opening a nested list (checked against cmark-gfm).
