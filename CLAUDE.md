@@ -145,7 +145,7 @@ This repository is the only one you write to. Any other repository you can see i
 
 ## The maintainer's PC
 
-- The maintainer keeps a pull-only clone at `C:\Users\matth\Claude\projects\info-feed-seeds` (push URL disabled). It
+- The maintainer keeps a pull-only clone on a local PC (push URL disabled). It
   tracks main and fetches `data`. Everything it produces goes under the ignored `local/`. It never pushes; new
   sources or fixes found there are handed to the cloud session by message.
 

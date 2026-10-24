@@ -56,7 +56,7 @@ class SchemaFixtureTests(unittest.TestCase):
         self.assertEqual(validate(auth_without_local, schema), [])
 
         bad_credential = copy.deepcopy(auth_without_local)
-        bad_credential["auth"] = {"credential": "Matt's key"}
+        bad_credential["auth"] = {"credential": "Owner's key"}
         self.assertTrue(validate(bad_credential, schema))
 
         bad_discovery = copy.deepcopy(base)
