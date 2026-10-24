@@ -204,9 +204,9 @@ graphs" or "search powered by large language models" passes. One name that is al
 surname counts only when no capitalised word stands right before it (a given name before it makes
 it a person). A capitalised word after the name that is not a product tier makes it someone else:
 "Claude Shannon", "Gemini Observatory" and "Mistral Press" pass, while "Claude Code", "ChatGPT
-Plus", "Grok Build" and
-"Copilot Autofix" still count, as does a tier glued on ("ClaudeOpus", "MistralAI"). "Built-in",
-"made-up" and "made-to-order" are adjectives and pass, unless a connective follows ("built-in with").
+Plus", "Grok Build" and "Copilot Autofix" still count, as does a tier glued on ("ClaudeOpus",
+"MistralAI"). "Built-in", "made-up" and "made-to-order" are adjectives and pass, unless a connective
+follows ("built-in with").
 
 Known limits, each pinned or listed so a change to them is deliberate:
 
