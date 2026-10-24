@@ -44,8 +44,7 @@ DECLARED = {
     "actions/setup-python": "the rehearsal runs on this interpreter and prints its version beside the one CI uses",
 }
 # Variables a run block may read: set by the job env or by the rehearsal.
-KNOWN_VARS = {"BASE_REF", "BOOTSTRAP_BASE", "BOOTSTRAP_PR", "BOOTSTRAP_BRANCH", "PR_NUMBER", "RUNNER_TEMP",
-              "GITHUB_WORKSPACE", "GITHUB_REF"}
+KNOWN_VARS = {"BASE_REF", "PR_NUMBER", "RUNNER_TEMP", "GITHUB_WORKSPACE", "GITHUB_REF"}
 STEP_KEYS = {"name", "uses", "with", "if", "run"}
 ALWAYS = "${{ !cancelled() }}"
 

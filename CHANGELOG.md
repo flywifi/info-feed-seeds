@@ -78,8 +78,6 @@ All notable changes to this repository are recorded here. The format follows
 - `tools/commit_exemptions.json`: exact matched texts in files that one block rule may skip, each
   with a written reason of at least 25 characters, read from `origin/main`; a stale entry fails the
   golden test.
-- A history boundary in `tools/commit_check.py`: commits written before these rules get the
-  identity check only, so history is never rewritten to satisfy a check.
 - `tools/main_history_known.txt`: commits on main acknowledged after they landed; an entry counts
   only if the commit was on main before the change that added it.
 - Tracked hooks in `tools/hooks/` (pre-commit, commit-msg, pre-push), opt-in with
