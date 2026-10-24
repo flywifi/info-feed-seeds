@@ -104,6 +104,12 @@ jobs:
       - name: Doctor
         if: ${{ !cancelled() }}
         run: python3 -I tools/doctor.py check
+      - name: Rehearsal parity and selftests of the preflight and CI status tools
+        if: ${{ !cancelled() }}
+        run: |
+          python3 -I tools/preflight.py --check-parity
+          python3 -I tools/preflight.py --selftest
+          python3 -I tools/ci_status.py --selftest
       # Last, so every step above ran on 3.12: the same golden cases on the newer interpreter, whose
       # Unicode tables differ.
       - uses: actions/setup-python@v5

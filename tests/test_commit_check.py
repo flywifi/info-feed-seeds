@@ -302,6 +302,7 @@ class SourcesTests(unittest.TestCase):
 class HookTests(unittest.TestCase):
     def setUp(self):
         self.repo = Scratch(hooks=True)
+        self.repo.env["IFS_SKIP_PREFLIGHT"] = "1"  # the rehearsal has its own tests; these test the checks
         self.repo.commit("README.md", b"x\n", "Add README")
 
     def tearDown(self):
@@ -373,6 +374,44 @@ class HookTests(unittest.TestCase):
         clean = self.pre_push(url, job)
         self.assertEqual(clean.returncode, 0, clean.stdout.decode("ascii", "replace"))
         self.assertIn(b"1 commit(s)", clean.stdout, "the new commit was checked")
+
+
+class PrePushRangeTests(unittest.TestCase):
+    def test_pre_push_checks_the_whole_branch(self):
+        """A commit already pushed is still checked: pre-push takes the range CI checks."""
+        repo = Scratch()
+        try:
+            repo.commit("README.md", b"x\n", "Add README")
+            repo.git("remote", "add", "origin", "https://github.com/flywifi/info-feed-seeds")
+            repo.git("update-ref", "refs/remotes/origin/main", repo.head())
+            repo.commit("a.txt", b"a\n", "Add a\n\n" + CO + ": X <x@example.com>")
+            pushed = repo.head()
+            repo.commit("b.txt", b"b\n", "Add b")
+            line = f"refs/heads/job {repo.head()} refs/heads/claude/job {pushed}"
+            found = quiet(cc.check_pre_push, "origin", "https://github.com/flywifi/info-feed-seeds", [line],
+                          cwd=repo.dir)
+            self.assertTrue(any(pushed[:7] in f and "co-author trailer" in f for f in found), found)
+        finally:
+            repo.close()
+
+    @unittest.skipIf(shutil.which("sh") is None, "the hooks are sh scripts")
+    def test_pre_push_runs_the_rehearsal(self):
+        """Without IFS_SKIP_PREFLIGHT the hook runs tools/preflight.py; this scratch copy has no
+        ci.yml, so the rehearsal fails closed and the push is refused."""
+        repo = Scratch(hooks=True)
+        try:
+            repo.commit("README.md", b"x\n", "Add README")
+            repo.git("remote", "add", "origin", "https://github.com/flywifi/info-feed-seeds")
+            repo.git("update-ref", "refs/remotes/origin/main", repo.head())
+            repo.commit("f.txt", b"f\n", "Add f")
+            job = f"refs/heads/main {repo.head()} refs/heads/claude/job {cc.ZERO_SHA}\n".encode()
+            hook = str(repo.dir / "tools" / "hooks" / "pre-push")
+            result = subprocess.run(["sh", hook, "origin", "https://github.com/flywifi/info-feed-seeds"],
+                                    cwd=repo.dir, env=repo.env, input=job, capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn(b"cannot read .github/workflows/ci.yml", result.stdout)
+        finally:
+            repo.close()
 
 
 class DoctorTests(unittest.TestCase):

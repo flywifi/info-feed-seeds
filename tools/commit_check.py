@@ -824,14 +824,13 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
             continue
         if local_sha == ZERO_SHA:
             continue  # deleting a job branch: the one empty push allowed
-        if remote_sha != ZERO_SHA and git_ok("cat-file", "-e", remote_sha + "^{commit}", cwd=cwd):
-            rng = f"{remote_sha}..{local_sha}"
-        else:
-            base = resolve_range("auto", cwd=cwd)
-            if base is None:
-                findings.append("no base to compare against (origin/main and the boundary are both missing)")
-                continue
-            rng = base.replace("HEAD", local_sha)
+        # The range CI checks (--range auto): every commit on the branch since origin/<BASE_REF>, not
+        # only the commits this push adds, so a branch CI would refuse is refused here first.
+        base = resolve_range("auto", cwd=cwd)
+        if base is None:
+            findings.append("no base to compare against (origin/main and the boundary are both missing)")
+            continue
+        rng = base.replace("HEAD", local_sha)
         findings += check_range(rng, branch=target, cwd=cwd)
     if valid == 0:
         findings.append("git passed no refs to push; failing closed")
