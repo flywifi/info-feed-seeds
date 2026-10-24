@@ -178,7 +178,7 @@ class ExemptionTests(unittest.TestCase):
 
     def test_malformed_entries_are_reported(self):
         good = {"path": "a.md", "rule": "footer-line", "match_sha256": "0" * 64, "reason": "x" * 25}
-        bad = [dict(good, reason="too short"), dict(good, rule="made-by"), dict(good, rule="session-mention"),
+        bad = [dict(good, reason="too short"), dict(good, rule="generated-near"), dict(good, rule="session-mention"),
                dict(good, match_sha256="xyz"), {"path": "a.md"}, good, good]
         entries, problems = cc.load_exemptions(json.dumps({"exemptions": bad}))
         self.assertEqual(len(entries), 1)
@@ -210,7 +210,7 @@ class BoundaryAndOutputTests(unittest.TestCase):
     def test_advisory_lines_never_fail(self):
         buf = io.StringIO()
         with redirect_stdout(buf):
-            findings = cc.check_message_text("Built with " + NAME + "\n")
+            findings = cc.check_message_text("The digest was gene" + "rated with care.\nThe " + NAME + " step labels items.\n")
             code = cc.report(findings, "commit message")
         self.assertEqual((findings, code), ([], 0))
         self.assertIn("ADVISORY:", buf.getvalue())
@@ -218,7 +218,7 @@ class BoundaryAndOutputTests(unittest.TestCase):
     def test_advisory_lines_are_warnings_in_actions(self):
         buf = io.StringIO()
         with mock.patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), redirect_stdout(buf):
-            cc.check_pr_text("Fix", "Code by " + NAME, "pull request 1")
+            cc.check_pr_text("Fix", "The digest was gene" + "rated with care.\nThe " + NAME + " step labels items.\n", "pull request 1")
         self.assertIn("::warning title=commit_check advisory::pull request 1 body", buf.getvalue())
 
     def test_block_findings_fail(self):

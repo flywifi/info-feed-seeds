@@ -473,7 +473,7 @@ class FooterAndFoldingTests(unittest.TestCase):
 
     def test_lookalikes_and_hidden_characters(self):
         for key in ("trailer capital cyrillic", "trailer capital cyrillic o", "session capital greek",
-                    "trailer combining mark", "trailer precomposed accent", "trailer hangul filler",
+                    "trailer combining mark", "trailer accented letter", "trailer hangul filler",
                     "link ideographic dot", "link halfwidth dot", "link fullwidth dot"):
             with self.subTest(probe=key):
                 self.assertTrue(cc.text_findings(SAMPLES[key], "m"), key)

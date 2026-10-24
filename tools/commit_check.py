@@ -18,10 +18,12 @@ Two kinds of result
              footer phrase and a tool name on a line of their own), the footer phrase and the
              assistant's name in one sentence, an em or en dash, a review-record token (round,
              finding or ruling numbers, severity tallies), a wrong author or committer, a forbidden
-             path, CR line endings and non-ASCII Python.
-  ADVISORY   wording that may claim authorship (made with or by the assistant, credit, bylines, first
-             person, the name as author, the footer phrase and the name in one paragraph) and short
-             finding ids. Printed as "ADVISORY:" lines, and as warnings in GitHub Actions; they never
+             path, CR line endings and non-ASCII Python. Authorship and credit wording that names an
+             AI assistant also blocks: made, written, built or assisted with or by it, thanks or help
+             from it, a byline or author label, first-person use, past-tense use for a task, or the
+             name as author. The names read are Claude and other assistants and their makers. Public
+             text credits no one; where a credit is needed at all it says "the creator".
+  ADVISORY   the footer phrase and the name in one paragraph, and short finding ids. Printed as "ADVISORY:" lines, and as warnings in GitHub Actions; they never
              change the exit code. A person reads them.
 
 Every rule carries a "Limit:" text naming what it deliberately does not read, and
@@ -137,7 +139,7 @@ class _PhraseThenName:
     def finditer(self, text: str):
         for m in self.start.finditer(text):
             window = text[m.end():m.end() + self.reach]
-            if _NAME not in window:
+            if not self.name.search(window):
                 continue
             cut = self.stop.search(window)
             if cut:
@@ -234,46 +236,53 @@ _GS = r"(?:[^\w.!?\n]|_|\n(?!\n)|\.(?=[a-z]))"
 _GW = r"[a-z0-9]{1,30}(?:\.[0-9]{1,6}){0,3}"
 _W2 = r"(?:" + _GS + "{1,5}" + _GW + r"){0,2}?" + _GS + "{1,5}"
 _AUX = r"(?!(?:is|are|was|were|be|been|being|gets?|got)(?![a-z0-9]))"
-_WHO = _NAME + r"(?!\.md(?![a-z0-9]))"
+# Assistant names the authorship rules read: Claude and other AI assistants and their makers, so the
+# rule holds whichever tool is in use. The name directly followed by ".md" is a file such as CLAUDE.md.
+_ASSISTANT = (r"(?:" + _NAME + r"|chat" + _S + r"?gpt|gpt" + _S + r"?\d|openai|anthropic|copilot|gemini|codex|"
+              r"llama|mistral|deepseek|grok|perplexity|cursor" + _S + r"{1,3}ai|an?" + _S + r"{1,3}ai" + _S
+              + r"{1,3}(?:assistant|model|tool)|llms?)")
+_WHO = _ASSISTANT + r"(?!\.md(?![a-z0-9]))"
 _BOW = r"(?<![a-z0-9])"
 _MADE = (_BOW + r"(?:re|co|ghost|hand|over|pre|auto|self|semi|copy|pair" + _S + r"?)?(?:built|made|created|"
          r"written|wrote|authored|produced|coded|developed|drafted|composed|crafted|prepared|designed|"
          r"programmed|assisted|done)(?![a-z])")
 _VIA = _BOW + r"(?:with|by|using|via|through|alongside|w/)(?![a-z0-9])"
 
-ADVISORY_RULES = (
-    Rule("made-by", "authorship wording (made with or by the assistant)", False, BOTH,
+AUTHORSHIP_RULES = (
+    Rule("made-by", "authorship wording (made with or by the assistant)", True, BOTH,
          _PhraseThenName(_MADE, 200, _SENTENCE_STOP, name=_WHO, via=_VIA, via_reach=60),
          "Limit: the connective must start within 60 characters of the verb and the name must follow "
          "in the same sentence; the name directly followed by \".md\" is the file CLAUDE.md."),
-    Rule("credit", "authorship wording (credit to the assistant)", False, BOTH,
+    Rule("credit", "authorship wording (credit to the assistant)", True, BOTH,
          r"(?:thanks" + _S + r"{1,5}to|courtesy" + _S + r"{1,5}of|with" + _S + r"{1,5}the" + _S + r"{1,5}help"
          + _S + r"{1,5}of|with" + _S + r"{1,5}help" + _S + r"{1,5}from|powered" + _S + r"{1,5}by|in" + _S
          + r"{1,5}collaboration" + _S + r"{1,5}with)" + _S + r"{1,5}(?:[a-z0-9]{1,30}" + _S + r"{1,5}){0,2}?"
-         r"[a-z0-9]{0,30}?" + _WHO + r"|with" + _S + r"{1,5}[a-z0-9]{0,30}?" + _NAME + _S + r"{0,3}s?" + _S
+         r"[a-z0-9]{0,30}?" + _WHO + r"|with" + _S + r"{1,5}[a-z0-9]{0,30}?" + _WHO + _S + r"{0,3}s?" + _S
          + r"{1,3}help(?![a-z0-9])",
          "Limit: at most two words between the credit phrase and the name; \"thanks again to\" passes."),
-    Rule("byline", "authorship wording (byline)", False, BOTH,
+    Rule("byline", "authorship wording (byline)", True, BOTH,
          r"(?:^|[.;,(]|[ \t]-[ \t])[^\w\n]{0,10}(?:[a-z0-9]{1,30}(?:[ \t-]{1,3}|,[ \t]{0,3})(?:and[ \t]{1,3})?)"
          r"{0,3}by" + _S + r"{1,10}[a-z0-9]{0,30}?" + _WHO,
          "Limit: up to three words between a line start or punctuation and \"by\"; a longer clause, "
          "and identifiers joined by underscores, pass.", re.M),
-    Rule("author-label", "authorship wording (author label)", False, BOTH,
-         r"auth" + r"or(?:[^\w:=\n]|_){0,5}[:=]" + _S + r"{0,5}" + _NAME,
+    Rule("author-label", "authorship wording (author label)", True, BOTH,
+         r"auth" + r"or(?:[^\w:=\n]|_){0,5}[:=]" + _S + r"{0,5}" + _WHO,
          "Limit: needs a colon or an equals sign between the label and the name."),
-    Rule("first-person", "authorship wording (first person)", False, BOTH,
+    Rule("first-person", "authorship wording (first person)", True, BOTH,
          _BOW + r"(?:i|we)" + _W2 + r"(?:re|co)?(?:used|use|asked|had|let|leveraged|leverage|utili[sz]ed|employed)"
-         + _W2 + _NAME + r"|" + _BOW + r"using" + _GS + r"{1,5}" + _NAME + _W2 + r"(?:i|we)(?![a-z0-9])",
+         + _W2 + _WHO + r"|" + _BOW + r"using" + _GS + r"{1,5}" + _WHO + _W2 + r"(?:i|we)(?![a-z0-9])",
          "Limit: at most two words on each side of the verb; three words pass."),
-    Rule("tool-past", "authorship wording (past-tense use)", False, BOTH,
-         _BOW + r"(?:re)?(?:used|asked|had)" + _W2 + _NAME + _W2 + r"to(?![a-z0-9])",
+    Rule("tool-past", "authorship wording (past-tense use)", True, BOTH,
+         _BOW + r"(?:re)?(?:used|asked|had)" + _W2 + _WHO + _W2 + r"to(?![a-z0-9])",
          "Limit: past tense only; present-tense feature text (\"uses ... to\") passes."),
-    Rule("name-as-author", "authorship wording (the name as author)", False, BOTH,
+    Rule("name-as-author", "authorship wording (the name as author)", True, BOTH,
          _WHO + r"(?:" + _GS + "{1,5}" + _AUX + _GW + r"){0,2}?" + _GS + r"{1,5}(?:re|co|ghost|over|auto)?"
          r"(?:wrote|written|built|made|created|authored|drafted|coded|produced|generated|helped|designed|"
          r"developed)(?![a-z0-9])",
          "Limit: at most two words between the name and the verb, never a form of \"be\"; passive "
          "feature text (\"the ... prompt is built\") and three-word product names pass."),
+)
+ADVISORY_RULES = (
     Rule("generated-near", "authorship wording (footer phrase and name in one paragraph)", False, BOTH,
          _PhraseThenName(_PHRASE, 1000, r"\n\n"),
          "Limit: the same paragraph, within 1,000 characters."),
@@ -281,6 +290,7 @@ ADVISORY_RULES = (
          r"\((?:[FHMLN]\d{1,2})(?:, ?[FHMLN]\d{1,2})*\)|(?<![A-Za-z0-9])test_[fhmln]\d{1,2}_",
          "Limit: only a parenthesised list or a test name; a bare F1 passes.", cased=True),
 )
+BLOCK_RULES = BLOCK_RULES + AUTHORSHIP_RULES
 RULES = BLOCK_RULES + ADVISORY_RULES
 RULE_IDS = {r.id for r in RULES} | {"dash"}
 
@@ -924,7 +934,7 @@ def banned_samples() -> dict[str, str]:
         "trailer capital cyrillic o": "Add b\n\nC\u041e-Auth" + "ored-By: x",
         "session capital greek": "Add b\n\nCl\u0391ude-Session: x",
         "trailer combining mark": "Add b\n\nCo\u0336-Auth" + "ored-By: x",
-        "trailer precomposed accent": "Add b\n\nC\u00f3-Auth" + "ored-By: x",
+        "trailer accented letter": "Add b\n\nC\u00f3-Auth" + "ored-By: x",
         "trailer hangul filler": "Add b\n\nCo-Auth\u3164ored-By: x",
         "link ideographic dot": "Add b\n\nsee https://" + "claude" + "\u3002" + "ai/x",
         "link halfwidth dot": "Add b\n\nsee https://" + "claude" + "\uff61" + "ai/x",
