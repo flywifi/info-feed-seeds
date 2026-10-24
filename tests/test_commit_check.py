@@ -170,19 +170,25 @@ class FileTests(unittest.TestCase):
     def test_seed_files_keep_imported_bylines_on_data_lines(self):
         # A seed file imports public listings, whose own bylines may stand; prose there is still read.
         imported = ("- Research blog by " + NAME + " (https://example.org/feed.xml)\n",
-                    "  - Posts written by " + NAME + "\n",
+                    "  - Posts by " + NAME + "\n",
                     "1. Blog by " + NAME + "\n",
                     "| Research blog by " + NAME + " | https://example.org/feed.xml |\n",
                     "|Blog by " + NAME + "|url|\n",
-                    "    \"title\": \"Posts written by " + NAME + "\",\n",
-                    "<outline text=\"Essays written by " + NAME + "\" />\n")
+                    "    \"title\": \"Posts by " + NAME + "\",\n",
+                    "{\"title\": \"Posts by " + NAME + "\"}\n",
+                    "<outline text=\"Essays by " + NAME + "\" />\n",
+                    "https://example.org/feed.xml  Essays by " + NAME + "\n",
+                    "title: Essays by " + NAME + "\n")
         for text in imported:
             self.assertEqual(cc.content_findings("seeds/2026-10-24_x.md", text.encode()), [], text)
+        for text in imported[:5] + imported[7:8]:  # the Markdown and tag shapes block outside seeds/
             self.assertTrue(cc.content_findings("docs/x.md", text.encode()), text)
-        for prose in ("Notes compiled by " + NAME + ".\n", "The table was written by " + NAME + ".\n"):
+        for prose in ("Notes compiled by " + NAME + ".\n", "Essays by " + NAME + " are listed below.\n"):
             self.assertTrue(cc.content_findings("seeds/2026-10-24_x.md", prose.encode()), prose)
-        # The fixed shapes are read on every line of a seed file.
-        self.assertTrue(cc.content_findings("seeds/x.md", ("- " + CO + ": x <x@example.com>\n").encode()))
+        # Only the byline rule relaxes: the file author's own notes and the fixed shapes block on every line.
+        for own in ("- Made with " + NAME + "\n", "- Thanks to " + NAME + " for the list\n",
+                    "1. " + NAME + " wrote this list\n", "- " + CO + ": x <x@example.com>\n"):
+            self.assertTrue(cc.content_findings("seeds/x.md", own.encode()), own)
         self.assertEqual(cc.file_matches(imported[0], "seeds/x.md"), [])
         self.assertTrue(cc.file_matches(imported[0], "docs/x.md"))
 
@@ -412,7 +418,9 @@ class HookTests(unittest.TestCase):
         self.repo.git("update-ref", "refs/remotes/origin/main", head)
         self.assertNotEqual(self.pre_push(url, job).returncode, 0, "nothing new on the branch: empty range")
         tag = f"refs/tags/v1 {head} refs/tags/v1 {cc.ZERO_SHA}\n".encode()
-        self.assertNotEqual(self.pre_push(url, tag).returncode, 0, "a tag on an already-pushed commit is empty")
+        result = self.pre_push(url, tag)
+        self.assertNotEqual(result.returncode, 0, "tags are made by the maintainer on GitHub")
+        self.assertIn(b"tags are made by the maintainer", result.stdout)
         delete = f"(delete) {cc.ZERO_SHA} refs/heads/other/old {head}\n".encode()
         self.assertEqual(self.pre_push(url, delete).returncode, 0, "deleting any job branch is allowed")
         self.repo.commit("f.txt", b"f\n", "Add f")
@@ -426,7 +434,7 @@ class HookTests(unittest.TestCase):
             other = f"{ref} {tip} {ref} {cc.ZERO_SHA}\n".encode()
             result = self.pre_push(url, other)
             self.assertNotEqual(result.returncode, 0, ref)
-            self.assertIn(b"only branches and tags are pushed", result.stdout, ref)
+            self.assertIn(b"only job/<name> and doctor/<fix> branches are pushed", result.stdout, ref)
         delete_notes = f"(delete) {cc.ZERO_SHA} refs/notes/commits {tip}\n".encode()
         self.assertEqual(self.pre_push(url, delete_notes).returncode, 0, "deleting stray notes is allowed")
         for name in ("job/x", "doctor/fix-1", "job/a.b_c/d"):

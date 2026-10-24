@@ -16,8 +16,9 @@ All notable changes to this repository are recorded here. The format follows
   `tests/test_instruction_files.py` holds that shape (a pointer is exactly the import line) and
   checks that `.gemini/settings.json`, which points its reader at the rulebook, names exactly it.
   Job branches are named `job/<name>`, and the pre-push hook refuses any branch not named
-  `job/<name>` or `doctor/<fix>` and any ref that is not a branch or a tag, so a tool's own branch
-  or attribution notes never reach the repository; a deletion of any ref passes.
+  `job/<name>` or `doctor/<fix>` and any ref that is not such a branch (tags included, since a tag
+  carries a tagger and a message no check reads), so a tool's own branch, tag or attribution notes
+  never reach the repository; a deletion of any ref passes.
 - The checker reads marks a tool leaves without naming itself: assistance trailer keys and
   title-case hyphenated session, thread, log, event, screenshot, publication or checkpoint keys in
   messages and pull request text; session label lines there; and everywhere a GitHub machine
@@ -29,9 +30,10 @@ All notable changes to this repository are recorded here. The format follows
   tiers (Build, Web, Autofix, Spark, Composer, Fable, Mythos and others), so a name followed by one
   of them is still read as the name. The generic phrases need an article or determiner, so a topic
   such as "AI agents built on graphs" stays ordinary text.
-- In files under `seeds/`, imports of public listings, the authorship rules leave lines of imported
-  data alone (list items, numbered items, table rows, tags and quoted strings), so a feed's own
-  byline may stand there; prose is still read, and the fixed shapes are read on every line.
+- In files under `seeds/`, imports of public listings, the byline rule leaves lines of imported data
+  alone (list items, numbered items, table rows, tags, quoted strings, objects, URLs and key lines),
+  so a feed's own byline may stand there; prose is still read, and every other rule reads every
+  line.
 - The authorship rules also read Qwen, Kimi, Devin, Aider, Windsurf, Replit, Jules and Junie (the
   given names and the sport only when capitalised, and never with a capitalised surname after them),
   and the phrases "coding agent", "AI agent" and "language model".

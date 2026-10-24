@@ -76,9 +76,10 @@ git config core.hooksPath tools/hooks
 - `commit-msg` checks the commit message.
 - `pre-push` checks every commit and changed file on the branch since `origin/main` (the range CI
   checks), confirms the push URL is github.com/flywifi/info-feed-seeds, refuses pushes to `main`
-  and `data`, refuses any branch not named `job/<name>` or `doctor/<fix>` and any ref that is not a
-  branch or a tag (notes included; a deletion of any ref is allowed), refuses an empty push, then
-  runs the CI rehearsal.
+  and `data`, refuses any ref that is not a branch named `job/<name>` or `doctor/<fix>` (tags, which
+  carry a tagger and a message no check reads, are made by the maintainer on GitHub; notes and other
+  namespaces never; a deletion of any ref is allowed), refuses an empty push, then runs the CI
+  rehearsal.
 
 All three call `tools/commit_check.py`. Run it by hand with `--range origin/main..HEAD`, check a
 pull request with `--pr N`, or prove the checks fire with `--selftest`.
@@ -186,9 +187,10 @@ other names first, so a pointer under one of those names would hide the rulebook
 - Credit phrases before the name (thanks to, courtesy of, with the help of, powered by), and plain
   thanks, kudos or a credit label with the name right after it.
 - A byline: up to three words and "by" before the name. In files under `seeds/`, imports of public
-  listings whose own bylines may stand, none of the authorship rules reads a line that holds
-  imported data (a list item, a numbered item, a table row, a tag or a quoted string); prose there
-  is read, and the fixed shapes are read on every line.
+  listings whose own bylines may stand, the byline rule does not read a line that holds imported
+  data (a list item, a numbered item, a table row, a tag, a quoted string, an object, a URL or a key
+  line); prose there is read, and every other rule reads every line, so the file author's own
+  "made with" or "thanks to" blocks there as anywhere.
 - An author label, first-person use (I or we used, asked, leveraged the name), past-tense use of
   the name to do a task, active or passive ("was used to"), and the name followed by a making verb.
 
@@ -199,8 +201,8 @@ mistral, perplexity, grok, Kiro, Trae, Manus) count only when capitalised, and t
 words are ordinary alone (Amazon Q, Muse Code, Meta AI, Zed Agent) count only as the pair in title
 case. The generic phrases need an article or determiner, so a topic such as "AI agents built on
 graphs" or "search powered by large language models" passes. One name that is also a common
-surname counts only when no
-capitalised word stands right before it (a given name before it makes it a person). A capitalised
+surname counts only when no capitalised word stands right before it (a given name before it makes
+it a person). A capitalised
 word after the name that is not a product tier makes it someone else: "Claude Shannon", "Gemini
 Observatory" and "Mistral Press" pass, while "Claude Code", "ChatGPT Plus", "Grok Build" and
 "Copilot Autofix" still count, as does a tier glued on ("ClaudeOpus", "MistralAI"). "Built-in",

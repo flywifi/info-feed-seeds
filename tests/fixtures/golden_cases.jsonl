@@ -392,3 +392,7 @@
 {"id": "generic-phrase-topic-agents", "kind": "control", "rule": "name-as-author", "note": "a topic without an article.", "expect": "pass", "b64": "QUkgYWdlbnRzIGJ1aWx0IG9uIGtub3dsZWRnZSBncmFwaHM="}
 {"id": "generic-phrase-detection-title", "kind": "control", "rule": "name-as-author", "note": "a paper title.", "expect": "pass", "b64": "TGFyZ2UgTGFuZ3VhZ2UgTW9kZWxzIEdlbmVyYXRlZCBUZXh0IERldGVjdGlvbg=="}
 {"id": "generic-phrase-with-article", "kind": "planted", "rule": "name-as-author", "note": "a generic phrase with its article.", "expect": "block", "b64": "VGhlIEFJIGFnZW50cyBidWlsdCB0aGUgaW5kZXgu"}
+{"id": "log-trailer-single-word-key", "kind": "limit", "rule": "log-trailer", "note": "a single word before the colon is an ordinary label.", "expect": "pass", "b64": "RXZlbnQ6IHRoZSBmZWVkIG1vdmVkIHRvIGEgbmV3IGhvc3QKUHVibGljYXRpb246IHdlZWtseQ=="}
+{"id": "log-trailer-bulleted-single-word", "kind": "control", "rule": "log-trailer", "note": "a single word in a bullet.", "expect": "pass", "b64": "LSBMb2dzOiByb3RhdGVkIGRhaWx5"}
+{"id": "generic-phrase-each-determiner", "kind": "planted", "rule": "name-as-author", "note": "a determiner other than an article.", "expect": "block", "b64": "RWFjaCBsYW5ndWFnZSBtb2RlbCB3cm90ZSBpdHMgb3duIHN1bW1hcnku"}
+{"id": "generic-phrase-its-determiner", "kind": "planted", "rule": "credit", "note": "a possessive determiner.", "expect": "block", "b64": "Q3JlZGl0czogaXRzIEFJIGFzc2lzdGFudA=="}

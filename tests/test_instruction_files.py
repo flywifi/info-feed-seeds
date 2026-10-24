@@ -30,12 +30,12 @@ SETTINGS_NAMING_THE_RULEBOOK = {".gemini/settings.json": ("context", "fileName")
 # Files and folders coding tools read instructions from, at any depth.
 INSTRUCTION_PATHS = re.compile(
     r"(?:^|/)(?:AGENTS?(?:\.override)?\.md|CLAUDE(?:\.local)?\.md|GEMINI\.md|QWEN\.md|CRUSH\.md|WARP\.md|"
-    r"copilot-instructions\.md|\.rules|\.cursorrules|\.windsurfrules|\.clinerules|\.roorules|\.goosehints|"
-    r"\.augment-guidelines|[^/]*\.mdc)$"
-    r"|(?:^|/)(?:\.cursor|\.windsurf|\.devin|\.junie|\.clinerules|\.github/(?:instructions|agents|prompts)|"
-    r"\.claude/(?:rules|agents|commands|skills)|\.agents/rules|\.augment/rules|\.kiro/steering|\.trae/rules|"
-    r"\.roo/rules[^/]*|\.amazonq/rules|\.kilocode/rules|\.continue/rules|\.openhands/microagents|\.idx/airules\.md|"
-    r"\.gemini/styleguide\.md)(?:/|$)", re.I)
+    r"CONVENTIONS\.md|copilot-instructions\.md|\.rules|\.cursorrules|\.windsurfrules|\.clinerules|\.roorules|"
+    r"\.kilocoderules|\.continuerules|\.goosehints|\.augment-guidelines|[^/]*\.mdc)$"
+    r"|(?:^|/)(?:\.cursor|\.windsurf|\.devin|\.junie|\.clinerules|\.github/(?:instructions|agents|prompts|chatmodes)|"
+    r"\.claude/(?:rules|agents|commands|skills)|\.agents?/rules|\.augment/rules|\.kiro/steering|\.trae/rules|"
+    r"\.roo/rules[^/]*|\.amazonq/rules|\.kilocode/rules|\.continue/rules|\.qoder/rules|\.codebuddy/rules|"
+    r"\.openhands/microagents|\.idx/airules\.md|\.gemini/styleguide\.md)(?:/|$)", re.I)
 # A product name anywhere in the rulebook, read with the checker's own list; ".md" after it is a file name.
 # The checker's generic phrases name no product, so they are removed before the search.
 PRODUCT = re.compile(cc._ASSISTANT + r"(?!\.md(?![a-z0-9]))", re.I)
@@ -111,7 +111,9 @@ class PointerTests(unittest.TestCase):
                     ".github/prompts/x.prompt.md", ".github/instructions/a.instructions.md", ".windsurfrules",
                     ".clinerules/a.md", ".agents/rules/a.md", ".kiro/steering/a.md", ".roo/rules-code/a.md",
                     ".amazonq/rules/a.md", ".kilocode/rules/a.md", ".continue/rules/a.md",
-                    ".openhands/microagents/repo.md", ".idx/airules.md", ".gemini/styleguide.md"):
+                    ".openhands/microagents/repo.md", ".idx/airules.md", ".gemini/styleguide.md",
+                    ".kilocoderules", ".continuerules", ".github/chatmodes/x.chatmode.md", ".agent/rules/a.md",
+                    "docs/CONVENTIONS.md", ".qoder/rules/a.md", ".codebuddy/rules/a.md"):
             self.assertTrue(INSTRUCTION_PATHS.search(rel), rel)
         for rel in ("README.md", "docs/injection-guard.md", ".claude/settings.json", ".gemini/settings.json",
                     "tools/hooks/pre-push", "feeder/agents.py", "schema/rules.json", "docs/rules.md"):

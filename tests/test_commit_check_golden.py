@@ -108,6 +108,7 @@ def timing_inputs() -> dict:
         "at signs": "@" * n, "address runs": "a@b." * (n // 4), "comment openers": "<!-- " * (n // 5),
         "slashes": "/" * n, "link openers": "](" * (n // 2), "hyphen keys": "A-" * (n // 2) + ":",
         "digits and plus": "1" * (n - 1) + "+", "bracket runs": "[" * n, "determiners": "the " * (n // 4),
+        "bylines on one line": ("by " + NAME + " ") * (n // 10), "bulleted bylines": ("- by " + NAME + "\n") * (n // 11),
     }
 
 
@@ -218,7 +219,7 @@ class TimingTests(unittest.TestCase):
         slow = []
         for label, text in timing_inputs().items():
             folded = {False: cc._fold(text), True: cc._fold(text, keep_case=True)}
-            for rule in cc.RULES:
+            for rule in cc.RULES + tuple(cc.SEED_RULES.values()):
                 start = time.perf_counter()
                 rule.search(folded[rule.cased])
                 took = time.perf_counter() - start

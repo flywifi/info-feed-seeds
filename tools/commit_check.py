@@ -26,11 +26,11 @@ Two kinds of result
              tool leaves without naming itself block too: assistance and session trailer keys and
              session label lines (messages and pull request text), and everywhere an agent mailbox,
              a session link by host and path, a hidden HTML marker and a credit verb with a link to
-             a coding tool's host. Pushes are refused for any branch not named job/<name> or
-             doctor/<fix> and for every ref that is not a branch or a tag (notes included); a deletion
-             of any ref passes. Under seeds/ the authorship rules read prose only: a list item, a
-             numbered item, a table row, a tag or a quoted string holds imported data, whose bylines
-             the content rules let stand.
+             a coding tool's host. Pushes are refused for any ref that is not a branch named job/<name>
+             or doctor/<fix> (tags, notes and other namespaces included); a deletion of any ref passes.
+             Under seeds/ the byline rule reads prose only: a list item, a numbered item, a table row, a
+             tag, a quoted string, an object, a URL or a key line holds imported data, whose bylines the
+             content rules let stand; every other rule reads every line there.
   ADVISORY   the footer phrase and the name in one paragraph, and short finding ids. Printed as "ADVISORY:" lines, and as warnings in GitHub Actions; they never
              change the exit code. A person reads them.
 
@@ -188,20 +188,22 @@ class _PhraseThenName:
 
 
 # A line that holds imported data rather than prose: a list item, a numbered item, a table row, a tag
-# (OPML, HTML) or a quoted string (JSON). The content rules let a byline or author name imported from
-# a public source stand, so under seeds/ the authorship rules do not read such lines.
-_IMPORTED_LINE = re.compile(r"[ \t]{0,8}(?:[-*+][ \t]|\d{1,3}[.)][ \t]|\||<|\")")
+# (OPML, HTML), a quoted string or an object (JSON), a URL, or a key line (YAML). The content rules let a
+# byline imported from a public source stand, so under seeds/ the byline rule does not read such lines.
+_IMPORTED_LINE = re.compile(r"[ \t]{0,8}(?:[-*+][ \t]|\d{1,3}[.)][ \t]|\||<|\"|[{\[]|https?://|[A-Za-z0-9_-]{1,40}:[ \t])")
 
 
 class _ProseOnly:
-    """A matcher's hits, without those that start on an imported-data line."""
+    """A matcher's hits, without those that start on an imported-data line. Line starts are found once
+    per text and looked up by bisection, so a long line with many hits stays linear."""
 
     def __init__(self, inner):
         self.inner = inner
 
     def finditer(self, text: str):
+        starts = [0] + [i + 1 for i, ch in enumerate(text) if ch == "\n"]
         for m in self.inner.finditer(text):
-            line_start = text.rfind("\n", 0, m.start()) + 1
+            line_start = starts[bisect.bisect_right(starts, m.start()) - 1]
             if not _IMPORTED_LINE.match(text, line_start):
                 yield m
 
@@ -288,12 +290,14 @@ BLOCK_RULES = (
          "Limit: the key must open a line and end in a colon or an equals sign; prose such as "
          "\"assisted by the new cache\" and files are not read.", re.M),
     Rule("log-trailer", "session or log trailer", True, TEXT,
-         _LEAD + r"(?:[A-Z][A-Za-z0-9]{0,30}(?:-[A-Z0-9][A-Za-z0-9]{0,30}){0,4}-)?(?:Session|Thread|Logs?|Event|"
-         r"Screenshot|Publication|Checkpoint)(?:-(?:Id|ID|Url|URL|Type|Created))?[ \t]{0,3}[:=]",
-         "Limit: the key must open a line, carry its words in title case joined by hyphens and end in one "
-         "of the listed words; a lowercase component prefix such as crawl-log: passes, Run, Task and Build "
-         "are not such words, and files (where a configuration key such as max-session is ordinary) are "
-         "not read.", re.M, cased=True),
+         _LEAD + r"(?:[A-Z][A-Za-z0-9]{0,30}(?:-[A-Z0-9][A-Za-z0-9]{0,30}){0,4}-(?:Session|Thread|Logs?|Event|"
+         r"Screenshot|Publication|Checkpoint)(?:-(?:Id|ID|Url|URL|Type|Created))?|(?:Session|Thread)-(?:Id|ID|Url|URL))"
+         r"[ \t]{0,3}[:=]",
+         "Limit: the key must open a line, carry at least two title-case words joined by hyphens and end in "
+         "one of the listed words (a bare Session-Id or Thread-Url counts too); a single word such as "
+         "Event: or a lowercase component prefix such as crawl-log: passes, Run, Task and Build are not such "
+         "words, and files (where a configuration key such as max-session is ordinary) are not read.",
+         re.M, cased=True),
     Rule("agent-address", "agent mailbox address", True, BOTH,
          r"(?<!github-actions)(?<!dependabot)(?<!renovate)\[bot\]@users\.noreply\.github\.com"
          r"|(?<![a-z0-9])\d{1,12}\+(?:copilot|kiro-agent|junie-agent|openhands-agent|zed-agent|cursoragent)"
@@ -375,7 +379,7 @@ _GLUE = r"(?:" + _TIER + r")?(?![a-z])"
 # right before it (a given name makes it a person), which also leaves out a sentence-opening word before it.
 _NO_GIVEN_NAME = "".join(r"(?<!(?-i:[A-Z])[a-z]{%d} )" % n for n in range(1, 13))
 # Every name starts with one of these letters; the lookahead turns most positions away in one test.
-_ASSISTANT = (r"(?=[acdfgjklmnopqrstwxz])(?:" + _NAME + _GLUE
+_ASSISTANT = (r"(?=[acdefgijklmnopqrstwxz])(?:" + _NAME + _GLUE
               + r"|(?<![a-z0-9])(?:chat" + _S + r"?gpt|gpts?(?![ \t-]{0,3}(?:partition|disk|table|header|"
               r"entr|label|format|boot|uefi)[a-z]{0,6}(?![a-z]))|openai|anthropic|gemini|deepseek|codellama|llms?|"
               r"qwen|aider|replit|cursor" + _S + r"{1,3}(?:ai|agent|composer)"
@@ -423,8 +427,8 @@ _SIGNOFF = (_LS + r"{0,5}+\n[ \t]{0,10}+(?:[-*>~]{1,2}[ \t]{0,3})?" + _WHO
 # A byline: up to three words, "by", the name.
 _BYLINE = (r"[^\w\n]{0,10}(?:[a-z0-9]{1,30}(?:[ \t-]{1,3}|,[ \t]{0,3})(?:and[ \t]{1,3})?){0,3}by" + _S
            + r"{1,10}[a-z0-9]{0,30}?" + _WHO)
-_SEED_LIMIT = (" In files under seeds/ a line that starts with a list marker, a number, a table bar, a tag or "
-               "a quote holds imported data and is not read; prose there is.")
+_SEED_LIMIT = (" In files under seeds/ a line that starts with a list marker, a number, a table bar, a tag, a "
+               "quote, a brace or bracket, a URL or a key holds imported data and is not read; prose there is.")
 SEEDS_PREFIX = "seeds/"
 
 AUTHORSHIP_RULES = (
@@ -481,9 +485,10 @@ ADVISORY_RULES = (
 BLOCK_RULES = BLOCK_RULES + AUTHORSHIP_RULES
 RULES = BLOCK_RULES + ADVISORY_RULES
 RULE_IDS = {r.id for r in RULES} | {"dash"}
-# Under seeds/ the authorship rules read prose only (see _IMPORTED_LINE); the fixed-shape rules read everything.
+# Under seeds/ the byline rule reads prose only (see _IMPORTED_LINE); every other rule reads every line, so
+# a note of the file's own author ("made with", "thanks to") blocks there as anywhere.
 SEED_RULES = {r.id: Rule(r.id, r.label, True, FILE, _ProseOnly(r.matcher), r.limit + _SEED_LIMIT, cased=r.cased)
-              for r in AUTHORSHIP_RULES}
+              for r in AUTHORSHIP_RULES if r.id == "byline"}
 # Branches a clone may push: one per job, or a proposal branch from the doctor.
 JOB_BRANCH = re.compile(r"(?:job|doctor)/[A-Za-z0-9][A-Za-z0-9._/-]{0,80}$")
 
@@ -663,7 +668,7 @@ def _rules(block: bool, place: str) -> tuple:
 
 
 def _file_rules(path: str) -> tuple:
-    """The BLOCK rules for one file; under seeds/ the authorship rules leave imported-data lines alone."""
+    """The BLOCK rules for one file; under seeds/ the byline rule leaves imported-data lines alone."""
     rules = _rules(True, "file")
     if path.startswith(SEEDS_PREFIX):
         rules = tuple(SEED_RULES.get(r.id, r) for r in rules)
@@ -1033,13 +1038,14 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
             continue
         if local_sha == ZERO_SHA:
             continue  # deleting a branch, a tag or a stray ref: the one empty push allowed
-        if remote_ref.startswith("refs/heads/"):
-            if not JOB_BRANCH.match(target):
-                findings.append(f"refusing to push branch {target}: a branch is named job/<name> or doctor/<fix>")
-                continue
-        elif not remote_ref.startswith("refs/tags/"):
-            findings.append(f"refusing to push {remote_ref}: only branches and tags are pushed (notes and "
-                            "other ref namespaces, where some tools keep attribution, never)")
+        if not remote_ref.startswith("refs/heads/"):
+            # A tag carries a tagger and a message of its own that no check here reads, and notes and
+            # other namespaces are where some tools keep attribution; the maintainer tags on GitHub.
+            findings.append(f"refusing to push {remote_ref}: only job/<name> and doctor/<fix> branches are "
+                            "pushed from a clone (tags are made by the maintainer on GitHub)")
+            continue
+        if not JOB_BRANCH.match(target):
+            findings.append(f"refusing to push branch {target}: a branch is named job/<name> or doctor/<fix>")
             continue
         # The range CI checks (--range auto): every commit on the branch since origin/<BASE_REF>, not
         # only the commits this push adds, so a branch CI would refuse is refused here first.
