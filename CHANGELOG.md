@@ -9,9 +9,25 @@ All notable changes to this repository are recorded here. The format follows
 ### Added
 
 - `AGENTS.md` is the one rulebook every coding tool reads, and `CLAUDE.md` is an import of it. The
-  rulebook names no AI product, imports nothing, stays under 24 KiB and 200 lines, and no other
-  instruction file in the tree carries a rule; `tests/test_instruction_files.py` holds that shape.
-  Job branches are named `job/<name>`.
+  rulebook names no AI product, imports nothing, stays under 16 KiB and 200 lines (the smallest
+  share any reader takes), and no other instruction file exists in the tree: a pointer is accepted
+  only as `CLAUDE.md` or `GEMINI.md` at the root, because one reader takes the first instruction
+  file it finds in an order that puts several other names before the rulebook.
+  `tests/test_instruction_files.py` holds that shape and checks that `.gemini/settings.json`, which
+  points its reader at the rulebook, keeps naming it. Job branches are named `job/<name>`, and the
+  pre-push hook refuses any branch not named `job/<name>` or `doctor/<fix>` and every notes ref,
+  so a tool's own branch or attribution notes never reach the repository.
+- The checker reads marks a tool leaves without naming itself: assistance trailer keys and
+  hyphenated session, thread, log, event, screenshot, publication or checkpoint keys in messages and
+  pull request text; session label lines there; and everywhere a GitHub machine account address or
+  a mail domain only agents write from, a tool's session, task, thread or badge link by host and
+  path, a hidden HTML comment a tool plants, and a making or credit verb with a Markdown link to a
+  coding tool's host. The authorship rules also read the coined names of coding agents and their
+  makers in any letter case, several given-name products in title case, two-word names as the pair
+  in title case, and more product tiers (Build, Web, Autofix, Spark, Composer, Fable, Mythos and
+  others), so a name followed by one of them is still read as the name.
+- In files under `seeds/`, imports of public listings, the byline rule leaves list items and table
+  rows alone, so a feed's own byline may stand there; prose is still read.
 - The authorship rules also read Qwen, Kimi, Devin, Aider, Windsurf, Replit, Jules and Junie (the
   given names and the sport only when capitalised, and never with a capitalised surname after them),
   and the phrases "coding agent", "AI agent" and "language model".

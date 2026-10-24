@@ -76,7 +76,8 @@ git config core.hooksPath tools/hooks
 - `commit-msg` checks the commit message.
 - `pre-push` checks every commit and changed file on the branch since `origin/main` (the range CI
   checks), confirms the push URL is github.com/flywifi/info-feed-seeds, refuses pushes to `main`
-  and `data`, refuses an empty push (anything but a branch deletion), then runs the CI rehearsal.
+  and `data`, refuses any branch not named `job/<name>` or `doctor/<fix>` (a deletion of any
+  branch is allowed), refuses every notes ref, refuses an empty push, then runs the CI rehearsal.
 
 All three call `tools/commit_check.py`. Run it by hand with `--range origin/main..HEAD`, check a
 pull request with `--pr N`, or prove the checks fire with `--selftest`.
@@ -151,6 +152,13 @@ ways.
   severity tally such as two counts with severity words, or a capital severity id with a number.
 - An author or committer other than flywifi, a path that is never tracked, CR line endings,
   non-ASCII Python, and machine output off the `data` branch.
+- Marks a tool leaves without naming itself, in messages and pull request text: an assistance
+  trailer key (assisted-by, generated-with, made-with and the like) or a hyphenated key ending in
+  session, thread, log, event, screenshot, publication or checkpoint; a label line that links to a
+  session, task, thread or trace, or names a requester with an at sign.
+- Everywhere: a GitHub machine account address or a mail domain only agents write from; a link
+  whose host and path are a tool's session, task, thread or badge link; a hidden HTML comment a
+  tool plants; and a making or credit verb with a Markdown link to a coding tool's host.
 
 Messages and pull request text are held to any mention of the trailer keys, the session host and
 session ids. Files are held only to the real forms (a trailer line, a link, a footer line), so a
@@ -159,30 +167,44 @@ sentence that names a rule passes.
 **Authorship and credit** (block): public text credits no one. Where a credit is needed at all, it
 says "the creator". The checks block authorship or help wording that names an AI assistant: Claude,
 other assistants and their makers (such as ChatGPT, GPT, OpenAI, Anthropic, Copilot, Gemini, Qwen,
-Devin, Aider), or a generic phrase ("an AI assistant", "a coding agent", "a language model"). The
-rulebook every coding tool reads, `AGENTS.md`, states the same rule; `CLAUDE.md` is an import of it.
-`tests/test_instruction_files.py` keeps the rulebook free of product names, within the size its
-readers accept, and the only file in the tree that carries a rule.
+Devin, Aider, Codex, Cursor Agent, OpenCode, OpenHands, OpenClaw, Kiro, Trae, Amazon Q, Roo Code,
+Kilo Code, Augment Code, Muse Code, Meta AI), or a generic phrase ("an AI assistant", "a coding
+agent", "a language model"). The rulebook every coding tool reads, `AGENTS.md`, states the same
+rule; `CLAUDE.md` is an import of it, and `.gemini/settings.json` names it for the one reader that
+looks for another file by default. `tests/test_instruction_files.py` keeps the rulebook free of
+product names, within 16 KiB and 200 lines (the smallest share any reader takes), the only file in
+the tree that carries a rule, and the only instruction file besides a pointer named `CLAUDE.md` or
+`GEMINI.md`: one reader takes the first instruction file it finds, in an order that puts several
+other names first, so a pointer under one of those names would hide the rulebook from it.
 
 - A making verb (built, made, written, generated, designed and similar, with prefixes such as re,
   co, auto or pair-) followed by with, by, using or a similar connective and the assistant's name.
 - Credit phrases before the name (thanks to, courtesy of, with the help of, powered by), and plain
   thanks, kudos or a credit label with the name right after it.
-- A byline: up to three words and "by" before the name.
+- A byline: up to three words and "by" before the name. In files under `seeds/`, imports of public
+  listings whose own bylines may stand, a list item or table row is not read for a byline; prose
+  there is.
 - An author label, first-person use (I or we used, asked, leveraged the name), past-tense use of
   the name to do a task, active or passive ("was used to"), and the name followed by a making verb.
 
-The names are read as words, so "Hallmark", "Ullman" or "philanthropic" never count. Names that are
-also ordinary words (copilot, codex, llama, mistral, perplexity, grok) count only when capitalised.
-A capitalised word after the name that is not a product tier makes it someone else: "Claude
-Shannon", "Gemini Observatory" and "Mistral Press" pass, while "Claude Code" and "ChatGPT Plus"
-still count, as does a tier glued on ("ClaudeOpus", "MistralAI"). "Built-in", "made-up" and
-"made-to-order" are adjectives and pass, unless a connective follows ("built-in with").
+The names are read as words, so "Hallmark", "Ullman" or "philanthropic" never count. Coined names
+(OpenCode, Codebuff, Genspark) count in any letter case; names that are also ordinary words or
+given names (copilot, codex, llama, mistral, perplexity, grok, Kiro, Trae, Manus) count only when
+capitalised, and two-word names whose words are ordinary alone (Amazon Q, Roo Code, Muse Code,
+Meta AI) count only as the pair in title case. One name that is also a common surname counts only
+when no capitalised word stands right before it ("Dana Cline wrote" is a person). A capitalised
+word after the name that is not a product tier makes it someone else: "Claude Shannon", "Gemini
+Observatory" and "Mistral Press" pass, while "Claude Code", "ChatGPT Plus", "Grok Build" and
+"Copilot Autofix" still count, as does a tier glued on ("ClaudeOpus", "MistralAI"). "Built-in",
+"made-up" and "made-to-order" are adjectives and pass, unless a connective follows ("built-in with").
 
 Known limits, each pinned or listed so a change to them is deliberate:
 
-- Verbs outside the lists ("implemented with", "refactored with", "prompted") and names outside the
-  list.
+- Verbs outside the lists ("implemented with", "refactored with", "prompted"), the connective "in"
+  ("written in" a tool), and names outside the list; a tool's own trailer key, mailbox, link or
+  hidden marker is read without its name.
+- Agent branch names appear only in the pre-push gate, never in merge subjects: the gate refuses
+  the branch before a merge can name it.
 - A name followed on the same line by a title-case word that is not a tier, a making verb or a short
   function word, such as a surname. In all capitals the name always counts, and a surname on the
   next line does not count. The six names that are also ordinary words (copilot, codex, llama,
