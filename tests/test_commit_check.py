@@ -167,17 +167,24 @@ class FileTests(unittest.TestCase):
             with self.subTest(path=rel):
                 self.assertEqual(cc.content_findings(rel, (ROOT / rel).read_bytes()), [])
 
-    def test_seed_files_keep_imported_bylines_in_lists_and_tables(self):
+    def test_seed_files_keep_imported_bylines_on_data_lines(self):
         # A seed file imports public listings, whose own bylines may stand; prose there is still read.
-        item = "- Research blog by " + NAME + " (https://example.org/feed.xml)\n"
-        row = "| Research blog by " + NAME + " | https://example.org/feed.xml |\n"
-        prose = "Notes compiled by " + NAME + ".\n"
-        for text in (item, row):
+        imported = ("- Research blog by " + NAME + " (https://example.org/feed.xml)\n",
+                    "  - Posts written by " + NAME + "\n",
+                    "1. Blog by " + NAME + "\n",
+                    "| Research blog by " + NAME + " | https://example.org/feed.xml |\n",
+                    "|Blog by " + NAME + "|url|\n",
+                    "    \"title\": \"Posts written by " + NAME + "\",\n",
+                    "<outline text=\"Essays written by " + NAME + "\" />\n")
+        for text in imported:
             self.assertEqual(cc.content_findings("seeds/2026-10-24_x.md", text.encode()), [], text)
             self.assertTrue(cc.content_findings("docs/x.md", text.encode()), text)
-        self.assertTrue(cc.content_findings("seeds/2026-10-24_x.md", prose.encode()))
-        self.assertEqual(cc.file_matches(item, "seeds/x.md"), [])
-        self.assertTrue(cc.file_matches(item, "docs/x.md"))
+        for prose in ("Notes compiled by " + NAME + ".\n", "The table was written by " + NAME + ".\n"):
+            self.assertTrue(cc.content_findings("seeds/2026-10-24_x.md", prose.encode()), prose)
+        # The fixed shapes are read on every line of a seed file.
+        self.assertTrue(cc.content_findings("seeds/x.md", ("- " + CO + ": x <x@example.com>\n").encode()))
+        self.assertEqual(cc.file_matches(imported[0], "seeds/x.md"), [])
+        self.assertTrue(cc.file_matches(imported[0], "docs/x.md"))
 
 
 class MessageFileTests(unittest.TestCase):
@@ -415,10 +422,13 @@ class HookTests(unittest.TestCase):
             result = self.pre_push(url, other)
             self.assertNotEqual(result.returncode, 0, name)
             self.assertIn(b"job/<name> or doctor/<fix>", result.stdout, name)
-        notes = f"refs/notes/commits {tip} refs/notes/commits {cc.ZERO_SHA}\n".encode()
-        result = self.pre_push(url, notes)
-        self.assertNotEqual(result.returncode, 0, "notes")
-        self.assertIn(b"notes are never pushed", result.stdout)
+        for ref in ("refs/notes/commits", "refs/notes", "refs/sessions/abc", "refs/meta/config", "refs/remotes/x/y"):
+            other = f"{ref} {tip} {ref} {cc.ZERO_SHA}\n".encode()
+            result = self.pre_push(url, other)
+            self.assertNotEqual(result.returncode, 0, ref)
+            self.assertIn(b"only branches and tags are pushed", result.stdout, ref)
+        delete_notes = f"(delete) {cc.ZERO_SHA} refs/notes/commits {tip}\n".encode()
+        self.assertEqual(self.pre_push(url, delete_notes).returncode, 0, "deleting stray notes is allowed")
         for name in ("job/x", "doctor/fix-1", "job/a.b_c/d"):
             job = f"refs/heads/main {tip} refs/heads/{name} {cc.ZERO_SHA}\n".encode()
             clean = self.pre_push(url, job)

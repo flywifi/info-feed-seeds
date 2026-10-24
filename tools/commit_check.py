@@ -27,7 +27,10 @@ Two kinds of result
              session label lines (messages and pull request text), and everywhere an agent mailbox,
              a session link by host and path, a hidden HTML marker and a credit verb with a link to
              a coding tool's host. Pushes are refused for any branch not named job/<name> or
-             doctor/<fix> and for every notes ref.
+             doctor/<fix> and for every ref that is not a branch or a tag (notes included); a deletion
+             of any ref passes. Under seeds/ the authorship rules read prose only: a list item, a
+             numbered item, a table row, a tag or a quoted string holds imported data, whose bylines
+             the content rules let stand.
   ADVISORY   the footer phrase and the name in one paragraph, and short finding ids. Printed as "ADVISORY:" lines, and as warnings in GitHub Actions; they never
              change the exit code. A person reads them.
 
@@ -133,13 +136,16 @@ _ENTITY = (r"(?![ \t]{1,3}(?=(?-i:[A-Z][a-z]))(?!(?:" + _TIER + r"|" + _TITLE_WO
 
 
 class _Hit:
-    """A match found by a matcher class: the matched text, read with group(0) like a re match."""
+    """A match found by a matcher class: the matched text and where it starts, read like a re match."""
 
-    def __init__(self, text: str):
-        self.text = text
+    def __init__(self, text: str, start: int = 0):
+        self.text, self._start = text, start
 
     def group(self, _index: int = 0) -> str:
         return self.text
+
+    def start(self) -> int:
+        return self._start
 
 
 class _PhraseThenName:
@@ -175,7 +181,29 @@ class _PhraseThenName:
                 offset = vias[j][1]
             k = bisect.bisect_left(name_starts, offset)
             if k < len(names) and names[k][1] <= hi:
-                yield _Hit(text[m.start():names[k][1]])
+                yield _Hit(text[m.start():names[k][1]], m.start())
+
+    def search(self, text: str):
+        return next(self.finditer(text), None)
+
+
+# A line that holds imported data rather than prose: a list item, a numbered item, a table row, a tag
+# (OPML, HTML) or a quoted string (JSON). The content rules let a byline or author name imported from
+# a public source stand, so under seeds/ the authorship rules do not read such lines.
+_IMPORTED_LINE = re.compile(r"[ \t]{0,8}(?:[-*+][ \t]|\d{1,3}[.)][ \t]|\||<|\")")
+
+
+class _ProseOnly:
+    """A matcher's hits, without those that start on an imported-data line."""
+
+    def __init__(self, inner):
+        self.inner = inner
+
+    def finditer(self, text: str):
+        for m in self.inner.finditer(text):
+            line_start = text.rfind("\n", 0, m.start()) + 1
+            if not _IMPORTED_LINE.match(text, line_start):
+                yield m
 
     def search(self, text: str):
         return next(self.finditer(text), None)
@@ -260,25 +288,31 @@ BLOCK_RULES = (
          "Limit: the key must open a line and end in a colon or an equals sign; prose such as "
          "\"assisted by the new cache\" and files are not read.", re.M),
     Rule("log-trailer", "session or log trailer", True, TEXT,
-         _LEAD + _LABEL + r"[a-z][a-z0-9]{0,30}(?:-[a-z0-9]{1,30}){0,4}-(?:session|thread|logs?|event|screenshot|"
-         r"publication|checkpoint)(?:-(?:id|url|type|created))?[ \t]{0,3}[:=]",
-         "Limit: the key must open a line, join at least two words with hyphens and end in one of the "
-         "listed words; Run, Task and Build are not such words, and files (where a configuration key "
-         "such as max-session is ordinary) are not read.", re.M),
+         _LEAD + r"(?:[A-Z][A-Za-z0-9]{0,30}(?:-[A-Z0-9][A-Za-z0-9]{0,30}){0,4}-)?(?:Session|Thread|Logs?|Event|"
+         r"Screenshot|Publication|Checkpoint)(?:-(?:Id|ID|Url|URL|Type|Created))?[ \t]{0,3}[:=]",
+         "Limit: the key must open a line, carry its words in title case joined by hyphens and end in one "
+         "of the listed words; a lowercase component prefix such as crawl-log: passes, Run, Task and Build "
+         "are not such words, and files (where a configuration key such as max-session is ordinary) are "
+         "not read.", re.M, cased=True),
     Rule("agent-address", "agent mailbox address", True, BOTH,
-         r"\[bot\]@users\.noreply\.github\.com"
+         r"(?<!github-actions)(?<!dependabot)(?<!renovate)\[bot\]@users\.noreply\.github\.com"
          r"|(?<![a-z0-9])\d{1,12}\+(?:copilot|kiro-agent|junie-agent|openhands-agent|zed-agent|cursoragent)"
          r"@users\.noreply\.github\.com"
-         r"|(?<=[a-z0-9._%+-])@(?:ampcode\.com|aider\.chat|charm\.land|opencode\.ai|kilo\.ai|kiro\.dev|cursor\.com|"
-         r"warp\.dev|all-hands\.dev|swe-agent\.com|codebuff\.com|qoder\.com|codebuddy\.ai|augmentcode\.com|"
-         r"roocode\.com|cline\.bot|muse\.dev|block\.github\.com|agents\.local|openrouter\.ai|"
-         r"users\.noreply\.replit\.com)(?![a-z0-9.-])"
-         r"|(?<![a-z0-9._%+-])(?:noreply@(?:anthropic\.com|openai\.com|alibabacloud\.com|moonshot\.cn|meta\.com|"
-         r"tencent\.com)|codex@openai\.com|copilot@github\.com|junie@jetbrains\.com|traecli@bytedance\.com|"
-         r"qwen-coder@alibabacloud\.com|grok@x\.ai|vibe@mistral\.ai|windsurf@codeium\.com|muse-code@meta\.com|"
-         r"antigravity@gemini\.google\.com|agent@replit\.com)(?![a-z0-9.-])",
-         "Limit: a GitHub machine account, a mail domain only agents write from, or one of the listed "
-         "vendor mailboxes; a person's noreply address and whole vendor domains such as github.com pass."),
+         # The mailbox an agent commits from: a machine local part at a coding tool's domain, or a
+         # model id (with a digit) at a router's domain.
+         r"|(?<![a-z0-9._%+-])(?:noreply|no-reply|agents?|bot|cursoragent|oz-agent|aider|crush|kiro|amp|openhands|"
+         r"noemail|roomote|cline|goose|antigravity|codex|copilot|junie|traecli|qwen-coder|grok|vibe|windsurf|"
+         r"muse-code)@(?:ampcode\.com|aider\.chat|charm\.land|opencode\.ai|kilo\.ai|kiro\.dev|cursor\.com|warp\.dev|"
+         r"all-hands\.dev|swe-agent\.com|codebuff\.com|qoder\.com|codebuddy\.ai|augmentcode\.com|roocode\.com|"
+         r"cline\.bot|muse\.dev|block\.github\.com|continue\.dev|anthropic\.com|openai\.com|"
+         r"jetbrains\.com|bytedance\.com|alibabacloud\.com|x\.ai|mistral\.ai|moonshot\.cn|codeium\.com|meta\.com|"
+         r"gemini\.google\.com|tencent\.com|replit\.com)(?![a-z0-9.-])"
+         r"|(?<![a-z0-9._%+-])copilot@github\.com(?![a-z0-9.-])"
+         r"|(?<![a-z0-9._%+-])[a-z0-9._-]{0,40}\d[a-z0-9._-]{0,40}@openrouter\.ai(?![a-z0-9.-])"
+         r"|(?<=[a-z0-9._%+-])@(?:agents\.local|users\.noreply\.replit\.com)(?![a-z0-9.-])",
+         "Limit: a GitHub machine account other than GitHub's own, a machine mailbox (noreply, agent, bot or "
+         "a tool's own name) at a coding tool's or vendor's domain, or a model id at a router's domain; a "
+         "person's address at those domains (security@, hello@) and a person's noreply address pass."),
     Rule("agent-link", "agent session link", True, BOTH,
          r"(?<![a-z0-9.-])(?:chatgpt\.com/codex/tasks/task_|github\.com/[^/\s]{1,100}/[^/\s]{1,100}/sessions/"
          r"[0-9a-f]{8}-|gh\.io/copilot-coding-agent-tips|cursor\.com/(?:agents/bc-|automations/|"
@@ -309,11 +343,11 @@ BLOCK_RULES = (
          "or two fixed sentences; a link to any other host (\"Powered by [feedparser](github url)\") passes.",
          re.M),
     Rule("session-label", "session label line", True, TEXT,
-         _LEAD + r"(?:link to [a-z0-9 ]{1,30}(?:session|run)[ \t]{0,3}:|pr created automatically by|"
-         r"opened on behalf of|requested by:[ \t]{0,3}@)"
-         r"|\[(?:view (?:the )?(?:[a-z]{1,20} )?(?:team )?(?:session|task|trace)|view thread|[a-z]{1,20} session)\]\(",
+         _LEAD + r"(?:link to [a-z0-9 ]{1,30}session[ \t]{0,3}:|pr created automatically by|opened on behalf of)"
+         r"|\[(?:view (?:the )?(?:[a-z]{1,20} )?(?:team )?(?:session|task|trace)|view thread)\]\(",
          "Limit: the fixed label lines at a line start, and link text that offers to view a session, task, "
-         "thread or trace; \"Requested in #14 by the owner\" and a link to a CI run pass.", re.M),
+         "thread or trace; \"Link to the CI run:\", \"Requested by:\" and a \"[training session]\" link pass.",
+         re.M),
 )
 
 # Advisory rules. A separator is a run of 1 to 5 characters that are not letters, digits, "!", "?",
@@ -338,15 +372,18 @@ _AUX = r"(?!(?:is|are|was|were|be|been|being|gets?|got)(?![a-z0-9]))"
 # (?-i:...) parts need the capitals.
 _GLUE = r"(?:" + _TIER + r")?(?![a-z])"
 # One name is also a common surname. It counts only when no capitalised word of 2 to 13 letters stands
-# right before it ("Dana Cline wrote" is a person), which also leaves out a sentence-opening word before it.
+# right before it (a given name makes it a person), which also leaves out a sentence-opening word before it.
 _NO_GIVEN_NAME = "".join(r"(?<!(?-i:[A-Z])[a-z]{%d} )" % n for n in range(1, 13))
 # Every name starts with one of these letters; the lookahead turns most positions away in one test.
 _ASSISTANT = (r"(?=[acdfgjklmnopqrstwxz])(?:" + _NAME + _GLUE
               + r"|(?<![a-z0-9])(?:chat" + _S + r"?gpt|gpts?(?![ \t-]{0,3}(?:partition|disk|table|header|"
               r"entr|label|format|boot|uefi)[a-z]{0,6}(?![a-z]))|openai|anthropic|gemini|deepseek|codellama|llms?|"
-              r"qwen|aider|replit|cursor" + _S + r"{1,3}(?:ai|agent|composer)|an?" + _S + r"{1,3}ai" + _S
-              + r"{1,3}(?:assistant|model|tool|agent)|(?:coding|ai)" + _S + r"{1,3}agents?|(?:large" + _S
-              + r"{1,3})?language" + _S + r"{1,3}models?"
+              r"qwen|aider|replit|cursor" + _S + r"{1,3}(?:ai|agent|composer)"
+              # The generic phrases need an article or determiner, so a topic ("AI agents built on
+              # graphs", "search powered by large language models") stays ordinary text.
+              r"|(?:an?|the|this|that|our|its|every|each|one)" + _S + r"{1,3}(?:ai" + _S
+              + r"{1,3}(?:assistant|model|tool|agent)|(?:coding|ai)" + _S + r"{1,3}agent|(?:large" + _S
+              + r"{1,3})?language" + _S + r"{1,3}model)s?"
               # Coined names of coding agents and their makers: words in no language, so any letter case.
               # Closed compounds only: "open code" and "code buddy" stay ordinary.
               r"|opencode|openhands|swe[ -]?agent|roomote|qoder|codebuddy|codebuff|freebuff|openclaw|clawdbot|"
@@ -362,7 +399,7 @@ _ASSISTANT = (r"(?=[acdfgjklmnopqrstwxz])(?:" + _NAME + _GLUE
               r"|(?-i:M)eta[ \t]{1,3}(?-i:AI)|(?-i:A)ll[ \t]{1,3}(?-i:H)ands[ \t]{1,3}(?-i:AI))" + _GLUE
               # These names are ordinary words or given names too: in title case or capitals, any
               # capitalised word after one that is not a tier makes it the ordinary word or a person
-              # ("The Copilot Wrote The Flight Log", "Jules Verne wrote").
+              # ("The Copilot Wrote The Flight Log", a novelist who shares a given name).
               + r"(?![ \t]{1,3}(?=(?-i:[A-Z]))(?!" + _TIER + r"(?![a-z0-9]))[a-z]{2,30})" + ")")
 # The name directly followed by ".md" is a file such as CLAUDE.md.
 _WHO = _ASSISTANT + r"(?!\.md(?![a-z0-9]))" + _ENTITY
@@ -383,11 +420,11 @@ _VIA = _BOW + r"(?:with|by|using|via|through|alongside|w/)(?![a-z0-9])"
 _SIGNOFF = (_LS + r"{0,5}+\n[ \t]{0,10}+(?:[-*>~]{1,2}[ \t]{0,3})?" + _WHO
             + r"(?:[ \t]{1,3}(?:" + _TIER + r"|[a-z]?\d{1,3}(?:\.\d{1,3}){0,2}[a-z]?)(?![a-z0-9])){0,3}+"
             + r"[^\w\n]{0,5}+(?=\n|\Z)")
-# A byline: up to three words, "by", the name. In seed files (imports of public listings, where the
-# content rules let a feed's own byline stand) a list item or table row is not read; prose there is.
+# A byline: up to three words, "by", the name.
 _BYLINE = (r"[^\w\n]{0,10}(?:[a-z0-9]{1,30}(?:[ \t-]{1,3}|,[ \t]{0,3})(?:and[ \t]{1,3})?){0,3}by" + _S
            + r"{1,10}[a-z0-9]{0,30}?" + _WHO)
-_SEED_LIMIT = " In files under seeds/ a line that starts with a list marker or a table bar is not read."
+_SEED_LIMIT = (" In files under seeds/ a line that starts with a list marker, a number, a table bar, a tag or "
+               "a quote holds imported data and is not read; prose there is.")
 SEEDS_PREFIX = "seeds/"
 
 AUTHORSHIP_RULES = (
@@ -410,7 +447,7 @@ AUTHORSHIP_RULES = (
     Rule("byline", "authorship wording (byline)", True, BOTH,
          r"(?:^|[.;,(]|[ \t]-[ \t])" + _BYLINE,
          "Limit: up to three words between a line start or punctuation and \"by\"; a longer clause, "
-         "and identifiers joined by underscores, pass." + _SEED_LIMIT, re.M | re.I, cased=True),
+         "and identifiers joined by underscores, pass.", re.M | re.I, cased=True),
     Rule("author-label", "authorship wording (author label)", True, BOTH,
          r"auth" + r"or(?:[^\w:=\n]|_){0,5}[:=]" + _S + r"{0,5}" + _WHO,
          "Limit: needs a colon or an equals sign between the label and the name.", re.I, cased=True),
@@ -444,10 +481,9 @@ ADVISORY_RULES = (
 BLOCK_RULES = BLOCK_RULES + AUTHORSHIP_RULES
 RULES = BLOCK_RULES + ADVISORY_RULES
 RULE_IDS = {r.id for r in RULES} | {"dash"}
-_BYLINE_RULE = next(r for r in AUTHORSHIP_RULES if r.id == "byline")
-SEED_BYLINE = Rule("byline", _BYLINE_RULE.label, True, FILE,
-                   r"(?:^(?![ \t]{0,3}(?:[-*+]|\d{1,3}[.)]|\|)[ \t])|[.;,(]|[ \t]-[ \t])" + _BYLINE,
-                   _BYLINE_RULE.limit, re.M | re.I, cased=True)
+# Under seeds/ the authorship rules read prose only (see _IMPORTED_LINE); the fixed-shape rules read everything.
+SEED_RULES = {r.id: Rule(r.id, r.label, True, FILE, _ProseOnly(r.matcher), r.limit + _SEED_LIMIT, cased=r.cased)
+              for r in AUTHORSHIP_RULES}
 # Branches a clone may push: one per job, or a proposal branch from the doctor.
 JOB_BRANCH = re.compile(r"(?:job|doctor)/[A-Za-z0-9][A-Za-z0-9._/-]{0,80}$")
 
@@ -627,10 +663,10 @@ def _rules(block: bool, place: str) -> tuple:
 
 
 def _file_rules(path: str) -> tuple:
-    """The BLOCK rules for one file; under seeds/ the byline rule leaves list items and table rows alone."""
+    """The BLOCK rules for one file; under seeds/ the authorship rules leave imported-data lines alone."""
     rules = _rules(True, "file")
     if path.startswith(SEEDS_PREFIX):
-        rules = tuple(SEED_BYLINE if r.id == "byline" else r for r in rules)
+        rules = tuple(SEED_RULES.get(r.id, r) for r in rules)
     return rules
 
 
@@ -995,14 +1031,15 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
             findings.append(f"refusing to push to {target}: changes reach {target} only through pull "
                             "requests (main) or the poll workflow (data)")
             continue
-        if remote_ref.startswith("refs/notes/"):
-            findings.append(f"refusing to push {remote_ref}: notes are never pushed (some tools write "
-                            "attribution notes there)")
-            continue
         if local_sha == ZERO_SHA:
-            continue  # deleting a job branch: the one empty push allowed
-        if remote_ref.startswith("refs/heads/") and not JOB_BRANCH.match(target):
-            findings.append(f"refusing to push branch {target}: a branch is named job/<name> or doctor/<fix>")
+            continue  # deleting a branch, a tag or a stray ref: the one empty push allowed
+        if remote_ref.startswith("refs/heads/"):
+            if not JOB_BRANCH.match(target):
+                findings.append(f"refusing to push branch {target}: a branch is named job/<name> or doctor/<fix>")
+                continue
+        elif not remote_ref.startswith("refs/tags/"):
+            findings.append(f"refusing to push {remote_ref}: only branches and tags are pushed (notes and "
+                            "other ref namespaces, where some tools keep attribution, never)")
             continue
         # The range CI checks (--range auto): every commit on the branch since origin/<BASE_REF>, not
         # only the commits this push adds, so a branch CI would refuse is refused here first.

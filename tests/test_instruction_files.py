@@ -21,7 +21,6 @@ RULEBOOK = ROOT / "AGENTS.md"
 POINTER = b"@AGENTS.md\n"
 MAX_BYTES = 16 * 1024  # one reader takes only the first 16 KiB; others cap a file at 20,000 or 24,000 bytes
 MAX_LINES = 200  # readers warn on an instruction file over 200 lines
-POINTER_MAX_BYTES = 400
 POINTER_NAMES = {"CLAUDE.md", "GEMINI.md"}
 ROOT_MARKDOWN = {"README.md", "CHANGELOG.md", "AGENTS.md"} | POINTER_NAMES
 HEADINGS = ("## How these rules are read", "## Repo lock", "## Tool defaults to switch off", "## Branches",
@@ -30,10 +29,13 @@ HEADINGS = ("## How these rules are read", "## Repo lock", "## Tool defaults to 
 SETTINGS_NAMING_THE_RULEBOOK = {".gemini/settings.json": ("context", "fileName")}
 # Files and folders coding tools read instructions from, at any depth.
 INSTRUCTION_PATHS = re.compile(
-    r"(?:^|/)(?:AGENTS?(?:\.override)?\.md|CLAUDE(?:\.local)?\.md|GEMINI\.md|WARP\.md|copilot-instructions\.md|"
-    r"\.rules|\.cursorrules|\.windsurfrules|\.clinerules|[^/]*\.mdc)$"
-    r"|(?:^|/)(?:\.cursor|\.windsurf|\.devin|\.junie|\.clinerules|\.github/instructions|\.claude/rules|"
-    r"\.agents/rules|\.augment/rules|\.kiro/steering|\.trae/rules|\.roo/rules|\.gemini/styleguide\.md)(?:/|$)", re.I)
+    r"(?:^|/)(?:AGENTS?(?:\.override)?\.md|CLAUDE(?:\.local)?\.md|GEMINI\.md|QWEN\.md|CRUSH\.md|WARP\.md|"
+    r"copilot-instructions\.md|\.rules|\.cursorrules|\.windsurfrules|\.clinerules|\.roorules|\.goosehints|"
+    r"\.augment-guidelines|[^/]*\.mdc)$"
+    r"|(?:^|/)(?:\.cursor|\.windsurf|\.devin|\.junie|\.clinerules|\.github/(?:instructions|agents|prompts)|"
+    r"\.claude/(?:rules|agents|commands|skills)|\.agents/rules|\.augment/rules|\.kiro/steering|\.trae/rules|"
+    r"\.roo/rules[^/]*|\.amazonq/rules|\.kilocode/rules|\.continue/rules|\.openhands/microagents|\.idx/airules\.md|"
+    r"\.gemini/styleguide\.md)(?:/|$)", re.I)
 # A product name anywhere in the rulebook, read with the checker's own list; ".md" after it is a file name.
 # The checker's generic phrases name no product, so they are removed before the search.
 PRODUCT = re.compile(cc._ASSISTANT + r"(?!\.md(?![a-z0-9]))", re.I)
@@ -43,11 +45,6 @@ GENERIC = re.compile(r"(?<![a-z])(?:an?\s+ai\s+(?:assistant|model|tool|agent)s?|
 
 def tracked():
     return [p.relative_to(ROOT).as_posix() for p in emdash_scan.tracked_files(ROOT) if p.is_file()]
-
-
-def is_pointer(path):
-    data = path.read_bytes()
-    return len(data) <= POINTER_MAX_BYTES and b"AGENTS.md" in data
 
 
 class RulebookTests(unittest.TestCase):
@@ -84,12 +81,13 @@ class PointerTests(unittest.TestCase):
         roots = {p for p in tracked() if "/" not in p and p.lower().endswith(".md")}
         self.assertEqual(sorted(roots - ROOT_MARKDOWN), [])
 
-    def test_root_pointer_files_are_pointers(self):
+    def test_root_pointer_files_are_exactly_the_import_line(self):
+        # A looser test (a short file that mentions the rulebook) would accept a file that adds a rule.
         for name in sorted(POINTER_NAMES):
             path = ROOT / name
             if path.exists():
                 with self.subTest(file=name):
-                    self.assertTrue(is_pointer(path), f"{name} carries more than a pointer")
+                    self.assertEqual(path.read_bytes(), POINTER, f"{name} is not exactly the import line")
 
     def test_every_other_instruction_path_is_absent(self):
         present = [rel for rel in tracked()
@@ -102,16 +100,21 @@ class PointerTests(unittest.TestCase):
                 value = json.loads((ROOT / rel).read_text(encoding="ascii"))
                 for key in keys:
                     value = value[key]
-                self.assertIn("AGENTS.md", value)
+                # Exactly the rulebook: a second name there would be a second rulebook.
+                self.assertEqual(value, ["AGENTS.md"])
 
     def test_instruction_path_pattern(self):
         for rel in ("feeder/AGENTS.md", "AGENTS.override.md", "x/CLAUDE.local.md", "GEMINI.md", "x/GEMINI.md",
-                    "AGENT.md", "WARP.md", ".rules", ".github/copilot-instructions.md", ".cursor/rules/a.mdc",
-                    ".claude/rules/a.md", ".github/instructions/a.instructions.md", ".windsurfrules",
-                    ".clinerules/a.md", ".agents/rules/a.md", ".kiro/steering/a.md", ".gemini/styleguide.md"):
+                    "AGENT.md", "WARP.md", "x/QWEN.md", "CRUSH.md", ".rules", ".roorules", ".goosehints",
+                    ".augment-guidelines", ".github/copilot-instructions.md", ".cursor/rules/a.mdc",
+                    ".claude/rules/a.md", ".claude/skills/x/SKILL.md", ".claude/commands/x.md", ".github/agents/x.md",
+                    ".github/prompts/x.prompt.md", ".github/instructions/a.instructions.md", ".windsurfrules",
+                    ".clinerules/a.md", ".agents/rules/a.md", ".kiro/steering/a.md", ".roo/rules-code/a.md",
+                    ".amazonq/rules/a.md", ".kilocode/rules/a.md", ".continue/rules/a.md",
+                    ".openhands/microagents/repo.md", ".idx/airules.md", ".gemini/styleguide.md"):
             self.assertTrue(INSTRUCTION_PATHS.search(rel), rel)
         for rel in ("README.md", "docs/injection-guard.md", ".claude/settings.json", ".gemini/settings.json",
-                    "tools/hooks/pre-push", "feeder/agents.py", "schema/rules.json"):
+                    "tools/hooks/pre-push", "feeder/agents.py", "schema/rules.json", "docs/rules.md"):
             self.assertFalse(INSTRUCTION_PATHS.search(rel), rel)
 
 

@@ -76,8 +76,9 @@ git config core.hooksPath tools/hooks
 - `commit-msg` checks the commit message.
 - `pre-push` checks every commit and changed file on the branch since `origin/main` (the range CI
   checks), confirms the push URL is github.com/flywifi/info-feed-seeds, refuses pushes to `main`
-  and `data`, refuses any branch not named `job/<name>` or `doctor/<fix>` (a deletion of any
-  branch is allowed), refuses every notes ref, refuses an empty push, then runs the CI rehearsal.
+  and `data`, refuses any branch not named `job/<name>` or `doctor/<fix>` and any ref that is not a
+  branch or a tag (notes included; a deletion of any ref is allowed), refuses an empty push, then
+  runs the CI rehearsal.
 
 All three call `tools/commit_check.py`. Run it by hand with `--range origin/main..HEAD`, check a
 pull request with `--pr N`, or prove the checks fire with `--selftest`.
@@ -153,12 +154,15 @@ ways.
 - An author or committer other than flywifi, a path that is never tracked, CR line endings,
   non-ASCII Python, and machine output off the `data` branch.
 - Marks a tool leaves without naming itself, in messages and pull request text: an assistance
-  trailer key (assisted-by, generated-with, made-with and the like) or a hyphenated key ending in
-  session, thread, log, event, screenshot, publication or checkpoint; a label line that links to a
-  session, task, thread or trace, or names a requester with an at sign.
-- Everywhere: a GitHub machine account address or a mail domain only agents write from; a link
-  whose host and path are a tool's session, task, thread or badge link; a hidden HTML comment a
-  tool plants; and a making or credit verb with a Markdown link to a coding tool's host.
+  trailer key (assisted-by, generated-with, made-with and the like) or a title-case hyphenated key
+  ending in Session, Thread, Log, Event, Screenshot, Publication or Checkpoint (a lowercase
+  component prefix such as `crawl-log:` passes); a label line that links to a session, or link text
+  that offers to view a session, task, thread or trace.
+- Everywhere: a GitHub machine account address other than GitHub's own, a machine mailbox (noreply,
+  agent, bot or a tool's own name) at a coding tool's or vendor's domain, or a model id at a
+  router's domain (a person's address at those domains passes); a link whose host and path are a
+  tool's session, task, thread or badge link; a hidden HTML comment a tool plants; and a making or
+  credit verb with a Markdown link to a coding tool's host.
 
 Messages and pull request text are held to any mention of the trailer keys, the session host and
 session ids. Files are held only to the real forms (a trailer line, a link, a footer line), so a
@@ -182,17 +186,21 @@ other names first, so a pointer under one of those names would hide the rulebook
 - Credit phrases before the name (thanks to, courtesy of, with the help of, powered by), and plain
   thanks, kudos or a credit label with the name right after it.
 - A byline: up to three words and "by" before the name. In files under `seeds/`, imports of public
-  listings whose own bylines may stand, a list item or table row is not read for a byline; prose
-  there is.
+  listings whose own bylines may stand, none of the authorship rules reads a line that holds
+  imported data (a list item, a numbered item, a table row, a tag or a quoted string); prose there
+  is read, and the fixed shapes are read on every line.
 - An author label, first-person use (I or we used, asked, leveraged the name), past-tense use of
   the name to do a task, active or passive ("was used to"), and the name followed by a making verb.
 
 The names are read as words, so "Hallmark", "Ullman" or "philanthropic" never count. Coined names
-(OpenCode, Codebuff, Genspark) count in any letter case; names that are also ordinary words or
-given names (copilot, codex, llama, mistral, perplexity, grok, Kiro, Trae, Manus) count only when
-capitalised, and two-word names whose words are ordinary alone (Amazon Q, Roo Code, Muse Code,
-Meta AI) count only as the pair in title case. One name that is also a common surname counts only
-when no capitalised word stands right before it ("Dana Cline wrote" is a person). A capitalised
+(OpenCode, Codebuff, Genspark) and coined compounds (Roo Code, Kilo Code, Factory Droid, SWE-agent)
+count in any letter case; names that are also ordinary words or given names (copilot, codex, llama,
+mistral, perplexity, grok, Kiro, Trae, Manus) count only when capitalised, and two-word names whose
+words are ordinary alone (Amazon Q, Muse Code, Meta AI, Zed Agent) count only as the pair in title
+case. The generic phrases need an article or determiner, so a topic such as "AI agents built on
+graphs" or "search powered by large language models" passes. One name that is also a common
+surname counts only when no
+capitalised word stands right before it (a given name before it makes it a person). A capitalised
 word after the name that is not a product tier makes it someone else: "Claude Shannon", "Gemini
 Observatory" and "Mistral Press" pass, while "Claude Code", "ChatGPT Plus", "Grok Build" and
 "Copilot Autofix" still count, as does a tier glued on ("ClaudeOpus", "MistralAI"). "Built-in",

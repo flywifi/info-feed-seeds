@@ -105,6 +105,9 @@ def timing_inputs() -> dict:
         "passive use": (NAME + " was used ") * (n // 16),
         "verbs then a name": ("done " * 38 + NAME + " ") * (n // 197), "verb and short name": "had    gpt    " * (n // 14),
         "pronoun and verb": "we     had     " * (n // 15), "split name": "chat gpt     " * (n // 13),
+        "at signs": "@" * n, "address runs": "a@b." * (n // 4), "comment openers": "<!-- " * (n // 5),
+        "slashes": "/" * n, "link openers": "](" * (n // 2), "hyphen keys": "A-" * (n // 2) + ":",
+        "digits and plus": "1" * (n - 1) + "+", "bracket runs": "[" * n, "determiners": "the " * (n // 4),
     }
 
 
@@ -168,7 +171,7 @@ class ExemptionTests(unittest.TestCase):
             with self.subTest(path=e["path"], rule=e["rule"]):
                 self.assertIn(e["path"], tracked, "the path is not tracked; drop the entry")
                 text, _ = cc.file_text(read_tracked(e["path"]))
-                self.assertIn((e["rule"], e["match_sha256"]), cc.file_matches(text or ""),
+                self.assertIn((e["rule"], e["match_sha256"]), cc.file_matches(text or "", e["path"]),
                               "the entry exempts nothing; drop it")
 
     def test_an_exemption_covers_one_exact_text(self):
