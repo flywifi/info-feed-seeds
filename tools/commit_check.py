@@ -12,25 +12,44 @@ Usage:
   python3 tools/commit_check.py --pr-event FILE          the same, from a GitHub Actions event payload
   python3 tools/commit_check.py --selftest               prove the checks fire, in a scratch repository
 
-Checks
-  messages   no co-author or session trailer, no session link or id, no footer (see the footer
-             rules below), no em or en dash. Text is normalised first (NFKD, format characters and
-             marks removed, Unicode hyphens and lookalike letters folded, HTML entities and
-             percent-encoding decoded).
-  files      the same rules read as CLAUDE.md words them: a trailer LINE, a LINK, a footer LINE, so
-             a sentence that names the rule (as CLAUDE.md does) passes. Also UTF-8, no CR, no em or
-             en dash, ASCII-only .py; never local/, .cache/, logs/, .venv-crawl/, *.local.json or
-             .secrets.local.json; never digests/, state/ or ledger/ off the data branch.
-  identity   author and committer are flywifi <236871844+flywifi@users.noreply.github.com>. GitHub's
-             web-flow committer is accepted only on a commit already on origin/main (it landed
-             through GitHub); anywhere else it is treated as forged.
-  pushes     the push URL is exactly github.com/flywifi/info-feed-seeds; never to main or data.
-  ranges     an empty range is a failure (fail closed), except a branch deletion in pre-push.
+Two kinds of result
+  BLOCK      fixed shapes; any one fails the hook or CI step (exit 1): a co-author or session trailer
+             line, a trailer key that names the assistant, a session link or id, a footer line (the
+             footer phrase and a tool name on a line of their own), the footer phrase and the
+             assistant's name in one sentence, an em or en dash, a review-record token (round,
+             finding or ruling numbers, severity tallies), a wrong author or committer, a forbidden
+             path, CR line endings and non-ASCII Python.
+  ADVISORY   wording that may claim authorship (made with or by the assistant, credit, bylines, first
+             person, the name as author, the footer phrase and the name in one paragraph) and short
+             finding ids. Printed as "ADVISORY:" lines, and as warnings in GitHub Actions; they never
+             change the exit code. A person reads them.
+
+Every rule carries a "Limit:" text naming what it deliberately does not read, and
+tests/test_commit_check_golden.py pins a case for each limit, so widening a rule is a deliberate,
+tested change. Messages and pull request text are checked for any mention of the trailer keys, the
+session host and session ids; files only for their real forms (a trailer LINE, a LINK, a footer
+LINE), so a sentence that names a rule passes. Text is folded first (NFKD, format characters and
+marks removed, Unicode hyphens and lookalike letters folded, HTML entities and every round of
+percent-encoding decoded, terminal control sequences removed) and every reading is checked.
+
+Exemptions: tools/commit_exemptions.json lists exact texts in files that one BLOCK rule may skip:
+path, rule id, the sha256 of the matched text (printed beside the finding) and a reason of at least
+25 characters. Ranges, pushes and staged checks read it from origin/<BASE_REF>, so an entry counts
+only once it is on main. History boundary: commits at or before HISTORY_BOUNDARY, when the
+repository has it, are checked for identity only; their messages predate these rules and history is
+never rewritten.
+
+identity   author and committer are flywifi <236871844+flywifi@users.noreply.github.com>. GitHub's
+           web-flow committer is accepted only on a commit already on origin/main (it landed through
+           GitHub); in main-history mode only on a commit GitHub marks verified.
+pushes     the push URL is exactly github.com/flywifi/info-feed-seeds; never to main or data.
+ranges     an empty range is a failure (fail closed), except a branch deletion in pre-push.
 
 `--range auto` uses origin/$BASE_REF (default main)..HEAD, falls back to the policy boundary commit
 (BOUNDARY_SHA), and fails closed when neither resolves. The checker works from any copy of this file
 (CI runs the base branch's copy) and always inspects the repository in the current directory.
-Output is ASCII only. Exit 0 clean, 1 on any finding or error, 2 on a usage error. Standard library.
+Output is ASCII only. Exit 0 clean or advisory only, 1 on any BLOCK finding or error, 2 on a usage
+error. Standard library only.
 """
 from __future__ import annotations
 
@@ -48,18 +67,21 @@ from urllib.parse import unquote
 
 REPO_SLUG = "flywifi/info-feed-seeds"
 BOUNDARY_SHA = "5436f99"
+# The newest commit whose message was written before these rules. It and its ancestors are checked
+# for identity only. Where the repository does not have it (after a squash merge drops the branch),
+# every commit gets every rule.
+HISTORY_BOUNDARY = "b454c3902fc08011f0a3df92ec5fb9fd4e9d0c05"
 AUTHOR = ("flywifi", "236871844+flywifi@users.noreply.github.com")
 WEB_COMMITTER = ("GitHub", "noreply@github.com")
 PROTECTED_BRANCHES = ("main", "data")
 ZERO_SHA = "0" * 40
 SCISSORS = "# ------------------------ >8 ------------------------"
+EXEMPTIONS_FILE = "tools/commit_exemptions.json"
+MIN_REASON = 25
 SELF_PATHS = ("tools/commit_check.py", "tools/hooks/", ".github/workflows/", "tools/main_history_known.txt",
-              "tests/fixtures/refused_corpus.jsonl", "tests/fixtures/allowed_corpus.jsonl",
-              "tests/fixtures/pending_ruling.jsonl", "tests/fixtures/corpus.lock",
-              "tests/fixtures/checker_baseline.py", "tests/fixtures/renamed_ids.txt", "tests/test_corpus.py",
-              "tests/test_no_narrowing.py", "tools/corpus_added.py")
+              EXEMPTIONS_FILE, "tests/fixtures/golden_cases.jsonl", "tests/test_commit_check_golden.py",
+              "tools/golden_added.py")
 
-EM_DASH, EN_DASH = "\u2014", "\u2013"
 # Every dash-like character a renderer could show as an em or en dash. Checked after HTML entities
 # are decoded, because GitHub renders the named HTML entities for both dashes as the characters.
 DASHES = (
@@ -68,184 +90,203 @@ DASHES = (
     ("\ufe31", "vertical em dash"),
 )
 
+# --------------------------------------------------------------------------- rules
 # The banned strings are assembled from pieces so this file never contains what it hunts for.
-#
-# Every rule below is checked against tests/fixtures/refused_corpus.jsonl (all must be refused) and
-# tests/fixtures/allowed_corpus.jsonl (all must pass), and tests/test_no_narrowing.py fails when the
-# 512e818 checker (tests/fixtures/checker_baseline.py) refuses a variant this one lets through.
-# Separator runs are unbounded, as in the baseline, but every unbounded run either follows a literal
-# or is anchored at a line start and cannot cross a newline, and no two unbounded runs can trade
-# characters, so matching stays linear; a timing test runs each rule on 100,000-character lines.
-_SEP = r"[\W_]*"
-_CO = "co" + _SEP + "author(?:ed)?" + _SEP + "by"
-_SESSION = "claude" + _SEP + "session"
-_HOST = "claude" + r"\s*\.\s*" + "ai"
-# A line may open with symbols, digits, underscores, quote markers and list markers, then a label:
-# a letter, up to 60 letters, digits, spaces or apostrophes ("Note", "Tool's note", "Automatically
-# produced release notes"), any symbols, a colon and any symbols.
-_LABEL = r"(?:[a-z][a-z0-9 ']{0,60}[^a-z0-9:\n]*:(?:[^\w\n]|_)*)?"
-_LINE_START = r"^(?:[^\w\n]|[_\d])*" + _LABEL
-_PHRASE = "generated" + r"[\W_]+(?:(?:with|by|using|via)(?![a-z0-9])|w/)"
-_NAME = "claude"
-# The name may run straight into "ai" ("...AI") or digits; any other letter ends the match.
-_NAME_END = r"(?:ai)?(?![a-z])"
-# Footer rules:
-#   line     a line opening with "Generated" with, by, using or via in any case, after an optional
-#            label, whatever tool it names (finding 7, read literally and failing closed until it
-#            is ruled on)
-#   product  anywhere, the phrase followed by separators only and then the assistant's name
-#   sentence anywhere, the phrase and then the assistant's name later in the same sentence, within
-#            200 characters, across single line breaks and dots inside words or numbers ("4.5"):
-#            any statement that something was generated with, by, using or via it
-#   near     anywhere, the phrase and the assistant's name later in the same paragraph, within
-#            1,000 characters (a bound for speed only)
-#   tool     a line opening with the phrase that names the assistant within a few words
-#   code     anywhere, the phrase and then the assistant's name and "code" within a few words
-#   paren    anywhere, the phrase and then the assistant's name in parentheses within a few words
-_GEN_LINE = _LINE_START + _PHRASE
-_GEN_PRODUCT = _PHRASE + _SEP + r"\[?" + _NAME + _NAME_END
+# Every quantifier is bounded, and a run of word characters and a run of separators never share a
+# character, so no rule backtracks far; the golden test times each rule on 100,000-character lines.
+
+_NAME = "cla" + "ude"
+_S = r"[\W_]"
+# A line may open with up to 40 symbols, digits or underscores (quote markers, bullets, numbers),
+# then a label: a letter, up to 60 letters, digits, spaces or apostrophes, up to 10 symbols, a colon.
+_LEAD = r"^(?:[^\w\n]|[_\d]){0,40}"
+_LABEL = r"(?:[a-z][a-z0-9 ']{0,60}?[^a-z0-9:\n]{0,10}:(?:[^\w\n]|_){0,10})?"
+_CO = "co" + _S + "{0,10}" + "auth" + "or(?:ed)?" + _S + "{0,10}by"
+_SESSION = _NAME + _S + "{0,10}" + "sess" + "ion"
+_HOST = _NAME + r"\s{0,10}\.\s{0,10}" + "ai"
+_PHRASE = "gene" + "rated" + _S + r"{1,10}(?:(?:with|by|using|via)(?![a-z0-9])|w/)"
+_TOOL = (r"(?:\[[^\]\n]{1,80}\]|[a-z0-9][\w.'+/-]{0,40}(?:[ \t]{1,3}[a-z0-9][\w.'+/-]{0,40}){0,3})"
+         r"(?:\([^()\s]{0,300}\))?")
+_ROLE_KEY = r"(?:[a-z][a-z0-9]{0,20}[ -]){0,3}(?:by|assisted|assistant|generated|authors?|authored|ai)"
+_SENTENCE_STOP = r"\n\n|[!?]|\.(?![a-z0-9])"
+_AUD = "aud" + "it"
+_SEV = r"(?:high|medium|med|low|critical)"
+
+
+class _Hit:
+    """A match found by a matcher class: the matched text, read with group(0) like a re match."""
+
+    def __init__(self, text: str):
+        self.text = text
+
+    def group(self, _index: int = 0) -> str:
+        return self.text
 
 
 class _PhraseThenName:
-    """A start phrase (by default the footer phrase), then the assistant's name starting within
-    `reach` characters, in a window that ends at the first `stop` match. Equivalent to the phrase,
-    a lazy gap of up to `reach` characters that never contains `stop`, and the name, but linear:
-    each phrase is followed by one window, searched twice in C."""
+    """A start pattern, then the name within `reach` characters, in a window that ends at the first
+    `stop` match. With `via`, a connective must start in the first `via_reach` characters and the name
+    must come after it. Linear: each start is followed by one bounded window."""
 
-    def __init__(self, reach: int, stop: str, start: str = _PHRASE, name: str = _NAME + _NAME_END):
-        self.reach = reach
-        self.start = re.compile(start)
-        self.stop = re.compile(stop)
-        self.name = re.compile(name)
-        self.pattern = f"{start} ...{reach} (stop {stop}) {name}"
+    def __init__(self, start: str, reach: int, stop: str, name: str = _NAME, via: str | None = None,
+                 via_reach: int = 0):
+        self.start, self.reach = re.compile(start), reach
+        self.stop, self.name = re.compile(stop), re.compile(name)
+        self.via, self.via_reach = (re.compile(via) if via else None), via_reach
 
-    def search(self, text: str):
+    def finditer(self, text: str):
         for m in self.start.finditer(text):
-            end = m.end()
-            window = text[end:end + self.reach + len(_NAME) + 2]
+            window = text[m.end():m.end() + self.reach]
             if _NAME not in window:
                 continue
             cut = self.stop.search(window)
             if cut:
                 window = window[:cut.start()]
-            # One character of context before the window keeps offsets comparable with `reach`.
-            hit = self.name.search(text[end - 1:end] + window)
-            if hit and hit.start() - 1 <= self.reach:
-                return hit
-        return None
+            offset = 0
+            if self.via is not None:
+                v = self.via.search(window[:self.via_reach])
+                if not v:
+                    continue
+                offset = v.end()
+            hit = self.name.search(window, offset)
+            if hit:
+                yield _Hit(text[m.start():m.end() + hit.end()])
+
+    def search(self, text: str):
+        return next(self.finditer(text), None)
 
 
-# sentence: stop at a blank line, a line break followed by another, "!" or "?", or a dot that is not
-# inside a word or number. near: stop only at a blank line.
-_SENTENCE_STOP = r"\n\n|[!?]|\.(?![a-z0-9])"
-_GEN_SENTENCE = _PhraseThenName(200, _SENTENCE_STOP)
-_GEN_NEAR = _PhraseThenName(1000, r"\n\n")
-# Authorship statements (Matt's ruling, 2026-10-23): text says what changed, why and how it works,
-# never which tool wrote it. A feature that uses the assistant may name it ("the classifier calls
-# the API"); a claim that it made the work may not.
-#   made-by  a making verb at the start of a word, optionally after re, co, ghost, hand, over or pre
-#            ("rebuilt", "ghostwritten"), "programmed" ("pair-programmed", Matt's ruling of
-#            2026-10-23) and "assisted" (so an "Assisted-by:" trailer is refused),
-#            up to 3 words, then with, by, using, via, w/, through, alongside or together with, then
-#            the name later in the same sentence, within 200 characters
-#   credit   thanks to, courtesy of, with the help of, with help from, powered by or in
-#            collaboration with, then the name, which may close a run of up to 30 letters or digits
-#            ("AnthropicClaude"); or "with" the name's help ("Done with ...'s help", Matt's ruling)
-#   byline   at a line start, after an optional label, up to 3 words, "by" and the name ("Code by
-#            ..."); "order_by=claude_score" in code is not a byline
-#   label    an "author:" label before the name
-#   first    I or we, up to 2 words, then used, use, asked, had, let, leveraged, leverage,
-#            utilized, utilised or employed (with the same prefixes), up to 2 words, then the name
-#            ("I leveraged ...", Matt's ruling); or "using" the name, up to 2 words, then I or we
-#   tool     used, asked or had (past tense), up to 2 words, the name, then "to" ("The API used ...
-#            to label each item", Matt's ruling 8); present-tense feature text ("uses ... to") passes
-#   author   the name, up to 2 words (a product name and version such as "Code", "Opus 4.5" or "3.5
-#            Sonnet"), then wrote, built, made, created, authored, drafted, coded, produced,
-#            generated or helped, with the same prefixes
-# The name may sit inside a longer word (audit 8). A verb, I, we and "using" start a word (audit 9):
-# "encoded with" is not "coded with", and the "i" in "CLI" is not a pronoun. In these rules only,
-# the name directly followed by ".md" is the file CLAUDE.md, not the assistant (Matt's ruling 7).
-# A gap word is 1 to 30 letters or digits, plus up to three ".digits" parts for a version; a gap
-# separator is any run of other characters that is not a sentence end: "!", "?", a blank line, or
-# a dot that is not inside a word or number (so "Claude.ai" and "4.5" do not end a gap). Words and separators never overlap, so a gap cannot backtrack (audit 9, HIGH 1).
-_WHO = _NAME + _NAME_END
-_WHO_AUTHOR = _WHO + r"(?!\.md(?![a-z0-9]))"
-_GAP = r"(?:[^\w.!?\n]|_|\n(?!\n)|\.(?=[a-z0-9]))+"
-_WORD = r"[a-z0-9]{1,30}(?:\.[0-9]{1,6}){0,3}"
-_W2 = r"(?:" + _GAP + _WORD + r"){0,2}?"
-_W3 = r"(?:" + _GAP + _WORD + r"){0,3}?"
-_BOW = r"(?<![a-z0-9])"
-_PREFIX = r"(?:re|co|ghost|hand|over|pre)?"
-_MADE = (_BOW + _PREFIX + r"(?:built|made|created|written|wrote|authored|produced|coded|developed|drafted|"
-         r"composed|crafted|prepared|designed|programmed|assisted)" + _W3 + _GAP + r"(?:(?:with|by|using|via|through|"
-         r"alongside|together" + _GAP + r"with)(?![a-z0-9])|w/)")
-_AUTHOR_MADE = _PhraseThenName(200, _SENTENCE_STOP, start=_MADE, name=_WHO_AUTHOR)
-_AUTHOR_CREDIT = (r"(?:thanks[\W_]+to|courtesy[\W_]+of|with[\W_]+the[\W_]+help[\W_]+of|"
-                  r"with[\W_]+help[\W_]+from|powered[\W_]+by|in[\W_]+collaboration[\W_]+with)[\W_]+"
-                  r"[a-z0-9]{0,30}?" + _WHO_AUTHOR
-                  + r"|with[\W_]+[a-z0-9]{0,30}?" + _WHO_AUTHOR + r"(?:[\W_]{1,3}s)?[\W_]+help(?![a-z0-9])")
-_AUTHOR_BY = (r"^(?:[^\w\n]|[_\d])*" + _LABEL + r"(?:[a-z0-9]{1,30}[ \t]+){0,3}by[^\w\n]+[a-z0-9]{0,30}?"
-              + _WHO_AUTHOR)
-_AUTHOR_LABEL = r"author[\W_]*[:=][\W_]*" + _WHO_AUTHOR
-_AUTHOR_FIRST = (_BOW + r"(?:i|we)" + _W2 + _GAP + _PREFIX + r"(?:used|use|asked|had|let|leveraged|leverage|utili[sz]ed|employed)" + _W2 + _GAP
-                 + _WHO_AUTHOR + r"|" + _BOW + r"using" + _GAP + _WHO_AUTHOR + _W2 + _GAP + r"(?:i|we)(?![a-z0-9])")
-_AUTHOR_TOOL = (_BOW + _PREFIX + r"(?:used|asked|had)" + _W2 + _GAP + _WHO_AUTHOR + _GAP + r"to(?![a-z0-9])")
-_AUTHOR_NAME = (_WHO_AUTHOR + _W2 + _GAP + _PREFIX + r"(?:wrote|built|made|created|authored|drafted|coded|"
-                r"produced|generated|helped)(?![a-z0-9])")
-_GEN_TOOL = _LINE_START + _PHRASE + _SEP + ".{0,24}?" + _NAME
-_GEN_CODE = _PHRASE + _SEP + ".{0,24}?" + _NAME + _SEP + "code(?![a-z0-9])"
-_GEN_PAREN = _PHRASE + _SEP + r".{0,24}?\(\s*" + _NAME + r"\s*\)"
-# Footer rules also run on a copy with HTML tags removed, so <p> or <sub> cannot hide a line start.
-_TAG = re.compile(r"<[^<>\n]*>")
-FOOTER_RULES = (
-    ("generated footer", re.compile(_GEN_LINE, re.M)),
-    ("generated footer", re.compile(_GEN_PRODUCT)),
-    ("generated footer", _GEN_SENTENCE),
-    ("generated footer", _GEN_NEAR),
-    ("generated footer", re.compile(_GEN_TOOL, re.M)),
-    ("generated footer", re.compile(_GEN_CODE)),
-    ("generated footer", re.compile(_GEN_PAREN)),
-    ("authorship statement", _AUTHOR_MADE),
-    ("authorship statement", re.compile(_AUTHOR_CREDIT)),
-    ("authorship statement", re.compile(_AUTHOR_BY, re.M)),
-    ("authorship statement", re.compile(_AUTHOR_LABEL)),
-    ("authorship statement", re.compile(_AUTHOR_FIRST)),
-    ("authorship statement", re.compile(_AUTHOR_TOOL)),
-    ("authorship statement", re.compile(_AUTHOR_NAME)),
+class Rule:
+    """One check. BLOCK rules fail the run; the others print ADVISORY lines. `places` holds "text"
+    (commit messages, pull request titles and bodies) and/or "file". `limit` starts with "Limit:"
+    and names what the rule deliberately does not read; the golden test pins a case for it."""
+
+    def __init__(self, rid: str, label: str, block: bool, places: tuple, pattern, limit: str,
+                 flags: int = 0, cased: bool = False):
+        self.id, self.label, self.block, self.places, self.limit, self.cased = rid, label, block, places, limit, cased
+        self.matcher = re.compile(pattern, flags) if isinstance(pattern, str) else pattern
+
+    def search(self, text: str):
+        return self.matcher.search(text)
+
+    def finditer(self, text: str):
+        return self.matcher.finditer(text)
+
+
+TEXT, FILE, BOTH = ("text",), ("file",), ("text", "file")
+
+BLOCK_RULES = (
+    Rule("coauthor-trailer", "co-author trailer", True, BOTH,
+         _LEAD + _LABEL + _CO + "(?:" + _S + "{0,10}[:=]|" + _S + "{1,10}" + _NAME + ")",
+         "Limit: the key must open a line (after up to 40 symbols or digits and an optional label) and "
+         "end with a colon, an equals sign or the assistant's name; a key named mid-sentence in a file "
+         "passes.", re.M),
+    Rule("coauthor-key", "co-author trailer", True, TEXT, "co" + _S + "{0,10}" + "auth" + "or(?:ed)?-by",
+         "Limit: needs a hyphen right before \"by\"; prose such as \"co-authored by Smith\" passes."),
+    Rule("coauthor-address", "co-author trailer", True, BOTH,
+         _CO + r".{0,60}?<[^<>\s@]{1,64}@[^<>\s]{1,255}>",
+         "Limit: the address must follow the key within 60 characters on the same line."),
+    Rule("session-trailer", "session trailer", True, FILE,
+         _LEAD + _LABEL + _SESSION + _S + "{0,10}[:=]",
+         "Limit: in files only a trailer line counts; a sentence naming the key passes.", re.M),
+    Rule("session-mention", "session trailer", True, TEXT, _SESSION,
+         "Limit: needs the assistant's name and \"session\" within 10 symbols; \"session\" alone passes."),
+    Rule("session-link", "session link", True, TEXT, _HOST + r"\b",
+         "Limit: the host's dot must be a dot after folding; \"dot ai\" in words, and a longer word "
+         "such as \"aim\" after the dot, pass."),
+    Rule("session-link-file", "session link", True, FILE,
+         r"(?:[a-z0-9+.-]:/{0,10}|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|" + _HOST + r"(?=[/:?#])",
+         "Limit: in files only a link counts (a scheme, //, www., a subdomain or a path after the "
+         "host); the bare host in a sentence passes."),
+    Rule("session-id", "session id", True, BOTH, r"session_(?:[-_]?[a-z0-9]){20}",
+         "Limit: needs 20 letters or digits after \"session_\"; a shorter id passes."),
+    Rule("footer-line", "generated footer", True, BOTH,
+         _LEAD + _LABEL + _PHRASE + r"(?:[^\w\n]|_){0,10}" + _TOOL + r"(?:[^\w\n]|_){0,40}$",
+         "Limit: the line holds only the phrase and a tool of up to four words or a bracketed name, "
+         "with an optional link and label; a longer line, or words before the phrase that are not a "
+         "label, pass this rule.", re.M),
+    Rule("generated-by-assistant", "generated footer", True, BOTH,
+         _PhraseThenName(_PHRASE, 200, _SENTENCE_STOP),
+         "Limit: the name must follow the phrase in the same sentence within 200 characters; after "
+         "\"!\", \"?\", a blank line or a sentence-ending dot it is left to the advisory paragraph rule."),
+    Rule("assistant-trailer", "trailer naming the assistant", True, BOTH,
+         _LEAD + _ROLE_KEY + r"[^\w\n]{0,3}[:=][^\n]{0,200}?" + _NAME,
+         "Limit: the key must open a line and end in by, assisted, assistant, generated, author, "
+         "authors, authored or ai; other keys (\"Note:\", \"Model:\") pass.", re.M),
+    Rule("audit-record", "review record", True, BOTH,
+         r"(?<![a-z])" + _AUD + r"(?:[ _-]?round)?[ _-]?\d{1,3}(?!\d)"
+         r"|(?<![a-z])" + _AUD + r"[ _-]rounds?(?![a-z])"
+         r"|(?<![a-z])round[ _-]?\d{1,3}(?![\d.])[ _-]?(?:" + _AUD + r"|findings?|fix(?:es)?|review)"
+         r"|(?<![a-z])findings?[ _-]?\d{1,3}(?![\d.])"
+         r"|(?<![a-z])ruling[ _-]?\d{1,2}(?!\d)"
+         r"|(?<![a-z0-9])\d{1,3} " + _SEV + r"(?![a-z])[,;]? \d{1,3} " + _SEV + r"(?![a-z])",
+         "Limit: needs a number right after the review word, or two counts with severity words; "
+         "\"the audit log\", a year after the word and a bare F, H, M or L number pass."),
+    Rule("audit-severity", "review record", True, BOTH,
+         r"(?<![A-Za-z])(?:HIGH|MEDIUM|MED|LOW) ?\d{1,2}(?![\d.])",
+         "Limit: capital severity words only; lowercase prose such as \"a high 5\" passes.", cased=True),
 )
-# Rules that need the original letter case (run on a normalised copy that keeps case).
-CASED_FOOTER_RULES = ()  # none at present; the near rule no longer depends on letter case
 
-# A trailer line: a line that opens (after symbols, numbers, list markers or a short label) with
-# the key and then a colon or an equals sign.
-_CO_LINE = _LINE_START + _CO + _SEP + "[:=]"
-_SESSION_LINE = _LINE_START + _SESSION + _SEP + "[:=]"
-# Anywhere, the co-author key followed within 60 characters by an address in angle brackets.
-_CO_ADDRESS = _CO + r".{0,60}?<[^<>\s@]{1,64}@[^<>\s]{1,255}>"
-# A bare session id: "session_" and at least 20 letters or digits.
-_SESSION_ID = r"session_(?:[-_]?[a-z0-9]){20}"
-MESSAGE_RULES = (
-    # A co-author trailer: a trailer line; or anywhere, the key with a hyphen before "by" (which
-    # prose such as "co-authored by Smith" never has); or the key and an address.
-    ("co-author trailer", re.compile(_CO_LINE, re.M)),
-    ("co-author trailer", re.compile("co" + _SEP + "author(?:ed)?" + "-" + "by")),
-    ("co-author trailer", re.compile(_CO_ADDRESS)),
-    ("session trailer", re.compile(_SESSION)),
-    ("session link", re.compile(_HOST + r"\b")),
-    ("session id", re.compile(_SESSION_ID)),
-) + FOOTER_RULES
-# Files name the banned items in prose (CLAUDE.md does), so only their real forms are refused.
-FILE_RULES = (
-    ("co-author trailer line", re.compile(_CO_LINE, re.M)),
-    ("co-author trailer", re.compile(_CO_ADDRESS)),
-    ("session trailer line", re.compile(_SESSION_LINE, re.M)),
-    ("session id", re.compile(_SESSION_ID)),
-    ("session link", re.compile(r"(?:[a-z0-9+.-]:/*|//|www\.|[a-z0-9-]\.)" + _HOST + r"\b|"
-                                + _HOST + r"(?=[/:?#])")),
-) + FOOTER_RULES
+# Advisory rules. A separator is a run of 1 to 5 characters that are not letters, digits, "!", "?",
+# a blank line or a sentence-ending dot; a word is 1 to 30 letters or digits plus up to three
+# ".digits" parts (a version such as 4.5). The two never share a character.
+_GS = r"(?:[^\w.!?\n]|_|\n(?!\n)|\.(?=[a-z]))"
+_GW = r"[a-z0-9]{1,30}(?:\.[0-9]{1,6}){0,3}"
+_W2 = r"(?:" + _GS + "{1,5}" + _GW + r"){0,2}?" + _GS + "{1,5}"
+_AUX = r"(?!(?:is|are|was|were|be|been|being|gets?|got)(?![a-z0-9]))"
+_WHO = _NAME + r"(?!\.md(?![a-z0-9]))"
+_BOW = r"(?<![a-z0-9])"
+_MADE = (_BOW + r"(?:re|co|ghost|hand|over|pre|auto|self|semi|copy|pair" + _S + r"?)?(?:built|made|created|"
+         r"written|wrote|authored|produced|coded|developed|drafted|composed|crafted|prepared|designed|"
+         r"programmed|assisted|done)(?![a-z])")
+_VIA = _BOW + r"(?:with|by|using|via|through|alongside|w/)(?![a-z0-9])"
+
+ADVISORY_RULES = (
+    Rule("made-by", "authorship wording (made with or by the assistant)", False, BOTH,
+         _PhraseThenName(_MADE, 200, _SENTENCE_STOP, name=_WHO, via=_VIA, via_reach=60),
+         "Limit: the connective must start within 60 characters of the verb and the name must follow "
+         "in the same sentence; the name directly followed by \".md\" is the file CLAUDE.md."),
+    Rule("credit", "authorship wording (credit to the assistant)", False, BOTH,
+         r"(?:thanks" + _S + r"{1,5}to|courtesy" + _S + r"{1,5}of|with" + _S + r"{1,5}the" + _S + r"{1,5}help"
+         + _S + r"{1,5}of|with" + _S + r"{1,5}help" + _S + r"{1,5}from|powered" + _S + r"{1,5}by|in" + _S
+         + r"{1,5}collaboration" + _S + r"{1,5}with)" + _S + r"{1,5}(?:[a-z0-9]{1,30}" + _S + r"{1,5}){0,2}?"
+         r"[a-z0-9]{0,30}?" + _WHO + r"|with" + _S + r"{1,5}[a-z0-9]{0,30}?" + _NAME + _S + r"{0,3}s?" + _S
+         + r"{1,3}help(?![a-z0-9])",
+         "Limit: at most two words between the credit phrase and the name; \"thanks again to\" passes."),
+    Rule("byline", "authorship wording (byline)", False, BOTH,
+         r"(?:^|[.;,(]|[ \t]-[ \t])[^\w\n]{0,10}(?:[a-z0-9]{1,30}(?:[ \t-]{1,3}|,[ \t]{0,3})(?:and[ \t]{1,3})?)"
+         r"{0,3}by" + _S + r"{1,10}[a-z0-9]{0,30}?" + _WHO,
+         "Limit: up to three words between a line start or punctuation and \"by\"; a longer clause, "
+         "and identifiers joined by underscores, pass.", re.M),
+    Rule("author-label", "authorship wording (author label)", False, BOTH,
+         r"auth" + r"or(?:[^\w:=\n]|_){0,5}[:=]" + _S + r"{0,5}" + _NAME,
+         "Limit: needs a colon or an equals sign between the label and the name."),
+    Rule("first-person", "authorship wording (first person)", False, BOTH,
+         _BOW + r"(?:i|we)" + _W2 + r"(?:re|co)?(?:used|use|asked|had|let|leveraged|leverage|utili[sz]ed|employed)"
+         + _W2 + _NAME + r"|" + _BOW + r"using" + _GS + r"{1,5}" + _NAME + _W2 + r"(?:i|we)(?![a-z0-9])",
+         "Limit: at most two words on each side of the verb; three words pass."),
+    Rule("tool-past", "authorship wording (past-tense use)", False, BOTH,
+         _BOW + r"(?:re)?(?:used|asked|had)" + _W2 + _NAME + _W2 + r"to(?![a-z0-9])",
+         "Limit: past tense only; present-tense feature text (\"uses ... to\") passes."),
+    Rule("name-as-author", "authorship wording (the name as author)", False, BOTH,
+         _WHO + r"(?:" + _GS + "{1,5}" + _AUX + _GW + r"){0,2}?" + _GS + r"{1,5}(?:re|co|ghost|over|auto)?"
+         r"(?:wrote|written|built|made|created|authored|drafted|coded|produced|generated|helped|designed|"
+         r"developed)(?![a-z0-9])",
+         "Limit: at most two words between the name and the verb, never a form of \"be\"; passive "
+         "feature text (\"the ... prompt is built\") and three-word product names pass."),
+    Rule("generated-near", "authorship wording (footer phrase and name in one paragraph)", False, BOTH,
+         _PhraseThenName(_PHRASE, 1000, r"\n\n"),
+         "Limit: the same paragraph, within 1,000 characters."),
+    Rule("finding-id", "a short finding id", False, BOTH,
+         r"\((?:[FHMLN]\d{1,2})(?:, ?[FHMLN]\d{1,2})*\)|(?<![A-Za-z0-9])test_[fhmln]\d{1,2}_",
+         "Limit: only a parenthesised list or a test name; a bare F1 passes.", cased=True),
+)
+RULES = BLOCK_RULES + ADVISORY_RULES
+RULE_IDS = {r.id for r in RULES} | {"dash"}
+
+# --------------------------------------------------------------------------- folding
 
 _HYPHENS = {ord(c): "-" for c in "\u00ad\u2010\u2011\u2012\u2013\u2014\u2015\u2212\ufe58\ufe63\uff0d"}
-# Letters from other scripts that render like the ASCII letters in the banned words.
 # Capital letters from other scripts that look like Latin capitals; folded before lowercasing so a
 # capital lookalike cannot slip past the small-letter table below.
 _CAPITAL_CONFUSABLES = {ord(k): v for k, v in {
@@ -268,7 +309,7 @@ _CAPITAL_CONFUSABLES = {ord(k): v for k, v in {
 # Characters that render as blank but are not format (Cf) characters: Hangul fillers, the blank
 # braille pattern and the null notehead.
 _FILLERS = frozenset("\u3164\u115f\u1160\uffa0\u2800\U0001d159")
-# Dots that IDNA treats as the label separator, so "claude" + ideographic dot + "ai" opens the host.
+# Dots that IDNA treats as the label separator, so the name, an ideographic dot and "ai" open the host.
 _DOTS = {ord(c): "." for c in "\u3002\uff61\uff0e"}
 _CONFUSABLES = {ord(k): v for k, v in {
     "\u0430": "a", "\u0441": "c", "\u0435": "e", "\u043e": "o", "\u0440": "p", "\u0443": "y",
@@ -292,10 +333,28 @@ FORBIDDEN_NAMES = re.compile(r"(?:^|/)(?:[^/]*\.local\.json|\.secrets\.local\.js
 DATA_PREFIXES = ("digests/", "state/", "ledger/")
 _GITHUB_URL = (re.compile(r"^(?:https?|ssh|git)://(?:[^@/]+@)?github\.com(?::\d+)?/([^/]+)/([^/]+?)(?:\.git)?/?$", re.I),
                re.compile(r"^(?:[^@/]+@)?github\.com:([^/]+)/([^/]+?)(?:\.git)?/?$", re.I))
+_TAG = re.compile(r"<[^<>\n]*>")
+# Terminal control sequences: ECMA-48 CSI (ESC "[" or the C1 byte U+009B, parameters, intermediates,
+# a final byte), OSC strings (ESC "]" up to BEL or ESC "\"), two-byte ESC sequences, and the C0 and
+# C1 control characters other than tab and newline. They render as nothing.
+_ESCAPES = re.compile(r"\x1b\][^\x07\x1b]{0,4096}(?:\x07|\x1b\\)|(?:\x1b\[|\x9b)[0-?]{0,64}[ -/]{0,16}[@-~]"
+                      r"|\x1b[@-_]")
+_CONTROLS = re.compile(r"[\x00-\x08\x0b-\x1f\x7f-\x9f]")
+
+ADVISED: list[str] = []
 
 
 def say(message: str = "") -> None:
     sys.stdout.write(message.encode("ascii", "backslashreplace").decode("ascii") + "\n")
+
+
+def advise(lines: list[str]) -> None:
+    """Print advisory lines, and in GitHub Actions a warning annotation for each. Never a failure."""
+    for line in lines:
+        ADVISED.append(line)
+        say(f"commit_check: ADVISORY: {line}")
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            say("::warning title=commit_check advisory::" + line.replace("%", "%25"))
 
 
 def git(*args: str, cwd: Path | None = None) -> bytes:
@@ -316,12 +375,9 @@ def toplevel(cwd: Path | None = None) -> Path:
 # --------------------------------------------------------------------------- text checks
 
 def _decode_layers(text: str) -> list[str]:
-    """Every reading of the text: HTML entities decoded once, as a browser renders them (an escaped
-    entity such as the one in the allowed entry audit3_fp_amp_ndash_literal_word stays literal
-    text), then each round of percent-decoding until nothing changes (at most 8 rounds). The rules
-    run on every layer, because one more round can glue a letter to the name and hide it (audit 9,
-    HIGH 2); no single layer is taken as the true reading."""
-    value = html.unescape(text or "")
+    """Every reading of the text: HTML entities decoded once, as a browser renders them, then each
+    round of percent-decoding until nothing changes (at most 8 rounds). Line endings become LF."""
+    value = html.unescape(text or "").replace("\r\n", "\n").replace("\r", "\n")
     layers = [value]
     for _ in range(8):
         decoded = unquote(value)
@@ -330,14 +386,6 @@ def _decode_layers(text: str) -> list[str]:
         value = decoded
         layers.append(value)
     return layers
-
-
-# Terminal control sequences (ECMA-48: ESC "[", parameter bytes 0x30-0x3F, intermediate bytes
-# 0x20-0x2F, a final byte 0x40-0x7E; or ESC and one byte 0x40-0x5F) and C0 control characters other
-# than tab and newline. They render as nothing, so each layer is also read with them removed
-# (audit 9, MEDIUM 6 and LOW 10); the copy with them kept still treats one as a separator.
-_ESCAPES = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]|\x1b[@-_]")
-_CONTROLS = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
 
 
 def _views(text: str) -> list[str]:
@@ -351,8 +399,8 @@ def _views(text: str) -> list[str]:
 
 
 def _fold(value: str, keep_case: bool = False) -> str:
-    # NFKD, not NFKC: decomposing first means an accented letter (precomposed or built from a
-    # combining mark) always leaves a combining mark (Mn) behind, which the next line removes.
+    # NFKD, not NFKC: decomposing first means an accented letter always leaves a combining mark (Mn)
+    # behind, which the next line removes.
     value = unicodedata.normalize("NFKD", value)
     value = "".join(ch for ch in value
                     if unicodedata.category(ch) not in ("Cf", "Mn", "Me") and ch not in _FILLERS)
@@ -361,12 +409,44 @@ def _fold(value: str, keep_case: bool = False) -> str:
 
 
 def normalize(text: str, keep_case: bool = False) -> str:
-    """Fold the tricks that hide a banned string: entities, percent-encoding, compatibility forms
-    (fullwidth letters and dots), format characters (zero-width, bidi), combining and enclosing
-    marks, Hangul fillers, the blank braille pattern, ideographic dots, Unicode hyphens and
-    lookalike letters in either case. Lowercased. This is the last decoding layer; the rules read
-    every layer through _views."""
+    """The last decoding layer, folded. The rules read every layer through _views."""
     return _fold(_decode_layers(text)[-1], keep_case)
+
+
+def match_sha256(matched: str) -> str:
+    return hashlib.sha256(matched.encode("utf-8")).hexdigest()
+
+
+def _scan(text: str, rules, exempt: frozenset = frozenset()) -> list[tuple]:
+    """(rule, matched text) for each rule that matches any reading of the text, with or without HTML
+    tags. A match whose (rule id, sha256) is in `exempt` does not count."""
+    found: dict[str, tuple] = {}
+    for view in _views(text):
+        folded: dict[bool, tuple] = {}
+        for rule in rules:
+            if rule.id in found:
+                continue
+            if rule.cased not in folded:
+                f = _fold(view, keep_case=rule.cased)
+                folded[rule.cased] = tuple(dict.fromkeys((f, _TAG.sub("", f))))
+            for reading in folded[rule.cased]:
+                hit = None
+                if not exempt:
+                    m = rule.search(reading)
+                    hit = m.group(0) if m else None
+                else:
+                    for m in rule.finditer(reading):
+                        if (rule.id, match_sha256(m.group(0))) not in exempt:
+                            hit = m.group(0)
+                            break
+                if hit is not None:
+                    found[rule.id] = (rule, hit)
+                    break
+    return list(found.values())
+
+
+def _rules(block: bool, place: str) -> tuple:
+    return tuple(r for r in RULES if r.block == block and place in r.places)
 
 
 def _dash_hits(text: str) -> list[tuple[str, str, int]]:
@@ -381,37 +461,18 @@ def _dash_hits(text: str) -> list[tuple[str, str, int]]:
     return hits
 
 
-def _dash_findings(text: str, where: str) -> list[str]:
-    return [f"{where}: contains an {name}" if name[0] in "ae" else f"{where}: contains a {name}"
-            for _, name, _ in _dash_hits(text)]
-
-
-def _rule_findings(text: str, where: str, rules) -> list[str]:
-    footer = {id(r) for _, r in FOOTER_RULES}
-    checks = [(label, pattern, False) for label, pattern in rules]
-    if any(id(r) in footer for _, r in rules):
-        checks += [(label, pattern, True) for label, pattern in CASED_FOOTER_RULES]
-    labels = []
-    for view in _views(text):
-        folded = {False: _fold(view)}
-        if CASED_FOOTER_RULES:
-            folded[True] = _fold(view, keep_case=True)
-        untagged = {k: _TAG.sub("", v) for k, v in folded.items()}
-        for label, pattern, cased in checks:
-            if label in labels:
-                continue  # one finding per label is enough
-            text_view = folded[cased]
-            is_footer = cased or id(pattern) in footer
-            hit = pattern.search(text_view) or (is_footer and untagged[cased] != text_view
-                                                and pattern.search(untagged[cased]))
-            if hit:
-                labels.append(label)
-    return [f"{where}: contains a {label}" for label in labels]
+def _an(name: str) -> str:
+    return "an" if name[0] in "aeiou" else "a"
 
 
 def text_findings(text: str, where: str) -> list[str]:
-    """Commit messages, pull request titles and bodies: any mention is refused."""
-    return _rule_findings(text, where, MESSAGE_RULES) + _dash_findings(text, where)
+    """Commit messages, pull request titles and bodies: BLOCK findings."""
+    out = [f"{where}: contains {_an(r.label)} {r.label} [{r.id}]" for r, _ in _scan(text, _rules(True, "text"))]
+    return out + [f"{where}: contains {_an(name)} {name} [dash]" for _, name, _ in _dash_hits(text)]
+
+
+def text_advisories(text: str, where: str) -> list[str]:
+    return [f"{where}: {r.label} [{r.id}]" for r, _ in _scan(text, _rules(False, "text"))]
 
 
 def identity_findings(author, committer, where: str, on_main: bool = False) -> list[str]:
@@ -438,33 +499,31 @@ def path_findings(path: str, branch: str | None) -> list[str]:
     return out
 
 
-# One file describes the rules in words the rules refuse: the 512e818 checker, kept byte for byte
-# as the no-narrowing baseline. Only that exact path with exactly these bytes skips the text rules;
-# any change to it makes it an ordinary file again (audit 7, M3). CLAUDE.md was pinned too until
-# its rule paragraph was split (Matt's ruling, 2026-10-23); it is now checked like any file.
-BASELINE_PATH = "tests/fixtures/checker_baseline.py"
-BASELINE_SHA256 = "fd224233c718939f7f4ce29cd1b758efeb49dc1550901e3339f42bdd782ad05a"
-PINNED_FILES = {
-    BASELINE_PATH: BASELINE_SHA256,
-}
-
-
-def content_findings(path: str, data: bytes) -> list[str]:
+def file_text(data: bytes) -> tuple[str | None, str | None]:
+    """(text, problem). A NUL byte in the first 8 KiB marks a binary file by git's test; its text
+    rules still run on a decoded copy with NUL removed, so a NUL cannot hide text."""
     if b"\x00" in data[:8192]:
-        # Binary by git's test. A NUL byte must not hide text, so the text rules still run on a
-        # decoded copy (audit 8); the line-ending, dash and ASCII checks apply to text files only.
-        pinned = path in PINNED_FILES and hashlib.sha256(data).hexdigest() == PINNED_FILES[path]
-        return [] if pinned else _rule_findings(data.decode("utf-8", "replace").replace("\x00", ""), path, FILE_RULES)
+        return data.decode("utf-8", "replace").replace("\x00", ""), None
     try:
-        text = data.decode("utf-8")
+        return data.decode("utf-8"), None
     except UnicodeDecodeError as exc:
-        return [f"{path}: not UTF-8 (byte {exc.start})"]
-    pinned = path in PINNED_FILES and hashlib.sha256(data).hexdigest() == PINNED_FILES[path]
-    out = [] if pinned else _rule_findings(text, path, FILE_RULES)
+        return None, f"not UTF-8 (byte {exc.start})"
+
+
+def content_findings(path: str, data: bytes, exemptions=None) -> list[str]:
+    """BLOCK findings in one file. `exemptions` is the entry list from load_exemptions."""
+    text, problem = file_text(data)
+    if text is None:
+        return [f"{path}: {problem}"]
+    exempt = frozenset((e["rule"], e["match_sha256"]) for e in (exemptions or ()) if e["path"] == path)
+    out = [f"{path}: contains {_an(r.label)} {r.label} [{r.id} {match_sha256(m)}]"
+           for r, m in _scan(text, _rules(True, "file"), exempt)]
+    if b"\x00" in data[:8192]:
+        return out
     if "\r" in text:
         out.append(f"{path}: has CR line endings")
-    for ch, name, line in _dash_hits(text):
-        out.append(f"{path}:{line}: contains {'an' if name[0] in 'ae' else 'a'} {name}")
+    for _, name, line in _dash_hits(text):
+        out.append(f"{path}:{line}: contains {_an(name)} {name} [dash]")
     if path.endswith(".py"):
         for index, ch in enumerate(text):
             if ord(ch) > 127:
@@ -474,10 +533,80 @@ def content_findings(path: str, data: bytes) -> list[str]:
     return out
 
 
+def content_advisories(path: str, data: bytes) -> list[str]:
+    text, _ = file_text(data)
+    return [] if text is None else [f"{path}: {r.label} [{r.id}]" for r, _ in _scan(text, _rules(False, "file"))]
+
+
+def file_matches(text: str) -> list[tuple[str, str]]:
+    """Every (rule id, sha256 of the matched text) a BLOCK file rule finds: what an exemption may name."""
+    out = set()
+    for view in _views(text):
+        for rule in _rules(True, "file"):
+            f = _fold(view, keep_case=rule.cased)
+            for reading in dict.fromkeys((f, _TAG.sub("", f))):
+                out.update((rule.id, match_sha256(m.group(0))) for m in rule.finditer(reading))
+    return sorted(out)
+
+
+def load_exemptions(raw: str | None) -> tuple[list[dict], list[str]]:
+    """Parse the exemptions file: (entries, problems). None (no file) means no exemptions."""
+    if raw is None:
+        return [], []
+    try:
+        data = json.loads(raw)
+    except ValueError as exc:
+        return [], [f"{EXEMPTIONS_FILE}: not JSON ({exc})"]
+    if not isinstance(data, dict) or not isinstance(data.get("exemptions"), list):
+        return [], [f"{EXEMPTIONS_FILE}: needs an \"exemptions\" list"]
+    entries, problems, seen = [], [], set()
+    for n, e in enumerate(data["exemptions"]):
+        where = f"{EXEMPTIONS_FILE} entry {n}"
+        if not isinstance(e, dict) or set(e) != {"path", "rule", "match_sha256", "reason"}:
+            problems.append(f"{where}: needs exactly path, rule, match_sha256 and reason")
+            continue
+        key = (e["path"], e["rule"], e["match_sha256"])
+        if not any(r.id == e["rule"] for r in _rules(True, "file")):
+            problems.append(f"{where}: {e['rule']!r} is not a BLOCK rule for files")
+        elif not re.fullmatch(r"[0-9a-f]{64}", str(e["match_sha256"])):
+            problems.append(f"{where}: match_sha256 must be 64 lowercase hex characters")
+        elif len(str(e["reason"]).strip()) < MIN_REASON:
+            problems.append(f"{where}: needs a written reason of {MIN_REASON}+ characters")
+        elif key in seen:
+            problems.append(f"{where}: listed more than once")
+        else:
+            seen.add(key)
+            entries.append(e)
+    return entries, problems
+
+
+def verdict(text: str, place: str) -> str:
+    """"block", "advisory" or "pass" for a text as a commit message, a pull request title or body, or
+    a file. The golden test compares it with each case."""
+    if place == "file":
+        data = (text + "\n").encode("utf-8")
+        if content_findings("golden.md", data):
+            return "block"
+        return "advisory" if content_advisories("golden.md", data) else "pass"
+    kept = text.split(SCISSORS, 1)[0] if place == "message" else text
+    if text_findings(kept, place):
+        return "block"
+    return "advisory" if text_advisories(kept, place) else "pass"
+
+
 # --------------------------------------------------------------------------- ranges
 
 def base_ref() -> str:
     return f"origin/{os.environ.get('BASE_REF') or 'main'}"
+
+
+def base_exemptions(cwd: Path | None = None) -> tuple[list[dict], list[str]]:
+    """The exemptions on origin/<BASE_REF>, so a change cannot exempt its own text."""
+    try:
+        raw = git("show", f"{base_ref()}:{EXEMPTIONS_FILE}", cwd=cwd).decode("utf-8")
+    except RuntimeError:
+        raw = None
+    return load_exemptions(raw)
 
 
 def resolve_range(spec: str, cwd: Path | None = None) -> str | None:
@@ -489,6 +618,12 @@ def resolve_range(spec: str, cwd: Path | None = None) -> str | None:
     if git_ok("rev-parse", "--verify", "--quiet", BOUNDARY_SHA + "^{commit}", cwd=cwd):
         return f"{BOUNDARY_SHA}..HEAD"
     return None
+
+
+def before_history_boundary(sha: str, cwd: Path | None = None) -> bool:
+    """True when the repository has HISTORY_BOUNDARY and the commit is it or one of its ancestors."""
+    return (git_ok("cat-file", "-e", HISTORY_BOUNDARY + "^{commit}", cwd=cwd)
+            and git_ok("merge-base", "--is-ancestor", sha, HISTORY_BOUNDARY, cwd=cwd))
 
 
 def github_verified(sha: str) -> bool:
@@ -579,10 +714,17 @@ def check_range(rng: str, branch: str | None = None, cwd: Path | None = None, ma
     tip = rng.partition("..")[2] or "HEAD"
     known, known_problems = (load_known(tip, {c["sha"] for c in commits}, cwd) if main_history else ({}, []))
     findings += known_problems
+    exemptions, problems = base_exemptions(cwd)
+    findings += problems
+    old = 0
     for c in commits:
         where = f"commit {c['sha'][:7]}"
-        mine = text_findings(c["message"], where + " message")
-        mine += identity_findings(c["author"], c["committer"], where, on_main=c["on_main"])
+        mine = identity_findings(c["author"], c["committer"], where, on_main=c["on_main"])
+        if before_history_boundary(c["sha"], cwd):
+            old += 1
+        else:
+            mine = text_findings(c["message"], where + " message") + mine
+            advise(text_advisories(c["message"], where + " message"))
         if mine and c["sha"] in known:
             for f in mine:
                 say(f"commit_check: known, acknowledged in {KNOWN_FILE} ({known[c['sha']]}): {f}")
@@ -591,7 +733,12 @@ def check_range(rng: str, branch: str | None = None, cwd: Path | None = None, ma
     tip, paths = changed_paths(rng, cwd=cwd)
     for path in paths:
         findings += path_findings(path, branch)
-        findings += content_findings(path, git("show", f"{tip}:{path}", cwd=cwd))
+        data = git("show", f"{tip}:{path}", cwd=cwd)
+        findings += content_findings(path, data, exemptions)
+        advise(content_advisories(path, data))
+    if old:
+        say(f"commit_check: {old} commit(s) at or before the history boundary {HISTORY_BOUNDARY[:7]}: "
+            "identity checked, message rules not re-run")
     touched = sorted(p for p in paths if p.startswith(SELF_PATHS))
     if touched:
         say("commit_check: NOTICE: this range changes the checks themselves (" + ", ".join(touched)
@@ -620,12 +767,16 @@ def check_staged(cwd: Path | None = None) -> list[str]:
         elif (m.group(1), m.group(2)) != AUTHOR:
             findings.append(f"{role} for this commit is {m.group(1)} <{m.group(2)}>, "
                             f"expected {AUTHOR[0]} <{AUTHOR[1]}>")
+    exemptions, problems = base_exemptions(cwd)
+    findings += problems
     raw = git("diff", "--cached", "--name-only", "-z", "--no-renames", "--diff-filter=d", cwd=cwd)
     paths = [p for p in raw.decode("utf-8", "replace").split("\x00") if p]
     branch = current_branch(cwd)
     for path in paths:
         findings += path_findings(path, branch)
-        findings += content_findings(path, git("show", f":{path}", cwd=cwd))
+        data = git("show", f":{path}", cwd=cwd)
+        findings += content_findings(path, data, exemptions)
+        advise(content_advisories(path, data))
     say(f"commit_check: {len(paths)} staged file(s)")
     return findings
 
@@ -634,6 +785,7 @@ def check_message_text(text: str) -> list[str]:
     """Everything above git's scissors line is checked, comment lines included: whether git strips
     them depends on the cleanup mode, so a banned line hidden behind '#' is still refused."""
     kept = text.split(SCISSORS, 1)[0]
+    advise(text_advisories(kept, "commit message"))
     return text_findings(kept, "commit message")
 
 
@@ -724,6 +876,7 @@ def check_sources(rng: str, cwd: Path | None = None) -> list[str]:
 
 
 def check_pr_text(title: str, body: str, where: str) -> list[str]:
+    advise(text_advisories(title or "", f"{where} title") + text_advisories(body or "", f"{where} body"))
     return text_findings(title or "", f"{where} title") + text_findings(body or "", f"{where} body")
 
 
@@ -766,8 +919,8 @@ def banned_samples() -> dict[str, str]:
         "footer italic": "Body\n\n---\n_" + "Gener" + "ated" + " b" + "y [Claude Code](" + link + ")_",
         "footer using": "Add b\n\n" + "Gener" + "ated" + " using " + "Claude",
         "footer robot": "Add b\n\n\U0001F916 " + "Gener" + "ated" + " with [" + "Claude" + " Code]",
-        # The first audit's italic probe, byte for byte: underscore right after "with".
-        "footer italic audit": "_" + "Gener" + "ated" + " with_ [" + "Cla" + "ude Code](...)",
+        # The italic footer with an underscore right after the connective, byte for byte.
+        "footer italic underscore": "_" + "Gener" + "ated" + " with_ [" + "Cla" + "ude Code](...)",
         "trailer capital cyrillic": "Add b\n\n\u0421o-Auth" + "ored-By: x",
         "trailer capital cyrillic o": "Add b\n\nC\u041e-Auth" + "ored-By: x",
         "session capital greek": "Add b\n\nCl\u0391ude-Session: x",
@@ -872,7 +1025,7 @@ def report(findings: list[str], label: str) -> int:
     if findings:
         say(f"commit_check: {label}: {len(findings)} finding(s); fix them before continuing")
         return 1
-    say(f"commit_check: {label}: clean")
+    say(f"commit_check: {label}: clean" + (f" ({len(ADVISED)} advisory line(s) above)" if ADVISED else ""))
     return 0
 
 
