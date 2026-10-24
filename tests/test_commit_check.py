@@ -24,6 +24,7 @@ FLYWIFI = {"GIT_AUTHOR_NAME": cc.AUTHOR[0], "GIT_AUTHOR_EMAIL": cc.AUTHOR[1],
            "GIT_COMMITTER_NAME": cc.AUTHOR[0], "GIT_COMMITTER_EMAIL": cc.AUTHOR[1]}
 WEB = {"GIT_COMMITTER_NAME": cc.WEB_COMMITTER[0], "GIT_COMMITTER_EMAIL": cc.WEB_COMMITTER[1]}
 CO = "Co-" + "Auth" + "ored-By"
+NAME = "Cla" + "ude"
 SESSION = "Claude" + "-Session"
 HOST = "claude" + ".ai"
 GEN = "Gener" + "ated"
@@ -161,10 +162,36 @@ class FileTests(unittest.TestCase):
         self.assertEqual(cc.content_findings("RULES.md", text.encode()), [])
 
     def test_this_repository_passes_the_file_rules(self):
-        for rel in ("CLAUDE.md", "README.md", "CHANGELOG.md", "tools/commit_check.py",
+        for rel in ("AGENTS.md", "CLAUDE.md", "README.md", "CHANGELOG.md", "tools/commit_check.py",
                     "tests/test_commit_check.py", ".github/workflows/ci.yml", "tools/hooks/_common.sh"):
             with self.subTest(path=rel):
                 self.assertEqual(cc.content_findings(rel, (ROOT / rel).read_bytes()), [])
+
+    def test_seed_files_keep_imported_bylines_on_data_lines(self):
+        # A seed file imports public listings, whose own bylines may stand; prose there is still read.
+        imported = ("- Research blog by " + NAME + " (https://example.org/feed.xml)\n",
+                    "  - Posts by " + NAME + "\n",
+                    "1. Blog by " + NAME + "\n",
+                    "| Research blog by " + NAME + " | https://example.org/feed.xml |\n",
+                    "|Blog by " + NAME + "|url|\n",
+                    "    \"title\": \"Posts by " + NAME + "\",\n",
+                    "{\"title\": \"Posts by " + NAME + "\"}\n",
+                    "<outline text=\"Essays by " + NAME + "\" />\n",
+                    "https://example.org/feed.xml  Essays by " + NAME + "\n",
+                    "title: Essays by " + NAME + "\n")
+        for text in imported:
+            self.assertEqual(cc.content_findings("seeds/2026-10-24_x.md", text.encode()), [], text)
+        for text in imported[:5]:  # the Markdown shapes block outside seeds/; quoted values pass everywhere
+            self.assertTrue(cc.content_findings("docs/x.md", text.encode()), text)
+        for prose in ("Notes compiled by " + NAME + ".\n", "Essays by " + NAME + " are listed below.\n"):
+            self.assertTrue(cc.content_findings("seeds/2026-10-24_x.md", prose.encode()), prose)
+        # Only the byline rule relaxes: the file author's own notes and the fixed shapes block on every line.
+        for own in ("- Made with " + NAME + "\n", "- Thanks to " + NAME + " for the list\n",
+                    "1. " + NAME + " wrote this list\n", "- " + CO + ": x <x@example.com>\n",
+                    "<!-- list compiled by " + NAME + " -->\n", "Note: feeds, by " + NAME + "\n"):
+            self.assertTrue(cc.content_findings("seeds/x.md", own.encode()), own)
+        self.assertEqual(cc.file_matches(imported[0], "seeds/x.md"), [])
+        self.assertTrue(cc.file_matches(imported[0], "docs/x.md"))
 
 
 class MessageFileTests(unittest.TestCase):
@@ -382,7 +409,7 @@ class HookTests(unittest.TestCase):
         result = self.pre_push(url, to_data)
         self.assertNotEqual(result.returncode, 0, "data")
         self.assertIn(b"refusing to push to data", result.stdout)
-        job = f"refs/heads/main {head} refs/heads/claude/job {cc.ZERO_SHA}\n".encode()
+        job = f"refs/heads/main {head} refs/heads/job/x {cc.ZERO_SHA}\n".encode()
         self.assertNotEqual(self.pre_push("https://github.com/someone/else", job).returncode, 0, "foreign URL")
         self.assertNotEqual(self.pre_push("/tmp/bare/flywifi/info-feed-seeds.git", job).returncode, 0,
                             "a local path that merely contains the slug")
@@ -392,15 +419,30 @@ class HookTests(unittest.TestCase):
         self.repo.git("update-ref", "refs/remotes/origin/main", head)
         self.assertNotEqual(self.pre_push(url, job).returncode, 0, "nothing new on the branch: empty range")
         tag = f"refs/tags/v1 {head} refs/tags/v1 {cc.ZERO_SHA}\n".encode()
-        self.assertNotEqual(self.pre_push(url, tag).returncode, 0, "a tag on an already-pushed commit is empty")
-        delete = f"(delete) {cc.ZERO_SHA} refs/heads/claude/old {head}\n".encode()
-        self.assertEqual(self.pre_push(url, delete).returncode, 0, "deleting a job branch is allowed")
+        result = self.pre_push(url, tag)
+        self.assertNotEqual(result.returncode, 0, "tags are made by the maintainer on GitHub")
+        self.assertIn(b"tags are made by the maintainer", result.stdout)
+        delete = f"(delete) {cc.ZERO_SHA} refs/heads/other/old {head}\n".encode()
+        self.assertEqual(self.pre_push(url, delete).returncode, 0, "deleting any job branch is allowed")
         self.repo.commit("f.txt", b"f\n", "Add f")
         tip = self.repo.head()
-        job = f"refs/heads/main {tip} refs/heads/claude/job {cc.ZERO_SHA}\n".encode()
-        clean = self.pre_push(url, job)
-        self.assertEqual(clean.returncode, 0, clean.stdout.decode("ascii", "replace"))
-        self.assertIn(b"1 commit(s)", clean.stdout, "the new commit was checked")
+        for name in ("other/x", "feature-x", "jobs/x", "job/"):
+            other = f"refs/heads/main {tip} refs/heads/{name} {cc.ZERO_SHA}\n".encode()
+            result = self.pre_push(url, other)
+            self.assertNotEqual(result.returncode, 0, name)
+            self.assertIn(b"job/<name> or doctor/<fix>", result.stdout, name)
+        for ref in ("refs/notes/commits", "refs/notes", "refs/sessions/abc", "refs/meta/config", "refs/remotes/x/y"):
+            other = f"{ref} {tip} {ref} {cc.ZERO_SHA}\n".encode()
+            result = self.pre_push(url, other)
+            self.assertNotEqual(result.returncode, 0, ref)
+            self.assertIn(b"only job/<name> and doctor/<fix> branches are pushed", result.stdout, ref)
+        delete_notes = f"(delete) {cc.ZERO_SHA} refs/notes/commits {tip}\n".encode()
+        self.assertEqual(self.pre_push(url, delete_notes).returncode, 0, "deleting stray notes is allowed")
+        for name in ("job/x", "doctor/fix-1", "job/a.b_c/d"):
+            job = f"refs/heads/main {tip} refs/heads/{name} {cc.ZERO_SHA}\n".encode()
+            clean = self.pre_push(url, job)
+            self.assertEqual(clean.returncode, 0, name + ": " + clean.stdout.decode("ascii", "replace"))
+            self.assertIn(b"1 commit(s)", clean.stdout, "the new commit was checked")
 
 
 class PrePushRangeTests(unittest.TestCase):
@@ -414,7 +456,7 @@ class PrePushRangeTests(unittest.TestCase):
             repo.commit("a.txt", b"a\n", "Add a\n\n" + CO + ": X <x@example.com>")
             pushed = repo.head()
             repo.commit("b.txt", b"b\n", "Add b")
-            line = f"refs/heads/job {repo.head()} refs/heads/claude/job {pushed}"
+            line = f"refs/heads/job {repo.head()} refs/heads/job/x {pushed}"
             found = quiet(cc.check_pre_push, "origin", "https://github.com/flywifi/info-feed-seeds", [line],
                           cwd=repo.dir)
             self.assertTrue(any(pushed[:7] in f and "co-author trailer" in f for f in found), found)
@@ -431,7 +473,7 @@ class PrePushRangeTests(unittest.TestCase):
             repo.git("remote", "add", "origin", "https://github.com/flywifi/info-feed-seeds")
             repo.git("update-ref", "refs/remotes/origin/main", repo.head())
             repo.commit("f.txt", b"f\n", "Add f")
-            job = f"refs/heads/main {repo.head()} refs/heads/claude/job {cc.ZERO_SHA}\n".encode()
+            job = f"refs/heads/main {repo.head()} refs/heads/job/x {cc.ZERO_SHA}\n".encode()
             hook = str(repo.dir / "tools" / "hooks" / "pre-push")
             result = subprocess.run(["sh", hook, "origin", "https://github.com/flywifi/info-feed-seeds"],
                                     cwd=repo.dir, env=repo.env, input=job, capture_output=True)

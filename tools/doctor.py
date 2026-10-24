@@ -8,7 +8,7 @@ environment was blocked or a required check did not run, 4 the command is not im
 never reported as clean. An advisory check that cannot run is reported as "advisory: blocked" and
 does not change the exit code.
 
-Only `check` exists so far. `fix --safe` and `propose`, described in CLAUDE.md, are planned.
+Only `check` exists so far. `fix --safe` and `propose`, described in AGENTS.md, are planned.
 Output is ASCII only. Standard library only.
 """
 from __future__ import annotations

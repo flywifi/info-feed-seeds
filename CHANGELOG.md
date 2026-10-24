@@ -8,8 +8,37 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- `AGENTS.md` is the one rulebook every coding tool reads, and `CLAUDE.md` is an import of it. The
+  rulebook names no AI product, imports nothing, stays under 16 KiB and 200 lines (the smallest
+  share any reader takes), and no other instruction file exists in the tree: a pointer is accepted
+  only as `CLAUDE.md` or `GEMINI.md` at the root, because one reader takes the first instruction
+  file it finds in an order that puts several other names before the rulebook.
+  `tests/test_instruction_files.py` holds that shape (a pointer is exactly the import line) and
+  checks that `.gemini/settings.json`, which points its reader at the rulebook, names exactly it.
+  Job branches are named `job/<name>`, and the pre-push hook refuses any branch not named
+  `job/<name>` or `doctor/<fix>` and any ref that is not such a branch (tags included, since a tag
+  carries a tagger and a message no check reads), so a tool's own branch, tag or attribution notes
+  never reach the repository; a deletion of any ref passes.
+- The checker reads marks a tool leaves without naming itself: assistance trailer keys and
+  title-case hyphenated session, thread, log, event, screenshot, publication or checkpoint keys in
+  messages and pull request text; session label lines there; and everywhere a GitHub machine
+  account address other than GitHub's own, a machine mailbox at a coding tool's or vendor's domain,
+  a tool's session, task, thread or badge link by host and path, a hidden HTML comment a tool
+  plants, and a making or credit verb with a Markdown link to a coding tool's host. The authorship
+  rules also read the coined names of coding agents and their makers in any letter case, several
+  given-name products in title case, two-word names as the pair in title case, and more product
+  tiers (Build, Web, Autofix, Spark, Composer, Fable, Mythos and others), so a name followed by one
+  of them is still read as the name. The generic phrases need an article or determiner, so a topic
+  such as "AI agents built on graphs" stays ordinary text.
+- In files under `seeds/`, imports of public listings, the byline rule leaves lines of imported data
+  alone (list items, numbered items, table rows, tags, quoted strings, objects, URLs and key lines),
+  so a feed's own byline may stand there; prose is still read, and every other rule reads every
+  line.
+- The authorship rules also read Qwen, Kimi, Devin, Aider, Windsurf, Replit, Jules and Junie (the
+  given names and the sport only when capitalised, and never with a capitalised surname after them),
+  and the phrases "coding agent", "AI agent" and "language model".
 - Authorship and credit wording that names an AI assistant (Claude, other assistants or their
-  makers) is blocked in commit messages, pull request text and files, and CLAUDE.md states the same
+  makers) is blocked in commit messages, pull request text and files, and AGENTS.md states the same
   rule: public text credits no one, and says "the creator" where a credit is needed. Names are read
   as words; product names that are also ordinary words count only when capitalised; a capitalised
   non-tier word after the name (a person's surname, an observatory) makes it another name; the

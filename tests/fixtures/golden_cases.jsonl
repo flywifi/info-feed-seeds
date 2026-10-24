@@ -235,3 +235,164 @@
 {"b64": "VGhlIENvcGlsb3QgV3JvdGUgVGhlIEZsaWdodCBMb2cu", "expect": "pass", "id": "title-case-ordinary-word", "kind": "control", "note": "title case keeps an ordinary word ordinary", "rule": "name-as-author"}
 {"b64": "UmV0cmllcyBhcmUgYnVpbHQtaW4gYnkgZGVmYXVsdCB3aXRoIHRoZSBPcGVuQUkgY2xpZW50Lg==", "expect": "pass", "id": "built-in-by-default", "kind": "control", "note": "built-in by default describes a feature", "rule": "made-by"}
 {"b64": "Q3JlZGl0OgogICAgIENsYXVkZQ==", "expect": "block", "id": "credit-label-sign-off-indented", "kind": "planted", "note": "a credit label with the name indented on the next line", "rule": "credit"}
+{"b64": "V3JpdHRlbiB3aXRoIFF3ZW4u", "expect": "block", "id": "made-with-a-newer-name", "kind": "planted", "note": "the made verb with a name added to the list", "rule": "made-by"}
+{"b64": "S2ltaSBkcmFmdGVkIHRoZSBzdW1tYXJ5Lg==", "expect": "block", "id": "given-name-product-drafts", "kind": "planted", "note": "a capitalised given-name product with a making verb", "rule": "name-as-author"}
+{"b64": "RGV2aW4gd3JvdGUgdGhlIHBhcnNlci4=", "expect": "block", "id": "agent-name-wrote-the-parser", "kind": "planted", "note": "another capitalised product name with a making verb", "rule": "name-as-author"}
+{"b64": "VGhlIGNvZGluZyBhZ2VudCB3cm90ZSB0aGlzIGZpbGUu", "expect": "block", "id": "generic-tool-phrase-then-making-verb", "kind": "planted", "note": "the generic phrase for a coding tool with a making verb", "rule": "name-as-author"}
+{"b64": "QSBsYW5ndWFnZSBtb2RlbCB3cm90ZSB0aGlzIHN1bW1hcnku", "expect": "block", "id": "generic-model-phrase-then-making-verb", "kind": "planted", "note": "the generic phrase for a model with a making verb", "rule": "name-as-author"}
+{"b64": "VGhhbmtzIHRvIEFpZGVyIGZvciB0aGUgcmVmYWN0b3Iu", "expect": "block", "id": "thanks-to-a-newer-name", "kind": "planted", "note": "thanks to with a name added to the list", "rule": "credit"}
+{"b64": "QnVpbHQgdXNpbmcgV2luZHN1cmYu", "expect": "block", "id": "built-using-a-capitalised-name", "kind": "planted", "note": "the built verb with a capitalised product name that is also a sport", "rule": "made-by"}
+{"b64": "UmVwbGl0IHdhcyB1c2VkIHRvIHByb3RvdHlwZSB0aGUgcGFyc2VyLg==", "expect": "block", "id": "newer-name-was-used-to", "kind": "planted", "note": "passive use of a name added to the list", "rule": "name-as-author"}
+{"b64": "S2ltaSBSYWlra29uZW4gd3JvdGUgdGhlIGxhcCBub3Rlcy4=", "expect": "pass", "id": "surname-after-a-given-name-product", "kind": "control", "note": "a capitalised surname after a given name makes it a person", "rule": "name-as-author"}
+{"b64": "SnVsZXMgVmVybmUgd3JvdGUgdGhlIG5vdmVsIGluIDE4NzAu", "expect": "pass", "id": "novelist-with-a-given-name", "kind": "control", "note": "a novelist whose given name is also a product name", "rule": "name-as-author"}
+{"b64": "V2Ugd2luZHN1cmYgYnkgdGhlIGJheSBhbmQgd3JvdGUgaXQgdXAu", "expect": "pass", "id": "lowercase-sport-verb", "kind": "control", "note": "the lowercase sport verb is not the product", "rule": "name-as-author"}
+{"b64": "QnVpbHQgYnkgRmFjdG9yeSB3b3JrZXJzIGluIDE5NTIu", "expect": "pass", "id": "unlisted-ordinary-word-builds", "kind": "control", "note": "a capitalised ordinary word that is not on the list", "rule": "made-by"}
+{"b64": "TWFkZSB3aXRoIHJhaWRlciB0YWN0aWNzIGluIHRoZSBnYW1lLg==", "expect": "pass", "id": "newer-name-inside-a-longer-word", "kind": "control", "note": "a listed name inside a longer ordinary word", "rule": "made-by"}
+{"id": "assist-trailer-key", "kind": "planted", "rule": "assist-trailer", "note": "a hyphenated assistance key opens a line.", "expect": {"message": "block", "title": "block", "body": "block", "file": "pass"}, "b64": "QWRkIGIKCkFzc2lzdGVkLWJ5OiBTb21lVG9vbA=="}
+{"id": "assist-trailer-generated-key", "kind": "planted", "rule": "assist-trailer", "note": "another assistance key.", "expect": {"message": "block", "title": "block", "body": "block", "file": "pass"}, "b64": "QWRkIGIKCkdlbmVyYXRlZC13aXRoOiBhIG1vZGVsIHZpYSBhIHNoZWxs"}
+{"id": "assist-trailer-prose", "kind": "limit", "rule": "assist-trailer", "note": "prose without a colon after the key words.", "expect": "pass", "b64": "QXNzaXN0ZWQgYnkgdGhlIG5ldyBjYWNoZSwgY29sZCBzdGFydHMgZHJvcCB0byAyIHMu"}
+{"id": "assist-trailer-care", "kind": "control", "rule": "assist-trailer", "note": "a word between the phrase and the colon.", "expect": "pass", "b64": "TWFkZSB3aXRoIGNhcmU6IHJldHJ5IGxvZ2ljIG5vdyBiYWNrcyBvZmYu"}
+{"id": "log-trailer-session-id", "kind": "planted", "rule": "log-trailer", "note": "a session key with a vendor prefix.", "expect": {"message": "block", "title": "block", "body": "block", "file": "pass"}, "b64": "QWRkIGIKClJlcGxpdC1Db21taXQtU2Vzc2lvbi1JZDogY2I4MWU3NGEtODcyOS00N2ZhLWFiZDItMDEzOGFjN2Y2MzUw"}
+{"id": "log-trailer-logs-url", "kind": "planted", "rule": "log-trailer", "note": "a logs key.", "expect": {"message": "block", "title": "block", "body": "block", "file": "pass"}, "b64": "QWRkIGIKCkFnZW50LUxvZ3MtVXJsOiBodHRwczovL2V4YW1wbGUuY29tL2xvZ3MvMQ=="}
+{"id": "log-trailer-publication", "kind": "planted", "rule": "log-trailer", "note": "a publication key.", "expect": {"message": "block", "title": "block", "body": "block", "file": "pass"}, "b64": "QWRkIGIKClNvbWVUb29sLVB1YmxpY2F0aW9uOiAzZjljMmE3ZS0xYjJkLTRjNWUtOGY5MC0xMjM0NTY3ODlhYmM="}
+{"id": "log-trailer-run-key", "kind": "limit", "rule": "log-trailer", "note": "Run is not a session word.", "expect": "pass", "b64": "Q0ktUnVuOiA0NDExIHBhc3NlZCBhZnRlciB0aGUgcmV0cnkgZml4"}
+{"id": "log-trailer-refs", "kind": "control", "rule": "log-trailer", "note": "an ordinary trailer.", "expect": "pass", "b64": "UmVmczogaHR0cHM6Ly9naXRodWIuY29tL2ZseXdpZmkvaW5mby1mZWVkLXNlZWRzL2lzc3Vlcy83"}
+{"id": "agent-address-bot-account", "kind": "planted", "rule": "agent-address", "note": "a GitHub machine account.", "expect": "block", "b64": "QWRkIGIKCnJldmlld2VkIGJ5IHRvb2xbYm90XUB1c2Vycy5ub3JlcGx5LmdpdGh1Yi5jb20="}
+{"id": "agent-address-numbered-account", "kind": "planted", "rule": "agent-address", "note": "a numbered agent account.", "expect": "block", "b64": "QXV0aG9yIDE5ODk4Mjc0OStDb3BpbG90QHVzZXJzLm5vcmVwbHkuZ2l0aHViLmNvbQ=="}
+{"id": "agent-address-agent-domain", "kind": "planted", "rule": "agent-address", "note": "a mail domain only agents write from.", "expect": "block", "b64": "ZnJvbSBjcnVzaEBjaGFybS5sYW5k"}
+{"id": "agent-address-maintainer", "kind": "limit", "rule": "agent-address", "note": "a noreply address of a person.", "expect": "pass", "b64": "MjM2ODcxODQ0K2ZseXdpZmlAdXNlcnMubm9yZXBseS5naXRodWIuY29t"}
+{"id": "agent-address-feed-owner", "kind": "control", "rule": "agent-address", "note": "an ordinary address.", "expect": "pass", "b64": "UmVwb3J0IGJyb2tlbiBmZWVkcyB0byBmZWVkc0BleGFtcGxlLm9yZy4="}
+{"id": "agent-address-vendor-domain", "kind": "control", "rule": "agent-address", "note": "a whole vendor domain is never blocked.", "expect": "pass", "b64": "V3JpdGUgdG8gc3VwcG9ydEBnaXRodWIuY29tIGFib3V0IHRoZSBvdXRhZ2Uu"}
+{"id": "agent-link-task", "kind": "planted", "rule": "agent-link", "note": "a task link.", "expect": "block", "b64": "c2VlIGh0dHBzOi8vY2hhdGdwdC5jb20vY29kZXgvdGFza3MvdGFza19pXzY4ZDFhMmIzYzQ="}
+{"id": "agent-link-session-path", "kind": "planted", "rule": "agent-link", "note": "a session link.", "expect": "block", "b64": "aHR0cHM6Ly9hcHAuZGV2aW4uYWkvc2Vzc2lvbnMvMDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="}
+{"id": "agent-link-badge", "kind": "planted", "rule": "agent-link", "note": "a review badge image.", "expect": "block", "b64": "IVtiYWRnZV0oaHR0cHM6Ly9zdGF0aWMuZGV2aW4uYWkvYXNzZXRzL2doLWRldmluLXJldmlldy1saWdodC5zdmc/dj00KQ=="}
+{"id": "agent-link-share", "kind": "planted", "rule": "agent-link", "note": "a share link.", "expect": "block", "b64": "W3NdKGh0dHBzOi8vb3BlbmNvZGUuYWkvcy9hYmMxMjMp"}
+{"id": "agent-link-docs-path", "kind": "limit", "rule": "agent-link", "note": "a documentation path on the same host.", "expect": "pass", "b64": "RG9jczogaHR0cHM6Ly9jdXJzb3IuY29tL2RvY3MvY29udGV4dC9ydWxlcw=="}
+{"id": "agent-link-pull-request", "kind": "control", "rule": "agent-link", "note": "an ordinary pull request link.", "expect": "pass", "b64": "aHR0cHM6Ly9naXRodWIuY29tL2ZseXdpZmkvaW5mby1mZWVkLXNlZWRzL3B1bGwvMTI="}
+{"id": "agent-link-subdomain-docs", "kind": "control", "rule": "agent-link", "note": "a documentation subdomain.", "expect": "pass", "b64": "aHR0cHM6Ly9kb2NzLnNtaXRoLmxhbmdjaGFpbi5jb20veA=="}
+{"id": "hidden-marker-suffix", "kind": "planted", "rule": "hidden-marker", "note": "a hidden comment a tool appends.", "expect": "block", "b64": "PCEtLSBTVEFSVCBDT1BJTE9UIENPRElORyBBR0VOVCBTVUZGSVggLS0+"}
+{"id": "hidden-marker-publication", "kind": "planted", "rule": "hidden-marker", "note": "a hidden publication id.", "expect": "block", "b64": "PCEtLSBvcGVuY2xhdy1wdWJsaWNhdGlvbjozZjljMmE3ZSAtLT4="}
+{"id": "hidden-marker-auto-generated", "kind": "planted", "rule": "hidden-marker", "note": "the marker of a review bot.", "expect": "block", "b64": "PCEtLSBUaGlzIGlzIGFuIGF1dG8tZ2VuZXJhdGVkIGNvbW1lbnQ6IHJlbGVhc2Ugbm90ZXMgYnkgYSByZXZpZXcgYm90IC0tPg=="}
+{"id": "hidden-marker-lint", "kind": "limit", "rule": "hidden-marker", "note": "an ordinary HTML comment.", "expect": "pass", "b64": "PCEtLSBtYXJrZG93bmxpbnQtZGlzYWJsZSBNRDAxMyAtLT4="}
+{"id": "hidden-marker-template", "kind": "control", "rule": "hidden-marker", "note": "a template comment.", "expect": "pass", "b64": "PCEtLSBEZXNjcmliZSB0aGUgZmVlZCBjaGFuZ2UgaGVyZSAtLT4="}
+{"id": "credit-link-made-with", "kind": "planted", "rule": "credit-link", "note": "a credit verb and a tool host.", "expect": "block", "b64": "TWFkZSB3aXRoIFtDdXJzb3JdKGh0dHBzOi8vY3Vyc29yLmNvbSk="}
+{"id": "credit-link-powered-by", "kind": "planted", "rule": "credit-link", "note": "italic credit with a tool host.", "expect": "block", "b64": "KlBvd2VyZWQgYnkgW0tpbG9dKGh0dHBzOi8va2lsby5haSkq"}
+{"id": "credit-link-opened-via", "kind": "planted", "rule": "credit-link", "note": "opened via a tool host.", "expect": "block", "b64": "Kk9wZW5lZCB2aWEgW0NvbnRpbnVlIEh1Yl0oaHR0cHM6Ly9jb250aW51ZS5kZXYpKg=="}
+{"id": "credit-link-description-sentence", "kind": "planted", "rule": "credit-link", "note": "a fixed sentence.", "expect": "block", "b64": "PiBUaGlzIHB1bGwgcmVxdWVzdCBkZXNjcmlwdGlvbiB3YXMgZ2VuZXJhdGVkIHdpdGggYSBib3Qu"}
+{"id": "credit-link-library", "kind": "limit", "rule": "credit-link", "note": "a link to another host.", "expect": "pass", "b64": "UG93ZXJlZCBieSBbZmVlZHBhcnNlcl0oaHR0cHM6Ly9naXRodWIuY29tL2t1cnRtY2tlZS9mZWVkcGFyc2VyKSBzaW5jZSB2Mi4="}
+{"id": "credit-link-care", "kind": "control", "rule": "credit-link", "note": "no link.", "expect": "pass", "b64": "TWFkZSB3aXRoIGNhcmUgZm9yIHNsb3cgY29ubmVjdGlvbnMu"}
+{"id": "session-label-view-thread", "kind": "planted", "rule": "session-label", "note": "link text offering a thread.", "expect": {"message": "block", "title": "block", "body": "block", "file": "pass"}, "b64": "W3ZpZXcgdGhyZWFkXShodHRwczovL2Rhc2hib2FyZC5leGFtcGxlL3RocmVhZHMvMTIzKQ=="}
+{"id": "session-label-link-to-session", "kind": "planted", "rule": "session-label", "note": "a session link label.", "expect": {"message": "block", "title": "block", "body": "block", "file": "pass"}, "b64": "TGluayB0byB0aGUgYWdlbnQgc2Vzc2lvbjogaHR0cHM6Ly9leGFtcGxlLmNvbS9zLzE="}
+{"id": "session-label-automatic", "kind": "planted", "rule": "session-label", "note": "an automatic creation line.", "expect": {"message": "block", "title": "block", "body": "block", "file": "pass"}, "b64": "KlBSIGNyZWF0ZWQgYXV0b21hdGljYWxseSBieSBhIHRvb2wgZm9yIHRhc2sgMTIzKg=="}
+{"id": "session-label-ci-run", "kind": "limit", "rule": "session-label", "note": "a CI run link is not a session.", "expect": "pass", "b64": "U2VlIHRoZSBDSSBydW46IGh0dHBzOi8vZ2l0aHViLmNvbS9mbHl3aWZpL2luZm8tZmVlZC1zZWVkcy9hY3Rpb25zL3J1bnMvMTIz"}
+{"id": "session-label-requested-in", "kind": "control", "rule": "session-label", "note": "a requester without an at sign.", "expect": "pass", "b64": "UmVxdWVzdGVkIGluICMxNCBieSB0aGUgZmVlZCBvd25lci4="}
+{"id": "opencode-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiB3aXRoIE9wZW5Db2RlLg=="}
+{"id": "opencode-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIG9wZW4gY29kZSBvZiB0aGUgcGFyc2VyIGlzIHB1YmxpYy4="}
+{"id": "openhands-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgYnkgT3BlbkhhbmRzLg=="}
+{"id": "openhands-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "Vm9sdW50ZWVycyB3aXRoIG9wZW4gaGFuZHMgc29ydGVkIHRoZSBmZWVkcy4="}
+{"id": "swe-agent-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "VGhpcyBpcyBhIFBSIG9wZW5lZCBieSBBSSB0b29sIFNXRS1hZ2VudC4="}
+{"id": "swe-agent-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIFNXRSB0ZWFtIHJldmlld2VkIHRoZSBwYXJzZXIu"}
+{"id": "roomote-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "Rml4ZXMgZHJhZnRlZCBieSBSb29tb3RlLg=="}
+{"id": "roomote-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QSByZW1vdGUgZmVlZCBpcyBwb2xsZWQgaG91cmx5Lg=="}
+{"id": "qoder-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "TWFkZSB3aXRoIFFvZGVyLg=="}
+{"id": "qoder-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QWRkIHRoZSBjb2RlciBuZXdzbGV0dGVyIGZlZWQu"}
+{"id": "codebuddy-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiB3aXRoIENvZGVCdWRkeS4="}
+{"id": "codebuddy-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QSBjb2RlIGJ1ZGR5IHJldmlld2VkIHRoZSBwdWxsIHJlcXVlc3Qu"}
+{"id": "codebuff-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "R2VuZXJhdGVkIHdpdGggQ29kZWJ1ZmYu"}
+{"id": "codebuff-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "Q29kZSBidWZmcyBmb2xsb3cgdGhlIHJlbGVhc2UgZmVlZC4="}
+{"id": "freebuff-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgd2l0aCBGcmVlYnVmZi4="}
+{"id": "freebuff-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QSBmcmVlIGJ1ZmZlciBwb29sIGlzIHVzZWQu"}
+{"id": "openclaw-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "TWFkZSB3aXRoIE9wZW5DbGF3Lg=="}
+{"id": "openclaw-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIG9wZW4gY2xhdyBvZiB0aGUgY3JhbmUgaXMgYSBwaG90byBzdWJqZWN0Lg=="}
+{"id": "clawdbot-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiBieSBDbGF3ZGJvdC4="}
+{"id": "clawdbot-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QWRkIHRoZSByb2JvdGljcyBmZWVkLg=="}
+{"id": "moltbot-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "RHJhZnRlZCBieSBNb2x0Ym90Lg=="}
+{"id": "moltbot-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "Q3JhYnMgbW9sdCBpbiBzcHJpbmcu"}
+{"id": "clawdis-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgd2l0aCBDTEFXRElTLg=="}
+{"id": "clawdis-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIGNsYXcgaXMgYSB0b29sLg=="}
+{"id": "warelay-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "R2VuZXJhdGVkIHdpdGggV2FyZWxheS4="}
+{"id": "warelay-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIHJlbGF5IGZlZWQgaXMgcHVibGljLg=="}
+{"id": "clawhub-in-credit-wording", "kind": "planted", "rule": "credit", "note": "a tool name in credit wording.", "expect": "block", "b64": "VGhhbmtzIHRvIENsYXdIdWIu"}
+{"id": "clawhub-in-ordinary-text", "kind": "control", "rule": "credit", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIGh1YiBwb2xscyBmZWVkcy4="}
+{"id": "nanoclaw-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiB3aXRoIE5hbm9DbGF3Lg=="}
+{"id": "nanoclaw-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QSBuYW5vIGNsYXcgZ3JpcHMgdGhlIHNhbXBsZS4="}
+{"id": "agentforce-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgYnkgQWdlbnRmb3JjZS4="}
+{"id": "agentforce-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIGFnZW50IGZvcmNlIGZpZWxkIGlzIGEgcGxvdCBkZXZpY2Uu"}
+{"id": "genspark-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "Q3JlYXRlZCB3aXRoIEdlbnNwYXJrLg=="}
+{"id": "genspark-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QSBnZW4gc3BhcmsgcGx1ZyBpcyBhIGNhciBwYXJ0Lg=="}
+{"id": "codeium-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "TWFkZSB3aXRoIENvZGVpdW0u"}
+{"id": "codeium-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QWRkIHRoZSBDb2RlaXVtIG5ld3NsZXR0ZXIgZmVlZC4="}
+{"id": "anysphere-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgd2l0aCBBbnlzcGhlcmUu"}
+{"id": "anysphere-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QW55IHNwaGVyZSByb2xscyBkb3duaGlsbC4="}
+{"id": "z-ai-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgd2l0aCBaLmFpLg=="}
+{"id": "z-ai-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "U2VlIGh0dHBzOi8vei5haS9uZXdzIGZvciB0aGUgcmVsZWFzZSBsaXN0Lg=="}
+{"id": "antigravity-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiBpbiBwYXJ0IGJ5IEFudGlncmF2aXR5Lg=="}
+{"id": "antigravity-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIGFudGlncmF2aXR5IGRldmljZSBpcyBmaWN0aW9uYWwu"}
+{"id": "kiro-in-credit-wording", "kind": "planted", "rule": "credit", "note": "a tool name in credit wording.", "expect": "block", "b64": "VGhhbmtzIHRvIEtpcm8u"}
+{"id": "kiro-in-ordinary-text", "kind": "control", "rule": "credit", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QSBraXJvIHdhcyBuYW1lZCBpbiB0aGUgcmV2aWV3Lg=="}
+{"id": "trae-in-credit-wording", "kind": "planted", "rule": "name-as-author", "note": "a tool name in credit wording.", "expect": "block", "b64": "VHJhZSB3cm90ZSBpdC4="}
+{"id": "trae-in-ordinary-text", "kind": "control", "rule": "name-as-author", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIHRyYWUgd29yZCBpcyBub3QgRW5nbGlzaC4="}
+{"id": "auggie-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "Rml4ZXMgZHJhZnRlZCBieSBBdWdnaWUu"}
+{"id": "auggie-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QXVnZ2llIFNtaXRoIHdyb3RlIHRoZSBmbGlnaHQgbm90ZXMu"}
+{"id": "manus-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "TWFkZSBieSBNYW51cy4="}
+{"id": "manus-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "TWFudXMgbWVhbnMgaGFuZCBpbiBMYXRpbiB0ZXh0cy4="}
+{"id": "xai-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "TWFkZSBieSB4QUku"}
+{"id": "xai-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIFhBSSBhY3JvbnltIHN0YW5kcyBmb3IgZXhwbGFpbmFibGUgQUku"}
+{"id": "cline-alone-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiB3aXRoIENsaW5lLg=="}
+{"id": "cline-alone-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "RGFuYSBDbGluZSB3cm90ZSB0aGUgcGFyc2VyLg=="}
+{"id": "cursor-agent-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgd2l0aCBDdXJzb3IgQWdlbnQu"}
+{"id": "cursor-agent-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIGRhdGFiYXNlIGN1cnNvciBhZ2VudCBpcyBhIHN0b3JlZCBwcm9jZWR1cmUu"}
+{"id": "cursor-composer-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "RHJhZnRlZCBieSBDdXJzb3IgQ29tcG9zZXIu"}
+{"id": "cursor-composer-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "TW92ZSB0aGUgY3Vyc29yIHRvIHRoZSBjb21wb3NlciBwYW5lLg=="}
+{"id": "perplexity-computer-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiB3aXRoIFBlcnBsZXhpdHkgQ29tcHV0ZXIu"}
+{"id": "perplexity-computer-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIHBlcnBsZXhpdHkgb2YgdGhlIG1vZGVsIGZlbGwu"}
+{"id": "factory-droid-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgd2l0aCBGYWN0b3J5IERyb2lkLg=="}
+{"id": "factory-droid-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIGZhY3RvcnkgZHJvaWQgaW4gdGhlIGZpbG0gaXMgYSBwcm9wLg=="}
+{"id": "amazon-q-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgd2l0aCBBbWF6b24gUSBEZXZlbG9wZXIu"}
+{"id": "amazon-q-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QW1hem9uIFE0IHJlc3VsdHMgYXJlIGR1ZS4="}
+{"id": "roo-code-in-credit-wording", "kind": "planted", "rule": "name-as-author", "note": "a tool name in credit wording.", "expect": "block", "b64": "Um9vIENvZGUgYnVpbHQgdGhlIGZpeC4="}
+{"id": "roo-code-in-ordinary-text", "kind": "control", "rule": "name-as-author", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIHJvbyBjb2RlIGluIHRoZSBnYW1lIGlzIGEgY2hlYXQu"}
+{"id": "kilo-code-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "TWFkZSB3aXRoIEtpbG8gQ29kZS4="}
+{"id": "kilo-code-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QSBraWxvIGNvZGUgaXMgYSB1bml0IGxhYmVsLg=="}
+{"id": "continue-hub-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgd2l0aCBDb250aW51ZSBIdWIu"}
+{"id": "continue-hub-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "Q29udGludWUgaHViIHBvbGxpbmcgYWZ0ZXIgdGhlIHJldHJ5Lg=="}
+{"id": "zed-agent-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiBieSBaZWQgQWdlbnQu"}
+{"id": "zed-agent-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "WmVkIGlzIHRoZSBsYXN0IGxldHRlci4="}
+{"id": "augment-code-in-credit-wording", "kind": "planted", "rule": "byline", "note": "a tool name in credit wording.", "expect": "block", "b64": "Rml4ZXMgYnkgQXVnbWVudCBDb2RlLg=="}
+{"id": "augment-code-in-ordinary-text", "kind": "control", "rule": "byline", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QXVnbWVudCBjb2RlIGNvdmVyYWdlIGZpcnN0Lg=="}
+{"id": "muse-code-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiBieSBNdXNlIENvZGUu"}
+{"id": "muse-code-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIG11c2Ugb2YgcG9ldHJ5IGlzIGEgbXl0aC4="}
+{"id": "muse-spark-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "R2VuZXJhdGVkIHdpdGggTXVzZSBTcGFyay4="}
+{"id": "muse-spark-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QSBtdXNlIHNwYXJrIGlzIGEgcGhyYXNlIGluIHRoZSBwb2VtLg=="}
+{"id": "meta-ai-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgd2l0aCBNZXRhIEFJLg=="}
+{"id": "meta-ai-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIG1ldGEgYW5hbHlzaXMgY292ZXJzIHRlbiBzdHVkaWVzLg=="}
+{"id": "all-hands-ai-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "QnVpbHQgd2l0aCBBbGwgSGFuZHMgQUku"}
+{"id": "all-hands-ai-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "QWxsIGhhbmRzIG9uIGRlY2sgZm9yIHRoZSByZWxlYXNlLg=="}
+{"id": "grok-build-in-credit-wording", "kind": "planted", "rule": "name-as-author", "note": "a tool name in credit wording.", "expect": "block", "b64": "R3JvayBCdWlsZCB3cm90ZSB0aGlzLg=="}
+{"id": "grok-build-in-ordinary-text", "kind": "control", "rule": "name-as-author", "note": "ordinary text that must pass.", "expect": "pass", "b64": "R3JvayB0aGUgYnVpbGQgb3V0cHV0IGZpcnN0Lg=="}
+{"id": "codex-web-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiB3aXRoIENvZGV4IFdlYi4="}
+{"id": "codex-web-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIGNvZGV4IHdlYiBwYWdlIGxpc3RzIG1hbnVzY3JpcHRzLg=="}
+{"id": "copilot-autofix-in-credit-wording", "kind": "planted", "rule": "byline", "note": "a tool name in credit wording.", "expect": "block", "b64": "Rml4ZWQgYnkgQ29waWxvdCBBdXRvZml4Lg=="}
+{"id": "copilot-autofix-in-ordinary-text", "kind": "control", "rule": "byline", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIGNvcGlsb3QgYXV0b2ZpeCBzZXR0aW5nIGlzIG9mZi4="}
+{"id": "mistral-vibe-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "RHJhZnRlZCBieSBNaXN0cmFsIFZpYmUu"}
+{"id": "mistral-vibe-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIG1pc3RyYWwgdmliZSBvZiB0aGUgc29uZy4="}
+{"id": "claude-fable-in-credit-wording", "kind": "planted", "rule": "made-by", "note": "a tool name in credit wording.", "expect": "block", "b64": "V3JpdHRlbiB3aXRoIENsYXVkZSBGYWJsZS4="}
+{"id": "claude-fable-in-ordinary-text", "kind": "control", "rule": "made-by", "note": "ordinary text that must pass.", "expect": "pass", "b64": "VGhlIGZhYmxlIGNvbGxlY3Rpb24gZmVlZC4="}
+{"id": "log-trailer-component-prefix", "kind": "control", "rule": "log-trailer", "note": "a lowercase component prefix in a subject.", "expect": "pass", "b64": "Y3Jhd2wtbG9nOiByb3RhdGUgdGhlIGZpbGVzIGRhaWx5"}
+{"id": "log-trailer-state-checkpoint", "kind": "control", "rule": "log-trailer", "note": "a lowercase key in a bullet.", "expect": "pass", "b64": "LSBzdGF0ZS1jaGVja3BvaW50OiB3cml0ZSBpdCBhZnRlciBldmVyeSBzb3VyY2U="}
+{"id": "log-trailer-bare-session-key", "kind": "planted", "rule": "log-trailer", "note": "a session key without a prefix.", "expect": {"message": "block", "title": "block", "body": "block", "file": "pass"}, "b64": "QWRkIGIKClNlc3Npb24tSWQ6IGFiYw=="}
+{"id": "agent-address-actions-bot", "kind": "control", "rule": "agent-address", "note": "the Actions account of GitHub itself.", "expect": "pass", "b64": "Z2l0IGNvbmZpZyB1c2VyLmVtYWlsIDQxODk4MjgyK2dpdGh1Yi1hY3Rpb25zW2JvdF1AdXNlcnMubm9yZXBseS5naXRodWIuY29t"}
+{"id": "agent-address-security-mailbox", "kind": "control", "rule": "agent-address", "note": "people at a tool vendor.", "expect": "pass", "b64": "UmVwb3J0IGlzc3VlcyB0byBzZWN1cml0eUBjdXJzb3IuY29tIG9yIGhlbGxvQHdhcnAuZGV2Lg=="}
+{"id": "agent-address-router-model", "kind": "planted", "rule": "agent-address", "note": "a model id at a router.", "expect": "block", "b64": "bW9kZWwteC0zLjFAb3BlbnJvdXRlci5haQ=="}
+{"id": "agent-address-router-person", "kind": "control", "rule": "agent-address", "note": "a person at the router.", "expect": "pass", "b64": "c3VwcG9ydEBvcGVucm91dGVyLmFp"}
+{"id": "session-label-ci-run-link", "kind": "control", "rule": "session-label", "note": "a CI run is not a session.", "expect": "pass", "b64": "TGluayB0byB0aGUgQ0kgcnVuOiBodHRwczovL2dpdGh1Yi5jb20vZmx5d2lmaS9pbmZvLWZlZWQtc2VlZHMvYWN0aW9ucy9ydW5zLzEyMw=="}
+{"id": "session-label-training-session", "kind": "control", "rule": "session-label", "note": "an ordinary link text.", "expect": "pass", "b64": "W3RyYWluaW5nIHNlc3Npb25dKGh0dHBzOi8vZXhhbXBsZS5vcmcvZXZlbnRzLzEp"}
+{"id": "session-label-requested-by", "kind": "control", "rule": "session-label", "note": "a requester line is ordinary.", "expect": "pass", "b64": "UmVxdWVzdGVkIGJ5OiBAc29tZW9uZQ=="}
+{"id": "generic-phrase-topic-title", "kind": "control", "rule": "credit", "note": "a topic without an article.", "expect": "pass", "b64": "U2VhcmNoIHBvd2VyZWQgYnkgbGFyZ2UgbGFuZ3VhZ2UgbW9kZWxz"}
+{"id": "generic-phrase-topic-agents", "kind": "control", "rule": "name-as-author", "note": "a topic without an article.", "expect": "pass", "b64": "QUkgYWdlbnRzIGJ1aWx0IG9uIGtub3dsZWRnZSBncmFwaHM="}
+{"id": "generic-phrase-detection-title", "kind": "control", "rule": "name-as-author", "note": "a paper title.", "expect": "pass", "b64": "TGFyZ2UgTGFuZ3VhZ2UgTW9kZWxzIEdlbmVyYXRlZCBUZXh0IERldGVjdGlvbg=="}
+{"id": "generic-phrase-with-article", "kind": "planted", "rule": "name-as-author", "note": "a generic phrase with its article.", "expect": "block", "b64": "VGhlIEFJIGFnZW50cyBidWlsdCB0aGUgaW5kZXgu"}
+{"id": "log-trailer-single-word-key", "kind": "limit", "rule": "log-trailer", "note": "a single word before the colon is an ordinary label.", "expect": "pass", "b64": "RXZlbnQ6IHRoZSBmZWVkIG1vdmVkIHRvIGEgbmV3IGhvc3QKUHVibGljYXRpb246IHdlZWtseQ=="}
+{"id": "log-trailer-bulleted-single-word", "kind": "control", "rule": "log-trailer", "note": "a single word in a bullet.", "expect": "pass", "b64": "LSBMb2dzOiByb3RhdGVkIGRhaWx5"}
+{"id": "generic-phrase-each-determiner", "kind": "planted", "rule": "name-as-author", "note": "a determiner other than an article.", "expect": "block", "b64": "RWFjaCBsYW5ndWFnZSBtb2RlbCB3cm90ZSBpdHMgb3duIHN1bW1hcnku"}
+{"id": "generic-phrase-its-determiner", "kind": "planted", "rule": "credit", "note": "a possessive determiner.", "expect": "block", "b64": "Q3JlZGl0czogaXRzIEFJIGFzc2lzdGFudA=="}
