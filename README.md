@@ -72,14 +72,23 @@ that pushes should set it:
 git config core.hooksPath tools/hooks
 ```
 
-- `pre-commit` checks staged files and the author identity.
-- `commit-msg` refuses co-author and session trailers, generated footers and dashes in the message.
-- `pre-push` checks every commit and changed file being pushed, confirms the push URL is
-  github.com/flywifi/info-feed-seeds, refuses pushes to `main` and `data`, and refuses an empty
-  push (anything but a branch deletion).
+- `pre-commit` checks staged files and the author and committer identity.
+- `commit-msg` checks the commit message.
+- `pre-push` checks every commit and changed file on the branch since `origin/main` (the range CI
+  checks), confirms the push URL is github.com/flywifi/info-feed-seeds, refuses pushes to `main`
+  and `data`, refuses an empty push (anything but a branch deletion), then runs the CI rehearsal.
 
 All three call `tools/commit_check.py`. Run it by hand with `--range origin/main..HEAD`, check a
 pull request with `--pr N`, or prove the checks fire with `--selftest`.
+
+`tools/preflight.py` rehearses the CI `checks` job step for step, reading the steps from
+`ci.yml` itself, with a timeout per step; `--check-parity` (run in CI) fails on any step it cannot
+rehearse. It says DID NOT RUN instead of passing when the tree has uncommitted changes, HEAD is
+not the commit being pushed, bash is missing or a step times out. `--fast` skips the full
+unit-test step and says the rehearsal was partial; `IFS_PREFLIGHT_FAST=1` asks the hook for it,
+and `IFS_SKIP_PREFLIGHT=1` skips the rehearsal with a DID NOT RUN line. Under CI both are refused.
+`python3 tools/ci_status.py SHA` reads the CI result for a commit and keeps a result, no result
+yet and an error apart: exit 0 green, 1 red, 2 error, 3 no result yet.
 
 The hooks are a convenience, not a guarantee. `git commit --no-verify` and `git push --no-verify`
 skip them without any message, and a clone without the setting above runs none of them.
@@ -92,19 +101,18 @@ push to `main`:
 
 - `checks` runs the commit checks over the whole branch and the proof check on changed source
   folders using the base branch's copy of the checker, so editing `tools/commit_check.py` in a
-  pull request does not change what checks that pull request. It also runs the branch's checker
-  selftest, the unit tests, `hub lint`, `hub fmt --check`, the em dash scan and the doctor. It
-  runs on description edits too.
-- `pr-text` checks the pull request title and description, and re-runs on every edit, so removing
-  a footer turns it green without a new push.
+  pull request does not change what checks that pull request. It prints every golden case the
+  change adds, runs the branch's checker selftest, the unit tests, `hub lint`, `hub fmt --check`,
+  the em dash scan and the doctor, and runs the golden tests again on Python 3.13. It runs on
+  description edits too.
+- `pr-text` checks the pull request title and description, and re-runs on every edit.
 - `main-history` runs on every push to `main` and re-checks every commit since the policy boundary,
   so a merge or edit made on github.com is caught even if an earlier run never happened. There,
   GitHub's web-flow committer passes only on a commit GitHub marks verified, merges included.
   Main cannot be rewritten, so a commit that landed with a finding is listed, with a reason, in
   `tools/main_history_known.txt` once a person accepts it; it is then reported as known and only
   new findings fail. An entry counts only if the commit was already on main before the change that
-  added the entry, so a pull request cannot acknowledge its own bad commit. That file is reviewed
-  like any other check.
+  added the entry, so a pull request cannot acknowledge its own bad commit.
 
 Two limits remain:
 
@@ -116,124 +124,78 @@ Two limits remain:
   takes the checker from the base branch. Closing that gap needs the hygiene checks moved to a
   `pull_request_target` workflow that runs the base branch's checker over git data only; that is
   planned as a separate change. Until then, any change to `ci.yml`, `tools/hooks/`,
-  `tools/commit_check.py`, `tools/main_history_known.txt`, the corpora and their lock
-  (`tests/fixtures/*_corpus.jsonl`, `pending_ruling.jsonl`, `corpus.lock`), the baseline checker
-  (`tests/fixtures/checker_baseline.py`), `tests/fixtures/renamed_ids.txt`, `tests/test_corpus.py`,
-  `tests/test_no_narrowing.py` or `tools/corpus_added.py`
-  needs a person's review, and the checker prints a notice when a range touches them.
+  `tools/commit_check.py`, `tools/commit_exemptions.json`, `tools/main_history_known.txt`,
+  `tools/golden_added.py`, `tests/fixtures/golden_cases.jsonl` or
+  `tests/test_commit_check_golden.py` needs a person's review, and the checker prints a notice
+  when a range touches them.
 
-`tools/audit_redgreen.py` reruns every audit probe against older copies of the checker and the
-current one, side by side, as the evidence for each fix.
+### What blocks and what is advisory
 
-What the checker refuses:
+The checker gives two kinds of result.
 
-- **Co-author trailer:** a trailer line (the key and then a colon or an equals sign, at the start
-  of a line or after a bullet, a number or a short label) and the key followed by an address in
-  angle brackets, everywhere; in messages and pull request text, also the key joined by hyphens
-  anywhere. Prose such as "co-authored by Smith" passes.
-- **Session trailer, link and id:** in messages and pull request text, any mention, the host
-  written with spaces around its dot included; in files, a trailer line, a real link, or a bare
-  session id ("session_" and 20 or more letters or digits, hyphens allowed between them).
-- **Footer:** the phrase is "generated" followed by with, by, using, via or "w/". Refused: a line
-  opening with the phrase in any case, after an optional label such as "Note:", whatever tool it
-  names (finding 7, read literally and failing closed until it is ruled on); and, anywhere, the
-  phrase followed by the assistant's name (the name may run into "AI" or digits) directly, within a
-  few words before "code" or in parentheses, later in the same sentence within 200 characters
-  (across single line breaks and dots inside words or numbers), or later in the same paragraph
-  within 1,000 characters (a bound for speed only). Footer rules also run with HTML tags removed.
-  One file is pinned by path and sha256 because it describes the rules in the words the rules
-  refuse: the baseline checker. Any change to it makes it an ordinary file again. Every text that
-  might pass although the rules refuse it waits in `tests/fixtures/pending_ruling.jsonl` for
-  Matt's ruling, and is refused until then.
-- **Authorship statements:** commit messages, pull request text and files say what changed, why,
-  and how it works, never which tool wrote them (Matt's ruling of 2026-10-23). Refused anywhere:
-  - a making verb (built, made, created, written, authored, designed, programmed, assisted and
-    similar, optionally after re, co, ghost, hand, over or pre, as in "rebuilt" or
-    "pair-programmed"), up to three words, then with, by, using, via, w/, through, alongside or
-    together with, and the assistant's name later in the same sentence;
-  - "thanks to", "courtesy of", "with the help of", "with help from", "powered by" or "in
-    collaboration with" before the name, and "with" the name's help;
-  - a byline: at a line start, after an optional label, up to three words, "by" and the name;
-  - an "author:" label before the name;
-  - "I" or "we", up to two words, then used, use, asked, had, let, leveraged, utilized or
-    employed, up to two words, then the name; or "using" the name, up to two words, then "I" or
-    "we";
-  - used, asked or had (past tense), up to two words, the name, then "to";
-  - the name, up to two words (a product name and version such as "Code", "Opus 4.5" or "3.5
-    Sonnet"), then wrote, built, made, created, authored, drafted, coded, produced, generated or
-    helped, with the same prefixes.
+**Block** (the hook or CI step fails): fixed shapes that a tool adds or that cannot be read two
+ways.
 
-  The name counts inside a longer word ("AnthropicX" for a name X). A verb, "I", "we" and "using"
-  must start a word, so "encoded with" is not "coded with" and the "i" in "CLI" is not a pronoun.
-  In these rules only, the name directly followed by ".md" is the file CLAUDE.md (Matt's ruling 7);
-  the footer rules still count it. A feature that uses the assistant may name it in the present
-  tense when no making verb, "by", byline or first-person use shares the sentence: "the classifier
-  calls the API", "each item is sent to it" and "the summarize step uses it to label items" pass.
-  Describe the step, not the authorship.
-- **Bounds:** every bound exists for speed, and each lets the text past it through:
-  - a label before a trailer or footer line: up to 61 characters ("Note:");
-  - a footer phrase and the name in the tool, code and parenthesis rules: up to 24 characters;
-  - a co-author key and its address: up to 60 characters;
-  - a gap word: up to 30 letters or digits, plus three ".digits" parts; gaps of two words (first
-    person, "using", tool and name rules) or three words (making verb to preposition, byline);
-  - a run of letters joined to the name in the credit and byline rules: up to 30;
-  - the sentence window: 200 characters; the paragraph window: 1,000;
-  - percent-decoding: up to eight rounds.
+- A co-author trailer line, and in messages and pull request text the hyphenated key anywhere or
+  the key followed by an address.
+- A session trailer line; in messages and pull request text, any mention of the session key.
+- A session link, and a bare session id ("session_" and 20 or more letters or digits).
+- A footer line: the footer phrase and a tool name of up to four words (or a bracketed name, with
+  an optional link and label) on a line of their own, whatever tool it names.
+- The footer phrase and the assistant's name in one sentence, within 200 characters.
+- A trailer key that names an authorship role (ending in by, assisted, assistant, generated,
+  author, authors, authored or ai) with the assistant's name after it.
+- An em dash, an en dash or another dash a renderer shows as one.
+- A review-record token in public text: a review word with a round, finding or ruling number, a
+  severity tally such as two counts with severity words, or a capital severity id with a number.
+- An author or committer other than flywifi, a path that is never tracked, CR line endings,
+  non-ASCII Python, and machine output off the `data` branch.
 
-  A gap word and a gap separator never overlap, so no rule can backtrack: an apostrophe is a
-  separator ("I've" is two words), and a gap ends at "!", "?", a blank line or a dot that is not
-  inside a word or number.
-- **Every reading:** HTML entities are decoded once, as a browser shows them. Then each round of
-  percent-decoding is a separate layer, up to eight. Each layer is also read with control
-  characters removed: NUL and the other C0 characters except tab and newline, and ECMA-48 terminal
-  sequences such as colour codes. Every rule and the dash check run on every reading; a finding in
-  any one refuses the text.
-- **Hidden characters:** text is folded before matching: entities, percent-encoding,
-  compatibility forms, format characters, combining and enclosing marks, Hangul fillers, the
-  blank braille pattern, the null notehead, ideographic dots, Unicode hyphens and lookalike letters
-  (Cyrillic, Greek, Armenian, Cherokee, Lisu and Latin small capitals).
+Messages and pull request text are held to any mention of the trailer keys, the session host and
+session ids. Files are held only to the real forms (a trailer line, a link, a footer line), so a
+sentence that names a rule passes.
 
-**What may and may not pass is fixed by corpora, not by the rules.**
-`tests/fixtures/refused_corpus.jsonl` holds every string an audit proved must be refused, and
-`tests/fixtures/allowed_corpus.jsonl` holds prose and real commit messages and pull request bodies
-that must pass. `tests/fixtures/pending_ruling.jsonl` holds text whose verdict waits on a ruling;
-the tests print its current verdicts without asserting them. The text is base64 so no scanner sees
-it. A rule may change only when both corpora still pass, and the corpora only grow:
-`tests/fixtures/corpus.lock` pins every id to its kind, its exact flag, the places it is checked
-in and the sha256 of its text. A test fails if a locked id is missing or any of those changed, and
-once main has the lock, every row on main must appear unchanged (a pending row may change kind
-when its ruling is made). New ids are appended to the lock in the same commit. Every rule also has
-to finish within a second on a 100,000-character line.
+**Advisory** (an `ADVISORY:` line, a warning annotation in GitHub Actions, exit code unchanged):
+wording that may claim authorship, which a person reads and rewords.
 
-**Nothing may pass that the baseline refused.** `tests/fixtures/checker_baseline.py` is a copy of
-the checker at `512e818`, pinned by its sha256. `tests/test_no_narrowing.py` builds about 140,000
-variants with fixed seeds in named dimensions (separator runs of 0 to 40, 41, 64, 100 and 200
-characters, line-break splits, prefixes and leading spaces, underscore-joined prefixes, every
-lookalike letter the baseline folds, sentence openings and suffixes, sentence gaps of 0 to 80
-characters, the refused corpus, every shape after 8,000, 20,000 and 100,000 characters of filler
-and at the end of a 300-line body, and 20,000 random combinations), each with a minimum count. It
-fails if the baseline refuses a variant that the current checker lets through, in a message, a PR
-title, a PR body or a file, and also runs a sample through `check_range` (files at `.md`,
-`.jsonl`, `.py` and dotfile paths), `check_pr_event` (title and body) and `check_message_text`.
-Only an exact pending text is skipped, and every pending text must be refused. Every allowed entry
-must also pass the baseline. CI prints the decoded text of every allowed and pending line a change
-adds, using the base branch's copy of `tools/corpus_added.py`. The baseline changes only in a
-commit that changes nothing else.
+- A making verb (built, made, written, designed and similar, with prefixes such as re, co, auto or
+  pair-) followed by with, by, using or a similar connective and the assistant's name.
+- Credit phrases before the name: thanks to, courtesy of, with the help of, powered by.
+- A byline: up to three words and "by" before the name.
+- An author label, first-person use (I or we used, asked, leveraged the name), past-tense use of
+  the name to do a task, and the name followed by a making verb.
+- The footer phrase and the name in one paragraph, and short finding ids in parentheses or test
+  names.
 
-Next step after this change merges: a second baseline pinned to main's checker, so the test also
-fails on anything main refuses that a later change lets through.
+A feature that uses the assistant names it in the present tense and passes: "the classifier calls
+the API", "each item is sent to it", "the summarize step uses it to label items".
 
-The test that compares the lock with main's copy skips only while main exists and has no lock; a
-missing `origin/main` or any other git error fails it. It starts guarding once this change merges,
-and it protects main only when the main ruleset requires the `checks` status check (F1, for the
-repository owner) and CI runs it against the base branch.
+Every rule states what it deliberately does not read in its `Limit:` text in
+`tools/commit_check.py`, and `tests/test_commit_check_golden.py` pins a case for each limit, so
+widening a rule is a deliberate change with a test.
 
-The file rule reads CLAUDE.md the way it is worded: a trailer line, a link, a footer line. CLAUDE.md
-itself names these things mid-sentence and passes, with no pin, because of how its commit-rules
-paragraph is laid out. Keep three things as they are: the quoted footer phrase never starts a line;
-the co-author key comes last in that sentence, so no sentence pairs it with the assistant's name;
-and a blank line separates that bullet from the next one, which names the assistant, so the two
-never share a paragraph.
+**Every reading.** Text is folded before matching: HTML entities, every round of percent-encoding
+(up to eight), terminal control sequences, compatibility forms, format characters, combining
+marks, blank fillers, ideographic dots, Unicode hyphens and lookalike letters. Every rule runs on
+every reading, with and without HTML tags, and a finding in any one counts. Every bound is small,
+and a run of word characters never shares a character with a run of separators, so each rule
+finishes in well under a second on a 100,000-character line.
+
+**Golden cases.** `tests/fixtures/golden_cases.jsonl` (base64, so no scanner reads it) holds
+planted texts that must block or advise, negative controls that must pass, one case for each
+`Limit:`, and decided wording cases. Each case gives the verdict as a commit message, a pull
+request title, a pull request body and a file. The test also turns the comparison red under four
+deliberate mutations of the checker, and times every rule.
+
+**Exemptions.** `tools/commit_exemptions.json` lists exact texts in files that one block rule may
+skip: the path, the rule id, the sha256 of the matched text (printed beside each file finding) and
+a written reason of at least 25 characters. Hooks and CI read the list from `origin/main`, so an
+entry counts only after the owner merges it. The golden test fails on an entry whose path is not
+tracked or that no longer exempts anything. Advisory lines are never exempted.
+
+**History boundary.** Commits at or before `HISTORY_BOUNDARY` in `tools/commit_check.py` were
+written before these rules; where the repository has that commit, they get the identity check
+only. History is never rewritten to satisfy a check.
 
 ## Outputs
 

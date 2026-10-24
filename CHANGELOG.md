@@ -42,75 +42,47 @@ All notable changes to this repository are recorded here. The format follows
 - Profile schema fields `window_days`, `backfill_days`, `outputs`, `guard.hold_at` and
   `subtopic_keywords` (include and exclude per subtopic).
 - `tools/commit_check.py`: commit hygiene for staged files, commit messages, pushes, commit ranges,
-  changed source folders and pull request text, with a selftest. Text is normalised before matching
-  (compatibility forms, format characters, Unicode hyphens, lookalike letters, entities and
-  percent-encoding). Files are held to the rule as CLAUDE.md words it: no trailer line, session
-  link or generated footer line. An empty range fails closed. Every author and committer must be
-  flywifi; GitHub's web-flow committer is accepted only on commits already on main.
+  changed source folders and pull request text, with a selftest. Two kinds of result: block, for
+  fixed shapes (co-author and session trailer lines, trailer keys that name the assistant, session
+  links and ids, footer lines, the footer phrase and the assistant's name in one sentence, em and
+  en dashes, review-record tokens in public text, identity, forbidden paths, CR line endings and
+  non-ASCII Python), and advisory, for wording that may claim authorship (printed as `ADVISORY:`
+  lines and GitHub Actions warnings, never failing a run). Text is folded before matching
+  (entities, every round of percent-encoding, terminal control sequences, compatibility forms,
+  format characters, Unicode hyphens and lookalike letters) and every reading is checked. Files are
+  held to the real forms: a trailer line, a link, a footer line. An empty range fails closed. Every
+  author and committer must be flywifi; GitHub's web-flow committer is accepted only on commits
+  already on main, and in `main-history` only on commits GitHub marks verified.
+- Every check rule states what it deliberately does not read in a `Limit:` text, and
+  `tests/test_commit_check_golden.py` pins a case for each limit with the golden cases in
+  `tests/fixtures/golden_cases.jsonl`: planted texts, negative controls and decided wording cases,
+  each with its verdict as a commit message, pull request title, pull request body and file. The
+  test also times every rule on 100,000-character lines and turns red under four deliberate
+  mutations of the checker.
+- `tools/commit_exemptions.json`: exact matched texts in files that one block rule may skip, each
+  with a written reason of at least 25 characters, read from `origin/main`; a stale entry fails the
+  golden test.
+- A history boundary in `tools/commit_check.py`: commits written before these rules get the
+  identity check only, so history is never rewritten to satisfy a check.
+- `tools/main_history_known.txt`: commits on main acknowledged after they landed; an entry counts
+  only if the commit was on main before the change that added it.
 - Tracked hooks in `tools/hooks/` (pre-commit, commit-msg, pre-push), opt-in with
   `git config core.hooksPath tools/hooks`, with a loud `IFS_SKIP_HOOKS=1` bypass. The push URL must
   be exactly github.com/flywifi/info-feed-seeds.
 - `.github/workflows/ci.yml`: `checks` and `pr-text` on every pull request event and job-branch
-  push, using the base branch's copy of the checker; `main-history` on every push to main. Advisory
-  until the main ruleset requires the `checks` and `pr-text` status checks.
+  push, using the base branch's copy of the checker; `main-history` on every push to main. `checks`
+  prints every golden case a change adds (`tools/golden_added.py`) and runs the golden tests on
+  Python 3.12 and 3.13. Advisory until the main ruleset requires the `checks` and `pr-text` status
+  checks.
+- `tools/preflight.py`: a local rehearsal of the CI `checks` job read from `ci.yml`, with a timeout
+  per step, a fast mode, a parity check run in CI, and DID NOT RUN instead of a pass on a dirty tree,
+  a missing shell or a timeout. The pre-push hook runs it after the commit checks.
+- The pre-push hook checks every commit on the branch since `origin/main`, the range CI checks.
+- `tools/ci_status.py`: the CI result for one commit through the REST API, with a result, no result
+  yet and an error kept apart.
 - `tools/doctor.py check` with a required lint check and an advisory hooks check; exit 4 for a
   command that is not implemented yet.
-- Second audit round: footer lines with an underscore after the phrase, capital lookalike letters,
-  combining marks, Hangul fillers, ideographic dots, dash entities and more dash characters are
-  caught; a tool-named footer must open a line, so prose about the rule passes; pre-push fails
-  with no or malformed ref lines; pre-commit checks the committer; `main-history` re-checks main
-  from the boundary and trusts GitHub's committer only on first-parent merges or verified
-  commits; the checker bootstrap is limited to the one base that has no checker.
-- Third audit round: footer rules restored and extended (the stock footer however it is wrapped,
-  labelled lines, HTML-wrapped lines); co-author trailers must have trailer shape in messages too;
-  GitHub's committer on main needs GitHub's verification, merges included; acknowledged commits on
-  main are listed in `tools/main_history_known.txt`; the checker bootstrap is tied to PR 7;
-  `tools/audit_redgreen.py` reruns every audit probe against older checkers.
-- Fourth audit round: `tests/fixtures/refused_corpus.jsonl` and `allowed_corpus.jsonl` (base64)
-  fix what must be refused and what must pass, and only grow; footer and co-author rules rebuilt
-  against them; every rule bounded and timed on 100,000-character lines; an acknowledgement in
-  `tools/main_history_known.txt` counts only after the commit landed; the red-green harness runs
-  the corpora.
-- Fifth audit round: the auditor's exact probe strings join the corpora (60 refused, 9 allowed);
-  `tests/fixtures/pending_ruling.jsonl` holds text whose verdict waits on finding 7, with its
-  verdicts printed; `tests/fixtures/corpus.lock` pins every id to its text and kind. The literal
-  footer rule is case-insensitive again; a capital "Generated" naming the assistant later on the
-  line is refused; files refuse numbered, labelled, equals-sign and address-bearing co-author
-  forms and bare session ids; enclosing marks and the blank braille pattern are folded away.
-- Sixth audit round: `tests/fixtures/checker_baseline.py` (the checker at `512e818`) and
-  `tests/test_no_narrowing.py`, which fails when a generated variant the baseline refused passes;
-  separator runs are unbounded again with linear line starts; any statement that something was
-  made with, by or using the assistant is refused; more lookalike letters are folded; lock rows pin
-  exact and where and are compared with main's; no text may be both pending and decided.
-- Seventh audit round: no exceptions; the snake_case lookbehind is gone and three corpus ids that
-  spelled banned phrases are renamed (recorded in `tests/fixtures/renamed_ids.txt`); a sentence rule
-  refuses the phrase and the assistant's name within 80 characters; the no-narrowing test gains
-  dimensions (long separator runs, line-break splits, lookalikes, underscore prefixes, a fixed
-  random set, a sample through range, event and message checks) and pins the baseline's sha256;
-  allowed entries must pass the baseline; CI prints added allowed lines; the link scheme is unbounded.
-- Eighth audit round: the sentence rule crosses single line breaks and dots inside words and reaches
-  200 characters; a paragraph-wide near rule replaces the capital-letter one; the phrase includes
-  via and "w/", and the name may run into "AI"; the line rule covers every form of the phrase,
-  failing closed; spaced hosts and hyphenated session ids are refused; the baseline and CLAUDE.md
-  are pinned by sha256 instead of exempted by pattern; pending entries must be refused; the
-  no-narrowing test adds PR titles, long-text positions and sentence gaps; selftest checks titles.
-- Matt's rulings (2026-10-23). The commit-rules paragraph in CLAUDE.md is split and reordered,
-  gains a wording rule, and is no longer pinned. Every pending entry is refused. Authorship
-  statements are refused anywhere, while feature descriptions that name the assistant pass. The
-  "Assisted-by" trailer and percent-encoded dashes are refused. `.claude/settings.json` hides the
-  commit and pull request attribution lines. The exact round-7 probe strings join the corpora.
-- Ninth audit round. The authorship rules match inside longer words and allow a few words in each
-  gap. "By" or an "author:" label before the name is refused. No rule keeps a left-boundary
-  lookbehind. Files with a NUL byte still get the text rules. Percent-encoding is decoded until
-  nothing changes. The settings file also hides the session link. Feature sentences the rules now
-  refuse, and possible gaps in the ruling, wait in pending for Matt.
-- Tenth audit round and Matt's rulings on the pending texts. Gap words and separators no longer
-  overlap, so no rule backtracks; gaps end at a sentence end and accept version numbers. Every
-  percent-decoding layer is checked, also with control characters and terminal colour codes
-  removed. Making verbs take an explicit prefix list and start a word, as do "I", "we" and "using".
-  "By" counts only in a byline. Pair programming, "with" the name's help and "leveraged" are
-  refused, as is past-tense use of the name to do a task. In the authorship rules a ".md" after the
-  name is the file CLAUDE.md. Eleven pending texts are refused and four reworded forms allowed.
+- `.claude/settings.json` hides the commit and pull request attribution lines and the session link.
 
 ### Changed
 
