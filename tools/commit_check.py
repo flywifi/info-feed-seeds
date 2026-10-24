@@ -188,9 +188,10 @@ class _PhraseThenName:
 
 
 # A line that holds imported data rather than prose: a list item, a numbered item, a table row, a tag
-# (OPML, HTML), a quoted string or an object (JSON), a URL, or a key line (YAML). The content rules let a
+# (OPML, HTML; not a comment, which is the author's own note), a quoted string or an object (JSON), a URL,
+# or a lowercase key line (YAML; a capitalised label such as Note: is prose). The content rules let a
 # byline imported from a public source stand, so under seeds/ the byline rule does not read such lines.
-_IMPORTED_LINE = re.compile(r"[ \t]{0,8}(?:[-*+][ \t]|\d{1,3}[.)][ \t]|\||<|\"|[{\[]|https?://|[A-Za-z0-9_-]{1,40}:[ \t])")
+_IMPORTED_LINE = re.compile(r"[ \t]{0,8}(?:[-*+][ \t]|\d{1,3}[.)][ \t]|\||<(?!!--)|\"|[{\[]|https?://|[a-z0-9_-]{1,40}:[ \t])")
 
 
 class _ProseOnly:
@@ -428,7 +429,8 @@ _SIGNOFF = (_LS + r"{0,5}+\n[ \t]{0,10}+(?:[-*>~]{1,2}[ \t]{0,3})?" + _WHO
 _BYLINE = (r"[^\w\n]{0,10}(?:[a-z0-9]{1,30}(?:[ \t-]{1,3}|,[ \t]{0,3})(?:and[ \t]{1,3})?){0,3}by" + _S
            + r"{1,10}[a-z0-9]{0,30}?" + _WHO)
 _SEED_LIMIT = (" In files under seeds/ a line that starts with a list marker, a number, a table bar, a tag, a "
-               "quote, a brace or bracket, a URL or a key holds imported data and is not read; prose there is.")
+               "quote, a brace or bracket, a URL or a lowercase key holds imported data and is not read; prose, "
+               "an HTML comment and a capitalised label there are read.")
 SEEDS_PREFIX = "seeds/"
 
 AUTHORSHIP_RULES = (

@@ -187,7 +187,8 @@ class FileTests(unittest.TestCase):
             self.assertTrue(cc.content_findings("seeds/2026-10-24_x.md", prose.encode()), prose)
         # Only the byline rule relaxes: the file author's own notes and the fixed shapes block on every line.
         for own in ("- Made with " + NAME + "\n", "- Thanks to " + NAME + " for the list\n",
-                    "1. " + NAME + " wrote this list\n", "- " + CO + ": x <x@example.com>\n"):
+                    "1. " + NAME + " wrote this list\n", "- " + CO + ": x <x@example.com>\n",
+                    "<!-- list compiled by " + NAME + " -->\n", "Note: feeds, by " + NAME + "\n"):
             self.assertTrue(cc.content_findings("seeds/x.md", own.encode()), own)
         self.assertEqual(cc.file_matches(imported[0], "seeds/x.md"), [])
         self.assertTrue(cc.file_matches(imported[0], "docs/x.md"))
