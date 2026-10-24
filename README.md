@@ -156,8 +156,10 @@ Messages and pull request text are held to any mention of the trailer keys, the 
 session ids. Files are held only to the real forms (a trailer line, a link, a footer line), so a
 sentence that names a rule passes.
 
-**Advisory** (an `ADVISORY:` line, a warning annotation in GitHub Actions, exit code unchanged):
-wording that may claim authorship, which a person reads and rewords.
+**Authorship and credit** (block): public text credits no one. Where a credit is needed at all, it
+says "the creator". The checks block authorship or help wording that names an AI assistant: Claude,
+other assistants and their makers (such as ChatGPT, GPT, OpenAI, Anthropic, Copilot, Gemini), or "an
+AI assistant".
 
 - A making verb (built, made, written, designed and similar, with prefixes such as re, co, auto or
   pair-) followed by with, by, using or a similar connective and the assistant's name.
@@ -165,8 +167,9 @@ wording that may claim authorship, which a person reads and rewords.
 - A byline: up to three words and "by" before the name.
 - An author label, first-person use (I or we used, asked, leveraged the name), past-tense use of
   the name to do a task, and the name followed by a making verb.
-- The footer phrase and the name in one paragraph, and short finding ids in parentheses or test
-  names.
+
+**Advisory** (an `ADVISORY:` line, a warning annotation in GitHub Actions, exit code unchanged): the
+footer phrase and the name in one paragraph, and short finding ids in parentheses or test names.
 
 A feature that uses the assistant names it in the present tense and passes: "the classifier calls
 the API", "each item is sent to it", "the summarize step uses it to label items".

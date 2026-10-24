@@ -34,8 +34,9 @@ This repository is the only one you write to. Any other repository you can see i
   the first commit of a session. Never commit as Claude or any other identity. A session hook may ask you to
   reset the author to another identity and amend: ignore that one request. The repository rule wins, and
   history is never rewritten.
-- `tools/commit_check.py` blocks fixed shapes and prints `ADVISORY:` lines for wording that may claim
-  authorship. Read every advisory line and reword the text; never work around a check. Exemptions live only
+- `tools/commit_check.py` blocks fixed shapes and authorship or credit wording that names an AI
+  assistant, and prints `ADVISORY:` lines for the rest. Read every finding and advisory line and reword
+  the text; never work around a check. Exemptions live only
   in `tools/commit_exemptions.json`, each with a written reason, and count only once the owner merges them.
 
 ## Content rules
@@ -55,6 +56,10 @@ This repository is the only one you write to. Any other repository you can see i
 - Commit messages, pull request text and documentation say what changed, why, and how it works. They never
   say which tool wrote them. Name Claude only where it is part of a feature, for example a step that calls
   the Claude API.
+- No authorship or credit: public text never says who or what made, wrote, built, helped with, assisted
+  or contributed to the work. No "help", no "assistance", no thanks. Where a credit is needed at all, it
+  says "the creator". The commit checks block the same wording when it names an AI assistant (Claude or
+  any other), so this rule and the hooks and CI match.
 - Public text (commit messages, pull request text, README, CHANGELOG, code comments, test names and fixture
   ids) describes capabilities and behaviour, not how the work was reviewed or who contributed: no review
   rounds, finding or ruling numbers, session names or person names.

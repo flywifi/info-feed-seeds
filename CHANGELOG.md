@@ -8,6 +8,9 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Authorship and credit wording that names an AI assistant (Claude, other assistants or their
+  makers) is blocked in commit messages, pull request text and files, and CLAUDE.md states the same
+  rule: public text credits no one, and says "the creator" where a credit is needed.
 - `VERSION` (0.1.0), `feeder/__init__.py` exposing `__version__`, `.gitattributes` (LF everywhere) and
   the ignore list for `.cache/`, `local/`, `logs/`, `.venv-crawl/`, `*.local.json` and `.secrets.local.json`.
 - JSON Schemas for sources, methods, profiles and items under `schema/`, the two-level topic registry
