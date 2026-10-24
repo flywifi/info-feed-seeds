@@ -37,6 +37,11 @@ def tracked():
     return [p.relative_to(ROOT).as_posix() for p in emdash_scan.tracked_files(ROOT) if p.is_file()]
 
 
+def is_pointer(path):
+    data = path.read_bytes()
+    return len(data) <= POINTER_MAX_BYTES and b"AGENTS.md" in data
+
+
 class RulebookTests(unittest.TestCase):
     def test_rulebook_fits_every_reader(self):
         data = RULEBOOK.read_bytes()
@@ -67,17 +72,17 @@ class PointerTests(unittest.TestCase):
     def test_claude_md_is_only_an_import(self):
         self.assertEqual((ROOT / "CLAUDE.md").read_bytes(), POINTER)
 
-    def test_root_markdown_is_the_known_set(self):
+    def test_root_markdown_is_the_known_set_or_a_pointer(self):
         roots = {p for p in tracked() if "/" not in p and p.lower().endswith(".md")}
-        self.assertEqual(roots - ROOT_MARKDOWN, set())
+        others = [p for p in sorted(roots - ROOT_MARKDOWN) if not is_pointer(ROOT / p)]
+        self.assertEqual(others, [])
 
     def test_every_other_instruction_file_is_a_pointer(self):
         offenders = []
         for rel in tracked():
             if rel in ("AGENTS.md", "CLAUDE.md") or not INSTRUCTION_PATHS.search(rel):
                 continue
-            data = (ROOT / rel).read_bytes()
-            if len(data) > POINTER_MAX_BYTES or b"AGENTS.md" not in data:
+            if not is_pointer(ROOT / rel):
                 offenders.append(rel)
         self.assertEqual(offenders, [])
 
