@@ -24,6 +24,7 @@ FLYWIFI = {"GIT_AUTHOR_NAME": cc.AUTHOR[0], "GIT_AUTHOR_EMAIL": cc.AUTHOR[1],
            "GIT_COMMITTER_NAME": cc.AUTHOR[0], "GIT_COMMITTER_EMAIL": cc.AUTHOR[1]}
 WEB = {"GIT_COMMITTER_NAME": cc.WEB_COMMITTER[0], "GIT_COMMITTER_EMAIL": cc.WEB_COMMITTER[1]}
 CO = "Co-" + "Auth" + "ored-By"
+NAME = "Cla" + "ude"
 SESSION = "Claude" + "-Session"
 HOST = "claude" + ".ai"
 GEN = "Gener" + "ated"
@@ -161,10 +162,22 @@ class FileTests(unittest.TestCase):
         self.assertEqual(cc.content_findings("RULES.md", text.encode()), [])
 
     def test_this_repository_passes_the_file_rules(self):
-        for rel in ("CLAUDE.md", "README.md", "CHANGELOG.md", "tools/commit_check.py",
+        for rel in ("AGENTS.md", "CLAUDE.md", "README.md", "CHANGELOG.md", "tools/commit_check.py",
                     "tests/test_commit_check.py", ".github/workflows/ci.yml", "tools/hooks/_common.sh"):
             with self.subTest(path=rel):
                 self.assertEqual(cc.content_findings(rel, (ROOT / rel).read_bytes()), [])
+
+    def test_seed_files_keep_imported_bylines_in_lists_and_tables(self):
+        # A seed file imports public listings, whose own bylines may stand; prose there is still read.
+        item = "- Research blog by " + NAME + " (https://example.org/feed.xml)\n"
+        row = "| Research blog by " + NAME + " | https://example.org/feed.xml |\n"
+        prose = "Notes compiled by " + NAME + ".\n"
+        for text in (item, row):
+            self.assertEqual(cc.content_findings("seeds/2026-10-24_x.md", text.encode()), [], text)
+            self.assertTrue(cc.content_findings("docs/x.md", text.encode()), text)
+        self.assertTrue(cc.content_findings("seeds/2026-10-24_x.md", prose.encode()))
+        self.assertEqual(cc.file_matches(item, "seeds/x.md"), [])
+        self.assertTrue(cc.file_matches(item, "docs/x.md"))
 
 
 class MessageFileTests(unittest.TestCase):
@@ -382,7 +395,7 @@ class HookTests(unittest.TestCase):
         result = self.pre_push(url, to_data)
         self.assertNotEqual(result.returncode, 0, "data")
         self.assertIn(b"refusing to push to data", result.stdout)
-        job = f"refs/heads/main {head} refs/heads/claude/job {cc.ZERO_SHA}\n".encode()
+        job = f"refs/heads/main {head} refs/heads/job/x {cc.ZERO_SHA}\n".encode()
         self.assertNotEqual(self.pre_push("https://github.com/someone/else", job).returncode, 0, "foreign URL")
         self.assertNotEqual(self.pre_push("/tmp/bare/flywifi/info-feed-seeds.git", job).returncode, 0,
                             "a local path that merely contains the slug")
@@ -393,14 +406,24 @@ class HookTests(unittest.TestCase):
         self.assertNotEqual(self.pre_push(url, job).returncode, 0, "nothing new on the branch: empty range")
         tag = f"refs/tags/v1 {head} refs/tags/v1 {cc.ZERO_SHA}\n".encode()
         self.assertNotEqual(self.pre_push(url, tag).returncode, 0, "a tag on an already-pushed commit is empty")
-        delete = f"(delete) {cc.ZERO_SHA} refs/heads/claude/old {head}\n".encode()
-        self.assertEqual(self.pre_push(url, delete).returncode, 0, "deleting a job branch is allowed")
+        delete = f"(delete) {cc.ZERO_SHA} refs/heads/other/old {head}\n".encode()
+        self.assertEqual(self.pre_push(url, delete).returncode, 0, "deleting any job branch is allowed")
         self.repo.commit("f.txt", b"f\n", "Add f")
         tip = self.repo.head()
-        job = f"refs/heads/main {tip} refs/heads/claude/job {cc.ZERO_SHA}\n".encode()
-        clean = self.pre_push(url, job)
-        self.assertEqual(clean.returncode, 0, clean.stdout.decode("ascii", "replace"))
-        self.assertIn(b"1 commit(s)", clean.stdout, "the new commit was checked")
+        for name in ("other/x", "feature-x", "jobs/x", "job/"):
+            other = f"refs/heads/main {tip} refs/heads/{name} {cc.ZERO_SHA}\n".encode()
+            result = self.pre_push(url, other)
+            self.assertNotEqual(result.returncode, 0, name)
+            self.assertIn(b"job/<name> or doctor/<fix>", result.stdout, name)
+        notes = f"refs/notes/commits {tip} refs/notes/commits {cc.ZERO_SHA}\n".encode()
+        result = self.pre_push(url, notes)
+        self.assertNotEqual(result.returncode, 0, "notes")
+        self.assertIn(b"notes are never pushed", result.stdout)
+        for name in ("job/x", "doctor/fix-1", "job/a.b_c/d"):
+            job = f"refs/heads/main {tip} refs/heads/{name} {cc.ZERO_SHA}\n".encode()
+            clean = self.pre_push(url, job)
+            self.assertEqual(clean.returncode, 0, name + ": " + clean.stdout.decode("ascii", "replace"))
+            self.assertIn(b"1 commit(s)", clean.stdout, "the new commit was checked")
 
 
 class PrePushRangeTests(unittest.TestCase):
@@ -414,7 +437,7 @@ class PrePushRangeTests(unittest.TestCase):
             repo.commit("a.txt", b"a\n", "Add a\n\n" + CO + ": X <x@example.com>")
             pushed = repo.head()
             repo.commit("b.txt", b"b\n", "Add b")
-            line = f"refs/heads/job {repo.head()} refs/heads/claude/job {pushed}"
+            line = f"refs/heads/job {repo.head()} refs/heads/job/x {pushed}"
             found = quiet(cc.check_pre_push, "origin", "https://github.com/flywifi/info-feed-seeds", [line],
                           cwd=repo.dir)
             self.assertTrue(any(pushed[:7] in f and "co-author trailer" in f for f in found), found)
@@ -431,7 +454,7 @@ class PrePushRangeTests(unittest.TestCase):
             repo.git("remote", "add", "origin", "https://github.com/flywifi/info-feed-seeds")
             repo.git("update-ref", "refs/remotes/origin/main", repo.head())
             repo.commit("f.txt", b"f\n", "Add f")
-            job = f"refs/heads/main {repo.head()} refs/heads/claude/job {cc.ZERO_SHA}\n".encode()
+            job = f"refs/heads/main {repo.head()} refs/heads/job/x {cc.ZERO_SHA}\n".encode()
             hook = str(repo.dir / "tools" / "hooks" / "pre-push")
             result = subprocess.run(["sh", hook, "origin", "https://github.com/flywifi/info-feed-seeds"],
                                     cwd=repo.dir, env=repo.env, input=job, capture_output=True)

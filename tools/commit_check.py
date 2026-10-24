@@ -22,7 +22,12 @@ Two kinds of result
              AI assistant also blocks: made, written, built or assisted with or by it, thanks or help
              from it, a byline or author label, first-person use, past-tense use for a task, or the
              name as author. The names read are Claude and other assistants and their makers. Public
-             text credits no one; where a credit is needed at all it says "the creator".
+             text credits no one; where a credit is needed at all it says "the creator". Marks a
+             tool leaves without naming itself block too: assistance and session trailer keys and
+             session label lines (messages and pull request text), and everywhere an agent mailbox,
+             a session link by host and path, a hidden HTML marker and a credit verb with a link to
+             a coding tool's host. Pushes are refused for any branch not named job/<name> or
+             doctor/<fix> and for every notes ref.
   ADVISORY   the footer phrase and the name in one paragraph, and short finding ids. Printed as "ADVISORY:" lines, and as warnings in GitHub Actions; they never
              change the exit code. A person reads them.
 
@@ -116,9 +121,10 @@ _SEV = r"(?:high|medium|med|low|critical)"
 # Product tiers that may follow an assistant's name (Claude Code, ChatGPT Plus, Gemini Advanced). Any
 # other capitalised word right after the name makes it a different name: Claude Shannon, Gemini
 # Observatory, Mistral Press. Rules that use _ENTITY read the text with its case kept, under re.I.
-_TIER = (r"(?:code|opus|sonnet|haiku|instant|pro|plus|flash|ultra|nano|max|mini|turbo|advanced|ai|api|"
-         r"assistant|chat|desktop|cli|app|sdk|agent|bot|enterprise|team|edu|gov|live|large|medium|small|"
-         r"workspace|studio|x)")
+_TIER = (r"(?:code|opus|sonnet|haiku|fable|mythos|instant|pro|plus|flash|ultra|nano|max|mini|turbo|advanced|ai|api|"
+         r"assistant|assist|chat|desktop|cli|app|sdk|agent|bot|enterprise|team|edu|gov|live|large|medium|small|"
+         r"workspace|studio|x|build|web|autofix|spark|composer|computer|expanse|hub|review|vibe|coder|terminal|"
+         r"developer|sonar)")
 # In Title Case a making verb or a short function word after the name is not a surname.
 _TITLE_WORDS = (r"(?:wrote|written|built|made|created|authored|drafted|coded|produced|generated|helped|designed|"
                 r"developed|was|were|is|has|had|and|or|for|to|the|in|on|with|by|from|of|at|as|did|does|do)")
@@ -246,6 +252,68 @@ BLOCK_RULES = (
     Rule("audit-severity", "review record", True, BOTH,
          r"(?<![A-Za-z])(?:HIGH|MEDIUM|MED|LOW) ?\d{1,2}(?![\d.])",
          "Limit: capital severity words only; lowercase prose such as \"a high 5\" passes.", cased=True),
+    # Marks a tool leaves without naming itself: trailer keys, mailboxes, links, hidden comments and
+    # credit lines with a link. None of them needs a name on the list above.
+    Rule("assist-trailer", "assistance trailer", True, TEXT,
+         _LEAD + _LABEL + r"(?:(?:ai[\W_]{1,3})?assisted[\W_]{1,3}by|generated[\W_]{1,3}(?:with|by)|"
+         r"(?:made|created|written)[\W_]{1,3}with)[^\w\n]{0,3}[:=]",
+         "Limit: the key must open a line and end in a colon or an equals sign; prose such as "
+         "\"assisted by the new cache\" and files are not read.", re.M),
+    Rule("log-trailer", "session or log trailer", True, TEXT,
+         _LEAD + _LABEL + r"[a-z][a-z0-9]{0,30}(?:-[a-z0-9]{1,30}){0,4}-(?:session|thread|logs?|event|screenshot|"
+         r"publication|checkpoint)(?:-(?:id|url|type|created))?[ \t]{0,3}[:=]",
+         "Limit: the key must open a line, join at least two words with hyphens and end in one of the "
+         "listed words; Run, Task and Build are not such words, and files (where a configuration key "
+         "such as max-session is ordinary) are not read.", re.M),
+    Rule("agent-address", "agent mailbox address", True, BOTH,
+         r"\[bot\]@users\.noreply\.github\.com"
+         r"|(?<![a-z0-9])\d{1,12}\+(?:copilot|kiro-agent|junie-agent|openhands-agent|zed-agent|cursoragent)"
+         r"@users\.noreply\.github\.com"
+         r"|(?<=[a-z0-9._%+-])@(?:ampcode\.com|aider\.chat|charm\.land|opencode\.ai|kilo\.ai|kiro\.dev|cursor\.com|"
+         r"warp\.dev|all-hands\.dev|swe-agent\.com|codebuff\.com|qoder\.com|codebuddy\.ai|augmentcode\.com|"
+         r"roocode\.com|cline\.bot|muse\.dev|block\.github\.com|agents\.local|openrouter\.ai|"
+         r"users\.noreply\.replit\.com)(?![a-z0-9.-])"
+         r"|(?<![a-z0-9._%+-])(?:noreply@(?:anthropic\.com|openai\.com|alibabacloud\.com|moonshot\.cn|meta\.com|"
+         r"tencent\.com)|codex@openai\.com|copilot@github\.com|junie@jetbrains\.com|traecli@bytedance\.com|"
+         r"qwen-coder@alibabacloud\.com|grok@x\.ai|vibe@mistral\.ai|windsurf@codeium\.com|muse-code@meta\.com|"
+         r"antigravity@gemini\.google\.com|agent@replit\.com)(?![a-z0-9.-])",
+         "Limit: a GitHub machine account, a mail domain only agents write from, or one of the listed "
+         "vendor mailboxes; a person's noreply address and whole vendor domains such as github.com pass."),
+    Rule("agent-link", "agent session link", True, BOTH,
+         r"(?<![a-z0-9.-])(?:chatgpt\.com/codex/tasks/task_|github\.com/[^/\s]{1,100}/[^/\s]{1,100}/sessions/"
+         r"[0-9a-f]{8}-|gh\.io/copilot-coding-agent-tips|cursor\.com/(?:agents/bc-|automations/|"
+         r"background-agent\?bcid=|assets/images/(?:open-in-web|view-automation))|app\.devin\.ai/(?:sessions|"
+         r"desktop/session)/|static\.devin\.ai/assets/gh-devin-review|jules\.google\.com/task/|ampcode\.com/threads/t-|"
+         r"opencode\.ai/s/|social-cards\.sst\.dev/opencode-share/|kilo\.ai/s/|app\.roomote\.dev/(?:task|api/artifacts)/|"
+         r"cosmos\.augmentcode\.com/session|storage\.googleapis\.com/screenshot-production-|smith\.langchain\.com/|"
+         r"jb\.gg/junie/|www\.cubic\.dev/buttons/)|\.devinenterprise\.com/review/",
+         "Limit: a host and the path a tool's session, task, thread or badge link uses; the bare host, "
+         "documentation paths and ordinary pull request, issue or feed links pass."),
+    Rule("hidden-marker", "hidden agent marker", True, BOTH,
+         r"<!--[ \t]{0,10}(?:start copilot|cursor_agent_|junie-(?:bot-comment|feedback)|openclaw[-:]|coderabbit|"
+         r"this is an auto-generated (?:description|comment))",
+         "Limit: the marker must open an HTML comment; other comments, such as markdownlint directives, pass."),
+    Rule("credit-link", "credit line with a tool link", True, BOTH,
+         _LEAD + r"(?:made|powered|opened|created|built|written|generated|developed|assisted)[\W_]{1,3}"
+         r"(?:with|by|via|using|in|on)[\W_]{1,3}\[[^\]\n]{1,80}\]\((?:[a-z][a-z0-9+.-]{0,10}:)?//(?:[a-z0-9-]{1,63}\.){0,3}"
+         r"(?:claude\.ai|claude\.com|anthropic\.com|chatgpt\.com|openai\.com|cursor\.com|cursor\.sh|devin\.ai|"
+         r"cognition\.ai|jules\.google(?:\.com)?|ampcode\.com|opencode\.ai|kilo\.ai|roocode\.com|roomote\.dev|"
+         r"continue\.dev|augmentcode\.com|kiro\.dev|warp\.dev|openclaw\.ai|all-hands\.dev|openhands\.dev|codeium\.com|"
+         r"windsurf\.com|aider\.chat|replit\.com|jb\.gg|jetbrains\.com/junie|qoder\.com|codebuddy\.ai|codebuff\.com|"
+         r"charm\.land|mistral\.ai|x\.ai|kimi\.com|moonshot\.cn|qwen\.ai|trae\.ai|manus\.im|genspark\.ai|"
+         r"antigravity\.google|gemini\.google\.com|zed\.dev|factory\.ai|copilot\.github\.com|sweep\.dev|cubic\.dev|"
+         r"coderabbit\.ai|github\.com/(?:features/copilot|langchain-ai/open-swe|swe-agent|google-gemini|openai/codex|"
+         r"anthropics))(?![a-z0-9-])"
+         r"|pull request opened by \[|this pull request description was gene" r"rated with",
+         "Limit: a making or credit verb, a connective and a Markdown link whose host is a coding tool's, "
+         "or two fixed sentences; a link to any other host (\"Powered by [feedparser](github url)\") passes.",
+         re.M),
+    Rule("session-label", "session label line", True, TEXT,
+         _LEAD + r"(?:link to [a-z0-9 ]{1,30}(?:session|run)[ \t]{0,3}:|pr created automatically by|"
+         r"opened on behalf of|requested by:[ \t]{0,3}@)"
+         r"|\[(?:view (?:the )?(?:[a-z]{1,20} )?(?:team )?(?:session|task|trace)|view thread|[a-z]{1,20} session)\]\(",
+         "Limit: the fixed label lines at a line start, and link text that offers to view a session, task, "
+         "thread or trace; \"Requested in #14 by the owner\" and a link to a CI run pass.", re.M),
 )
 
 # Advisory rules. A separator is a run of 1 to 5 characters that are not letters, digits, "!", "?",
@@ -269,15 +337,29 @@ _AUX = r"(?!(?:is|are|was|were|be|been|being|gets?|got)(?![a-z0-9]))"
 # calls it what it is. The authorship rules read the text with its case kept, under re.I; the
 # (?-i:...) parts need the capitals.
 _GLUE = r"(?:" + _TIER + r")?(?![a-z])"
+# One name is also a common surname. It counts only when no capitalised word of 2 to 13 letters stands
+# right before it ("Dana Cline wrote" is a person), which also leaves out a sentence-opening word before it.
+_NO_GIVEN_NAME = "".join(r"(?<!(?-i:[A-Z])[a-z]{%d} )" % n for n in range(1, 13))
 # Every name starts with one of these letters; the lookahead turns most positions away in one test.
-_ASSISTANT = (r"(?=[acdgjklmopqrw])(?:" + _NAME + _GLUE
+_ASSISTANT = (r"(?=[acdfgjklmnopqrstwxz])(?:" + _NAME + _GLUE
               + r"|(?<![a-z0-9])(?:chat" + _S + r"?gpt|gpts?(?![ \t-]{0,3}(?:partition|disk|table|header|"
               r"entr|label|format|boot|uefi)[a-z]{0,6}(?![a-z]))|openai|anthropic|gemini|deepseek|codellama|llms?|"
-              r"qwen|aider|replit|cursor" + _S + r"{1,3}ai|an?" + _S + r"{1,3}ai" + _S
+              r"qwen|aider|replit|cursor" + _S + r"{1,3}(?:ai|agent|composer)|an?" + _S + r"{1,3}ai" + _S
               + r"{1,3}(?:assistant|model|tool|agent)|(?:coding|ai)" + _S + r"{1,3}agents?|(?:large" + _S
-              + r"{1,3})?language" + _S + r"{1,3}models?)" + _GLUE
+              + r"{1,3})?language" + _S + r"{1,3}models?"
+              # Coined names of coding agents and their makers: words in no language, so any letter case.
+              # Closed compounds only: "open code" and "code buddy" stay ordinary.
+              r"|opencode|openhands|swe[ -]?agent|roomote|qoder|codebuddy|codebuff|freebuff|openclaw|clawdbot|"
+              r"moltbot|clawdis|warelay|clawhub|nanoclaw|agentforce|genspark|codeium|anysphere|z\.ai|"
+              r"factory[ -]{1,3}droid|roo[ -]{0,3}code|kilo[ -]{0,3}code|augmentcode)" + _GLUE
               + r"|(?<![a-z0-9])(?:(?-i:C)opilot|(?-i:C)odex|(?-i:L)lama|(?-i:M)istral|(?-i:G)rok"
-              r"|(?-i:P)erplexity|(?-i:W)indsurf|(?-i:D)evin|(?-i:J)ules|(?-i:J)unie|(?-i:K)imi)" + _GLUE
+              r"|(?-i:P)erplexity|(?-i:W)indsurf|(?-i:D)evin|(?-i:J)ules|(?-i:J)unie|(?-i:K)imi"
+              r"|(?-i:A)ntigravity|(?-i:K)iro|(?-i:T)rae|(?-i:A)uggie|(?-i:M)anus|(?-i:xAI)|"
+              + _NO_GIVEN_NAME + r"(?-i:C)line"
+              # Two-word names whose words are ordinary alone, read in title case only.
+              r"|(?-i:A)mazon[ \t]{1,3}(?-i:Q)|(?-i:C)ontinue[ \t]{1,3}(?-i:H)ub|(?-i:Z)ed[ \t]{1,3}(?-i:A)gent"
+              r"|(?-i:A)ugment[ \t]{1,3}(?-i:C)ode|(?-i:M)use[ \t]{1,3}(?:(?-i:C)ode|(?-i:S)park)"
+              r"|(?-i:M)eta[ \t]{1,3}(?-i:AI)|(?-i:A)ll[ \t]{1,3}(?-i:H)ands[ \t]{1,3}(?-i:AI))" + _GLUE
               # These names are ordinary words or given names too: in title case or capitals, any
               # capitalised word after one that is not a tier makes it the ordinary word or a person
               # ("The Copilot Wrote The Flight Log", "Jules Verne wrote").
@@ -293,7 +375,7 @@ _BOW = r"(?<![a-z0-9])"
 _NOT_ADJ = r"(?!-(?:in|up|to)(?![a-z])(?![ \t-]{1,3}(?:with|by(?![ \t]{1,3}default)|using|via)(?![a-z])))"
 _MADE = (_BOW + r"(?:re|co|ghost|hand|over|pre|auto|self|semi|copy|pair" + _S + r"?)?(?:built|made|created|"
          r"written|wrote|authored|produced|coded|developed|drafted|composed|crafted|prepared|designed|"
-         r"programmed|assisted|done|generated)(?![a-z])" + _NOT_ADJ)
+         r"programmed|assisted|done|generated|opened)(?![a-z])" + _NOT_ADJ)
 _VIA = _BOW + r"(?:with|by|using|via|through|alongside|w/)(?![a-z0-9])"
 
 # A sign-off: the name alone on the next line, after up to 10 spaces or tabs and a list or quote mark, with
@@ -301,6 +383,12 @@ _VIA = _BOW + r"(?:with|by|using|via|through|alongside|w/)(?![a-z0-9])"
 _SIGNOFF = (_LS + r"{0,5}+\n[ \t]{0,10}+(?:[-*>~]{1,2}[ \t]{0,3})?" + _WHO
             + r"(?:[ \t]{1,3}(?:" + _TIER + r"|[a-z]?\d{1,3}(?:\.\d{1,3}){0,2}[a-z]?)(?![a-z0-9])){0,3}+"
             + r"[^\w\n]{0,5}+(?=\n|\Z)")
+# A byline: up to three words, "by", the name. In seed files (imports of public listings, where the
+# content rules let a feed's own byline stand) a list item or table row is not read; prose there is.
+_BYLINE = (r"[^\w\n]{0,10}(?:[a-z0-9]{1,30}(?:[ \t-]{1,3}|,[ \t]{0,3})(?:and[ \t]{1,3})?){0,3}by" + _S
+           + r"{1,10}[a-z0-9]{0,30}?" + _WHO)
+_SEED_LIMIT = " In files under seeds/ a line that starts with a list marker or a table bar is not read."
+SEEDS_PREFIX = "seeds/"
 
 AUTHORSHIP_RULES = (
     Rule("made-by", "authorship wording (made with or by the assistant)", True, BOTH,
@@ -320,10 +408,9 @@ AUTHORSHIP_RULES = (
          "Limit: at most two words between the credit phrase and the name, and plain thanks or credit "
          "only with the name right after it; \"thanks again to\" passes.", re.I, cased=True),
     Rule("byline", "authorship wording (byline)", True, BOTH,
-         r"(?:^|[.;,(]|[ \t]-[ \t])[^\w\n]{0,10}(?:[a-z0-9]{1,30}(?:[ \t-]{1,3}|,[ \t]{0,3})(?:and[ \t]{1,3})?)"
-         r"{0,3}by" + _S + r"{1,10}[a-z0-9]{0,30}?" + _WHO,
+         r"(?:^|[.;,(]|[ \t]-[ \t])" + _BYLINE,
          "Limit: up to three words between a line start or punctuation and \"by\"; a longer clause, "
-         "and identifiers joined by underscores, pass.", re.M | re.I, cased=True),
+         "and identifiers joined by underscores, pass." + _SEED_LIMIT, re.M | re.I, cased=True),
     Rule("author-label", "authorship wording (author label)", True, BOTH,
          r"auth" + r"or(?:[^\w:=\n]|_){0,5}[:=]" + _S + r"{0,5}" + _WHO,
          "Limit: needs a colon or an equals sign between the label and the name.", re.I, cased=True),
@@ -357,6 +444,12 @@ ADVISORY_RULES = (
 BLOCK_RULES = BLOCK_RULES + AUTHORSHIP_RULES
 RULES = BLOCK_RULES + ADVISORY_RULES
 RULE_IDS = {r.id for r in RULES} | {"dash"}
+_BYLINE_RULE = next(r for r in AUTHORSHIP_RULES if r.id == "byline")
+SEED_BYLINE = Rule("byline", _BYLINE_RULE.label, True, FILE,
+                   r"(?:^(?![ \t]{0,3}(?:[-*+]|\d{1,3}[.)]|\|)[ \t])|[.;,(]|[ \t]-[ \t])" + _BYLINE,
+                   _BYLINE_RULE.limit, re.M | re.I, cased=True)
+# Branches a clone may push: one per job, or a proposal branch from the doctor.
+JOB_BRANCH = re.compile(r"(?:job|doctor)/[A-Za-z0-9][A-Za-z0-9._/-]{0,80}$")
 
 # --------------------------------------------------------------------------- folding
 
@@ -533,6 +626,14 @@ def _rules(block: bool, place: str) -> tuple:
     return tuple(r for r in RULES if r.block == block and place in r.places)
 
 
+def _file_rules(path: str) -> tuple:
+    """The BLOCK rules for one file; under seeds/ the byline rule leaves list items and table rows alone."""
+    rules = _rules(True, "file")
+    if path.startswith(SEEDS_PREFIX):
+        rules = tuple(SEED_BYLINE if r.id == "byline" else r for r in rules)
+    return rules
+
+
 def _dash_hits(text: str) -> list[tuple[str, str, int]]:
     """Each dash found in any view, with its line in the first view that shows it."""
     views = _views(text)
@@ -602,7 +703,7 @@ def content_findings(path: str, data: bytes, exemptions=None) -> list[str]:
         return [f"{path}: {problem}"]
     exempt = frozenset((e["rule"], e["match_sha256"]) for e in (exemptions or ()) if e["path"] == path)
     out = [f"{path}: contains {_an(r.label)} {r.label} [{r.id} {match_sha256(m)}]"
-           for r, m in _scan(text, _rules(True, "file"), exempt)]
+           for r, m in _scan(text, _file_rules(path), exempt)]
     if b"\x00" in data[:8192]:
         return out
     if "\r" in text:
@@ -623,11 +724,11 @@ def content_advisories(path: str, data: bytes) -> list[str]:
     return [] if text is None else [f"{path}: {r.label} [{r.id}]" for r, _ in _scan(text, _rules(False, "file"))]
 
 
-def file_matches(text: str) -> list[tuple[str, str]]:
+def file_matches(text: str, path: str = "") -> list[tuple[str, str]]:
     """Every (rule id, sha256 of the matched text) a BLOCK file rule finds: what an exemption may name."""
     out = set()
     for view in _views(text):
-        for rule in _rules(True, "file"):
+        for rule in _file_rules(path):
             f = _fold(view, keep_case=rule.cased)
             for reading in dict.fromkeys((f, _TAG.sub("", f))):
                 out.update((rule.id, match_sha256(m.group(0))) for m in rule.finditer(reading))
@@ -894,8 +995,15 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
             findings.append(f"refusing to push to {target}: changes reach {target} only through pull "
                             "requests (main) or the poll workflow (data)")
             continue
+        if remote_ref.startswith("refs/notes/"):
+            findings.append(f"refusing to push {remote_ref}: notes are never pushed (some tools write "
+                            "attribution notes there)")
+            continue
         if local_sha == ZERO_SHA:
             continue  # deleting a job branch: the one empty push allowed
+        if remote_ref.startswith("refs/heads/") and not JOB_BRANCH.match(target):
+            findings.append(f"refusing to push branch {target}: a branch is named job/<name> or doctor/<fix>")
+            continue
         # The range CI checks (--range auto): every commit on the branch since origin/<BASE_REF>, not
         # only the commits this push adds, so a branch CI would refuse is refused here first.
         base = resolve_range("auto", cwd=cwd)
@@ -1001,6 +1109,13 @@ def banned_samples() -> dict[str, str]:
         "link ideographic dot": "Add b\n\nsee https://" + "claude" + "\u3002" + "ai/x",
         "link halfwidth dot": "Add b\n\nsee https://" + "claude" + "\uff61" + "ai/x",
         "link fullwidth dot": "Add b\n\nsee https://" + "claude" + "\uff0e" + "ai/x",
+        "assist trailer": "Add b\n\nAssisted-by: SomeTool",
+        "log trailer": "Add b\n\nAgent-Logs-Url: https://example.com/x",
+        "agent address": "Add b\n\nreviewed by tool[bot]@users." + "noreply.github.com",
+        "agent link": "Add b\n\nsee https://jules.google.com" + "/task/1",
+        "hidden marker": "Add b\n\n<!-- START" + " COPILOT CODING AGENT TIPS -->",
+        "credit link": "Add b\n\nMade with [SomeTool](https://cursor" + ".com)",
+        "session label": "Add b\n\n[view thread](https://example.com/t/1)",
     }
 
 
