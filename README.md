@@ -82,7 +82,8 @@ All three call `tools/commit_check.py`. Run it by hand with `--range origin/main
 pull request with `--pr N`, or prove the checks fire with `--selftest`.
 
 `tools/preflight.py` rehearses the CI `checks` job step for step, reading the steps from
-`ci.yml` itself, with a timeout per step; `--check-parity` (run in CI) fails on any step it cannot
+`ci.yml` itself, with a timeout per step and the `CI=true` and `GITHUB_ACTIONS=true` that every
+Actions run sets; `--check-parity` (run in CI) fails on any step it cannot
 rehearse. It says DID NOT RUN instead of passing when the tree has uncommitted changes, HEAD is
 not the commit being pushed, bash is missing or a step times out. `--fast` skips the full
 unit-test step and says the rehearsal was partial; `IFS_PREFLIGHT_FAST=1` asks the hook for it,

@@ -158,9 +158,11 @@ def find_bash() -> str | None:
     if os.name == "nt":
         git_exe = shutil.which("git")
         if git_exe:
-            candidate = Path(git_exe).resolve().parent.parent / "bin" / "bash.exe"
-            if candidate.exists():
-                return str(candidate)
+            # From a shell git is <git>\cmd\git.exe; inside a hook it is <git>\<mingw64|ucrt64>\libexec\git-core.
+            for root in Path(git_exe).resolve().parents[1:4]:
+                for candidate in (root / "bin" / "bash.exe", root / "usr" / "bin" / "bash.exe"):
+                    if candidate.exists():
+                        return str(candidate)
         return None  # never WSL's bash.exe: it runs another system
     return shutil.which("bash")
 
@@ -173,8 +175,10 @@ def job_env(env: dict, runner_temp: str) -> dict:
     out = dict(os.environ)
     branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=ROOT, capture_output=True,
                             text=True).stdout.strip()
+    # CI and GITHUB_ACTIONS are set on every Actions run, so steps that read them behave here as in CI.
     out.update({"BASE_REF": os.environ.get("BASE_REF") or "main", "PR_NUMBER": "", "RUNNER_TEMP": runner_temp,
-                "GITHUB_WORKSPACE": str(ROOT), "GITHUB_REF": f"refs/heads/{branch}"})
+                "GITHUB_WORKSPACE": str(ROOT), "GITHUB_REF": f"refs/heads/{branch}", "CI": "true",
+                "GITHUB_ACTIONS": "true"})
     for name, value in env.items():
         if "${{" not in value:
             out[name] = value

@@ -303,6 +303,7 @@ class HookTests(unittest.TestCase):
     def setUp(self):
         self.repo = Scratch(hooks=True)
         self.repo.env["IFS_SKIP_PREFLIGHT"] = "1"  # the rehearsal has its own tests; these test the checks
+        self.repo.env.pop("CI", None)  # hooks run on a PC, not in CI, where the skip variable is refused
         self.repo.commit("README.md", b"x\n", "Add README")
 
     def tearDown(self):

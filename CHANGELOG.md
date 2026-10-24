@@ -75,8 +75,9 @@ All notable changes to this repository are recorded here. The format follows
   Python 3.12 and 3.13. Advisory until the main ruleset requires the `checks` and `pr-text` status
   checks.
 - `tools/preflight.py`: a local rehearsal of the CI `checks` job read from `ci.yml`, with a timeout
-  per step, a fast mode, a parity check run in CI, and DID NOT RUN instead of a pass on a dirty tree,
-  a missing shell or a timeout. The pre-push hook runs it after the commit checks.
+  per step, the `CI` and `GITHUB_ACTIONS` values Actions sets, a fast mode, a parity check run in CI,
+  and DID NOT RUN instead of a pass on a dirty tree, a missing shell or a timeout. The pre-push hook
+  runs it after the commit checks, and on Windows it finds Git Bash from inside the hook.
 - The pre-push hook checks every commit on the branch since `origin/main`, the range CI checks.
 - `tools/ci_status.py`: the CI result for one commit through the REST API, with a result, no result
   yet and an error kept apart.
