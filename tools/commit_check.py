@@ -89,7 +89,7 @@ SELF_PATHS = ("tools/commit_check.py", "tools/hooks/", ".github/workflows/", "to
 DASHES = (
     ("\u2014", "em dash"), ("\u2013", "en dash"), ("\u2015", "horizontal bar"),
     ("\u2e3a", "two-em dash"), ("\u2e3b", "three-em dash"), ("\ufe58", "small em dash"),
-    ("\ufe31", "vertical em dash"),
+    ("\ufe31", "vertical em dash"), ("\ufe32", "vertical en dash"),
 )
 
 # --------------------------------------------------------------------------- rules
@@ -106,13 +106,19 @@ _LABEL = r"(?:[a-z][a-z0-9 ']{0,60}?[^a-z0-9:\n]{0,10}:(?:[^\w\n]|_){0,10})?"
 _CO = "co" + _S + "{0,10}" + "auth" + "or(?:ed)?" + _S + "{0,10}by"
 _SESSION = _NAME + _S + "{0,10}" + "sess" + "ion"
 _HOST = _NAME + r"\s{0,10}\.\s{0,10}" + "ai"
-_PHRASE = "gene" + "rated" + _S + r"{1,10}(?:(?:with|by|using|via)(?![a-z0-9])|w/)"
+_PHRASE = "gene" + "rated" + _S + r"{1,40}(?:(?:with|by|using|via)(?![a-z0-9])|w/)"
 _TOOL = (r"(?:\[[^\]\n]{1,80}\]|[a-z0-9][\w.'+/-]{0,40}(?:[ \t]{1,3}[a-z0-9][\w.'+/-]{0,40}){0,3})"
          r"(?:\([^()\s]{0,300}\))?")
 _ROLE_KEY = r"(?:[a-z][a-z0-9]{0,20}[ -]){0,3}(?:by|assisted|assistant|generated|authors?|authored|ai)"
 _SENTENCE_STOP = r"\n\n|[!?]|\.(?![a-z0-9])"
 _AUD = "aud" + "it"
 _SEV = r"(?:high|medium|med|low|critical)"
+# Product tiers that may follow an assistant's name (Claude Code, ChatGPT Plus, Gemini Advanced). Any
+# other capitalised word right after the name makes it a different name: Claude Shannon, Gemini
+# Observatory, Mistral Press. Rules that use _ENTITY read the text with its case kept, under re.I.
+_TIER = (r"(?:code|opus|sonnet|haiku|instant|pro|plus|flash|ultra|nano|max|mini|turbo|advanced|ai|api|"
+         r"assistant|chat|desktop|cli|app|sdk|agent|x)")
+_ENTITY = r"(?![ \t]{1,3}(?=(?-i:[A-Z]))(?!" + _TIER + r"(?![a-z0-9]))[a-z]{2,30})"
 
 
 class _Hit:
@@ -128,16 +134,24 @@ class _Hit:
 class _PhraseThenName:
     """A start pattern, then the name within `reach` characters, in a window that ends at the first
     `stop` match. With `via`, a connective must start in the first `via_reach` characters and the name
-    must come after it. Linear: each start is followed by one bounded window."""
+    must come after it. Linear: one forward search finds the next name, and a start whose window
+    cannot reach it is skipped before any window is read."""
 
     def __init__(self, start: str, reach: int, stop: str, name: str = _NAME, via: str | None = None,
-                 via_reach: int = 0):
-        self.start, self.reach = re.compile(start), reach
-        self.stop, self.name = re.compile(stop), re.compile(name)
-        self.via, self.via_reach = (re.compile(via) if via else None), via_reach
+                 via_reach: int = 0, flags: int = 0):
+        self.start, self.reach = re.compile(start, flags), reach
+        self.stop, self.name = re.compile(stop, flags), re.compile(name, flags)
+        self.via, self.via_reach = (re.compile(via, flags) if via else None), via_reach
 
     def finditer(self, text: str):
+        nxt = None
         for m in self.start.finditer(text):
+            if nxt is None or nxt.start() < m.end():
+                nxt = self.name.search(text, m.end())
+                if nxt is None:
+                    return
+            if nxt.start() >= m.end() + self.reach:
+                continue
             window = text[m.end():m.end() + self.reach]
             if not self.name.search(window):
                 continue
@@ -203,7 +217,7 @@ BLOCK_RULES = (
     Rule("session-id", "session id", True, BOTH, r"session_(?:[-_]?[a-z0-9]){20}",
          "Limit: needs 20 letters or digits after \"session_\"; a shorter id passes."),
     Rule("footer-line", "generated footer", True, BOTH,
-         _LEAD + _LABEL + _PHRASE + r"(?:[^\w\n]|_){0,10}" + _TOOL + r"(?:[^\w\n]|_){0,40}$",
+         _LEAD + _LABEL + _PHRASE + r"(?:[^\w\n]|_){0,40}" + _TOOL + r"(?:[^\w\n]|_){0,40}$",
          "Limit: the line holds only the phrase and a tool of up to four words or a bracketed name, "
          "with an optional link and label; a longer line, or words before the phrase that are not a "
          "label, pass this rule.", re.M),
@@ -212,9 +226,11 @@ BLOCK_RULES = (
          "Limit: the name must follow the phrase in the same sentence within 200 characters; after "
          "\"!\", \"?\", a blank line or a sentence-ending dot it is left to the advisory paragraph rule."),
     Rule("assistant-trailer", "trailer naming the assistant", True, BOTH,
-         _LEAD + _ROLE_KEY + r"[^\w\n]{0,3}[:=][^\n]{0,200}?" + _NAME,
+         _LEAD + _ROLE_KEY + r"[^\w\n]{0,3}[:=][^\n]{0,200}?" + _NAME + _ENTITY,
          "Limit: the key must open a line and end in by, assisted, assistant, generated, author, "
-         "authors, authored or ai; other keys (\"Note:\", \"Model:\") pass.", re.M),
+         "authors, authored or ai; other keys (\"Note:\", \"Model:\") pass, and so does the name "
+         "followed by a capitalised word that is not a product tier (a person such as Claude Shannon).",
+         re.M | re.I, cased=True),
     Rule("audit-record", "review record", True, BOTH,
          r"(?<![a-z])" + _AUD + r"(?:[ _-]?round)?[ _-]?\d{1,3}(?!\d)"
          r"|(?<![a-z])" + _AUD + r"[ _-]rounds?(?![a-z])"
@@ -236,51 +252,68 @@ _GS = r"(?:[^\w.!?\n]|_|\n(?!\n)|\.(?=[a-z]))"
 _GW = r"[a-z0-9]{1,30}(?:\.[0-9]{1,6}){0,3}"
 _W2 = r"(?:" + _GS + "{1,5}" + _GW + r"){0,2}?" + _GS + "{1,5}"
 _AUX = r"(?!(?:is|are|was|were|be|been|being|gets?|got)(?![a-z0-9]))"
-# Assistant names the authorship rules read: Claude and other AI assistants and their makers, so the
-# rule holds whichever tool is in use. The name directly followed by ".md" is a file such as CLAUDE.md.
-_ASSISTANT = (r"(?:" + _NAME + r"|chat" + _S + r"?gpt|gpt" + _S + r"?\d|openai|anthropic|copilot|gemini|codex|"
-              r"llama|mistral|deepseek|grok|perplexity|cursor" + _S + r"{1,3}ai|an?" + _S + r"{1,3}ai" + _S
-              + r"{1,3}(?:assistant|model|tool)|llms?)")
-_WHO = _ASSISTANT + r"(?!\.md(?![a-z0-9]))"
+# Assistant names the authorship rules read, so the rules hold whichever tool is in use. Claude may be
+# glued into a longer token (ClaudeAI, AnthropicClaude) but not into another name such as Claudette;
+# the other names stand as words. Names that are also ordinary words (a copilot, a codex, a llama, the
+# mistral wind, perplexity, grok) count only when capitalised. The authorship rules read the text with
+# its case kept, under re.I; the (?-i:...) parts need the capitals.
+_ASSISTANT = (r"(?:" + _NAME + r"(?:ai|code)?(?![a-z])"
+              r"|(?<![a-z0-9])(?:chat" + _S + r"?gpt|gpts?|openai|anthropic|gemini|deepseek|llms?|cursor" + _S
+              + r"{1,3}ai|an?" + _S + r"{1,3}ai" + _S + r"{1,3}(?:assistant|model|tool))(?![a-z])"
+              r"|(?-i:(?<![A-Za-z0-9])(?:Copilot|COPILOT|Codex|CODEX|Llama|LLAMA|Mistral|MISTRAL|Grok|GROK"
+              r"|Perplexity|PERPLEXITY)(?![A-Za-z])))")
+# The name directly followed by ".md" is a file such as CLAUDE.md.
+_WHO = _ASSISTANT + r"(?!\.md(?![a-z0-9]))" + _ENTITY
+# A word allowed between the name and its verb: a product tier, a version, or an adverb.
+_MID = (r"(?:" + _TIER + r"|v?\d{1,3}(?:\.\d{1,3}){0,2}[a-z]?|then|also|just|has|have|had|itself|"
+        r"[a-z]{2,20}ly)(?![a-z0-9])")
 _BOW = r"(?<![a-z0-9])"
+# "built-in", "made-up" and "made-to-order" are adjectives, not a claim of making.
+_NOT_ADJ = r"(?!-(?:in|up|to)(?![a-z]))"
 _MADE = (_BOW + r"(?:re|co|ghost|hand|over|pre|auto|self|semi|copy|pair" + _S + r"?)?(?:built|made|created|"
          r"written|wrote|authored|produced|coded|developed|drafted|composed|crafted|prepared|designed|"
-         r"programmed|assisted|done)(?![a-z])")
+         r"programmed|assisted|done|generated)(?![a-z])" + _NOT_ADJ)
 _VIA = _BOW + r"(?:with|by|using|via|through|alongside|w/)(?![a-z0-9])"
 
 AUTHORSHIP_RULES = (
     Rule("made-by", "authorship wording (made with or by the assistant)", True, BOTH,
-         _PhraseThenName(_MADE, 200, _SENTENCE_STOP, name=_WHO, via=_VIA, via_reach=60),
+         _PhraseThenName(_MADE, 200, _SENTENCE_STOP, name=_WHO, via=_VIA, via_reach=60, flags=re.I),
          "Limit: the connective must start within 60 characters of the verb and the name must follow "
-         "in the same sentence; the name directly followed by \".md\" is the file CLAUDE.md."),
+         "in the same sentence; the name directly followed by \".md\" is the file CLAUDE.md.", cased=True),
     Rule("credit", "authorship wording (credit to the assistant)", True, BOTH,
          r"(?:thanks" + _S + r"{1,5}to|courtesy" + _S + r"{1,5}of|with" + _S + r"{1,5}the" + _S + r"{1,5}help"
          + _S + r"{1,5}of|with" + _S + r"{1,5}help" + _S + r"{1,5}from|powered" + _S + r"{1,5}by|in" + _S
          + r"{1,5}collaboration" + _S + r"{1,5}with)" + _S + r"{1,5}(?:[a-z0-9]{1,30}" + _S + r"{1,5}){0,2}?"
          r"[a-z0-9]{0,30}?" + _WHO + r"|with" + _S + r"{1,5}[a-z0-9]{0,30}?" + _WHO + _S + r"{0,3}s?" + _S
-         + r"{1,3}help(?![a-z0-9])",
-         "Limit: at most two words between the credit phrase and the name; \"thanks again to\" passes."),
+         + r"{1,3}help(?![a-z0-9])"
+         r"|(?<![a-z])(?:thanks|thank" + _GS + r"{1,5}you|kudos(?:" + _GS + r"{1,5}to)?|credits?(?:[ \t]{0,3}[:=]|"
+         + _GS + r"{1,5}to))" + _GS + r"{1,5}" + _WHO,
+         "Limit: at most two words between the credit phrase and the name, and plain thanks or credit "
+         "only with the name right after it; \"thanks again to\" passes.", re.I, cased=True),
     Rule("byline", "authorship wording (byline)", True, BOTH,
          r"(?:^|[.;,(]|[ \t]-[ \t])[^\w\n]{0,10}(?:[a-z0-9]{1,30}(?:[ \t-]{1,3}|,[ \t]{0,3})(?:and[ \t]{1,3})?)"
          r"{0,3}by" + _S + r"{1,10}[a-z0-9]{0,30}?" + _WHO,
          "Limit: up to three words between a line start or punctuation and \"by\"; a longer clause, "
-         "and identifiers joined by underscores, pass.", re.M),
+         "and identifiers joined by underscores, pass.", re.M | re.I, cased=True),
     Rule("author-label", "authorship wording (author label)", True, BOTH,
          r"auth" + r"or(?:[^\w:=\n]|_){0,5}[:=]" + _S + r"{0,5}" + _WHO,
-         "Limit: needs a colon or an equals sign between the label and the name."),
+         "Limit: needs a colon or an equals sign between the label and the name.", re.I, cased=True),
     Rule("first-person", "authorship wording (first person)", True, BOTH,
          _BOW + r"(?:i|we)" + _W2 + r"(?:re|co)?(?:used|use|asked|had|let|leveraged|leverage|utili[sz]ed|employed)"
          + _W2 + _WHO + r"|" + _BOW + r"using" + _GS + r"{1,5}" + _WHO + _W2 + r"(?:i|we)(?![a-z0-9])",
-         "Limit: at most two words on each side of the verb; three words pass."),
+         "Limit: at most two words on each side of the verb; three words pass.", re.I, cased=True),
     Rule("tool-past", "authorship wording (past-tense use)", True, BOTH,
-         _BOW + r"(?:re)?(?:used|asked|had)" + _W2 + _WHO + _W2 + r"to(?![a-z0-9])",
-         "Limit: past tense only; present-tense feature text (\"uses ... to\") passes."),
+         _BOW + r"(?:re)?(?:used|asked|had)" + _W2 + _WHO + _W2 + r"to(?![a-z0-9])"
+         r"|" + _WHO + r"(?:" + _GS + r"{1,5}" + _MID + r"){0,2}?" + _GS + r"{1,5}(?:was|were|been|got)" + _GS
+         + r"{1,5}(?:re)?(?:used|asked|leveraged|utili[sz]ed|employed)" + _GS + r"{1,5}to(?![a-z0-9])",
+         "Limit: past tense only; present-tense feature text (\"uses ... to\") passes.", re.I, cased=True),
     Rule("name-as-author", "authorship wording (the name as author)", True, BOTH,
-         _WHO + r"(?:" + _GS + "{1,5}" + _AUX + _GW + r"){0,2}?" + _GS + r"{1,5}(?:re|co|ghost|over|auto)?"
+         _WHO + r"(?:" + _GS + "{1,5}" + _AUX + _MID + r"){0,2}?" + _GS + r"{1,5}(?:re|co|ghost|over|auto)?"
          r"(?:wrote|written|built|made|created|authored|drafted|coded|produced|generated|helped|designed|"
-         r"developed)(?![a-z0-9])",
-         "Limit: at most two words between the name and the verb, never a form of \"be\"; passive "
-         "feature text (\"the ... prompt is built\") and three-word product names pass."),
+         r"developed)(?![a-z0-9])" + _NOT_ADJ,
+         "Limit: at most two words between the name and the verb, each a product tier, a version or an "
+         "adverb, never a form of \"be\"; other words between them (\"the Gemini program developed\") "
+         "and passive feature text (\"the ... prompt is built\") pass.", re.I, cased=True),
 )
 ADVISORY_RULES = (
     Rule("generated-near", "authorship wording (footer phrase and name in one paragraph)", False, BOTH,
@@ -337,6 +370,11 @@ _CONFUSABLES = {ord(k): v for k, v in {
 # Cherokee small letters, which lowercasing makes of the capitals above.
 _CONFUSABLES.update({ord(chr(k).lower()): v.lower() for k, v in _CAPITAL_CONFUSABLES.items()
                      if 0x13a0 <= k <= 0x13f5})
+# For readings that keep the case: the capital of each small lookalike above folds to the Latin capital,
+# so a cased reading folds as much as the lowercased one.
+_CAPITAL_FROM_SMALL = {ord(chr(k).upper()): v.upper() for k, v in _CONFUSABLES.items()
+                       if len(chr(k).upper()) == 1 and chr(k).upper() != chr(k)
+                       and ord(chr(k).upper()) not in _CAPITAL_CONFUSABLES}
 
 FORBIDDEN_PREFIXES = ("local/", ".cache/", "logs/", ".venv-crawl/")
 FORBIDDEN_NAMES = re.compile(r"(?:^|/)(?:[^/]*\.local\.json|\.secrets\.local\.json)$")
@@ -415,7 +453,9 @@ def _fold(value: str, keep_case: bool = False) -> str:
     value = "".join(ch for ch in value
                     if unicodedata.category(ch) not in ("Cf", "Mn", "Me") and ch not in _FILLERS)
     value = value.translate(_DOTS).translate(_HYPHENS).translate(_CAPITAL_CONFUSABLES)
-    return value.translate(_CONFUSABLES) if keep_case else value.lower().translate(_CONFUSABLES)
+    if keep_case:
+        return value.translate(_CAPITAL_FROM_SMALL).translate(_CONFUSABLES)
+    return value.lower().translate(_CONFUSABLES)
 
 
 def normalize(text: str, keep_case: bool = False) -> str:
@@ -502,9 +542,10 @@ def identity_findings(author, committer, where: str, on_main: bool = False) -> l
 
 def path_findings(path: str, branch: str | None) -> list[str]:
     out = []
-    if path.startswith(FORBIDDEN_PREFIXES) or FORBIDDEN_NAMES.search(path):
+    # Any letter case: Windows and macOS treat "Logs/" and "logs/" as one folder.
+    if path.lower().startswith(FORBIDDEN_PREFIXES) or FORBIDDEN_NAMES.search(path.lower()):
         out.append(f"{path}: this path is never tracked")
-    if path.startswith(DATA_PREFIXES) and branch != "data":
+    if path.lower().startswith(DATA_PREFIXES) and branch != "data":
         out.append(f"{path}: machine output belongs only on the data branch")
     return out
 
@@ -942,8 +983,26 @@ def banned_samples() -> dict[str, str]:
     }
 
 
+def git_local_env_names() -> set[str]:
+    """Variables that point git at one repository (GIT_DIR, GIT_WORK_TREE, GIT_INDEX_FILE and the rest).
+    A hook run in a linked worktree receives GIT_DIR, so scratch repositories must never inherit them."""
+    proc = subprocess.run(["git", "rev-parse", "--local-env-vars"], capture_output=True, text=True, check=False)
+    names = set(proc.stdout.split()) if proc.returncode == 0 else set()
+    return names | {"GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY", "GIT_COMMON_DIR",
+                    "GIT_PREFIX"}
+
+
 def selftest() -> list[str]:
-    """Build a scratch repository and prove each check fires and clean cases pass."""
+    """Build a scratch repository and prove each check fires and clean cases pass. Variables that point
+    git at a repository are removed for the duration, so the scratch work cannot reach another one."""
+    saved = {name: os.environ.pop(name) for name in git_local_env_names() if name in os.environ}
+    try:
+        return _selftest()
+    finally:
+        os.environ.update(saved)
+
+
+def _selftest() -> list[str]:
     failures: list[str] = []
     samples = banned_samples()
     for label, text in samples.items():

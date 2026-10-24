@@ -10,7 +10,16 @@ All notable changes to this repository are recorded here. The format follows
 
 - Authorship and credit wording that names an AI assistant (Claude, other assistants or their
   makers) is blocked in commit messages, pull request text and files, and CLAUDE.md states the same
-  rule: public text credits no one, and says "the creator" where a credit is needed.
+  rule: public text credits no one, and says "the creator" where a credit is needed. Names are read
+  as words; product names that are also ordinary words count only when capitalised; a capitalised
+  non-tier word after the name (a person's surname, an observatory) makes it another name; the
+  generated verb, plain thanks or credit, and passive use ("was used to") are read too.
+- The rehearsal and the checker's selftest drop the variables that point git at one repository
+  (GIT_DIR and its relatives, which a hook in a linked worktree receives), so scratch repositories
+  never write into the repository being checked.
+- The footer line and the footer phrase allow up to 40 separators, so a padded footer that renders
+  as the stock line is refused; the vertical en dash is a dash; forbidden and data paths match in
+  any letter case.
 - `VERSION` (0.1.0), `feeder/__init__.py` exposing `__version__`, `.gitattributes` (LF everywhere) and
   the ignore list for `.cache/`, `local/`, `logs/`, `.venv-crawl/`, `*.local.json` and `.secrets.local.json`.
 - JSON Schemas for sources, methods, profiles and items under `schema/`, the two-level topic registry
@@ -49,7 +58,8 @@ All notable changes to this repository are recorded here. The format follows
   fixed shapes (co-author and session trailer lines, trailer keys that name the assistant, session
   links and ids, footer lines, the footer phrase and the assistant's name in one sentence, em and
   en dashes, review-record tokens in public text, identity, forbidden paths, CR line endings and
-  non-ASCII Python), and advisory, for wording that may claim authorship (printed as `ADVISORY:`
+  non-ASCII Python, and authorship or credit wording that names an AI assistant), and advisory, for
+  the footer phrase and the name in one paragraph and short finding ids (printed as `ADVISORY:`
   lines and GitHub Actions warnings, never failing a run). Text is folded before matching
   (entities, every round of percent-encoding, terminal control sequences, compatibility forms,
   format characters, Unicode hyphens and lookalike letters) and every reading is checked. Files are

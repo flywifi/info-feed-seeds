@@ -171,6 +171,14 @@ def git(*args: str) -> str:
     return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
 
 
+def git_local_env_names() -> set[str]:
+    """Variables that point git at one repository (GIT_DIR, GIT_WORK_TREE, GIT_INDEX_FILE and the rest)."""
+    proc = subprocess.run(["git", "rev-parse", "--local-env-vars"], capture_output=True, text=True, check=False)
+    names = set(proc.stdout.split()) if proc.returncode == 0 else set()
+    return names | {"GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY", "GIT_COMMON_DIR",
+                    "GIT_PREFIX"}
+
+
 def job_env(env: dict, runner_temp: str) -> dict:
     out = dict(os.environ)
     branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=ROOT, capture_output=True,
@@ -182,6 +190,10 @@ def job_env(env: dict, runner_temp: str) -> dict:
     for name, value in env.items():
         if "${{" not in value:
             out[name] = value
+    # A hook in a linked worktree receives GIT_DIR and its relatives. Steps find the repository from
+    # their working directory instead, and the scratch repositories they build cannot reach this one.
+    for name in git_local_env_names():
+        out.pop(name, None)
     shim = Path(runner_temp) / "bin"
     shim.mkdir()
     exe = Path(sys.executable).as_posix()

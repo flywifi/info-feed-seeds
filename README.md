@@ -161,12 +161,26 @@ says "the creator". The checks block authorship or help wording that names an AI
 other assistants and their makers (such as ChatGPT, GPT, OpenAI, Anthropic, Copilot, Gemini), or "an
 AI assistant".
 
-- A making verb (built, made, written, designed and similar, with prefixes such as re, co, auto or
-  pair-) followed by with, by, using or a similar connective and the assistant's name.
-- Credit phrases before the name: thanks to, courtesy of, with the help of, powered by.
+- A making verb (built, made, written, generated, designed and similar, with prefixes such as re,
+  co, auto or pair-) followed by with, by, using or a similar connective and the assistant's name.
+- Credit phrases before the name (thanks to, courtesy of, with the help of, powered by), and plain
+  thanks, kudos or a credit label with the name right after it.
 - A byline: up to three words and "by" before the name.
 - An author label, first-person use (I or we used, asked, leveraged the name), past-tense use of
-  the name to do a task, and the name followed by a making verb.
+  the name to do a task, active or passive ("was used to"), and the name followed by a making verb.
+
+The names are read as words, so "Hallmark", "Ullman" or "philanthropic" never count. Names that are
+also ordinary words (copilot, codex, llama, mistral, perplexity, grok) count only when capitalised.
+A capitalised word after the name that is not a product tier makes it someone else: "Claude
+Shannon", "Gemini Observatory" and "Mistral Press" pass, while "Claude Code" and "ChatGPT Plus"
+still count. "Built-in", "made-up" and "made-to-order" are adjectives and pass.
+
+Known limits, each pinned or listed so a change to them is deliberate: verbs outside the lists
+("implemented with", "refactored with", "prompted"); names outside the list; a name followed by any
+capitalised word ("written by Claude Today"); "@author" without a colon; a footer phrase split by a
+tag or a blank line; sentence-ending dots in abbreviations, which end a sentence for the one-sentence
+rules; and review-record shapes in quoted third-party prose (a review word such as finding or ruling
+followed by a number), which block like any other.
 
 **Advisory** (an `ADVISORY:` line, a warning annotation in GitHub Actions, exit code unchanged): the
 footer phrase and the name in one paragraph, and short finding ids in parentheses or test names.

@@ -12,6 +12,7 @@ import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 from tests.helpers import ROOT
 
@@ -47,7 +48,7 @@ class Scratch:
     def __init__(self, hooks=False):
         self.dir = Path(tempfile.mkdtemp())
         self.env = dict(os.environ, GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1", **FLYWIFI)
-        for key in ("IFS_SKIP_HOOKS", "BASE_REF"):
+        for key in ("IFS_SKIP_HOOKS", "BASE_REF", *cc.git_local_env_names()):
             self.env.pop(key, None)
         self.git("init", "-q", "-b", "main")
         self.git("config", "commit.gpgsign", "false")
@@ -276,6 +277,31 @@ class RangeTests(unittest.TestCase):
 
     def test_selftest(self):
         self.assertEqual(quiet(cc.selftest), [])
+
+    def test_selftest_never_touches_the_repository_git_points_at(self):
+        """A hook in a linked worktree receives GIT_DIR; the selftest's scratch work stays in scratch."""
+        other = Scratch()
+        try:
+            other.commit("README.md", b"x\n", "Add README")
+            refs = ["for-each-ref", "--format=%(refname) %(objectname)"]
+            before = other.git(*refs).stdout
+            env = dict(os.environ, GIT_DIR=str(other.dir / ".git"))
+            with tempfile.TemporaryDirectory() as td:
+                proc = subprocess.run([sys.executable, "-I", str(ROOT / "tools" / "commit_check.py"), "--selftest"],
+                                      cwd=td, env=env, capture_output=True)
+            self.assertEqual(proc.returncode, 0, proc.stdout.decode("ascii", "replace"))
+            self.assertEqual(other.git(*refs).stdout, before)
+            self.assertEqual(other.git("status", "--porcelain").stdout, b"")
+        finally:
+            other.close()
+
+    def test_rehearsal_steps_get_no_variables_that_point_git_at_a_repository(self):
+        import preflight
+        pointed = {"GIT_DIR": "/elsewhere/.git", "GIT_INDEX_FILE": "/elsewhere/index"}
+        with tempfile.TemporaryDirectory() as td, mock.patch.dict(os.environ, pointed):
+            env = preflight.job_env({}, td)
+        self.assertNotIn("GIT_DIR", env)
+        self.assertNotIn("GIT_INDEX_FILE", env)
 
 
 class SourcesTests(unittest.TestCase):

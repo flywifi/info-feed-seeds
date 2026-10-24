@@ -102,6 +102,9 @@ def timing_inputs() -> dict:
         "verbs": "built " * (n // 6), "credit": "thanks to " * (n // 10), "session run": "session_" + "-" * n,
         "angle brackets": "co-auth" + "ored-by " + "<" * n, "escapes": "\x1b[" * (n // 2), "osc open": "\x1b]" + "a" * n,
         "review words": "aud" + "it " * (n // 6), "severity words": "HIGH " * (n // 5), "newlines": "\n" * n,
+        "made and spaces": "made " * (n // 5), "made and newlines": "made\n" * (n // 5),
+        "thanks and spaces": "thanks " * (n // 7), "name and surname": (NAME + " Shannon ") * (n // 15),
+        "passive use": (NAME + " was used ") * (n // 16),
     }
 
 

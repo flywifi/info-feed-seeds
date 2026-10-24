@@ -1,6 +1,6 @@
 #!/bin/sh
-# info-feed-seeds commit-msg: blocks trailers, session links, footers, dashes and review records;
-# prints advisory lines for wording, which never stop the commit.
+# info-feed-seeds commit-msg: blocks trailers, session links, footers, dashes, review records and
+# authorship or credit wording that names an AI assistant; prints advisory lines for the rest.
 . "$(dirname "$0")/_common.sh"
 skip_if_bypassed commit-msg
 find_python
