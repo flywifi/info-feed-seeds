@@ -12,12 +12,11 @@ All notable changes to this repository are recorded here. The format follows
   reports, firmware updates, and the endpoint vulnerability, intrusion prevention, OT intrusion
   prevention, OT security, virtual patching and application control updates) and thirteen signature and
   reputation feeds stored with `enabled: false`, each with two live proof records and a sample; the 16
-  sources whose items link to an update page (every signature and reputation source except the three
-  antispam feeds) also carry that listing page as a page route with a reachability record.
-  `seeds/2026-10-23_fortiguard.md` lists all 23 feeds with status and an intended reader category
-  (planned). The technology-regulation profile selects the ten enabled sources by topic, so its
-  digest now carries FortiGuard vendor lines; its daily cap rises from 40 to 80 and its description
-  says so.
+  sources whose items link to an update page also carry that listing page as a page route with a
+  reachability record. `seeds/2026-10-23_fortiguard.md` lists all 23 feeds with status and an
+  intended reader category (planned). The technology-regulation profile selects all 23 by topic: the
+  ten enabled sources add items to its digest and the thirteen disabled ones appear as skipped in its
+  Source health section; its daily cap rises from 40 to 80 and its description names the vendor feeds.
 - The checker blocks a person's name (a capitalised word of 4 to 6 letters, or an account name in a
   Users path) whose SHA-256 fingerprint is listed. Neither the name nor the fingerprints are in the
   repository: CI reads the list from the `IFS_PERSON_FINGERPRINTS` secret and the hooks from an

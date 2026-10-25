@@ -50,8 +50,8 @@ the readable part in the summary: the signatures newly added or modified, with C
 Each item links to a version page under https://fortiguard.fortinet.com/updates/ with a `?version=` query
 string, and the listing page without the version is recorded as a second route (`adapter: page`) on the
 16 sources whose items carry such links, with a reachability record. Every listing page answered 200
-with a body of about 19.7 KB, the same size for every service, so the listing content is loaded by
-script; nothing in the repository reads the signature lists yet, and the version pages are off limits
+with a body of about 19.7 KB, the same size for every service, so the listing content is not in the
+page body; nothing in the repository reads the signature lists yet, and the version pages are off limits
 under that host's robots.txt (see above). The three antispam feeds carry no item links and no listing
 page.
 
@@ -81,8 +81,8 @@ page.
 - `fortidast.xml` last published on 2025-01-15; it is stored off and `expected_update_period_days` is 90.
 - Six enabled feeds (endpoint vulnerability, IPS, OT IPS, OT security, virtual patching, application
   control) title each item with a version number; the summary carries the readable content, the
-  signatures added or modified with CVE ids and severities. The digest shows the title and the link;
-  nothing in the repository extracts the CVE ids or severities yet.
+  signatures added or modified with CVE ids and severities. The digest shows the title, the link and up
+  to 300 characters of the summary; nothing in the repository extracts the CVE ids or severities yet.
 - Six feeds (antivirus, the three antispam feeds, mobile antivirus, web filtering) stamp their items 3.5
   to 7 hours ahead of the fetch time in UTC, so the newest item of a fetch made on 2026-10-25 reads
   2026-10-26. The values are recorded as the feed gives them.
