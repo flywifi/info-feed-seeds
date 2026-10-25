@@ -1,0 +1,65 @@
+{
+  "id": "fortiguard-internet-services",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/isdb?version=7.04510",
+            "published": "2026-10-24T05:59:03Z",
+            "title": "7.04510"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:16:19Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/isdb?version=7.04510",
+            "published": "2026-10-24T05:59:03Z",
+            "title": "7.04510"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:18:16Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:18:16Z"
+      },
+      "url": "https://filestore.fortinet.com/fortiguard/rss/isdb.xml"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 19731 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:25:02Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:25:02Z"
+      },
+      "url": "https://fortiguard.fortinet.com/updates/isdb"
+    }
+  ]
+}

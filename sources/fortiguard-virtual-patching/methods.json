@@ -1,0 +1,65 @@
+{
+  "id": "fortiguard-virtual-patching",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10800",
+            "published": "2026-10-24T03:21:41Z",
+            "title": "26.10800"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:15:54Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10800",
+            "published": "2026-10-24T03:21:41Z",
+            "title": "26.10800"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:17:52Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:17:52Z"
+      },
+      "url": "https://filestore.fortinet.com/fortiguard/rss/fmwp.xml"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 19743 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:25:20Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:25:20Z"
+      },
+      "url": "https://fortiguard.fortinet.com/updates/virtual-patching"
+    }
+  ]
+}

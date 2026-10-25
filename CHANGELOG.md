@@ -8,6 +8,13 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- 23 FortiGuard sources under `sources/`: ten enabled (PSIRT advisories, outbreak alerts, threat signal
+  reports, firmware updates, and the endpoint vulnerability, intrusion prevention, OT intrusion
+  prevention, OT security, virtual patching and application control updates) and thirteen signature and
+  reputation feeds stored with `enabled: false`, each with two live proof records and a sample; the
+  signature and reputation sources also carry their update listing page as a page route with a
+  reachability record. `seeds/2026-10-23_fortiguard.md` lists all 23 feeds with status and intended
+  category.
 - The checker blocks a person's name (a capitalised word of 4 to 6 letters, or an account name in a
   Users path) whose SHA-256 fingerprint is listed. Neither the name nor the fingerprints are in the
   repository: CI reads the list from the `IFS_PERSON_FINGERPRINTS` secret and the hooks from an

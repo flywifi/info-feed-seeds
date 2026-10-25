@@ -1,0 +1,37 @@
+{
+  "added": "2026-10-25",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-23",
+    "kind": "seed",
+    "ref": "seeds/2026-10-23_fortiguard.md"
+  },
+  "enabled": false,
+  "expected_update_period_days": 1,
+  "homepage": "https://www.fortiguard.com/rss-feeds",
+  "id": "fortiguard-antispam-ip",
+  "interval_days": 1,
+  "label": "FortiGuard antispam IP updates",
+  "lists": [
+    "fortiguard-feeds"
+  ],
+  "publisher": "Fortinet FortiGuard Labs",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://filestore.fortinet.com/fortiguard/rss/asip.xml"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "tier": "vendor",
+  "topics": [
+    "cybersecurity"
+  ],
+  "verified": "2026-10-25"
+}

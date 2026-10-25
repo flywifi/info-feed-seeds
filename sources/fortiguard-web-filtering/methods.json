@@ -1,0 +1,65 @@
+{
+  "id": "fortiguard-web-filtering",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/webfiltering?version=236.61138",
+            "published": "2026-10-26T05:05:23Z",
+            "title": "236.61138"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:16:07Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/webfiltering?version=236.61138",
+            "published": "2026-10-26T05:05:23Z",
+            "title": "236.61138"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:18:05Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:18:05Z"
+      },
+      "url": "https://filestore.fortinet.com/fortiguard/rss/webfiltering.xml"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 19739 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:25:22Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:25:22Z"
+      },
+      "url": "https://fortiguard.fortinet.com/updates/webfiltering"
+    }
+  ]
+}

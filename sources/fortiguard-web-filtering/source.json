@@ -1,0 +1,43 @@
+{
+  "added": "2026-10-25",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-23",
+    "kind": "seed",
+    "ref": "seeds/2026-10-23_fortiguard.md"
+  },
+  "enabled": false,
+  "expected_update_period_days": 1,
+  "homepage": "https://fortiguard.fortinet.com/updates/webfiltering",
+  "id": "fortiguard-web-filtering",
+  "interval_days": 1,
+  "label": "FortiGuard web filtering updates",
+  "lists": [
+    "fortiguard-feeds"
+  ],
+  "publisher": "Fortinet FortiGuard Labs",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://filestore.fortinet.com/fortiguard/rss/webfiltering.xml"
+    },
+    {
+      "adapter": "page",
+      "kind": "page",
+      "params": {},
+      "url": "https://fortiguard.fortinet.com/updates/webfiltering"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "tier": "vendor",
+  "topics": [
+    "cybersecurity"
+  ],
+  "verified": "2026-10-25"
+}

@@ -1,0 +1,65 @@
+{
+  "id": "fortiguard-ips",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/ips?version=37.319",
+            "published": "2026-10-24T07:13:53Z",
+            "title": "37.319"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:15:49Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/ips?version=37.319",
+            "published": "2026-10-24T07:13:53Z",
+            "title": "37.319"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:17:45Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:17:45Z"
+      },
+      "url": "https://filestore.fortinet.com/fortiguard/rss/ipsdatabase.xml"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 19730 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:25:08Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:25:08Z"
+      },
+      "url": "https://fortiguard.fortinet.com/updates/ips"
+    }
+  ]
+}

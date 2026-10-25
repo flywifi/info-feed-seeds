@@ -1,0 +1,45 @@
+{
+  "id": "fortiguard-antispam-checksum",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": null,
+            "published": "2026-10-26T04:51:01Z",
+            "title": "88.38214"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:16:01Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": null,
+            "published": "2026-10-26T04:51:01Z",
+            "title": "88.38214"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:17:58Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:17:58Z"
+      },
+      "url": "https://filestore.fortinet.com/fortiguard/rss/aschecksum.xml"
+    }
+  ]
+}
