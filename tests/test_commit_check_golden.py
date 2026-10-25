@@ -2,8 +2,8 @@
 
 tests/fixtures/golden_cases.jsonl holds planted refusals, negative controls, limit cases and decided
 wording cases, base64-encoded so no scanner reads them. Each case gives the checker's verdict for
-the text as a commit message, a pull request title, a pull request body and a file: "block",
-"advisory" or "pass". Ids describe the shape of the text, never where a case came from.
+the text as a commit message, a pull request title, a pull request body, a file and a file under seeds/:
+"block", "advisory" or "pass". Ids describe the shape of the text, never where a case came from.
 
 Also here: every rule has a "Limit:" text and a case pinning it, the exemptions file holds no stale
 entry, exemptions cover one exact text, advisory lines never change the exit code, every rule is
@@ -29,7 +29,7 @@ import commit_check as cc  # noqa: E402
 
 GOLDEN = ROOT / "tests" / "fixtures" / "golden_cases.jsonl"
 EXEMPTIONS = ROOT / cc.EXEMPTIONS_FILE
-PLACES = ("message", "title", "body", "file")
+PLACES = ("message", "title", "body", "file", "seed")  # seed: a file under seeds/
 KINDS = ("planted", "control", "limit", "decided")
 VERDICTS = ("block", "advisory", "pass")
 ID_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
@@ -66,7 +66,9 @@ def load_cases(text: str) -> list:
 
 def expected(case: dict, place: str) -> str:
     want = case["expect"]
-    return want if isinstance(want, str) else want[place]
+    if isinstance(want, str):
+        return want
+    return want[place] if place in want else want["file"]  # a seed verdict defaults to the file verdict
 
 
 def mismatches(checker, cases) -> list:
@@ -81,8 +83,12 @@ def mismatches(checker, cases) -> list:
 
 def fired(checker, text: str, place: str) -> set:
     """Rule ids that match the text in one place ("dash" for the dash check)."""
-    kind = "file" if place == "file" else "text"
-    ids = {r.id for r in checker.RULES if kind in r.places and checker._scan(text, (r,))}
+    if place in ("file", "seed"):
+        path = "seeds/golden.md" if place == "seed" else "golden.md"
+        rules = tuple(checker._file_rules(path)) + checker._rules(False, "file")
+    else:
+        rules = tuple(r for r in checker.RULES if "text" in r.places)
+    ids = {r.id for r in rules if checker._scan(text, (r,))}
     return ids | ({"dash"} if checker._dash_hits(text) else set())
 
 
@@ -146,7 +152,7 @@ class GoldenTests(unittest.TestCase):
             if c["kind"] != "limit":
                 continue
             rule = next((r for r in cc.RULES if r.id == c["rule"]), None)
-            places = [p for p in PLACES if rule is None or ("file" if p == "file" else "text") in rule.places]
+            places = [p for p in PLACES if rule is None or ("file" if p in ("file", "seed") else "text") in rule.places]
             with self.subTest(case=c["id"]):
                 self.assertFalse(any(c["rule"] in fired(cc, c["text"], p) for p in places), c["rule"])
 

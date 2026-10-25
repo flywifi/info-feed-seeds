@@ -44,7 +44,11 @@ DECLARED = {
     "actions/setup-python": "the rehearsal runs on this interpreter and prints its version beside the one CI uses",
 }
 # Variables a run block may read: set by the job env or by the rehearsal.
-KNOWN_VARS = {"BASE_REF", "PR_NUMBER", "RUNNER_TEMP", "GITHUB_WORKSPACE", "GITHUB_REF"}
+# IFS_PERSON_FINGERPRINTS is a repository secret in CI; the rehearsal passes the local environment's value
+# through when there is one. Without it the base-branch copy of the checker in RUNNER_TEMP reads only the
+# test token, as a CI run without the secret would; the branch's own checker beside the ignored local file
+# still reads that file.
+KNOWN_VARS = {"BASE_REF", "PR_NUMBER", "RUNNER_TEMP", "GITHUB_WORKSPACE", "GITHUB_REF", "IFS_PERSON_FINGERPRINTS"}
 STEP_KEYS = {"name", "uses", "with", "if", "run"}
 ALWAYS = "${{ !cancelled() }}"
 

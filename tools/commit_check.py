@@ -30,7 +30,9 @@ Two kinds of result
              or doctor/<fix> (tags, notes and other namespaces included); a deletion of any ref passes.
              Under seeds/ the byline rule reads prose only: a list item, a numbered item, a table row, a
              tag, a quoted string, an object, a URL or a key line holds imported data, whose bylines the
-             content rules let stand; every other rule reads every line there.
+             content rules let stand; every other rule reads every line there. A person's name blocks
+             everywhere but an imported seed line; the checker holds neither the name nor its
+             fingerprints, which come from IFS_PERSON_FINGERPRINTS or an ignored local file.
   ADVISORY   the footer phrase and the name in one paragraph, and short finding ids. Printed as "ADVISORY:" lines, and as warnings in GitHub Actions; they never
              change the exit code. A person reads them.
 
@@ -190,7 +192,8 @@ class _PhraseThenName:
 # A line that holds imported data rather than prose: a list item, a numbered item, a table row, a tag
 # (OPML, HTML; not a comment, which is the author's own note), a quoted string or an object (JSON), a URL,
 # or a lowercase key line (YAML; a capitalised label such as Note: is prose). The content rules let a
-# byline imported from a public source stand, so under seeds/ the byline rule does not read such lines.
+# byline imported from a public source stand, so under seeds/ the byline and person-name rules do not
+# read such lines.
 _IMPORTED_LINE = re.compile(r"[ \t]{0,8}(?:[-*+][ \t]|\d{1,3}[.)][ \t]|\||<(?!!--)|\"|[{\[]|https?://|[a-z0-9_-]{1,40}:[ \t])")
 
 
@@ -206,6 +209,48 @@ class _ProseOnly:
         for m in self.inner.finditer(text):
             line_start = starts[bisect.bisect_right(starts, m.start()) - 1]
             if not _IMPORTED_LINE.match(text, line_start):
+                yield m
+
+    def search(self, text: str):
+        return next(self.finditer(text), None)
+
+
+# A person's name is never written into public text, this file included. The checker compares the
+# SHA-256 of every capitalised 4 to 6 letter word (and of a lowercase account name in a Users\ path)
+# against fingerprints it does not publish either: a short digest is brute-forced in seconds, so the
+# list lives outside the tree, in the IFS_PERSON_FINGERPRINTS variable (CI takes it from a repository
+# secret) or in tools/person_fingerprints.local.json beside this file (ignored; the hooks on a PC).
+# The one fingerprint kept here is the public test token the golden set plants.
+TEST_TOKEN_FINGERPRINT = "da8eb25c821b5e6df79ed7175974d5a24b90765fa864fa6094fd17170aae3211"
+FINGERPRINTS_VAR = "IFS_PERSON_FINGERPRINTS"
+FINGERPRINTS_FILE = "person_fingerprints.local.json"
+_USERS = r"[Uu][Ss][Ee][Rr][Ss]"
+_SHORT_WORD = re.compile(r"(?<![A-Za-z])(?:[A-Z][A-Za-z]{3,5}|(?:(?<=" + _USERS + r"\\)|(?<=" + _USERS + r"\\\\)|(?<="
+                         + _USERS + r"/))[a-z]{4,6})(?![A-Za-z])")
+
+
+def person_fingerprints() -> frozenset:
+    """The test token plus every digest the environment or the local file supplies."""
+    found = {TEST_TOKEN_FINGERPRINT}
+    found.update(x.strip().lower() for x in os.environ.get(FINGERPRINTS_VAR, "").split(",") if x.strip())
+    local = Path(__file__).with_name(FINGERPRINTS_FILE)
+    if local.exists():
+        try:
+            data = json.loads(local.read_text(encoding="utf-8-sig"))
+            found.update(str(x).strip().lower() for x in data["fingerprints"])
+        except (OSError, ValueError, LookupError, TypeError):
+            say(f"commit_check: WARNING: {FINGERPRINTS_FILE} is not a JSON object with a \"fingerprints\" list of "
+                "hex digests; it supplied nothing")
+    return frozenset(x for x in found if re.fullmatch(r"[0-9a-f]{64}", x))
+
+
+class _Fingerprinted:
+    """Words whose SHA-256 is a listed fingerprint. Linear: one hash per candidate word."""
+
+    def finditer(self, text: str):
+        listed = person_fingerprints()
+        for m in _SHORT_WORD.finditer(text):
+            if hashlib.sha256(m.group(0).encode("utf-8")).hexdigest() in listed:
                 yield m
 
     def search(self, text: str):
@@ -283,6 +328,10 @@ BLOCK_RULES = (
     Rule("audit-severity", "review record", True, BOTH,
          r"(?<![A-Za-z])(?:HIGH|MEDIUM|MED|LOW) ?\d{1,2}(?![\d.])",
          "Limit: capital severity words only; lowercase prose such as \"a high 5\" passes.", cased=True),
+    Rule("person-name", "a person's name", True, BOTH, _Fingerprinted(),
+         "Limit: a capitalised word of 4 to 6 letters, or a lowercase one right after a Users folder in a path, "
+         "whose fingerprint is listed; other spellings, longer words and the name inside a longer word pass, "
+         "and without the fingerprint list only the test token is read.", cased=True),
     # Marks a tool leaves without naming itself: trailer keys, mailboxes, links, hidden comments and
     # credit lines with a link. None of them needs a name on the list above.
     Rule("assist-trailer", "assistance trailer", True, TEXT,
@@ -487,10 +536,11 @@ ADVISORY_RULES = (
 BLOCK_RULES = BLOCK_RULES + AUTHORSHIP_RULES
 RULES = BLOCK_RULES + ADVISORY_RULES
 RULE_IDS = {r.id for r in RULES} | {"dash"}
-# Under seeds/ the byline rule reads prose only (see _IMPORTED_LINE); every other rule reads every line, so
-# a note of the file's own author ("made with", "thanks to") blocks there as anywhere.
+# Under seeds/ the byline and person-name rules read prose only (see _IMPORTED_LINE), so an imported byline
+# may name anyone; every other rule reads every line, so a note of the file's own author ("made with",
+# "thanks to") blocks there as anywhere.
 SEED_RULES = {r.id: Rule(r.id, r.label, True, FILE, _ProseOnly(r.matcher), r.limit + _SEED_LIMIT, cased=r.cased)
-              for r in AUTHORSHIP_RULES if r.id == "byline"}
+              for r in BLOCK_RULES if r.id in ("byline", "person-name")}
 # Branches a clone may push: one per job, or a proposal branch from the doctor.
 JOB_BRANCH = re.compile(r"(?:job|doctor)/[A-Za-z0-9][A-Za-z0-9._/-]{0,80}$")
 
@@ -626,11 +676,6 @@ def _fold(value: str, keep_case: bool = False) -> str:
     if keep_case:
         return value.translate(_CAPITAL_FROM_SMALL).translate(_CONFUSABLES)
     return value.lower().translate(_CONFUSABLES)
-
-
-def normalize(text: str, keep_case: bool = False) -> str:
-    """The last decoding layer, folded. The rules read every layer through _views."""
-    return _fold(_decode_layers(text)[-1], keep_case)
 
 
 def match_sha256(matched: str) -> str:
@@ -810,13 +855,14 @@ def load_exemptions(raw: str | None) -> tuple[list[dict], list[str]]:
 
 
 def verdict(text: str, place: str) -> str:
-    """"block", "advisory" or "pass" for a text as a commit message, a pull request title or body, or
-    a file. The golden test compares it with each case."""
-    if place == "file":
+    """"block", "advisory" or "pass" for a text as a commit message, a pull request title or body, a
+    file, or a file under seeds/. The golden test compares it with each case."""
+    if place in ("file", "seed"):
+        path = "seeds/golden.md" if place == "seed" else "golden.md"
         data = (text + "\n").encode("utf-8")
-        if content_findings("golden.md", data):
+        if content_findings(path, data):
             return "block"
-        return "advisory" if content_advisories("golden.md", data) else "pass"
+        return "advisory" if content_advisories(path, data) else "pass"
     kept = text.split(SCISSORS, 1)[0] if place == "message" else text
     if text_findings(kept, place):
         return "block"
@@ -1283,6 +1329,9 @@ def main(argv: list[str]) -> int:
         say(__doc__.strip())
         return 0 if argv else 2
     mode, rest = argv[0], argv[1:]
+    if os.environ.get("GITHUB_ACTIONS") == "true" and len(person_fingerprints()) == 1:
+        say(f"::warning title=commit_check::{FINGERPRINTS_VAR} supplied no digest (one line of comma-separated "
+            "hex); the person-name rule reads only the test token in this run")
     try:
         if mode == "--staged" and not rest:
             return report(check_staged(), "staged")

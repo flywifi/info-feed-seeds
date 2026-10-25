@@ -194,6 +194,32 @@ class FileTests(unittest.TestCase):
         self.assertTrue(cc.file_matches(imported[0], "docs/x.md"))
 
 
+class FingerprintTests(unittest.TestCase):
+    def test_fingerprints_come_from_the_environment(self):
+        import hashlib
+        word = "Qwvxzt"
+        digest = hashlib.sha256(word.encode()).hexdigest()
+        text = "Reviewed with " + word + " today."
+        with mock.patch.dict(os.environ, {cc.FINGERPRINTS_VAR: ""}):
+            self.assertEqual(cc.text_findings(text, "m"), [], "an unlisted word passes")
+        with mock.patch.dict(os.environ, {cc.FINGERPRINTS_VAR: digest.upper() + ", not-a-digest"}):
+            self.assertTrue(cc.text_findings(text, "m"), "a listed word blocks; a malformed entry is ignored")
+            self.assertEqual(cc.text_findings(text.lower(), "m"), [], "only the capitalised spelling counts")
+            self.assertEqual(cc.text_findings("Tool " + word + "ish ran", "m"), [], "inside a longer word")
+            self.assertEqual(cc.content_findings("seeds/x.md", ("- Posts by " + word + "\n").encode()), [],
+                             "an imported seed line may name anyone")
+            self.assertTrue(cc.content_findings("seeds/x.md", ("Compiled by " + word + ".\n").encode()))
+
+    def test_account_name_after_a_users_folder(self):
+        import hashlib
+        with mock.patch.dict(os.environ, {cc.FINGERPRINTS_VAR: hashlib.sha256(b"qwvxz").hexdigest()}):
+            self.assertTrue(cc.text_findings(r"see C:\Users\qwvxz\x", "m"))
+            self.assertTrue(cc.text_findings("see /Users/qwvxz/x", "m"))
+            self.assertTrue(cc.text_findings(r"see c:\users\qwvxz\x", "m"), "lowercase folder")
+            self.assertTrue(cc.text_findings(r'{"p": "C:\\Users\\qwvxz\\x"}', "m"), "a JSON-escaped path")
+            self.assertEqual(cc.text_findings("the qwvxz word alone", "m"), [], "lowercase only in a path")
+
+
 class MessageFileTests(unittest.TestCase):
     def test_comment_lines_are_checked(self):
         hidden = "Add a\n\n# " + CO + ": x\n"
@@ -397,7 +423,7 @@ class HookTests(unittest.TestCase):
         result = self.repo.commit("e.txt", b"e\r\n", "Add e", check=False, extra={"IFS_SKIP_HOOKS": "1"})
         self.assertEqual(result.returncode, 0)
         self.assertIn(b"IFS_SKIP_HOOKS=1 is set", result.stderr)
-        self.assertIn(b"blocks a merge only once", result.stderr)
+        self.assertIn(b"blocks the merge there instead of here", result.stderr)
 
     def test_pre_push_rules(self):
         head = self.repo.head()

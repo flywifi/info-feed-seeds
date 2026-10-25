@@ -9,8 +9,8 @@ skip_if_bypassed() {
       echo "##################################################################"
       echo "#  WARNING: IFS_SKIP_HOOKS=1 is set. The $1 hook did NOT run."
       echo "#  Nothing was checked. CI runs the same checks on the pull"
-      echo "#  request, but a red CI run blocks a merge only once the main"
-      echo "#  ruleset requires the checks and pr-text status checks."
+      echo "#  request, and the main ruleset requires them, so a red run"
+      echo "#  blocks the merge there instead of here."
       echo "##################################################################"
     } >&2
     exit 0
