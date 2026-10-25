@@ -12,6 +12,7 @@ import re
 import xml.etree.ElementTree as ET
 
 from ..items import RawItem, to_utc_z
+from .base import AdapterError
 
 NS = {
     "atom": "http://www.w3.org/2005/Atom",
@@ -28,7 +29,7 @@ _ENTITY_RE = re.compile(rb"<!ENTITY", re.IGNORECASE)
 _JSONFEED_VERSION = "https://jsonfeed.org/version/"
 
 
-class FeedParseError(ValueError):
+class FeedParseError(AdapterError):
     """The document is not a feed this adapter can read."""
 
 
@@ -313,4 +314,12 @@ def parse_feed(data: bytes | str) -> dict:
     raise FeedParseError(f"root element {tag!r} is not a feed")
 
 
-__all__ = ["FeedParseError", "FeedRefused", "NS", "detect_kind", "parse_feed"]
+def parse(data: bytes | str, *, url: str | None = None, params: dict | None = None) -> dict:
+    """The registry entry: parse_feed plus the shape every adapter returns (kind, items, follow).
+    `url` and `params` are accepted for the shared signature; a feed needs neither."""
+    parsed = parse_feed(data)
+    parsed["follow"] = []
+    return parsed
+
+
+__all__ = ["FeedParseError", "FeedRefused", "NS", "detect_kind", "parse", "parse_feed"]

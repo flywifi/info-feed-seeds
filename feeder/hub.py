@@ -27,8 +27,7 @@ if __package__ in (None, ""):
     # repository on sys.path, so add the repository root for the `feeder` package.
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from feeder import ROOT, guard, items, jsonio, outputs  # noqa: E402
-from feeder.adapters import feed as feed_adapter  # noqa: E402
+from feeder import ROOT, adapters, guard, items, jsonio, outputs  # noqa: E402
 from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, item_tags,  # noqa: E402
                            json_files, lint, selected_sources)
 from feeder.schema_validate import validate  # noqa: E402
@@ -64,11 +63,15 @@ def default_fetcher_factory(state_dir: Path):
 # --------------------------------------------------------------------------- polling one source
 
 def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
-    """Fetch the source's feed routes in order until one answers. Returns a health record plus
-    `attempted`, `failed` and `new` counts."""
-    record = {"status": "error", "http_status": None, "items": None, "error": "no feed route",
+    """Fetch the source's configured routes in order until one answers, dispatching each body to
+    its adapter and following the adapter's `follow` URLs up to the route's bound. Returns a
+    health record plus `attempted`, `failed` and `new` counts."""
+    record = {"status": "error", "http_status": None, "items": None, "error": "no configured route",
               "route_url": None, "source_label": None, "attempted": 0, "failed": 0, "new": 0}
-    for url in source.feed_routes():
+    for route in source.poll_routes():
+        url = route["url"]
+        parse = adapters.ADAPTERS[route["adapter"]]
+        params = route.get("params") or {}
         record["attempted"] += 1
         result = fetcher.get(url)
         record.update(route_url=url, http_status=result.status or None, source_label=result.source_label)
@@ -80,21 +83,42 @@ def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
             record.update(status="not-modified", error=None, items=None)
             return record
         try:
-            parsed = feed_adapter.parse_feed(result.body)
-        except feed_adapter.FeedParseError as exc:
-            # A 200 that is not a feed (a bot wall, an error page) is a failure, not a response.
+            parsed = parse(result.body, url=url, params=params)
+        except adapters.AdapterError as exc:
+            # A 200 that the adapter cannot read (a bot wall, an error page) is a failure, not a response.
             record["failed"] += 1
             record.update(status="parse-error", error=type(exc).__name__, items=None)
             continue
+        raws = list(parsed["items"])
+        truncated = result.truncated
+        queue = list(parsed.get("follow") or [])
+        budget = adapters.follow_limit(route)
+        seen = {url}
+        while queue and budget > 0:
+            next_url = queue.pop(0)
+            if next_url in seen:
+                continue
+            seen.add(next_url)
+            budget -= 1
+            more = fetcher.get(next_url)
+            if more.error is not None or more.body is None:
+                continue
+            try:
+                extra = parse(more.body, url=next_url, params=params)
+            except adapters.AdapterError:
+                continue
+            raws += list(extra["items"])
+            truncated = truncated or more.truncated
+            queue += list(extra.get("follow") or [])
         new = 0
-        for raw in parsed["items"]:
+        for raw in raws:
             rec = items.build_item(source.id, url, raw, retrieved_at=result.retrieved_at)
             scan = guard.scan_item_fields(raw.title, raw.summary, *raw.authors)
             rec["guard_level"], rec["guard_score"] = scan["risk_level"], scan["total_score"]
             if store.upsert_item(rec, first_seen=now):
                 new += 1
-        record.update(status="ok" if parsed["items"] else "empty", items=len(parsed["items"]),
-                      error="truncated" if result.truncated else None, new=new)
+        record.update(status="ok" if raws else "empty", items=len(raws),
+                      error="truncated" if truncated else None, new=new)
         return record
     return record
 
@@ -235,8 +259,8 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
                 reason = "disabled"
             elif args.surface not in runs_on:
                 reason = f"runs_on {','.join(runs_on)} excludes {args.surface}"
-            elif not src.feed_routes():
-                reason = "no feed route"
+            elif not src.poll_routes():
+                reason = "no configured route"
             if reason:
                 store.record_health(sid, day, status="skipped", http_status=None, items=None, error=reason,
                                     route_url=None, source_label=None, checked_at=now_z)
@@ -377,7 +401,10 @@ def cmd_cat(args, repo: Repo) -> int:
     say(jsonio.dumps(src.manifest).rstrip("\n"))
     say(f"# sources/{args.id}/methods.json")
     say(jsonio.dumps(src.methods).rstrip("\n") if src.methods is not None else "(missing)")
-    say(f"# feed routes in poll order: {', '.join(src.feed_routes()) or 'none'}")
+    polled = [f"{r['url']} ({r['adapter']})" for r in src.poll_routes()]
+    landing = [f"{r['url']} ({r['adapter']})" for r in src.manifest.get("routes", []) if not adapters.configured(r)]
+    say(f"# routes in poll order: {', '.join(polled) or 'none'}")
+    say(f"# landing routes, not polled: {', '.join(landing) or 'none'}")
     return EXIT_OK
 
 

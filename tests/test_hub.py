@@ -7,7 +7,9 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from feeder import hub, jsonio
+from feeder import adapters, hub, jsonio
+from feeder.items import RawItem
+from unittest import mock
 from feeder.config import RELEASES_COMMENT
 from feeder.fetchkit import FetchResult
 from tests.helpers import ROOT
@@ -247,6 +249,61 @@ class PollTests(HubTestCase):
         report = jsonio.load_json(self.out / "tr" / "report.json")
         self.assertIn({"feed_id": "gamma", "reason": "runs_on local excludes actions"}, report["did_not_run"])
 
+    def test_unconfigured_routes_are_never_fetched(self):
+        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"])
+        manifest = jsonio.load_json(self.root / "sources" / "gamma" / "source.json")
+        manifest["routes"].append({"kind": "page", "adapter": "page", "url": "https://example.gov/gamma/", "params": {}})
+        manifest["routes"].append({"kind": "sitemap", "adapter": "sitemap", "url": "https://example.gov/sitemap.xml", "params": {}})
+        jsonio.dump_json(self.root / "sources" / "gamma" / "source.json", manifest)
+        jsonio.dump_json(self.root / "sources" / "gamma" / "methods.json", {"id": "gamma", "routes": [
+            {"url": "https://example.gov/gamma/", "attempts": [], "last_success": {
+                "method": "conditional-get", "source_label": "live", "tried_at": "2026-10-19T00:00:00Z"}}]})
+        self.script["https://example.gov/gamma.xml"] = CLEAN_RSS
+        self.assertEqual(self.poll("--only", "gamma"), 0)
+        self.assertEqual(self.fetcher.calls, ["https://example.gov/gamma.xml"],
+                         "the landing page with the newer success and the module-less sitemap are not fetched")
+
+    def test_a_source_with_only_landing_routes_is_skipped(self):
+        self.add_source("delta", "https://example.gov/delta/", ["cybersecurity"],
+                        routes=[{"kind": "page", "adapter": "page", "url": "https://example.gov/delta/", "params": {}}])
+        self.assertEqual(self.poll(), 0)
+        self.assertNotIn("https://example.gov/delta/", self.fetcher.calls)
+        report = jsonio.load_json(self.out / "tr" / "report.json")
+        self.assertIn({"feed_id": "delta", "reason": "no configured route"}, report["did_not_run"])
+
+    def test_poll_dispatches_through_the_adapter_registry_and_follows_pages(self):
+        pages = {b"page-one": (["https://example.gov/p?page=2"], "Listing one"),
+                 b"page-two": (["https://example.gov/p?page=3"], "Listing two"),
+                 b"page-three": (["https://example.gov/p?page=4"], "Listing three")}
+
+        def stub(body, url, params):
+            follow, title = pages[body]
+            return {"kind": "json-api", "items": [RawItem(guid=url, link=url, title=title, summary="s")], "follow": follow}
+
+        self.add_source("epsilon", "https://example.gov/p", ["cybersecurity"],
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": "https://example.gov/p",
+                                 "params": {"items_path": "results[]", "fields": {"title": "t"}, "max_pages": 1}}])
+        self.script.update({"https://example.gov/p": b"page-one", "https://example.gov/p?page=2": b"page-two",
+                            "https://example.gov/p?page=3": b"page-three"})
+        with mock.patch.dict(adapters.ADAPTERS, {"json-api": stub}):
+            self.assertEqual(self.poll("--only", "epsilon"), 0)
+        self.assertEqual(self.fetcher.calls, ["https://example.gov/p", "https://example.gov/p?page=2"],
+                         "one follow fetch, as max_pages says")
+        titles = [i["title_display"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]]
+        self.assertEqual(sorted(titles), ["Listing one", "Listing two"])
+
+    def test_adapter_error_counts_as_a_failed_fetch(self):
+        def refuse(body, url, params):
+            raise adapters.AdapterError("not a listing")
+
+        self.add_source("zeta", "https://example.gov/z", ["cybersecurity"],
+                        routes=[{"kind": "page", "adapter": "page", "url": "https://example.gov/z", "params": {"item_selector": "li"}}])
+        self.script["https://example.gov/z"] = b"<html>bot wall</html>"
+        with mock.patch.dict(adapters.ADAPTERS, {"page": refuse}):
+            self.assertEqual(self.poll("--only", "zeta"), 3, "every attempted fetch failed")
+        md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
+        self.assertIn("- zeta: parse-error, HTTP 200, AdapterError", md)
+
     def test_not_modified_counts_as_a_response(self):
         self.poll()
         self.script = {"https://example.gov/alpha.xml": "not-modified", "https://example.gov/beta.xml": "not-modified"}
@@ -379,10 +436,30 @@ class LintFmtCatTests(HubTestCase):
         self.assertTrue(jsonio.is_canonical(path))
         self.assertEqual(self.run_hub("fmt", "--check"), 0)
 
+    def test_lint_reports_page_selectors_without_item_selector_and_no_configured_route(self):
+        m = source_manifest("alpha", "https://example.gov/alpha.xml", ["cybersecurity"])
+        m["routes"] = [{"kind": "page", "adapter": "page", "url": "https://example.gov/blog/", "params": {"title_selector": "h3"}}]
+        jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", m)
+        self.assertEqual(self.run_hub("lint"), 1)
+        self.assertIn("page selectors need params.item_selector", self.output)
+        m["routes"] = [{"kind": "page", "adapter": "page", "url": "https://example.gov/blog/", "params": {}}]
+        jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", m)
+        self.assertEqual(self.run_hub("lint"), 1)
+        self.assertIn("no configured route the poller can read", self.output)
+
     def test_cat(self):
         self.assertEqual(self.run_hub("cat", "alpha"), 0)
         self.assertIn('"id": "alpha"', self.output)
+        self.assertIn("# routes in poll order: https://example.gov/alpha.xml (feed)", self.output)
+        self.assertIn("# landing routes, not polled: none", self.output)
         self.assertEqual(self.run_hub("cat", "nope"), 2)
+
+    def test_cat_marks_landing_routes(self):
+        m = source_manifest("alpha", "https://example.gov/alpha.xml", ["cybersecurity"])
+        m["routes"].append({"kind": "page", "adapter": "page", "url": "https://example.gov/", "params": {}})
+        jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", m)
+        self.assertEqual(self.run_hub("cat", "alpha"), 0)
+        self.assertIn("# landing routes, not polled: https://example.gov/ (page)", self.output)
 
 
 class ScriptModeTests(unittest.TestCase):

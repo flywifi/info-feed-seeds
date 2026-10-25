@@ -60,7 +60,7 @@ Other commands:
 
 - `hub lint` validates every source, profile and the releases file (exit 1 on any defect).
 - `hub fmt [--check]` rewrites config JSON in canonical form, or reports files that are not.
-- `hub cat ID` prints a source's manifest, methods and feed route order.
+- `hub cat ID` prints a source's manifest, methods, the routes in poll order and the landing routes it never polls.
 - `hub release SHA --reason TEXT` releases a held item by its `content_sha256`.
 
 Run the tests with `python3 -m unittest discover -s tests -t .`.

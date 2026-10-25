@@ -8,6 +8,16 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Adapter dispatch: `feeder/adapters` keeps a registry of adapter names (`feed` today; page, sitemap,
+  xml, json-api, urllist and artifact are allowed in manifests and polled once their modules land)
+  with the params each needs, a shared `AdapterError`, and a `follow` list an adapter may return
+  (child sitemaps, next pages) that the poller fetches up to the route's `max_sitemaps` or
+  `max_pages`. `poll_source` dispatches every configured route through the registry; a route whose
+  adapter is unregistered or whose params lack a required key is a landing route the poller never
+  fetches, so the recorded listing pages keep their meaning. The source schema documents the params
+  of every adapter and refuses unknown keys; `hub lint` reports page selectors without an
+  `item_selector` and a source with no configured route; `hub cat` lists routes in poll order and the
+  landing routes; the proof check accepts a live 200 with a sample on a route of any adapter.
 - The checker blocks a person's name (a capitalised word of 4 to 6 letters, or an account name in a
   Users path) whose SHA-256 fingerprint is listed. Neither the name nor the fingerprints are in the
   repository: CI reads the list from the `IFS_PERSON_FINGERPRINTS` secret and the hooks from an

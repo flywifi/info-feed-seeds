@@ -1109,8 +1109,11 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
 
 
 def check_sources(rng: str, cwd: Path | None = None) -> list[str]:
-    """Every added or changed sources/<id>/ folder carries a live proof with a sample item.
-    Stands in for `hub check --prove` until that command exists."""
+    """Every added or changed sources/<id>/ folder carries a live proof with a sample item on a
+    route of any adapter. Stands in for `hub check --prove` until that command exists.
+    Limit: reads the latest attempt of each route named in source.json; it does not fetch, does
+    not check the adapter name against the registry, and ignores routes methods.json records
+    that source.json no longer lists (hub lint reports those)."""
     if not git("rev-list", rng, cwd=cwd).split():
         return [f"{rng}: the range holds no commits; failing closed"]
     root = toplevel(cwd)
@@ -1128,17 +1131,17 @@ def check_sources(rng: str, cwd: Path | None = None) -> list[str]:
         except (OSError, ValueError) as exc:
             findings.append(f"sources/{sid}: cannot read source.json and methods.json ({exc})")
             continue
-        feed_urls = {r.get("url") for r in manifest.get("routes", []) if r.get("adapter") == "feed"}
+        route_urls = {r.get("url") for r in manifest.get("routes", []) if r.get("adapter")}
         proven = False
         for rec in methods.get("routes", []):
-            if rec.get("url") not in feed_urls or not rec.get("attempts"):
+            if rec.get("url") not in route_urls or not rec.get("attempts"):
                 continue
             last = rec["attempts"][-1]
             if (last.get("source_label") == "live" and last.get("http_status") == 200
                     and last.get("result") == "ok" and last.get("tried_at") and last.get("sample")):
                 proven = True
         if not proven:
-            findings.append(f"sources/{sid}: no feed route whose latest attempt is a live 200 with a sample item")
+            findings.append(f"sources/{sid}: no route whose latest attempt is a live 200 with a sample item")
         if not manifest.get("verified"):
             findings.append(f"sources/{sid}: verified is empty; only proven sources are committed")
     say(f"commit_check: {len(ids)} changed source folder(s) in {rng}")
