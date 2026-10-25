@@ -8,6 +8,15 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- The checker blocks a person's name (a capitalised word of 4 to 6 letters, or an account name in a
+  Users path) whose SHA-256 fingerprint is listed. Neither the name nor the fingerprints are in the
+  repository: CI reads the list from the `IFS_PERSON_FINGERPRINTS` secret and the hooks from an
+  ignored local file; the tree holds only a public test token. Golden cases carry a fifth verdict, for
+  a file under `seeds/`, so the seeds relaxation is pinned. The pre-push hook reads `IFS_PREFLIGHT_FAST` as on only when it is `1`.
+  AGENTS.md marks planned parts of the layout (hub commands, the doctor's fix and propose modes, the
+  crawl layer, the no-slop docs) as planned and says what CI checks about a new source: its proof
+  record, not a live fetch. The public-domain rule moved from README into AGENTS.md, which is the
+  only file that carries a rule.
 - `AGENTS.md` is the one rulebook every coding tool reads, and `CLAUDE.md` is an import of it. The
   rulebook names no AI product, imports nothing, stays under 16 KiB and 200 lines (the smallest
   share any reader takes), and no other instruction file exists in the tree: a pointer is accepted

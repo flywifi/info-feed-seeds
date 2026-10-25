@@ -22,7 +22,9 @@ private notes or anything that identifies a client or a campaign.
   two-level topic registry.
 - `guard/releases.json`: items held by the injection guard that a person has released.
 - `seeds/`: dated seed files. These are imports; `sources/` is the truth.
-- `tools/`: the em dash scan and the live title fixture builder.
+- `tools/`: the commit checker, its hooks, its exemptions list, the acknowledged-commit list and the
+  golden-case reader; the CI rehearsal and CI status reader; the doctor and its checks; the em dash
+  scan and the live title fixture builder.
 - `tests/`: unittest suite with offline fixtures.
 - Never tracked: `.cache/` (fetch state and `feeder.db`), `local/` (local digests), `logs/`,
   `*.local.json`.
@@ -118,11 +120,11 @@ push to `main`:
   new findings fail. An entry counts only if the commit was already on main before the change that
   added the entry, so a pull request cannot acknowledge its own bad commit.
 
-Two limits remain:
+The main ruleset requires the `checks` and `pr-text` runs to pass, allows squash merges only with a
+message written by hand, and deletes a branch when its pull request merges; the default Actions token
+is read-only. The data ruleset still needs a rule that stops anything but the poll workflow from
+updating `data`. One limit remains:
 
-- **CI is advisory for now.** A red run does not block a merge until the repository owner adds a
-  required status checks rule for `checks` and `pr-text` to the main ruleset. The data ruleset
-  also needs a rule that stops anything but the poll workflow from updating `data`.
 - **A pull request can still weaken its own CI.** A `pull_request` workflow runs the workflow file
   from the pull request itself, so a pull request that edits `ci.yml` can remove the step that
   takes the checker from the base branch. Closing that gap needs the hygiene checks moved to a
@@ -154,6 +156,16 @@ ways.
   severity tally such as two counts with severity words, or a capital severity id with a number.
 - An author or committer other than flywifi, a path that is never tracked, CR line endings,
   non-ASCII Python, and machine output off the `data` branch.
+- A person's name, read as a capitalised word of 4 to 6 letters (or a lowercase account name after a
+  Users folder in a path) whose SHA-256 fingerprint is listed. Neither the name nor its fingerprints are
+  in the repository: a short digest is brute-forced in seconds, so CI takes the list from the
+  `IFS_PERSON_FINGERPRINTS` repository secret (one line of comma-separated hex digests) and the hooks
+  read `tools/person_fingerprints.local.json`, an ignored file with a `fingerprints` list. Without the
+  list only the public test token is read, and a CI run says so in a warning annotation; a pull request
+  from a fork gets no secrets, so there a name in a file or commit is caught by the main-history run
+  after a merge, and a name in the pull request text only by the person who merges. An imported byline
+  on a data line in a seed file may name anyone; a sample title in a proof record or text in a pull
+  request may not.
 - Marks a tool leaves without naming itself, in messages and pull request text: an assistance
   trailer key (assisted-by, generated-with, made-with and the like) or a title-case hyphenated key
   ending in Session, Thread, Log, Event, Screenshot, Publication or Checkpoint (a lowercase
@@ -213,8 +225,9 @@ Known limits, each pinned or listed so a change to them is deliberate:
 - Verbs outside the lists ("implemented with", "refactored with", "prompted"), the connective "in"
   ("written in" a tool), and names outside the list; a tool's own trailer key, mailbox, link or
   hidden marker is read without its name.
-- Agent branch names appear only in the pre-push gate, never in merge subjects: the gate refuses
-  the branch before a merge can name it.
+- Agent branch names are refused by the pre-push gate, which runs only in clones that opted into the
+  hooks; a merge subject that names one is not read. The required status checks and the squash-only
+  setting on the repository hold the rest.
 - A name followed on the same line by a title-case word that is not a tier, a making verb or a short
   function word, such as a surname. In all capitals the name always counts, and a surname on the
   next line does not count. The six names that are also ordinary words (copilot, codex, llama,
@@ -250,7 +263,7 @@ finishes in well under a second on a 100,000-character line.
 **Golden cases.** `tests/fixtures/golden_cases.jsonl` (base64, so no scanner reads it) holds
 planted texts that must block or advise, negative controls that must pass, one case for each
 `Limit:`, and decided wording cases. Each case gives the verdict as a commit message, a pull
-request title, a pull request body and a file. The test also turns the comparison red under four
+request title, a pull request body, a file and a file under `seeds/`. The test also turns the comparison red under four
 deliberate mutations of the checker, and times every rule.
 
 **Exemptions.** `tools/commit_exemptions.json` lists exact texts in files that one block rule may
@@ -291,6 +304,6 @@ The `data` branch does not exist yet.
 
 ## Rules
 
-- Public URLs and neutral tags only. No credentials anywhere.
-- Federal government content is public domain; everything else is link and attribution only.
-- No em dashes in anything written here.
+Every standing rule lives in `AGENTS.md`, the one rulebook, including the three most often asked
+about: public URLs and neutral tags only with no credentials anywhere; federal government content is
+public domain and everything else is link and attribution only; no em dashes in anything written here.

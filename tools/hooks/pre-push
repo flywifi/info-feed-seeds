@@ -6,4 +6,6 @@ skip_if_bypassed pre-push
 find_python
 refs=$(cat)
 printf '%s\n' "$refs" | $PY -I "$ROOT/tools/commit_check.py" --pre-push "$1" "$2" || exit 1
-printf '%s\n' "$refs" | $PY -I "$ROOT/tools/preflight.py" --pre-push ${IFS_PREFLIGHT_FAST:+--fast}
+fast=""
+[ "${IFS_PREFLIGHT_FAST:-}" = "1" ] && fast="--fast"
+printf '%s\n' "$refs" | $PY -I "$ROOT/tools/preflight.py" --pre-push $fast

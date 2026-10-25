@@ -1,9 +1,8 @@
 # Checks every pull request, every push to a job branch, and every push to main (which can only be a
 # merge or an edit made on github.com). data is written only by the poll workflow and never runs this.
 #
-# These checks are advisory until the main ruleset requires the `checks` and `pr-text` status
-# checks; only the repository owner can add that rule. The checker's ADVISORY lines are warning
-# annotations and never fail a job.
+# The main ruleset requires the `checks` and `pr-text` status checks, so a red run blocks the merge.
+# The checker's ADVISORY lines are warning annotations and never fail a job.
 name: ci
 
 on:
@@ -31,6 +30,7 @@ jobs:
     env:
       BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
+      IFS_PERSON_FINGERPRINTS: ${{ secrets.IFS_PERSON_FINGERPRINTS }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -114,6 +114,7 @@ jobs:
     env:
       BASE_REF: ${{ github.event.pull_request.base.ref }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
+      IFS_PERSON_FINGERPRINTS: ${{ secrets.IFS_PERSON_FINGERPRINTS }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -145,6 +146,8 @@ jobs:
     concurrency:
       group: main-history-${{ github.sha }}
       cancel-in-progress: false
+    env:
+      IFS_PERSON_FINGERPRINTS: ${{ secrets.IFS_PERSON_FINGERPRINTS }}
     steps:
       - uses: actions/checkout@v4
         with:
