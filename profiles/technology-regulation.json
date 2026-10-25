@@ -1,7 +1,7 @@
 {
   "backfill_days": 2,
-  "daily_cap": 40,
-  "description": "Technology and regulation digest: NIST standards and cybersecurity news, and federal rulemaking from govinfo.",
+  "daily_cap": 80,
+  "description": "Technology and regulation digest: NIST standards and cybersecurity news, federal rulemaking from govinfo, and FortiGuard vendor feeds (advisories, outbreak alerts, threat signal reports, firmware and signature updates).",
   "enabled": true,
   "exclude_keywords": [],
   "guard": {

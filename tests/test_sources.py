@@ -41,7 +41,7 @@ class SourceFolderTests(unittest.TestCase):
 
     def test_profile_and_releases(self):
         profile = REPO.load_profile("technology-regulation")
-        self.assertEqual(profile["daily_cap"], 40)
+        self.assertEqual(profile["daily_cap"], 80)
         self.assertEqual(release_problems(jsonio.load_json(ROOT / "guard" / "releases.json")), [])
 
 

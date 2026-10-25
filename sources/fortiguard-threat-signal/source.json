@@ -31,8 +31,7 @@
   ],
   "tier": "vendor",
   "topics": [
-    "cybersecurity/incidents",
-    "cybersecurity/ot-ics"
+    "cybersecurity/incidents"
   ],
   "verified": "2026-10-25"
 }

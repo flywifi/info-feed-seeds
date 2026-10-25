@@ -9,7 +9,7 @@
   },
   "enabled": true,
   "expected_update_period_days": 7,
-  "homepage": "https://support.fortinet.com/EndUser",
+  "homepage": "https://support.fortinet.com/",
   "id": "fortinet-firmware",
   "interval_days": 1,
   "label": "Fortinet firmware updates",
