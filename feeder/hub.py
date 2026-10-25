@@ -89,36 +89,49 @@ def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
             record["failed"] += 1
             record.update(status="parse-error", error=type(exc).__name__, items=None)
             continue
-        raws = list(parsed["items"])
+        except Exception as exc:  # noqa: BLE001 - one broken adapter must not stop the poll
+            record["failed"] += 1
+            record.update(status="adapter-crash", error=type(exc).__name__, items=None)
+            continue
+        # Every item remembers the page that held it and that fetch's time, so a digest line cites its capture.
+        raws = [(raw, url, result.retrieved_at) for raw in parsed["items"]]
         truncated = result.truncated
-        queue = list(parsed.get("follow") or [])
+        queue = [u for u in (parsed.get("follow") or [])]
         budget = adapters.follow_limit(route)
         seen = {url}
+        follow_failed = 0
         while queue and budget > 0:
-            next_url = queue.pop(0)
-            if next_url in seen:
+            next_url = adapters.follow_url(url, queue.pop(0))
+            if next_url is None or next_url in seen:
                 continue
             seen.add(next_url)
             budget -= 1
+            record["attempted"] += 1
             more = fetcher.get(next_url)
             if more.error is not None or more.body is None:
+                follow_failed += 1
+                continue
+            if adapters.follow_url(url, more.final_url) is None:
+                follow_failed += 1
                 continue
             try:
                 extra = parse(more.body, url=next_url, params=params)
-            except adapters.AdapterError:
+            except Exception:  # noqa: BLE001 - a bad page in the chain is a failed follow, not a crash
+                follow_failed += 1
                 continue
-            raws += list(extra["items"])
+            raws += [(raw, next_url, more.retrieved_at) for raw in extra["items"]]
             truncated = truncated or more.truncated
-            queue += list(extra.get("follow") or [])
+            queue += [u for u in (extra.get("follow") or [])]
+        record["failed"] += follow_failed
         new = 0
-        for raw in raws:
-            rec = items.build_item(source.id, url, raw, retrieved_at=result.retrieved_at)
+        for raw, page_url, retrieved_at in raws:
+            rec = items.build_item(source.id, page_url, raw, retrieved_at=retrieved_at)
             scan = guard.scan_item_fields(raw.title, raw.summary, *raw.authors)
             rec["guard_level"], rec["guard_score"] = scan["risk_level"], scan["total_score"]
             if store.upsert_item(rec, first_seen=now):
                 new += 1
-        record.update(status="ok" if raws else "empty", items=len(raws),
-                      error="truncated" if truncated else None, new=new)
+        error = "truncated" if truncated else ("follow-partial" if follow_failed else None)
+        record.update(status="ok" if raws else "empty", items=len(raws), error=error, new=new)
         return record
     return record
 

@@ -16,8 +16,16 @@ All notable changes to this repository are recorded here. The format follows
   adapter is unregistered or whose params lack a required key is a landing route the poller never
   fetches, so the recorded listing pages keep their meaning. The source schema documents the params
   of every adapter and refuses unknown keys; `hub lint` reports page selectors without an
-  `item_selector` and a source with no configured route; `hub cat` lists routes in poll order and the
-  landing routes; the proof check accepts a live 200 with a sample on a route of any adapter.
+  `item_selector`, a kind that does not fit its adapter, a source with no configured route, and a
+  configured route without a live proof; `hub cat` lists routes in poll order and the landing routes;
+  the proof check accepts a live 200 with a sample on a route of any adapter that carries the params
+  it needs. A follow URL is fetched only when it is http or https on the route's own host, with its
+  fragment dropped, and the fetcher refuses any other scheme; every item cites the page that held it
+  and that fetch's time; a failed follow fetch is counted and reported as `follow-partial`; an adapter
+  that raises anything but `AdapterError` is recorded as `adapter-crash` for that route and the poll goes
+  on. A page route may set `max_pages` (0 switches following off). The sitemap, urllist and artifact
+  adapters need no params, so a recorded route of those kinds switches on, with up to 3 child fetches
+  for a sitemap index, the moment its module registers.
 - The checker blocks a person's name (a capitalised word of 4 to 6 letters, or an account name in a
   Users path) whose SHA-256 fingerprint is listed. Neither the name nor the fingerprints are in the
   repository: CI reads the list from the `IFS_PERSON_FINGERPRINTS` secret and the hooks from an

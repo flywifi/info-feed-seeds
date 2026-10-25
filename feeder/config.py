@@ -45,20 +45,22 @@ class Source:
         """Routes the poller reads (a registered adapter with its required params), in manifest
         order with the route that worked last first. Landing routes are left out."""
         routes = [r for r in self.manifest.get("routes", []) if adapters.configured(r)]
-        urls = [r["url"] for r in routes]
+        records = {rec.get("url"): rec for rec in (self.methods or {}).get("routes", [])}
         last = None
         best = ""
-        for rec in (self.methods or {}).get("routes", []):
-            success = rec.get("last_success")
-            if success and rec.get("url") in urls and success.get("tried_at", "") > best:
-                best, last = success["tried_at"], rec["url"]
+        for route in routes:
+            success = (records.get(route["url"]) or {}).get("last_success")
+            if success and success.get("tried_at", "") > best:
+                best, last = success["tried_at"], route["url"]
         if last is not None:
             routes.sort(key=lambda r: r["url"] != last)
         return routes
 
-    def feed_routes(self) -> list[str]:
-        """Feed-adapter route URLs in poll order (the one that worked last first)."""
-        return [r["url"] for r in self.poll_routes() if r.get("adapter") == "feed"]
+    def proof_records(self) -> list[dict]:
+        """The latest attempt of every configured route that methods.json records."""
+        polled = {r["url"] for r in self.poll_routes()}
+        return [rec["attempts"][-1] for rec in (self.methods or {}).get("routes", [])
+                if rec.get("url") in polled and rec.get("attempts")]
 
 
 @dataclass
@@ -289,6 +291,9 @@ def lint(repo: Repo) -> list[str]:
         if src.methods is None:
             problems.append(f"{rel}: no methods.json")
         else:
+            if src.poll_routes() and not any(adapters.live_proof(a) for a in src.proof_records()):
+                problems.append(f"{rel}/methods.json: no configured route whose latest attempt is a live 200 "
+                                "with a sample item")
             problems += [f"{rel}/methods.json: {e}" for e in validate(src.methods, methods_schema)]
             if src.methods.get("id") != folder.name:
                 problems.append(f"{rel}/methods.json: id does not equal the folder name")

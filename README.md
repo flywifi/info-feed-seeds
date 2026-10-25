@@ -11,7 +11,7 @@ private notes or anything that identifies a client or a campaign.
 ## Layout
 
 - `feeder/`: the hub CLI (`hub.py`) and its modules: fetching (`fetchkit.py`), feed parsing
-  (`adapters/feed.py`), items, the injection guard, the SQLite store (`store.py`), digest outputs
+  (`adapters/`, with `feed.py` today), items, the injection guard, the SQLite store (`store.py`), digest outputs
   (`outputs.py`), configuration and lint (`config.py`), and the single file writer (`jsonio.py`).
 - `sources/<id>/`: one folder per source. `source.json` lists every known route (feed, page,
   sitemap) with topics, authority, tier and where the source came from. `methods.json` records what

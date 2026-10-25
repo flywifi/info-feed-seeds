@@ -209,6 +209,11 @@
                   "minLength": 1,
                   "type": "string"
                 },
+                "max_pages": {
+                  "maximum": 20,
+                  "minimum": 0,
+                  "type": "integer"
+                },
                 "summary_selector": {
                   "minLength": 1,
                   "type": "string"
