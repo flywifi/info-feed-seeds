@@ -8,6 +8,9 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Follow fetches (next pages, child sitemaps) are pinned to their own host and port: a redirect
+  to another host or port is refused before it is requested, and any fetch is refused a redirect to
+  a scheme other than http or https.
 - File adapters (`feeder/adapters/files.py`): `sitemap` (urlset items with lastmod dates, a
   sitemap index followed to its children, gzip read), `urllist`, `xml` (item and field paths,
   namespaces), `json-api` (item and field paths, next-page following) and `artifact` (one item per
