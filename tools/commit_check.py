@@ -1118,7 +1118,8 @@ def check_sources(rng: str, cwd: Path | None = None) -> list[str]:
     """Every added or changed sources/<id>/ folder carries a live proof with a sample item on a
     route of any adapter that carries the params the adapter needs (a page route needs item_selector,
     an xml route item_path and fields, a json-api route items_path and fields); a landing route with
-    empty params never proves a source. Stands in for `hub check --prove` until that command exists.
+    empty params never proves a source. A source with enabled false is never polled and may wait for
+    its first live proof. Stands in for `hub check --prove` until that command exists.
     Only an adapter the poller reads can prove a source. Limit: reads the latest attempt of each such
     route named in source.json; it does not fetch, and ignores routes methods.json records that
     source.json no longer lists (hub lint reports those)."""
@@ -1149,6 +1150,8 @@ def check_sources(rng: str, cwd: Path | None = None) -> list[str]:
             if (last.get("source_label") == "live" and last.get("http_status") == 200
                     and last.get("result") == "ok" and last.get("tried_at") and last.get("sample")):
                 proven = True
+        if not manifest.get("enabled", True):
+            continue   # stored for later, never polled: it may wait for its first live proof
         if not proven:
             findings.append(f"sources/{sid}: no route whose latest attempt is a live 200 with a sample item")
         if not manifest.get("verified"):
