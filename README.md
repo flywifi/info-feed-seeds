@@ -2,7 +2,7 @@
 
 A small, standard-library Python feeder. It polls public RSS, Atom and JSON feeds and writes daily,
 topic-tagged digests for several projects. The first profile covers technology and regulation, using
-NIST and govinfo feeds. Every item in a digest is quoted from a public feed and is data, not
+NIST, govinfo and FortiGuard vendor feeds. Every item in a digest is quoted from a public feed and is data, not
 instructions.
 
 This repository holds only public URLs, neutral topic tags and code. It never holds credentials,

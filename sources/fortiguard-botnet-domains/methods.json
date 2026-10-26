@@ -1,0 +1,65 @@
+{
+  "id": "fortiguard-botnet-domains",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/botnetdom?version=3.01702",
+            "published": "2026-10-24T00:43:48Z",
+            "title": "3.01702"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:16:16Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/botnetdom?version=3.01702",
+            "published": "2026-10-24T00:43:48Z",
+            "title": "3.01702"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:18:14Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:18:14Z"
+      },
+      "url": "https://filestore.fortinet.com/fortiguard/rss/botnetdom.xml"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 19736 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:24:55Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:24:55Z"
+      },
+      "url": "https://fortiguard.fortinet.com/updates/botnetdom"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "added": "2026-10-25",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-23",
+    "kind": "seed",
+    "ref": "seeds/2026-10-23_fortiguard.md"
+  },
+  "enabled": true,
+  "expected_update_period_days": 14,
+  "homepage": "https://fortiguard.fortinet.com/updates/ots",
+  "id": "fortiguard-ot-security",
+  "interval_days": 1,
+  "label": "FortiGuard operational technology security services",
+  "lists": [
+    "fortiguard-feeds"
+  ],
+  "publisher": "Fortinet FortiGuard Labs",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://filestore.fortinet.com/fortiguard/rss/indsec.xml"
+    },
+    {
+      "adapter": "page",
+      "kind": "page",
+      "params": {},
+      "url": "https://fortiguard.fortinet.com/updates/ots"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "tier": "vendor",
+  "topics": [
+    "cybersecurity/ot-ics"
+  ],
+  "verified": "2026-10-25"
+}

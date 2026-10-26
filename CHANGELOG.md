@@ -8,6 +8,15 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- 23 FortiGuard sources under `sources/`: ten enabled (PSIRT advisories, outbreak alerts, threat signal
+  reports, firmware updates, and the endpoint vulnerability, intrusion prevention, OT intrusion
+  prevention, OT security, virtual patching and application control updates) and thirteen signature and
+  reputation feeds stored with `enabled: false`, each with two live proof records and a sample; the 16
+  sources whose items link to an update page also carry that listing page as a page route with a
+  reachability record. `seeds/2026-10-23_fortiguard.md` lists all 23 feeds with status and an
+  intended reader category (planned). The technology-regulation profile selects all 23 by topic: the
+  ten enabled sources add items to its digest and the thirteen disabled ones appear as skipped in its
+  Source health section; its daily cap rises from 40 to 80 and its description names the vendor feeds.
 - Adapter dispatch: `feeder/adapters` keeps a registry of adapter names (`feed` today; page, sitemap,
   xml, json-api, urllist and artifact are allowed in manifests and polled once their modules land)
   with the params each needs, a shared `AdapterError`, and a `follow` list an adapter may return

@@ -1,0 +1,38 @@
+{
+  "added": "2026-10-25",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-23",
+    "kind": "seed",
+    "ref": "seeds/2026-10-23_fortiguard.md"
+  },
+  "enabled": true,
+  "expected_update_period_days": 7,
+  "homepage": "https://support.fortinet.com/",
+  "id": "fortinet-firmware",
+  "interval_days": 1,
+  "label": "Fortinet firmware updates",
+  "lists": [
+    "fortiguard-feeds"
+  ],
+  "publisher": "Fortinet",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://support.fortinet.com/rss/firmware.xml"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "tier": "vendor",
+  "topics": [
+    "technology/devices",
+    "cybersecurity"
+  ],
+  "verified": "2026-10-25"
+}

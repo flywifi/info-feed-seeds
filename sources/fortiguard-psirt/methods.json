@@ -1,0 +1,45 @@
+{
+  "id": "fortiguard-psirt",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 50 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-186",
+            "published": "2026-10-21T07:00:00Z",
+            "title": "PHP core RCE vulnerability patches (CVE-2026-109618 and CVE-2026-109619)"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:15:39Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 50 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-186",
+            "published": "2026-10-21T07:00:00Z",
+            "title": "PHP core RCE vulnerability patches (CVE-2026-109618 and CVE-2026-109619)"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:17:36Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:17:36Z"
+      },
+      "url": "https://filestore.fortinet.com/fortiguard/rss/ir.xml"
+    }
+  ]
+}

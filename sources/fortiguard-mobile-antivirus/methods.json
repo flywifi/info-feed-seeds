@@ -1,0 +1,65 @@
+{
+  "id": "fortiguard-mobile-antivirus",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/mobile?version=93.08162",
+            "published": "2026-10-26T01:49:51Z",
+            "title": "93.08162"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:16:12Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 10 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/mobile?version=93.08162",
+            "published": "2026-10-26T01:49:51Z",
+            "title": "93.08162"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:18:10Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:18:10Z"
+      },
+      "url": "https://filestore.fortinet.com/fortiguard/rss/mobile.xml"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 19733 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:25:13Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:25:13Z"
+      },
+      "url": "https://fortiguard.fortinet.com/updates/mobile"
+    }
+  ]
+}

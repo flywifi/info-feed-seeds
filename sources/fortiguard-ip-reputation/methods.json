@@ -1,0 +1,65 @@
+{
+  "id": "fortiguard-ip-reputation",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 8 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/irdb?version=5.039",
+            "published": "2026-10-15T05:00:58Z",
+            "title": "5.039"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:16:14Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 8 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://fortiguard.fortinet.com/updates/irdb?version=5.039",
+            "published": "2026-10-15T05:00:58Z",
+            "title": "5.039"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:18:12Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:18:12Z"
+      },
+      "url": "https://filestore.fortinet.com/fortiguard/rss/irdb.xml"
+    },
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "text/html, 19731 bytes; reachable, not parsed (no page adapter yet)",
+          "result": "ok",
+          "source_label": "live",
+          "tried_at": "2026-10-25T22:25:06Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-25T22:25:06Z"
+      },
+      "url": "https://fortiguard.fortinet.com/updates/irdb"
+    }
+  ]
+}
