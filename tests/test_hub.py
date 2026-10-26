@@ -418,6 +418,16 @@ class PollTests(HubTestCase):
                          "two new posts: page 2 holds only stored items, so paging stops there")
         self.assertIn("poll nu: ok, HTTP 200, 4 items (2 new)", self.output)
 
+    def test_polled_items_carry_their_source_and_content_categories(self):
+        self.assertEqual(self.poll(), 0)
+        latest = jsonio.load_json(self.out / "tr" / "latest.json")
+        cats = [item["categories"] for item in latest["items"]]
+        self.assertTrue(cats)
+        for c in cats:
+            self.assertRegex(c["source"], r"^[a-z-]+/[a-z-]+$")
+            self.assertRegex(c["content"], r"^[a-z-]+/[a-z-]+$", "every polled item has a content category")
+            self.assertIn(c["content_basis"]["category"], ("item", "source"))
+
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
             records = []
@@ -835,7 +845,7 @@ class RealProfileTests(unittest.TestCase):
             self.assertEqual(code, 0, buf.getvalue())
             report = jsonio.load_json(Path(td) / "out" / "technology-regulation" / "report.json")
             md = (Path(td) / "out" / "technology-regulation" / f"{DAY}.md").read_text(encoding="utf-8")
-        self.assertEqual(report["coverage"]["sources_selected"], 20)
+        self.assertEqual(report["coverage"]["sources_selected"], 21)
         for sid in ("fortiguard-antivirus", "fortiguard-ip-reputation", "fortiguard-dast"):
             self.assertNotIn(f"- {sid}:", md)
         for sid in ("fortiguard-psirt", "fortinet-firmware", "fortiguard-ips", "govinfo-fr", "govinfo-fr-bulkdata", "nist-news",

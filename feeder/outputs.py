@@ -127,7 +127,20 @@ def item_view(row: dict, source, profile: dict, released: set[str]) -> dict:
         "link": safe_link(row.get("link")), "published": row.get("published"),
         "first_seen": row.get("first_seen"), "topics": list(row.get("topics") or []),
         "primary": row.get("primary") or (row.get("topics") or ["uncategorised"])[0],
+        "categories": {
+            "source": _pair(manifest.get("source_category"), manifest.get("source_subcategory")),
+            "content": _pair(row.get("content_category"), row.get("content_subcategory")),
+            "content_basis": {"category": row.get("content_category_basis"),
+                              "subcategory": row.get("content_subcategory_basis")},
+        },
     }
+
+
+def _pair(category, subcategory) -> str | None:
+    """'category/subcategory', 'category' alone, or None when the item has no label yet."""
+    if not category:
+        return None
+    return f"{category}/{subcategory}" if subcategory else category
 
 
 def _sort_key(view: dict):
@@ -213,7 +226,7 @@ def latest_json(profile: dict, day: str, views: list[dict], health: list[dict], 
             "title_display": view["title_display"], "authors": view["authors"], "link": view["link"],
             "summary_display": view["summary_display"], "published": view["published"],
             "first_seen": view["first_seen"], "topics": view["topics"], "authority": view["authority"],
-            "tier": view["tier"], guard.FIELD_NAME: view["scan"],
+            "tier": view["tier"], "categories": view["categories"], guard.FIELD_NAME: view["scan"],
         })
     return {"_comment": JSON_COMMENT, "version": FORMAT_VERSION, "profile": profile["name"], "date": day,
             "generated": generated, "items": out_items, "health": health, "coverage": coverage}

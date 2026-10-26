@@ -1,0 +1,30 @@
+{
+  "id": "ervik-threat-feed",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 60 items (rss)",
+          "result": "ok",
+          "sample": {
+            "link": "https://www.ervik.as/ransomware",
+            "published": "2026-10-26T13:48:31Z",
+            "title": "Ransomware: Spontini (the gentlemen)"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-26T14:00:14Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-26T14:00:14Z"
+      },
+      "url": "https://www.ervik.as/rss.xml"
+    }
+  ]
+}

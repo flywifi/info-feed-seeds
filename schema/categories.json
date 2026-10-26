@@ -97,7 +97,9 @@
           "keywords": [
             "breach",
             "data leak",
-            "compromised"
+            "compromised",
+            "ransomware victim",
+            "victim"
           ],
           "label": "Breaches",
           "note": "confirmed incidents and data breaches",
@@ -110,7 +112,10 @@
           "keywords": [
             "exploited",
             "outbreak",
-            "in the wild"
+            "in the wild",
+            "active zero-day",
+            "actively exploited",
+            "exploitation"
           ],
           "label": "Exploited now",
           "note": "vulnerabilities under active exploitation",
@@ -191,7 +196,9 @@
           "keywords": [
             "guidance",
             "best practices",
-            "tips"
+            "tips",
+            "awareness",
+            "whitepaper"
           ],
           "label": "Security guidance",
           "note": "best-practice documents",
@@ -597,7 +604,8 @@
           "keywords": [
             "cvss",
             "nvd",
-            "known exploited"
+            "known exploited",
+            "cve"
           ],
           "label": "Scoring and catalogues",
           "note": "CVE, CVSS and catalogue updates",
@@ -608,7 +616,10 @@
           "keywords": [
             "advisory",
             "psirt",
-            "security update"
+            "security update",
+            "ics advisory",
+            "icsa",
+            "icsma"
           ],
           "label": "Vendor advisories",
           "note": "a vendor's own security advisories",

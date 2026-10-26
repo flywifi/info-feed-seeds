@@ -77,7 +77,7 @@ def _nothing_new(store: Store, source_id: str, route: dict, raws: list) -> bool:
     return all(store.item(items.content_sha256(source_id, r.guid, r.link, r.title)) for r in raws)
 
 
-def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
+def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | None = None) -> dict:
     """Fetch the source's configured routes in order until one answers, dispatching each body to
     its adapter and following the adapter's `follow` URLs up to the route's bound. A 304 ends the
     source's poll as not-modified: its items were stored at the earlier fetch, so later routes and
@@ -145,6 +145,14 @@ def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
             rec = items.build_item(source.id, page_url, raw, retrieved_at=retrieved_at)
             scan = guard.scan_item_fields(raw.title, raw.summary, *raw.authors)
             rec["guard_level"], rec["guard_score"] = scan["risk_level"], scan["total_score"]
+            if reg is not None:
+                # The source category places the feed; the content category places this item by its own text.
+                placed = categories.content_category(reg, raw.title, raw.summary, source.source_category,
+                                                     source.source_subcategory)
+                rec.update(source_category=source.source_category, source_subcategory=source.source_subcategory,
+                           content_category=placed["category"], content_subcategory=placed["subcategory"],
+                           content_category_basis=placed["category_basis"],
+                           content_subcategory_basis=placed["subcategory_basis"])
             if store.upsert_item(rec, first_seen=now):
                 new += 1
         error = ",".join(flag for flag, on in (("truncated", truncated), ("follow-partial", follow_failed)) if on) or None
@@ -302,7 +310,7 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
                 continue
             if fetcher is None:
                 fetcher = fetcher_factory(state_dir)
-            rec = poll_source(fetcher, src, store, day, now_z)
+            rec = poll_source(fetcher, src, store, day, now_z, reg=repo.categories())
             attempted += rec["attempted"]
             failed += rec["failed"]
             new_items += rec["new"]
