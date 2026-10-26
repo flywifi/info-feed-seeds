@@ -8,6 +8,15 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- The page adapter (`feeder/adapters/page.py`) reads listing pages without a feed: a page route whose
+  params carry `item_selector` is polled, with title, link, date and summary read through a small CSS
+  subset (tag, id, class, descendant steps, comma groups, `@attr`) and dates through `date_regex` and
+  `date_format` with English month names whatever the locale. A page route with empty params stays a
+  landing route. Fixtures keep the structure of the FedRAMP changelog and the PCI SSC blog index.
+- A malformed adapter result fails its own route as `adapter-crash` instead of stopping the poll run;
+  follow URLs must keep the route's host and port and never move from https to http; a page that is
+  both truncated and missing follow pages reports both flags; the commit checker accepts proof only
+  on a route of an adapter the poller reads.
 - Store schema version 2: `feeder/store.py` records the schema version in `PRAGMA user_version`,
   migrates an older `feeder.db` in place (missing columns and indexes added, every row, hit and health
   record kept, a second open adds nothing; the dry-run copy is migrated in memory and the file is left

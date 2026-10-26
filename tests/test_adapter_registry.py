@@ -1,10 +1,14 @@
 """The adapter registry: names match the source schema, configured routes are the ones the poller
 reads, the feed adapter speaks the shared shape, and route lint names the missing params."""
+import sys
 import unittest
 
 from feeder import adapters, jsonio
 from feeder.adapters import feed
 from tests.helpers import ROOT
+
+sys.path.insert(0, str(ROOT / "tools"))
+import commit_check as cc  # noqa: E402
 
 FEED = b'<?xml version="1.0"?><rss version="2.0"><channel><title>T</title><link>https://example.gov/</link>' \
        b'<description>d</description><item><title>One</title><link>https://example.gov/1</link><guid>1</guid>' \
@@ -24,13 +28,19 @@ class RegistryTests(unittest.TestCase):
         self.assertFalse(adapters.configured({"adapter": "page", "url": "u", "params": {}}), "a landing route")
         self.assertFalse(adapters.configured({"adapter": "sitemap", "url": "u", "params": {}}), "no module yet")
         self.assertFalse(adapters.configured({"adapter": "bogus", "url": "u"}))
-        with_stub = dict(adapters.ADAPTERS, page=lambda body, url, params: {"kind": "page", "items": [], "follow": []})
-        try:
-            adapters.ADAPTERS.update(with_stub)
-            self.assertTrue(adapters.configured({"adapter": "page", "url": "u", "params": {"item_selector": "li"}}))
-            self.assertFalse(adapters.configured({"adapter": "page", "url": "u", "params": {"title_selector": "h2"}}))
-        finally:
-            adapters.ADAPTERS.pop("page", None)
+        self.assertTrue(adapters.configured({"adapter": "page", "url": "u", "params": {"item_selector": "li"}}))
+        self.assertFalse(adapters.configured({"adapter": "page", "url": "u", "params": {"title_selector": "h2"}}))
+
+    def test_the_commit_checker_mirrors_the_registry(self):
+        self.assertEqual(set(cc._POLLED_ADAPTERS), set(adapters.ADAPTERS))
+        self.assertEqual(cc._ROUTE_PARAMS, {name: keys for name, keys in adapters.REQUIRED_PARAMS.items() if keys})
+
+    def test_check_result_refuses_a_malformed_adapter_return(self):
+        good = {"kind": "page", "items": [], "follow": []}
+        self.assertIs(adapters.check_result(good), good)
+        for bad in (None, {}, {"items": None}, {"items": [{"title": "t"}]}, {"items": [], "follow": "https://example.gov/"}):
+            with self.subTest(bad=bad), self.assertRaises(TypeError):
+                adapters.check_result(bad)
 
     def test_feed_parse_returns_the_shared_shape_and_error(self):
         parsed = feed.parse(FEED, url="https://example.gov/f.xml", params={})
@@ -50,8 +60,10 @@ class RegistryTests(unittest.TestCase):
     def test_follow_url_keeps_the_route_host_and_web_schemes_only(self):
         route = "https://example.gov/sitemap.xml"
         self.assertEqual(adapters.follow_url(route, "https://example.gov/a.xml#x"), "https://example.gov/a.xml")
-        self.assertEqual(adapters.follow_url(route, "http://EXAMPLE.gov/b.xml"), "http://EXAMPLE.gov/b.xml")
-        for bad in ("file:///etc/hostname", "ftp://example.gov/x", "data:text/plain,x", "https://evil.example/",
+        self.assertEqual(adapters.follow_url(route, "https://EXAMPLE.gov:443/b.xml"), "https://EXAMPLE.gov:443/b.xml")
+        self.assertEqual(adapters.follow_url("http://example.gov/s.xml", "https://example.gov/c.xml"), "https://example.gov/c.xml",
+                         "http may move up to https")
+        for bad in ("http://example.gov/b.xml", "https://example.gov:8443/x", "https://example.gov:99999/x", "file:///etc/hostname", "ftp://example.gov/x", "data:text/plain,x", "https://evil.example/",
                     "http://169.254.169.254/latest/", "//example.gov/x", "", None, 7):
             self.assertIsNone(adapters.follow_url(route, bad), bad)
 

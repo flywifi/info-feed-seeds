@@ -1108,7 +1108,9 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
     return findings
 
 
-# The params a route must carry before the poller reads it (feeder/adapters keeps the same table).
+# The adapters the poller reads and the params a route must carry first (feeder/adapters keeps the same
+# tables; tests/test_adapter_registry.py holds them equal).
+_POLLED_ADAPTERS = ("feed", "page")
 _ROUTE_PARAMS = {"page": ("item_selector",), "xml": ("item_path", "fields"), "json-api": ("items_path", "fields")}
 
 
@@ -1117,8 +1119,8 @@ def check_sources(rng: str, cwd: Path | None = None) -> list[str]:
     route of any adapter that carries the params the adapter needs (a page route needs item_selector,
     an xml route item_path and fields, a json-api route items_path and fields); a landing route with
     empty params never proves a source. Stands in for `hub check --prove` until that command exists.
-    Limit: reads the latest attempt of each such route named in source.json; it does not fetch, does
-    not check the adapter name against the registry, and ignores routes methods.json records that
+    Only an adapter the poller reads can prove a source. Limit: reads the latest attempt of each such
+    route named in source.json; it does not fetch, and ignores routes methods.json records that
     source.json no longer lists (hub lint reports those)."""
     if not git("rev-list", rng, cwd=cwd).split():
         return [f"{rng}: the range holds no commits; failing closed"]
@@ -1137,7 +1139,7 @@ def check_sources(rng: str, cwd: Path | None = None) -> list[str]:
         except (OSError, ValueError) as exc:
             findings.append(f"sources/{sid}: cannot read source.json and methods.json ({exc})")
             continue
-        route_urls = {r.get("url") for r in manifest.get("routes", []) if r.get("adapter")
+        route_urls = {r.get("url") for r in manifest.get("routes", []) if r.get("adapter") in _POLLED_ADAPTERS
                       and all(k in (r.get("params") or {}) for k in _ROUTE_PARAMS.get(r.get("adapter"), ()))}
         proven = False
         for rec in methods.get("routes", []):

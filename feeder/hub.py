@@ -67,8 +67,9 @@ def default_fetcher_factory(state_dir: Path):
 
 def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
     """Fetch the source's configured routes in order until one answers, dispatching each body to
-    its adapter and following the adapter's `follow` URLs up to the route's bound. Returns a
-    health record plus `attempted`, `failed` and `new` counts."""
+    its adapter and following the adapter's `follow` URLs up to the route's bound. A 304 ends the
+    source's poll as not-modified: its items were stored at the earlier fetch, so later routes and
+    follow URLs are not fetched. Returns a health record plus `attempted`, `failed` and `new` counts."""
     record = {"status": "error", "http_status": None, "items": None, "error": "no configured route",
               "route_url": None, "source_label": None, "attempted": 0, "failed": 0, "new": 0}
     for route in source.poll_routes():
@@ -86,7 +87,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
             record.update(status="not-modified", error=None, items=None)
             return record
         try:
-            parsed = parse(result.body, url=url, params=params)
+            parsed = adapters.check_result(parse(result.body, url=url, params=params))
         except adapters.AdapterError as exc:
             # A 200 that the adapter cannot read (a bot wall, an error page) is a failure, not a response.
             record["failed"] += 1
@@ -118,7 +119,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
                 follow_failed += 1
                 continue
             try:
-                extra = parse(more.body, url=next_url, params=params)
+                extra = adapters.check_result(parse(more.body, url=next_url, params=params))
             except Exception:  # noqa: BLE001 - a bad page in the chain is a failed follow, not a crash
                 follow_failed += 1
                 continue
@@ -133,7 +134,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
             rec["guard_level"], rec["guard_score"] = scan["risk_level"], scan["total_score"]
             if store.upsert_item(rec, first_seen=now):
                 new += 1
-        error = "truncated" if truncated else ("follow-partial" if follow_failed else None)
+        error = ",".join(flag for flag, on in (("truncated", truncated), ("follow-partial", follow_failed)) if on) or None
         record.update(status="ok" if raws else "empty", items=len(raws), error=error, new=new)
         return record
     return record

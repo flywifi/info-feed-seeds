@@ -14,11 +14,13 @@ from __future__ import annotations
 
 from urllib.parse import urldefrag, urlsplit
 
-from . import feed
+from ..items import RawItem
+from . import feed, page
 from .base import AdapterError
 
 ADAPTERS = {
     "feed": feed.parse,
+    "page": page.parse,
 }
 
 # Params a route must carry before the poller reads it, by adapter name (every name the schema allows).
@@ -47,6 +49,7 @@ ALLOWED_KINDS = {
 }
 
 DEFAULT_FOLLOW_LIMIT = 3
+DEFAULT_PORTS = {"http": 80, "https": 443}
 
 
 def get_adapter(name: str):
@@ -92,16 +95,40 @@ def follow_limit(route: dict) -> int:
     return DEFAULT_FOLLOW_LIMIT
 
 
+def check_result(parsed) -> dict:
+    """The adapter's return value when it has the shared shape, else TypeError, so a broken adapter
+    fails its own route instead of the poll run."""
+    if not isinstance(parsed, dict) or not isinstance(parsed.get("items"), list):
+        raise TypeError("adapter result has no items list")
+    if not all(isinstance(item, RawItem) for item in parsed["items"]):
+        raise TypeError("adapter result items are not RawItem objects")
+    if not isinstance(parsed.get("follow") or [], list):
+        raise TypeError("adapter result follow is not a list")
+    return parsed
+
+
+def _origin(url: str) -> tuple[str, str, int | None] | None:
+    """(scheme, host, port) with the scheme's default port read as None; None for a bad port."""
+    parts = urlsplit(url)
+    scheme = parts.scheme.lower()
+    try:
+        port = parts.port
+    except ValueError:
+        return None
+    return scheme, (parts.hostname or "").lower(), None if port == DEFAULT_PORTS.get(scheme) else port
+
+
 def follow_url(route_url: str, candidate) -> str | None:
-    """The follow URL the poller may fetch, or None: http or https only, the same host as the route,
-    fragment dropped. Anything an adapter returns is data from the fetched document, never trusted."""
+    """The follow URL the poller may fetch, or None: http or https only, the same host and port as the
+    route, never from https down to http, fragment dropped. Anything an adapter returns is data from the
+    fetched document, never trusted."""
     if not isinstance(candidate, str):
         return None
     clean = urldefrag(candidate.strip())[0]
-    parts = urlsplit(clean)
-    if parts.scheme.lower() not in ("http", "https") or not parts.hostname:
+    cand, base = _origin(clean), _origin(route_url)
+    if cand is None or base is None or cand[0] not in DEFAULT_PORTS or not cand[1]:
         return None
-    if parts.hostname.lower() != (urlsplit(route_url).hostname or "").lower():
+    if cand[1:] != base[1:] or (base[0] == "https" and cand[0] != "https"):
         return None
     return clean
 
@@ -112,6 +139,6 @@ def live_proof(attempt: dict | None) -> bool:
                 and attempt.get("result") == "ok" and attempt.get("tried_at") and attempt.get("sample"))
 
 
-__all__ = ["ADAPTERS", "ALLOWED_KINDS", "AdapterError", "DEFAULT_FOLLOW_LIMIT", "PAGE_SELECTOR_KEYS",
-           "REQUIRED_PARAMS", "configured", "feed", "follow_limit", "follow_url", "get_adapter", "lint_route",
-           "live_proof"]
+__all__ = ["ADAPTERS", "ALLOWED_KINDS", "AdapterError", "DEFAULT_FOLLOW_LIMIT", "DEFAULT_PORTS", "PAGE_SELECTOR_KEYS",
+           "REQUIRED_PARAMS", "check_result", "configured", "feed", "follow_limit", "follow_url", "get_adapter",
+           "lint_route", "live_proof", "page"]
