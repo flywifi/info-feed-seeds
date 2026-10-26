@@ -28,6 +28,8 @@
         "date_selector": "div.post-details-meta",
         "item_selector": "div.latest-post, div.post-item",
         "link_selector": "h3 a@href",
+        "max_pages": 3,
+        "next_selector": "a.bp-link-next@href",
         "summary_selector": "div.post-body",
         "title_selector": "h3 a"
       },
