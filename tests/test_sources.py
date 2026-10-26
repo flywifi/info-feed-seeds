@@ -2,7 +2,7 @@
 The committed profile and guard releases file validate too."""
 import unittest
 
-from feeder import jsonio
+from feeder import adapters, jsonio
 from feeder.config import Repo, lint, release_problems
 from feeder.schema_validate import validate
 from feeder.topics import all_tags
@@ -31,9 +31,9 @@ class SourceFolderTests(unittest.TestCase):
                     self.assertIn(tag, tags)
                 self.assertIsNotNone(manifest["verified"], "only proven sources are committed")
                 self.assertEqual(manifest["classification_review"], "pending")
-                feed_urls = {r["url"] for r in manifest["routes"] if r["adapter"] == "feed"}
-                proven = [r for r in methods["routes"] if r["url"] in feed_urls and r["last_success"]]
-                self.assertTrue(proven, "a feed route has a recorded success")
+                polled = {r["url"] for r in manifest["routes"] if adapters.configured(r)}
+                proven = [r for r in methods["routes"] if r["url"] in polled and r["last_success"]]
+                self.assertTrue(proven, "a configured route has a recorded success")
                 self.assertEqual(proven[0]["last_success"]["source_label"], "live")
 
     def test_lint_is_clean(self):

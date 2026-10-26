@@ -67,6 +67,47 @@ class SchemaFixtureTests(unittest.TestCase):
         bad_review["classification_review"] = "done"
         self.assertTrue(validate(bad_review, schema))
 
+    def test_route_params_follow_the_adapter(self):
+        schema = load_schema("source.schema.json")
+        base = load_fixture("source_example.json")
+
+        def with_route(route):
+            doc = copy.deepcopy(base)
+            doc["routes"].append(route)
+            return doc
+
+        for route in (
+            {"adapter": "page", "kind": "page", "url": "https://example.gov/blog/", "params": {
+                "item_selector": "div.post", "title_selector": "h3 a", "link_selector": "h3 a@href",
+                "date_selector": "div.meta", "date_regex": "\\d{1,2} \\w{3}, \\d{4}", "date_format": "%d %b, %Y"}},
+            {"adapter": "page", "kind": "page", "url": "https://example.gov/changelog/", "params": {"version_signal": "heading-date"}},
+            {"adapter": "sitemap", "kind": "sitemap", "url": "https://example.gov/sitemap.xml", "params": {"max_sitemaps": 5, "lastmod_since": "2026-10-01"}},
+            {"adapter": "xml", "kind": "xml", "url": "https://example.gov/catalog.xml", "params": {
+                "item_path": "c:entry", "namespaces": {"c": "urn:example:cat"}, "fields": {"title": "c:name", "link": "c:url"}}},
+            {"adapter": "json-api", "kind": "json-api", "url": "https://example.gov/api/documents.json", "params": {
+                "items_path": "results[]", "fields": {"title": "title", "link": "html_url"}, "next_path": "next_page_url", "max_pages": 3}},
+            {"adapter": "urllist", "kind": "urllist", "url": "https://example.gov/list.txt", "params": {}},
+            {"adapter": "artifact", "kind": "artifact", "url": "https://example.gov/guide.pdf", "params": {"label": "Guide"}},
+        ):
+            with self.subTest(adapter=route["adapter"]):
+                self.assertEqual(validate(with_route(route), schema), [])
+
+        selectors_without_item = with_route({"adapter": "page", "kind": "page", "url": "https://example.gov/blog/",
+                                             "params": {"title_selector": "h3"}})
+        self.assertEqual(validate(selectors_without_item, schema),
+                         ["$.routes[2].params: missing required property 'item_selector'"])
+        unknown_feed_param = copy.deepcopy(base)
+        unknown_feed_param["routes"][0]["params"] = {"x": 1}
+        self.assertEqual(validate(unknown_feed_param, schema), ["$.routes[0].params: unexpected property 'x'"])
+        too_many_pages = with_route({"adapter": "json-api", "kind": "json-api", "url": "https://example.gov/api.json",
+                                     "params": {"items_path": "results[]", "fields": {"title": "t"}, "max_pages": 99}})
+        self.assertTrue(validate(too_many_pages, schema))
+        xml_without_item_path = with_route({"adapter": "xml", "kind": "xml", "url": "https://example.gov/c.xml",
+                                            "params": {"fields": {"title": "t"}}})
+        self.assertTrue(validate(xml_without_item_path, schema))
+        bad_signal = with_route({"adapter": "page", "kind": "page", "url": "https://example.gov/c/", "params": {"version_signal": "guess"}})
+        self.assertTrue(validate(bad_signal, schema))
+
     def test_methods_example_validates(self):
         self.assertEqual(validate(load_fixture("methods_example.json"), load_schema("methods.schema.json")), [])
 

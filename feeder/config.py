@@ -9,7 +9,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import ROOT, guard, items, jsonio, topics
+from . import ROOT, adapters, guard, items, jsonio, topics
 from .schema_validate import validate
 
 SHA_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -41,19 +41,26 @@ class Source:
     def topics(self) -> list[str]:
         return list(self.manifest.get("topics") or [])
 
-    def feed_routes(self) -> list[str]:
-        """Feed-adapter route URLs, the one that worked last first."""
-        urls = [r["url"] for r in self.manifest.get("routes", []) if r.get("adapter") == "feed"]
+    def poll_routes(self) -> list[dict]:
+        """Routes the poller reads (a registered adapter with its required params), in manifest
+        order with the route that worked last first. Landing routes are left out."""
+        routes = [r for r in self.manifest.get("routes", []) if adapters.configured(r)]
+        records = {rec.get("url"): rec for rec in (self.methods or {}).get("routes", [])}
         last = None
         best = ""
-        for rec in (self.methods or {}).get("routes", []):
-            success = rec.get("last_success")
-            if success and rec.get("url") in urls and success.get("tried_at", "") > best:
-                best, last = success["tried_at"], rec["url"]
+        for route in routes:
+            success = (records.get(route["url"]) or {}).get("last_success")
+            if success and success.get("tried_at", "") > best:
+                best, last = success["tried_at"], route["url"]
         if last is not None:
-            urls.remove(last)
-            urls.insert(0, last)
-        return urls
+            routes.sort(key=lambda r: r["url"] != last)
+        return routes
+
+    def proof_records(self) -> list[dict]:
+        """The latest attempt of every configured route that methods.json records."""
+        polled = {r["url"] for r in self.poll_routes()}
+        return [rec["attempts"][-1] for rec in (self.methods or {}).get("routes", [])
+                if rec.get("url") in polled and rec.get("attempts")]
 
 
 @dataclass
@@ -277,11 +284,16 @@ def lint(repo: Repo) -> list[str]:
                 problems.append(f"{rel}/{name}: topic {tag!r} is not in schema/topics.json")
         if "auth" in src.manifest and not src.local:
             problems.append(f"{rel}: a credential-gated source must live in source.local.json")
-        if not any(r.get("adapter") == "feed" for r in src.manifest.get("routes", [])):
-            problems.append(f"{rel}/{name}: no route the poller can read (adapter feed)")
+        for route in src.manifest.get("routes", []):
+            problems += [f"{rel}/{name}: {p}" for p in adapters.lint_route(route)]
+        if not src.poll_routes():
+            problems.append(f"{rel}/{name}: no configured route the poller can read")
         if src.methods is None:
             problems.append(f"{rel}: no methods.json")
         else:
+            if src.poll_routes() and not any(adapters.live_proof(a) for a in src.proof_records()):
+                problems.append(f"{rel}/methods.json: no configured route whose latest attempt is a live 200 "
+                                "with a sample item")
             problems += [f"{rel}/methods.json: {e}" for e in validate(src.methods, methods_schema)]
             if src.methods.get("id") != folder.name:
                 problems.append(f"{rel}/methods.json: id does not equal the folder name")

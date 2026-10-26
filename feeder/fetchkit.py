@@ -537,6 +537,10 @@ class Fetcher:
 
     def get(self, url: str, *, conditional: bool = True, extra_headers: dict | None = None,
             respect_robots: bool = True) -> FetchResult:
+        scheme = url.partition(":")[0].lower() if ":" in url else ""
+        if scheme not in ("http", "https"):
+            # urllib's default opener would read file:, ftp: and data: URLs; a feed never needs them.
+            return self._result(url, trail=["scheme-refused"], robots=ROBOTS_UNKNOWN, error="scheme-refused")
         host = host_of(url)
         trail: list[str] = []
         robots_status = ROBOTS_NO_RULES
