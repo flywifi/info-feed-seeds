@@ -393,11 +393,17 @@ class PollTests(HubTestCase):
 
     def test_a_profile_naming_one_subcategory_excludes_the_rest(self):
         self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"], source_category="attacks", source_subcategory="breaches")
+        self.add_source("delta", "https://example.gov/delta.xml", ["cybersecurity"], source_category="attacks", source_subcategory="scams")
         self.script["https://example.gov/gamma.xml"] = rss_with("Breach line")
+        self.script["https://example.gov/delta.xml"] = rss_with("Scam line")
         self.profile["source_categories"] = ["attacks/breaches"]
         jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
         self.assertEqual(self.poll(), 0)
-        self.assertEqual(self.fetcher.calls, ["https://example.gov/gamma.xml"])
+        self.assertEqual(self.fetcher.calls, ["https://example.gov/gamma.xml"], "the sibling attacks/scams source is not polled")
+        self.profile["source_categories"] = ["attacks"]
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.assertEqual(self.poll(), 0)
+        self.assertEqual(sorted(self.fetcher.calls), ["https://example.gov/delta.xml", "https://example.gov/gamma.xml"])
 
     def test_a_source_listed_by_id_is_selected_whatever_its_category(self):
         self.add_machine_source()
@@ -587,10 +593,16 @@ class LintFmtCatTests(HubTestCase):
         m = source_manifest("alpha", "https://example.gov/alpha.xml", ["cybersecurity"], industries=["pets"])
         out = self.lint_after(lambda: jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", m))
         self.assertIn("industry 'pets' is not in schema/categories.json", out)
+        m["industries"] = ["cybersecurity", "cybersecurity"]
+        out = self.lint_after(lambda: jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", m))
+        self.assertIn("industry 'cybersecurity' is listed twice", out)
         jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", source_manifest("alpha", "https://example.gov/alpha.xml", ["cybersecurity"]))
         self.profile["source_categories"] = ["attacks/science"]
         out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
         self.assertIn("source category 'attacks/science' is not in schema/categories.json", out)
+        self.profile["source_categories"] = ["attacks", "attacks"]
+        out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
+        self.assertIn("source category 'attacks' is listed twice", out)
 
     def test_lint_reports_registry_defects(self):
         path = self.root / "schema" / "categories.json"
@@ -608,15 +620,43 @@ class LintFmtCatTests(HubTestCase):
         out = self.lint_after(lambda: None)
         self.assertIn("schema/categories.json is missing or not valid JSON", out)
 
+    def test_categorize_fetches_once_without_validators_and_saves_no_state(self):
+        seen = {"dirs": [], "conditional": [], "saved": False}
+
+        class Recorder(FakeFetcher):
+            def get(self, url, conditional=True, **kw):
+                seen["conditional"].append(conditional)
+                return super().get(url, conditional, **kw)
+
+            def save(self):
+                seen["saved"] = True
+
+        def factory(state_dir):
+            seen["dirs"].append(state_dir)
+            return Recorder(self.script)
+
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(io.StringIO()):
+            code = hub.main(["categorize", "alpha"], root=self.root, fetcher_factory=factory, now_fn=lambda: NOW)
+        self.assertEqual(code, 0)
+        self.assertEqual((seen["dirs"], seen["conditional"], seen["saved"]), ([None], [False], False))
+        self.script["https://example.gov/alpha.xml"] = 503
+        self.assertEqual(self.run_hub("categorize", "alpha"), 0)
+        self.assertIn("read 0 title(s) from nothing (every route failed)", self.output)
+
     def test_categorize_proposes_from_live_titles_and_writes_on_request(self):
         self.script["https://example.gov/alpha.xml"] = rss_with("37.319", "37.318", "37.317")
         self.assertEqual(self.run_hub("categorize", "alpha"), 0)
         self.assertIn("source category vulnerabilities/vendor-advisories; read 3 title(s) from https://example.gov/alpha.xml", self.output)
         self.assertIn("suggest source category machine-data/signature-versions (score 3): 3 of 3 titles are version numbers", self.output)
-        self.assertIn("content machine-data/signature-versions: 3 item(s); category from the item, subcategory from the item", self.output)
+        self.assertIn("content vulnerabilities/vendor-advisories: 3 item(s); category from the source, subcategory from the source", self.output,
+                      "items of a reader source stay out of machine data")
         before = jsonio.load_json(self.root / "sources" / "alpha" / "source.json")
         self.assertEqual(before["source_category"], "vulnerabilities", "no write without --write")
-        self.assertEqual(self.run_hub("categorize", "alpha", "--write"), 0)
+        self.assertEqual(self.run_hub("categorize", "alpha", "--write"), 1, "machine data needs the explicit flag")
+        self.assertIn("give --allow-machine-data to write it", self.output)
+        self.assertEqual(jsonio.load_json(self.root / "sources" / "alpha" / "source.json"), before)
+        self.assertEqual(self.run_hub("categorize", "alpha", "--write", "--allow-machine-data"), 0)
         after = jsonio.load_json(self.root / "sources" / "alpha" / "source.json")
         self.assertEqual((after["source_category"], after["source_subcategory"]), ("machine-data", "signature-versions"))
         self.assertEqual({k: v for k, v in after.items() if k not in ("source_category", "source_subcategory")},
@@ -648,6 +688,11 @@ class LintFmtCatTests(HubTestCase):
                                       "--category-label", "Health", "--purpose", "public health", "--reason", "health feeds"), 0)
         reg = jsonio.load_json(self.root / "schema" / "categories.json")
         self.assertEqual((reg["categories"]["health"]["order"], reg["categories"]["health"]["added"]), (10, DAY))
+        path = self.root / "schema" / "categories.json"
+        path.write_text(path.read_text(encoding="utf-8").replace('"ai": {', '"ai": {"order": 9}, "ai": {', 1), encoding="utf-8")
+        before = path.read_bytes()
+        self.assertEqual(self.run_hub("categories", "add", "ai/agents", "--label", "Agents", "--note", "n"), 2)
+        self.assertEqual(path.read_bytes(), before, "a registry with a repeated key is never rewritten")
 
     def test_cat(self):
         self.assertEqual(self.run_hub("cat", "alpha"), 0)
@@ -665,7 +710,7 @@ class LintFmtCatTests(HubTestCase):
 
 
 class RealProfileTests(unittest.TestCase):
-    def test_technology_regulation_leaves_the_machine_data_sources_out(self):
+    def test_technology_regulation_polls_every_reader_source_and_no_machine_data(self):
         with tempfile.TemporaryDirectory() as td:
             buf = io.StringIO()
             with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(io.StringIO()):
@@ -675,10 +720,10 @@ class RealProfileTests(unittest.TestCase):
             self.assertEqual(code, 0, buf.getvalue())
             report = jsonio.load_json(Path(td) / "out" / "technology-regulation" / "report.json")
             md = (Path(td) / "out" / "technology-regulation" / f"{DAY}.md").read_text(encoding="utf-8")
-        self.assertEqual(report["coverage"]["sources_selected"], 17)
-        for sid in ("fortiguard-antivirus", "fortiguard-ip-reputation", "fortiguard-dast", "govinfo-fr-bulkdata"):
+        self.assertEqual(report["coverage"]["sources_selected"], 18)
+        for sid in ("fortiguard-antivirus", "fortiguard-ip-reputation", "fortiguard-dast"):
             self.assertNotIn(f"- {sid}:", md)
-        for sid in ("fortiguard-psirt", "fortinet-firmware", "fortiguard-ips", "govinfo-fr", "nist-news"):
+        for sid in ("fortiguard-psirt", "fortinet-firmware", "fortiguard-ips", "govinfo-fr", "govinfo-fr-bulkdata", "nist-news"):
             self.assertIn(f"- {sid}:", md)
         self.assertNotIn("skipped, disabled", md)
 

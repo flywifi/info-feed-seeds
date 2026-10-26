@@ -397,9 +397,9 @@
       "type": "string"
     },
     "industries": {
-      "description": "Industry ids from schema/categories.json (industries).",
+      "description": "Optional industry ids from schema/categories.json (industries), each once.",
       "items": {
-        "pattern": "^[a-z][a-z0-9-]*$",
+        "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
         "type": "string"
       },
       "type": "array"
@@ -445,12 +445,12 @@
     },
     "source_category": {
       "description": "The source category: where this feed sits as a whole, a category id from schema/categories.json. Each item also gets its own content category from its text.",
-      "pattern": "^[a-z][a-z0-9-]*$",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
       "type": "string"
     },
     "source_subcategory": {
       "description": "The source subcategory, under the source category in schema/categories.json.",
-      "pattern": "^[a-z][a-z0-9-]*$",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
       "type": "string"
     },
     "tier": {

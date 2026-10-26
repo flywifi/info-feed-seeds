@@ -117,9 +117,21 @@ class ContentCategoryTests(unittest.TestCase):
         one_hit = self.place("Note", "about a webinar")
         self.assertEqual(one_hit["category_basis"], "source", "a single summary hit is not enough")
 
-    def test_title_shapes_decide_both_levels(self):
-        self.assertEqual(self.place("37.319", source=("vulnerabilities", "detections"))["subcategory"], "signature-versions")
-        self.assertEqual(self.place("FR-2022-04-07", source=("regulatory", "federal-rules"))["category"], "machine-data")
+    def test_items_of_a_reader_source_never_land_in_machine_data(self):
+        for title, source in (("37.319", ("vulnerabilities", "detections")), ("FR-2022-04-07", ("regulatory", "federal-rules")),
+                              ("Reputation blocklist update", ("guidance", "events"))):
+            with self.subTest(title=title):
+                placed = self.place(title, source=source)
+                self.assertNotEqual(placed["category"], "machine-data")
+        placed = self.place("37.319", source=("vulnerabilities", "detections"))
+        self.assertEqual((placed["category"], placed["subcategory"], placed["category_basis"], placed["subcategory_basis"]),
+                         ("vulnerabilities", "detections", "source", "source"), "a version-number title falls back to the source")
+        placed = self.place("FR-2022-04-07", source=("regulatory", "federal-rules"))
+        self.assertEqual((placed["category"], placed["category_basis"]), ("regulatory", "source"), "so does a record-id title")
+
+    def test_title_shapes_decide_inside_a_machine_data_source(self):
+        placed = self.place("FR-2022-04-07", source=("machine-data", "signature-versions"))
+        self.assertEqual((placed["category"], placed["subcategory"], placed["category_basis"]), ("machine-data", "bulk-data", "item"))
 
     def test_a_tie_keeps_the_source(self):
         placed = self.place("Advisory on a phishing campaign", source=("attacks", "scams"))
@@ -150,6 +162,9 @@ class AddEntryTests(unittest.TestCase):
     def test_refusals(self):
         for ref, kw, message in (("technology", {}, "category/subcategory"),
                                  ("technology/Bad", {}, "lowercase kebab"),
+                                 ("technology/robot-", {}, "lowercase kebab"),
+                                 ("technology/robot--arm", {}, "lowercase kebab"),
+                                 ("technology/robotics", {"reason": "r"}, "apply only to a new one"),
                                  ("technology/science", {}, "already in the registry"),
                                  ("technology/robotics", {"machine_data": True}, "apply only to a new one")):
             with self.subTest(ref=ref), self.assertRaisesRegex(ValueError, message):

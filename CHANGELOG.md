@@ -11,25 +11,31 @@ All notable changes to this repository are recorded here. The format follows
 - Category registry: `schema/categories.json` (9 categories, 46 subcategories and an industries
   list, checked against `schema/categories.schema.json`) and `feeder/categories.py`, used two ways
   that are kept apart. The source category places a feed as a whole: every source carries a
-  `source_category`, a `source_subcategory` and `industries`; the 32 sources are placed, the 13
-  FortiGuard signature and reputation feeds and the two govinfo bulk-data feeds in machine data. The
-  content category places one item by its own title and summary: `content_category()` decides the
-  content category and the content subcategory separately and records for each whether the item text
-  or the source decided it. A profile's optional `source_categories` list names the source categories
-  it polls; without it a profile polls every category whose `digest_default` is true, so machine data
-  appears only in a profile that names it, and a source listed by id is always selected. The
-  technology-regulation profile names none, so its digest drops
-  the 13 skipped FortiGuard lines and the Federal Register bulk-data feed: 17 sources are selected
-  instead of 31, and its daily cap stays 80. `hub lint` reports an unknown category, a subcategory
-  under the wrong category, an unknown industry, an unknown profile category and registry defects
-  (shared orders, empty categories, bad ids, topic hints not in `schema/topics.json`, duplicate keys).
-  `hub categorize ID` proposes a source category for a source from its item titles (live, or the
-  proof samples with `--offline`) and topics: mostly version-number titles mean signature versions,
-  mostly record-id titles mean bulk data, otherwise the registry's topic and keyword hints score each
-  subcategory; it also shows the content categories of the items it read, and `--write` puts the best
-  source category in the manifest. `hub categories` lists the registry
-  and `hub categories add category/subcategory` extends it (a new category needs its label, reader
-  purpose and reason, and `--machine-data` keeps it out of digests unless named).
+  `source_category` and a `source_subcategory`, and may carry `industries` (each listed once). The 32
+  sources are placed; machine data holds only the 13 FortiGuard signature and reputation feeds, all
+  stored off, and a source goes there only on the maintainer's word. The content category places one
+  item by its own title and summary: `content_category()` decides the content category and the
+  content subcategory separately and records for each whether the item text or the source decided
+  it; an item of a reader source never lands in machine data, so a version-number or record-id title
+  there falls back to the source. A profile's optional `source_categories` list names the source
+  categories it polls; without it a profile polls every category whose `digest_default` is true, so
+  machine data is polled only by a profile that names it, and a source listed by id is always
+  selected. The technology-regulation profile names none: it selects 18 sources instead of 31 (the
+  13 disabled FortiGuard feeds, which only ever printed "skipped, disabled", leave its Source health
+  section; the two govinfo bulk-data feeds stay in reader categories and the Federal Register one
+  stays in this digest), and its daily cap stays 80. `hub lint` reports an unknown source category, a
+  source subcategory under the wrong category, an unknown or repeated industry, an unknown or
+  repeated profile source category, and registry defects (shared orders, empty categories, ids with
+  stray hyphens, topic hints not in `schema/topics.json`, duplicate keys). `hub categorize ID`
+  proposes a source category from a source's item titles and topics and shows the content
+  categories of the items it read: live, each configured route fetched once without validators by a
+  fetcher that keeps no state (the poll's cache is never touched), or the proof samples with
+  `--offline`. Mostly version-number titles propose signature versions, mostly record-id titles bulk
+  data, otherwise the registry's topic and keyword hints score each subcategory. `--write` puts the
+  best proposal in the manifest but never machine data without `--allow-machine-data`. `hub
+  categories` lists the registry and `hub categories add category/subcategory` extends it (a new
+  category needs its label, reader purpose and reason, and `--machine-data` keeps it out of digests
+  unless named); it refuses a registry file that repeats a key.
 - 23 FortiGuard sources under `sources/`: ten enabled (PSIRT advisories, outbreak alerts, threat signal
   reports, firmware updates, and the endpoint vulnerability, intrusion prevention, OT intrusion
   prevention, OT security, virtual patching and application control updates) and thirteen signature and

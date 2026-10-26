@@ -73,7 +73,7 @@
     "source_categories": {
       "description": "Source categories this profile polls: category or category/subcategory references from schema/categories.json, matched against each source's source_category. Without this list a profile polls every category whose digest_default is true.",
       "items": {
-        "pattern": "^[a-z][a-z0-9-]*(/[a-z][a-z0-9-]*)?$",
+        "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*(/[a-z][a-z0-9]*(-[a-z0-9]+)*)?$",
         "type": "string"
       },
       "minItems": 1,

@@ -22,7 +22,7 @@ from pathlib import Path
 from . import ROOT, jsonio
 
 CATEGORIES_FILE = ROOT / "schema" / "categories.json"
-ID_RE = re.compile(r"^[a-z][a-z0-9-]*$")
+ID_RE = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 # Titles that are only a version number ("37.319") or a record id ("FR-2022-04-07") are written for programs.
 VERSION_TITLE = re.compile(r"^v?\d+(?:\.\d+)+$")
 RECORD_ID_TITLE = re.compile(r"^[A-Z]{2,6}(?:-[A-Z0-9]+)+$")
@@ -155,14 +155,16 @@ def content_category(reg: dict, title: str, summary: str, source_category: str |
     """One item's content category and content subcategory, each decided on its own:
     {"category", "subcategory", "category_basis", "subcategory_basis", "reasons"}. A basis is "item"
     when the item's own text decided that level and "source" when it fell back to the source category
-    or source subcategory. A version-number or record-id title decides both levels. Otherwise each
-    keyword scores 2 in the title and 1 in the summary: the category with the highest total (2 or more)
-    wins, then the subcategory with the highest score inside it (2 or more, or any score when the
-    category is not the source category). Ties keep the source category and source subcategory."""
+    or source subcategory. Each keyword scores 2 in the title and 1 in the summary: the category with
+    the highest total (2 or more) wins, then the subcategory with the highest score inside it (2 or
+    more, or any score when the category is not the source category). Ties keep the source category
+    and source subcategory. An item lands in a category that no profile shows by default (machine
+    data) only when its source is already there; then a version-number or record-id title decides."""
     text_title = " ".join((title or "").split())
+    hidden_ok = not digest_default(reg, source_category)
     for rx, ref, what in ((VERSION_TITLE, "machine-data/signature-versions", "version number"),
                           (RECORD_ID_TITLE, "machine-data/bulk-data", "record id")):
-        if text_title and rx.match(text_title) and ref in all_refs(reg):
+        if hidden_ok and text_title and rx.match(text_title) and ref in all_refs(reg):
             cid, sid = ref.split("/")
             return {"category": cid, "subcategory": sid, "category_basis": "item", "subcategory_basis": "item",
                     "reasons": [f"the title is a {what}"]}
@@ -170,6 +172,8 @@ def content_category(reg: dict, title: str, summary: str, source_category: str |
     scores: dict[str, dict[str, int]] = {}
     reasons: dict[tuple[str, str], list[str]] = {}
     for cid, entry in ordered(reg):
+        if not entry["digest_default"] and not hidden_ok:
+            continue
         for sid, sub in sorted(entry["subcategories"].items(), key=lambda kv: kv[1]["order"]):
             score, why = 0, []
             for kw in sub.get("keywords", []):
@@ -229,8 +233,8 @@ def add_entry(reg: dict, ref: str, *, label: str, note: str, today: str, keyword
         cats[cid] = {"label": category_label, "order": max((c["order"] for c in cats.values()), default=0) + 1,
                      "reader_purpose": purpose, "digest_default": not machine_data, "added": today,
                      "reason": reason, "subcategories": {}}
-    elif category_label or purpose or machine_data:
-        raise ValueError(f"category {cid!r} exists; --category-label, --purpose and --machine-data apply only to a new one")
+    elif category_label or purpose or reason or machine_data:
+        raise ValueError(f"category {cid!r} exists; --category-label, --purpose, --reason and --machine-data apply only to a new one")
     subs = cats[cid]["subcategories"]
     if sid in subs:
         raise ValueError(f"{cid}/{sid} is already in the registry")

@@ -65,8 +65,12 @@ Other commands:
 - `hub lint` validates every source, profile and the releases file (exit 1 on any defect).
 - `hub fmt [--check]` rewrites config JSON in canonical form, or reports files that are not.
 - `hub cat ID` prints a source's manifest, methods, the routes in poll order and the landing routes it never polls.
-- `hub categorize ID [--write] [--offline]` proposes a source category from a source's item titles and topics and
-  shows the content categories of the items it read.
+- `hub categorize ID [--write [--allow-machine-data]] [--offline]` proposes a source category from a source's
+  item titles and topics and shows the content categories of the items it read. It fetches live through the
+  source's routes without touching the poll's cache, or reads the proof samples with `--offline`; `--write`
+  edits the manifest and never writes machine data without `--allow-machine-data`. For the six FortiGuard
+  detection feeds, whose titles are version numbers, the proposal is machine data while the committed
+  source category is vulnerabilities/detections; that difference is expected.
 - `hub categories` lists the category registry; `hub categories add category/subcategory --label L --note N`
   extends it.
 - `hub release SHA --reason TEXT` releases a held item by its `content_sha256`.
@@ -303,8 +307,9 @@ The `data` branch does not exist yet.
 
 1. Fetch the feed with the named User-Agent and confirm it parses at least one item.
 2. Write `sources/<id>/source.json` and `methods.json` from that real fetch. The folder name is the
-   id, topics come from `schema/topics.json`, the source category, source subcategory and industries
-   from `schema/categories.json` (`hub categorize ID` proposes them), and `classification_review` stays `pending`.
+   id, topics come from `schema/topics.json`, the source category and source subcategory (and optional
+   industries) from `schema/categories.json` (`hub categorize ID` proposes them), and
+   `classification_review` stays `pending`.
 3. Reference the id or its topics in a profile if wanted, and add a CHANGELOG line.
 4. Run `hub lint` and `hub fmt --check`, then open a pull request. Unproven sources go in the pull
    request description with their HTTP result, never into `sources/`.

@@ -338,7 +338,10 @@ def lint(repo: Repo) -> list[str]:
             elif not categories.is_valid_pair(reg, src.source_category, src.source_subcategory):
                 problems.append(f"{rel}/{name}: source subcategory {src.source_subcategory!r} is not under "
                                 f"category {src.source_category!r}")
-            for industry in src.manifest.get("industries", []):
+            listed = src.manifest.get("industries", [])
+            for industry in sorted({i for i in listed if listed.count(i) > 1}):
+                problems.append(f"{rel}/{name}: industry {industry!r} is listed twice")
+            for industry in listed:
                 if industry not in categories.industry_ids(reg):
                     problems.append(f"{rel}/{name}: industry {industry!r} is not in schema/categories.json")
         if "auth" in src.manifest and not src.local:
@@ -380,7 +383,10 @@ def lint(repo: Repo) -> list[str]:
         for sid in profile.get("sources", []):
             if sid not in known_ids:
                 problems.append(f"{rel}: source {sid!r} has no folder under sources/")
-        for ref in profile.get("source_categories", []):
+        named = profile.get("source_categories", [])
+        for ref in sorted({r for r in named if named.count(r) > 1}):
+            problems.append(f"{rel}: source category {ref!r} is listed twice")
+        for ref in named:
             if refs is not None and ref not in refs:
                 problems.append(f"{rel}: source category {ref!r} is not in schema/categories.json")
 

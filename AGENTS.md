@@ -70,8 +70,8 @@ lives in the tool's own folder and is tracked.
 - Topics come from `schema/topics.json` (topic or topic/subtopic). When nothing fits, add the topic or
   subtopic to the registry in the same pull request with a one-line reason instead of forcing a near match.
 - Categories come from `schema/categories.json`, the same way (`hub categories add`). A source category
-  (manifest) places the feed; a content category places one item by its text. Machine data is polled
-  only by a profile that names it.
+  (manifest) places the feed; a content category places one item by its text. A source goes in machine
+  data only on the maintainer's word, and machine data is polled only by a profile that names it.
 - Externally facing prose follows `docs/no-ai-slop/` with `OVERLAY.md` taking precedence once that folder
   exists (planned); quoted feed text is never rewritten.
 - Federal government content is public domain; everything else is link and attribution only.
@@ -154,7 +154,8 @@ lives in the tool's own folder and is tracked.
 
 1. Fetch the feed with the named User-Agent and confirm it parses at least one item, then write
    `sources/<id>/source.json` and `methods.json` from that real fetch, with a `sample` item in the proof
-   record and a source category, source subcategory and industries from `schema/categories.json` (`hub categorize`). (Planned: `python3 feeder/hub.py add <url> --id <id> --topics a,b/c`, with `--opml`, `--local` for
+   record and a source category, source subcategory and optional industries from `schema/categories.json`
+   (`hub categorize`: live, or the proof samples with `--offline`; `--write` edits the manifest). (Planned: `python3 feeder/hub.py add <url> --id <id> --topics a,b/c`, with `--opml`, `--local` for
    anything secret-bearing and `--from`, will do this in one command and write the folder only if a real
    fetch parsed at least one item.)
 2. Reference the id in a profile if wanted, add a CHANGELOG line, run `hub lint` and `hub fmt --check`.

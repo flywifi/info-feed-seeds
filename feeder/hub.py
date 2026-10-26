@@ -9,7 +9,7 @@ Usage (Windows: `py -3 -I feeder\\hub.py ...`; elsewhere: `python3 feeder/hub.py
   fmt [--check]
   cat ID
   release SHA --reason TEXT
-  categorize ID [--write] [--offline] [--state-dir DIR]
+  categorize ID [--write [--allow-machine-data]] [--offline]
   categories [add CATEGORY/SUBCATEGORY --label L --note N [--keywords a,b]
              [--category-label L --purpose P --reason R [--machine-data]]]
 
@@ -466,8 +466,10 @@ def cmd_release(args, repo: Repo, now_fn) -> int:
 
 def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
     """Propose a source category for a source from its item titles and topics, and show the content
-    category of each item read; --write puts the best source category in the manifest. Live by default
-    (the source's configured routes); --offline reads the proof samples."""
+    category of each item read; --write puts the best source category in the manifest, never machine
+    data unless --allow-machine-data is given. Live by default: each configured route is fetched once,
+    unconditionally, by a fetcher that keeps no state, so the poll's cache and validators are never
+    touched. --offline reads the proof samples instead."""
     folder = repo.sources_dir / args.id
     if not folder.is_dir():
         warn(f"categorize: no source folder sources/{args.id}")
@@ -483,16 +485,16 @@ def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
         return EXIT_CONFIG
     titles: list[str] = []
     summaries: list[str] = []
-    origin = "proof samples"
+    origin = "nothing (every route failed)"
     if args.offline:
         titles = [a["sample"]["title"] for rec in (src.methods or {}).get("routes", [])
                   for a in rec.get("attempts", []) if a.get("sample")]
         summaries = [""] * len(titles)
+        origin = "proof samples"
     else:
-        state_dir = Path(args.state_dir) if args.state_dir else DEFAULT_STATE_DIR
-        fetcher = fetcher_factory(state_dir)
+        fetcher = fetcher_factory(None)   # no state directory: nothing read or saved
         for route in src.poll_routes():
-            result = fetcher.get(route["url"])
+            result = fetcher.get(route["url"], conditional=False)
             if result.error is not None or result.body is None:
                 say(f"categorize: {route['url']}: {result.error or 'no body'}")
                 continue
@@ -504,8 +506,6 @@ def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
             titles, origin = [raw.title for raw in parsed["items"]], route["url"]
             summaries = [items.sanitize(raw.summary) for raw in parsed["items"]]
             break
-        if hasattr(fetcher, "save"):
-            fetcher.save()
     current = f"{src.source_category}/{src.source_subcategory}" if src.source_category else "none"
     say(f"categorize {src.id}: source category {current}; read {len(titles)} title(s) from {origin}")
     found = categories.suggest(reg, titles, src.topics)
@@ -520,13 +520,18 @@ def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
         spread[key] = spread.get(key, 0) + 1
     for (cat, subcat, cat_basis, sub_basis), count in sorted(spread.items(), key=lambda kv: (-kv[1], kv[0])):
         say(f"  content {cat}/{subcat}: {count} item(s); category from the {cat_basis}, subcategory from the {sub_basis}")
-    if not found:
-        return EXIT_DEFECT if args.write else EXIT_OK
-    if args.write:
-        best_cat, best_sub = found[0]["ref"].split("/")
-        manifest = dict(src.manifest, source_category=best_cat, source_subcategory=best_sub)
-        jsonio.dump_json(folder / ("source.local.json" if src.local else "source.json"), manifest)
-        say(f"categorize: wrote source category {found[0]['ref']} to sources/{src.id}; check it before committing")
+    if not args.write:
+        return EXIT_OK
+    writable = [s for s in found if args.allow_machine_data or categories.digest_default(reg, s["ref"].split("/")[0])]
+    if found and not writable:
+        say(f"categorize: {found[0]['ref']} is machine data, which no profile polls by default; "
+            "give --allow-machine-data to write it")
+    if not writable:
+        return EXIT_DEFECT
+    best_cat, best_sub = writable[0]["ref"].split("/")
+    manifest = dict(src.manifest, source_category=best_cat, source_subcategory=best_sub)
+    jsonio.dump_json(folder / ("source.local.json" if src.local else "source.json"), manifest)
+    say(f"categorize: wrote source category {writable[0]['ref']} to sources/{src.id}; check it before committing")
     return EXIT_OK
 
 
@@ -536,6 +541,11 @@ def cmd_categories(args, repo: Repo, now_fn) -> int:
         warn("categories: schema/categories.json is missing or not valid JSON")
         return EXIT_CONFIG
     if args.action == "add":
+        doubled = categories.duplicate_keys(repo.categories_file)
+        if doubled:
+            warn(f"categories add: schema/categories.json repeats the key(s) {', '.join(sorted(set(doubled)))}; "
+                 "fix the file first, a rewrite would drop one of them")
+            return EXIT_CONFIG
         try:
             new = categories.add_entry(
                 reg, args.ref, label=args.label, note=args.note, today=now_fn().date().isoformat(),
@@ -589,7 +599,7 @@ def build_parser() -> argparse.ArgumentParser:
     cz.add_argument("id")
     cz.add_argument("--write", action="store_true", help="write the best source category into the manifest")
     cz.add_argument("--offline", action="store_true", help="read the proof samples instead of fetching")
-    cz.add_argument("--state-dir", help="fetch cache directory (default .cache)")
+    cz.add_argument("--allow-machine-data", action="store_true", help="let --write put the source in machine data")
     cats = sub.add_parser("categories", help="list the category registry, or add an entry to it")
     cats_sub = cats.add_subparsers(dest="action")
     add = cats_sub.add_parser("add", help="add category/subcategory (a new category needs its label, purpose and reason)")

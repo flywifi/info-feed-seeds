@@ -37,8 +37,8 @@
     "actions",
     "local"
   ],
-  "source_category": "machine-data",
-  "source_subcategory": "bulk-data",
+  "source_category": "regulatory",
+  "source_subcategory": "federal-rules",
   "tier": "canonical",
   "topics": [
     "regulation/federal-rulemaking",
