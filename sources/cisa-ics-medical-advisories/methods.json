@@ -1,0 +1,36 @@
+{
+  "id": "cisa-ics-medical-advisories",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": null,
+          "media": [],
+          "method": "user-saved",
+          "note": "user-saved copy of the feed, parsed 30 items (rss); not a live fetch; tried_at is when the copy was saved here",
+          "result": "ok",
+          "sample": {
+            "link": "https://www.cisa.gov/news-events/ics-medical-advisories/icsma-26-295-01",
+            "published": "2026-10-21T22:12:50Z",
+            "title": "InterSystems Corporation InterSystems IRIS for Health"
+          },
+          "source_label": "user_saved",
+          "tried_at": "2026-10-26T13:58:32Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 403,
+          "media": [],
+          "method": "conditional-get",
+          "note": "live fetch: HTTP 403, bot-wall, 0 items",
+          "result": "bot-wall",
+          "source_label": "live",
+          "tried_at": "2026-10-26T14:34:09Z"
+        }
+      ],
+      "last_success": null,
+      "url": "https://www.cisa.gov/cybersecurity-advisories/ics-medical-advisories.xml"
+    }
+  ]
+}

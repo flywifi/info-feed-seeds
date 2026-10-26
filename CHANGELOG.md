@@ -8,6 +8,10 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Five sources stored with `enabled: false` until a live proof: `pulse-kalir` (valid feed, no items
+  yet), `deepdarkcti` (repository commit feed, 403), and `cisa-ics-advisories`,
+  `cisa-ics-medical-advisories` and `cisa-news` (403 bot wall; user-saved copies parsed 30, 30 and 10
+  items and are recorded as user-saved, not live).
 - Every polled item stores its source category and its content category (with the basis of each),
   and `latest.json` items carry both under `categories`. Registry keywords place ransomware victim
   posts, active zero-days, CVE entries, ICS advisories and guidance by their titles.

@@ -1,0 +1,39 @@
+{
+  "added": "2026-10-26",
+  "authority": "secondary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-26",
+    "kind": "manual",
+    "ref": "https://github.com/fastfire/deepdarkCTI/commits/main.atom"
+  },
+  "enabled": false,
+  "expected_update_period_days": 7,
+  "homepage": "https://github.com/fastfire/deepdarkCTI",
+  "id": "deepdarkcti",
+  "industries": [
+    "cybersecurity"
+  ],
+  "interval_days": 1,
+  "label": "deepdarkCTI repository changes",
+  "publisher": "deepdarkCTI project",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "atom",
+      "params": {},
+      "url": "https://github.com/fastfire/deepdarkCTI/commits/main.atom"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "source_category": "attacks",
+  "source_subcategory": "threat-research",
+  "tier": "news",
+  "topics": [
+    "cybersecurity/incidents"
+  ],
+  "verified": null
+}

@@ -1,0 +1,21 @@
+{
+  "id": "deepdarkcti",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 403,
+          "media": [],
+          "method": "conditional-get",
+          "note": "live fetch: HTTP 403, refused, 0 items",
+          "result": "refused",
+          "source_label": "live",
+          "tried_at": "2026-10-26T14:34:04Z"
+        }
+      ],
+      "last_success": null,
+      "url": "https://github.com/fastfire/deepdarkCTI/commits/main.atom"
+    }
+  ]
+}

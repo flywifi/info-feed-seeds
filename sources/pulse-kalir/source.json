@@ -1,0 +1,39 @@
+{
+  "added": "2026-10-26",
+  "authority": "secondary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-26",
+    "kind": "manual",
+    "ref": "https://pulse.kalir.io/en/feed.xml"
+  },
+  "enabled": false,
+  "expected_update_period_days": 7,
+  "homepage": "https://pulse.kalir.io/en",
+  "id": "pulse-kalir",
+  "industries": [
+    "cybersecurity"
+  ],
+  "interval_days": 1,
+  "label": "Pulse underground intelligence (English)",
+  "publisher": "Kalir",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://pulse.kalir.io/en/feed.xml"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "source_category": "attacks",
+  "source_subcategory": "threat-research",
+  "tier": "news",
+  "topics": [
+    "cybersecurity/incidents"
+  ],
+  "verified": null
+}

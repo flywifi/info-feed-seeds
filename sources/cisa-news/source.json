@@ -1,0 +1,41 @@
+{
+  "added": "2026-10-26",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-26",
+    "kind": "manual",
+    "ref": "https://www.cisa.gov/news.xml"
+  },
+  "enabled": false,
+  "expected_update_period_days": 7,
+  "homepage": "https://www.cisa.gov/news-events/news",
+  "id": "cisa-news",
+  "industries": [
+    "federal",
+    "cybersecurity"
+  ],
+  "interval_days": 1,
+  "label": "CISA news",
+  "publisher": "Cybersecurity and Infrastructure Security Agency",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://www.cisa.gov/news.xml"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "source_category": "guidance",
+  "source_subcategory": "security-guidance",
+  "tier": "canonical",
+  "topics": [
+    "cybersecurity",
+    "government/federal"
+  ],
+  "verified": null
+}
