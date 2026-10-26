@@ -342,6 +342,11 @@
       ],
       "type": "string"
     },
+    "category": {
+      "description": "A category id from schema/categories.json.",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "type": "string"
+    },
     "classification_review": {
       "description": "pending until a person confirms authority and tier.",
       "enum": [
@@ -396,6 +401,14 @@
       "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
       "type": "string"
     },
+    "industries": {
+      "description": "Industry ids from schema/categories.json (industries).",
+      "items": {
+        "pattern": "^[a-z][a-z0-9-]*$",
+        "type": "string"
+      },
+      "type": "array"
+    },
     "interval_days": {
       "description": "Minimum days between polls of this source.",
       "minimum": 0,
@@ -435,6 +448,11 @@
       "minItems": 1,
       "type": "array"
     },
+    "subcategory": {
+      "description": "A subcategory id under the source's category in schema/categories.json.",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "type": "string"
+    },
     "tier": {
       "enum": [
         "canonical",
@@ -462,18 +480,20 @@
     }
   },
   "required": [
+    "added",
+    "authority",
+    "category",
+    "classification_review",
+    "discovered_from",
+    "enabled",
+    "homepage",
     "id",
     "label",
     "publisher",
-    "homepage",
     "routes",
-    "topics",
-    "authority",
+    "subcategory",
     "tier",
-    "classification_review",
-    "enabled",
-    "added",
-    "discovered_from",
+    "topics",
     "verified"
   ],
   "then": {

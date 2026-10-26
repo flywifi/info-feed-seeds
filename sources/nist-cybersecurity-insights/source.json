@@ -1,6 +1,7 @@
 {
   "added": "2026-10-20",
   "authority": "primary",
+  "category": "guidance",
   "classification_review": "pending",
   "discovered_from": {
     "date": "2026-10-20",
@@ -10,6 +11,9 @@
   "enabled": true,
   "homepage": "https://www.nist.gov/blogs/cybersecurity-insights",
   "id": "nist-cybersecurity-insights",
+  "industries": [
+    "cybersecurity"
+  ],
   "label": "NIST Cybersecurity Insights blog",
   "lists": [
     "nist-feeds"
@@ -33,6 +37,7 @@
     "actions",
     "local"
   ],
+  "subcategory": "security-guidance",
   "tier": "canonical",
   "topics": [
     "cybersecurity",

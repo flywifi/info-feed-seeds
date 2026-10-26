@@ -2,7 +2,7 @@
 The committed profile and guard releases file validate too."""
 import unittest
 
-from feeder import adapters, jsonio
+from feeder import adapters, categories, jsonio
 from feeder.config import Repo, lint, release_problems
 from feeder.schema_validate import validate
 from feeder.topics import all_tags
@@ -35,6 +35,21 @@ class SourceFolderTests(unittest.TestCase):
                 proven = [r for r in methods["routes"] if r["url"] in polled and r["last_success"]]
                 self.assertTrue(proven, "a configured route has a recorded success")
                 self.assertEqual(proven[0]["last_success"]["source_label"], "live")
+
+    def test_every_source_is_placed_in_the_category_registry(self):
+        reg = categories.load_categories(ROOT / "schema" / "categories.json")
+        for folder in REPO.source_folders():
+            with self.subTest(source=folder.name):
+                manifest = jsonio.load_json(folder / "source.json")
+                self.assertTrue(categories.is_valid_pair(reg, manifest["category"], manifest["subcategory"]))
+                for industry in manifest.get("industries", []):
+                    self.assertIn(industry, categories.industry_ids(reg))
+
+    def test_machine_data_sources_are_stored_off_and_reader_sources_on(self):
+        for sid, src in REPO.load_sources().items():
+            if sid.startswith(("fortiguard-", "fortinet-")):
+                with self.subTest(source=sid):
+                    self.assertEqual(src.manifest["enabled"], src.digest_default)
 
     def test_lint_is_clean(self):
         self.assertEqual(lint(REPO), [])

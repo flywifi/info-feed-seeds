@@ -4,8 +4,8 @@ The 23 feeds listed at https://www.fortiguard.com/rss-feeds, read on 2026-10-23.
 twice on 2026-10-25 with the named User-Agent through the feeder's own fetcher; the status column is from
 the second fetch and the proof records under `sources/<id>/methods.json` carry both. "Bucket" says whether a
 person reads the lines (readable, an enabled source) or a program does (machine, stored with
-`enabled: false`). "Intended reader category (planned)" is a working label for a reader-category
-registry that does not exist yet; manifests carry topics from `schema/topics.json` only.
+`enabled: false`). "Category" is the source's category/subcategory in `schema/categories.json`,
+as its manifest carries it; machine-data sources are shown only by a profile that names that category.
 
 robots.txt: www.fortiguard.com and fortiguard.fortinet.com both answer 200 with `User-agent: *`,
 `Crawl-delay: 2`, `Disallow: /*?*` and `Disallow: /threat-research/data`; filestore.fortinet.com and
@@ -17,7 +17,7 @@ Homepages: the psirt, outbreak-alert and threat-signal-report pages were derived
 answered 200 when fetched once on 2026-10-25. The firmware feed's item link, a support portal path, refused
 its redirect, so that source's homepage is https://support.fortinet.com/ (200).
 
-| id | feed | url | bucket | intended reader category (planned) | status |
+| id | feed | url | bucket | category | status |
 |---|---|---|---|---|---|
 | fortiguard-psirt | FortiGuard PSIRT advisories | https://filestore.fortinet.com/fortiguard/rss/ir.xml | readable | vulnerabilities/vendor-advisories | 200, 50 items, newest 2026-10-21 |
 | fortiguard-outbreak-alerts | FortiGuard outbreak alerts | https://filestore.fortinet.com/fortiguard/rss/outbreakalert.xml | readable | attacks/exploited-now | 200, 20 items, newest 2026-10-23 |

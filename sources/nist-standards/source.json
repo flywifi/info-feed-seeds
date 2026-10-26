@@ -1,6 +1,7 @@
 {
   "added": "2026-10-20",
   "authority": "primary",
+  "category": "standards",
   "classification_review": "pending",
   "discovered_from": {
     "date": "2026-10-20",
@@ -10,6 +11,9 @@
   "enabled": true,
   "homepage": "https://www.nist.gov/standards",
   "id": "nist-standards",
+  "industries": [
+    "technology"
+  ],
   "label": "NIST Standards news",
   "lists": [
     "nist-feeds"
@@ -33,6 +37,7 @@
     "actions",
     "local"
   ],
+  "subcategory": "measurement",
   "tier": "canonical",
   "topics": [
     "standards/nist"

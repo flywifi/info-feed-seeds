@@ -9,7 +9,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import ROOT, adapters, guard, items, jsonio, topics
+from . import ROOT, adapters, categories, guard, items, jsonio, topics
 from .schema_validate import validate
 
 SHA_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -32,6 +32,15 @@ class Source:
     methods: dict | None
     folder: Path
     local: bool = False
+    digest_default: bool = True   # False when the source's category is shown only by a profile that names it
+
+    @property
+    def category(self) -> str | None:
+        return self.manifest.get("category")
+
+    @property
+    def subcategory(self) -> str | None:
+        return self.manifest.get("subcategory")
 
     @property
     def publisher(self) -> str:
@@ -67,6 +76,7 @@ class Source:
 class Repo:
     root: Path = ROOT
     _topics: dict | None = field(default=None, repr=False)
+    _categories: dict | None = field(default=None, repr=False)
 
     @property
     def sources_dir(self) -> Path:
@@ -92,6 +102,19 @@ class Repo:
             self._topics = topics.load_topics(self.schema_dir / "topics.json")
         return self._topics
 
+    @property
+    def categories_file(self) -> Path:
+        return self.schema_dir / "categories.json"
+
+    def categories(self) -> dict | None:
+        """The category registry, or None when schema/categories.json is missing or unreadable (lint reports it)."""
+        if self._categories is None:
+            try:
+                self._categories = categories.load_categories(self.categories_file)
+            except (OSError, ValueError):
+                return None
+        return self._categories
+
     # -- sources
 
     def source_folders(self) -> list[Path]:
@@ -112,7 +135,10 @@ class Repo:
             methods = jsonio.load_json(methods_path) if methods_path.exists() else None
         except ValueError as exc:
             raise ConfigError(f"{_rel(folder, self.root)}: invalid JSON: {exc}") from None
-        return Source(id=folder.name, manifest=manifest, methods=methods, folder=folder, local=local)
+        reg = self.categories()
+        shown = True if reg is None else categories.digest_default(reg, manifest.get("category"))
+        return Source(id=folder.name, manifest=manifest, methods=methods, folder=folder, local=local,
+                      digest_default=shown)
 
     def load_sources(self) -> dict[str, Source]:
         return {f.name: self.load_source(f) for f in self.source_folders()}
@@ -181,11 +207,23 @@ def _parent(tag: str) -> str:
     return tag.split("/", 1)[0]
 
 
+def category_allowed(profile: dict, source: Source) -> bool:
+    """A profile's `categories` list (category or category/subcategory) names what it shows; without
+    the list it shows every category whose digest_default is true, so machine data stays out."""
+    names = profile.get("categories")
+    if names is None:
+        return source.digest_default
+    return source.category in names or f"{source.category}/{source.subcategory}" in names
+
+
 def profile_selects(profile: dict, source: Source) -> bool:
+    """A source listed by id is selected; otherwise one of its topics must match and its category must be allowed."""
     if source.id in profile.get("sources", []):
         return True
     wanted = set(profile.get("topics", []))
-    return any(t in wanted or _parent(t) in wanted for t in source.topics)
+    if not any(t in wanted or _parent(t) in wanted for t in source.topics):
+        return False
+    return category_allowed(profile, source)
 
 
 def selected_sources(profile: dict, sources: dict[str, Source]) -> list[Source]:
@@ -263,6 +301,16 @@ def lint(repo: Repo) -> list[str]:
     """Return every defect found; an empty list is clean."""
     problems: list[str] = []
     tags = topics.all_tags(repo.topics())
+    reg = repo.categories()
+    if reg is None:
+        problems.append("schema/categories.json is missing or not valid JSON")
+    else:
+        problems += [f"schema/categories.json: {e}" for e in validate(reg, repo.schema("categories.schema.json"))]
+        if not problems:
+            problems += [f"schema/categories.json: {p}" for p in categories.registry_problems(reg, tags)]
+        problems += [f"schema/categories.json: key {k!r} appears twice in one object"
+                     for k in categories.duplicate_keys(repo.categories_file)]
+    refs = categories.all_refs(reg) if reg is not None and not problems else None
     source_schema = repo.schema("source.schema.json")
     methods_schema = repo.schema("methods.schema.json")
     known_ids: set[str] = set()
@@ -282,6 +330,14 @@ def lint(repo: Repo) -> list[str]:
         for tag in src.topics:
             if tag not in tags:
                 problems.append(f"{rel}/{name}: topic {tag!r} is not in schema/topics.json")
+        if refs is not None and src.category is not None:
+            if src.category not in reg["categories"]:
+                problems.append(f"{rel}/{name}: category {src.category!r} is not in schema/categories.json")
+            elif not categories.is_valid_pair(reg, src.category, src.subcategory):
+                problems.append(f"{rel}/{name}: subcategory {src.subcategory!r} is not under category {src.category!r}")
+            for industry in src.manifest.get("industries", []):
+                if industry not in categories.industry_ids(reg):
+                    problems.append(f"{rel}/{name}: industry {industry!r} is not in schema/categories.json")
         if "auth" in src.manifest and not src.local:
             problems.append(f"{rel}: a credential-gated source must live in source.local.json")
         for route in src.manifest.get("routes", []):
@@ -321,6 +377,9 @@ def lint(repo: Repo) -> list[str]:
         for sid in profile.get("sources", []):
             if sid not in known_ids:
                 problems.append(f"{rel}: source {sid!r} has no folder under sources/")
+        for ref in profile.get("categories", []):
+            if refs is not None and ref not in refs:
+                problems.append(f"{rel}: category {ref!r} is not in schema/categories.json")
 
     if repo.releases_file.exists():
         try:
@@ -341,7 +400,7 @@ def lint(repo: Repo) -> list[str]:
 
 
 __all__ = [
-    "ConfigError", "GUARD_RANK", "RELEASES_COMMENT", "Repo", "Source", "accepts", "is_held",
+    "ConfigError", "GUARD_RANK", "RELEASES_COMMENT", "Repo", "Source", "accepts", "category_allowed", "is_held",
     "item_tags", "json_files", "keyword_tags", "lint", "profile_selects", "release_problems",
     "selected_sources", "with_defaults",
 ]

@@ -69,6 +69,8 @@ lives in the tool's own folder and is tracked.
 - No fabrication: never invent a date, figure, quote, source or archive URL. A missing date stays null.
 - Topics come from `schema/topics.json` (topic or topic/subtopic). When nothing fits, add the topic or
   subtopic to the registry in the same pull request with a one-line reason instead of forcing a near match.
+- Categories come from `schema/categories.json`, the same way (`hub categories add`); a machine-data
+  category is selected only by a profile that names it.
 - Externally facing prose follows `docs/no-ai-slop/` with `OVERLAY.md` taking precedence once that folder
   exists (planned); quoted feed text is never rewritten.
 - Federal government content is public domain; everything else is link and attribution only.
@@ -126,9 +128,9 @@ lives in the tool's own folder and is tracked.
 - `profiles/<name>.json`: one per project. `*.local.json` profiles are ignored, loaded only by name and
   written only under `local/`.
 - `schema/`: JSON Schemas for sources, methods, profiles and items (crawl jobs and crawl audits once the crawl
-  layer exists), plus `topics.json`, the two-level topic registry.
+  layer exists), plus `topics.json`, the two-level topic registry, and `categories.json`, the category registry.
 - `guard/releases.json`: human-owned list of items held by the injection guard and released by a person.
-- `feeder/`: the hub (today: poll, lint, fmt, cat, release; planned: check, status, add, set-credential, auth,
+- `feeder/`: the hub (today: poll, lint, fmt, cat, release, categorize, categories; planned: check, status, add, set-credential, auth,
   serve-mcp) and its modules and adapters.
 - `tools/doctor.py` and `tools/doctor_checks/`: the health checker and fixer. `check` is read-only and exists;
   `fix --safe` (planned) will run only inside the poll workflow and apply only registered safe fixes, each
@@ -151,7 +153,7 @@ lives in the tool's own folder and is tracked.
 
 1. Fetch the feed with the named User-Agent and confirm it parses at least one item, then write
    `sources/<id>/source.json` and `methods.json` from that real fetch, with a `sample` item in the proof
-   record. (Planned: `python3 feeder/hub.py add <url> --id <id> --topics a,b/c`, with `--opml`, `--local` for
+   record and a category, subcategory and industries from `schema/categories.json` (`hub categorize`). (Planned: `python3 feeder/hub.py add <url> --id <id> --topics a,b/c`, with `--opml`, `--local` for
    anything secret-bearing and `--from`, will do this in one command and write the folder only if a real
    fetch parsed at least one item.)
 2. Reference the id in a profile if wanted, add a CHANGELOG line, run `hub lint` and `hub fmt --check`.

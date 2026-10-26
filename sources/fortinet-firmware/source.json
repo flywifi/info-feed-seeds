@@ -1,6 +1,7 @@
 {
   "added": "2026-10-25",
   "authority": "primary",
+  "category": "releases",
   "classification_review": "pending",
   "discovered_from": {
     "date": "2026-10-23",
@@ -11,6 +12,9 @@
   "expected_update_period_days": 7,
   "homepage": "https://support.fortinet.com/",
   "id": "fortinet-firmware",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "Fortinet firmware updates",
   "lists": [
@@ -29,6 +33,7 @@
     "actions",
     "local"
   ],
+  "subcategory": "firmware",
   "tier": "vendor",
   "topics": [
     "technology/devices",

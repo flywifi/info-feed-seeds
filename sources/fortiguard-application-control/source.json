@@ -1,6 +1,7 @@
 {
   "added": "2026-10-25",
   "authority": "primary",
+  "category": "vulnerabilities",
   "classification_review": "pending",
   "discovered_from": {
     "date": "2026-10-23",
@@ -11,6 +12,9 @@
   "expected_update_period_days": 7,
   "homepage": "https://fortiguard.fortinet.com/updates/app",
   "id": "fortiguard-application-control",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard application control updates",
   "lists": [
@@ -35,6 +39,7 @@
     "actions",
     "local"
   ],
+  "subcategory": "detections",
   "tier": "vendor",
   "topics": [
     "cybersecurity"

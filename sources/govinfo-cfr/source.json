@@ -1,6 +1,7 @@
 {
   "added": "2026-10-20",
   "authority": "primary",
+  "category": "regulatory",
   "classification_review": "pending",
   "discovered_from": {
     "date": "2026-10-20",
@@ -10,6 +11,9 @@
   "enabled": true,
   "homepage": "https://www.govinfo.gov/app/collection/cfr",
   "id": "govinfo-cfr",
+  "industries": [
+    "federal"
+  ],
   "label": "Code of Federal Regulations (govinfo)",
   "lists": [
     "govinfo-core"
@@ -39,6 +43,7 @@
     "actions",
     "local"
   ],
+  "subcategory": "codified",
   "tier": "canonical",
   "topics": [
     "regulation/federal-rulemaking",

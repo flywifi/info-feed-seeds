@@ -1,6 +1,7 @@
 {
   "added": "2026-10-25",
   "authority": "primary",
+  "category": "machine-data",
   "classification_review": "pending",
   "discovered_from": {
     "date": "2026-10-23",
@@ -11,6 +12,9 @@
   "expected_update_period_days": 1,
   "homepage": "https://www.fortiguard.com/rss-feeds",
   "id": "fortiguard-antispam-uri",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard antispam URI updates",
   "lists": [
@@ -29,6 +33,7 @@
     "actions",
     "local"
   ],
+  "subcategory": "signature-versions",
   "tier": "vendor",
   "topics": [
     "cybersecurity"
