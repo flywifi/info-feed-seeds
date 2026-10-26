@@ -5,7 +5,8 @@ item; `title_selector`, `link_selector`, `date_selector` and `summary_selector` 
 A selector is one or more groups separated by commas; a group is steps separated by spaces (descendant),
 and a step is `tag`, `#id`, `.class` or a combination such as `div#main.a.b`. `sel@attr` reads an
 attribute (`href` and `src` resolved against the page URL), `sel` reads text, and `.` is the item node
-itself. Anything outside the subset (`>`, `[attr]`, `:first-child`) is refused before parsing.
+itself. `next_selector` (for example `a.next@href`) names the link to the next, older page; the
+poller follows it up to `max_pages` and stops at the first page holding nothing new. Anything outside the subset (`>`, `[attr]`, `:first-child`) is refused before parsing.
 
 Dates: `date_regex` picks the date out of the selected text, `date_format` is a strptime format, and
 without a format only ISO 8601 parses. Month names in the format (%b, %B) are read from a fixed English
@@ -215,6 +216,7 @@ def parse(data: bytes | str, *, url: str | None = None, params: dict | None = No
     link_c = compile_value(params.get("link_selector") or "a@href")
     date_c = compile_value(params.get("date_selector"))
     summary_c = compile_value(params.get("summary_selector"))
+    next_c = compile_value(params.get("next_selector"))
     date_regex = params.get("date_regex")
     if date_regex:
         try:
@@ -222,15 +224,17 @@ def parse(data: bytes | str, *, url: str | None = None, params: dict | None = No
         except re.error as exc:
             raise PageParseError(f"bad date_regex: {exc}") from None
     text = data.decode("utf-8", "replace") if isinstance(data, bytes) else data
+    root = parse_html(text)
     items = []
-    for node in select(parse_html(text), items_sel):
+    for node in select(root, items_sel):
         title, link = first_value(node, title_c, base), first_value(node, link_c, base)
         if not title and not link:
             continue
         published = parse_date(first_value(node, date_c, base), params.get("date_format"), date_regex)
         items.append(RawItem(guid=link or title, link=link, title=title or link,
                              summary=first_value(node, summary_c, base) or "", published=published))
-    return {"kind": "page", "items": items, "follow": []}
+    nxt = first_value(root, next_c, base) if next_c else None
+    return {"kind": "page", "items": items, "follow": [nxt] if nxt else []}
 
 
 __all__ = ["PageParseError", "compile_selector", "parse", "parse_date", "parse_html", "select"]

@@ -82,6 +82,12 @@ class SelectorTests(unittest.TestCase):
         items = parse("<ul><li>Typo fixes</li></ul>", {"item_selector": "li", "title_selector": "."})["items"]
         self.assertEqual((items[0].guid, items[0].link, items[0].title), ("Typo fixes", None, "Typo fixes"))
 
+    def test_next_selector_returns_the_next_page_link(self):
+        html = "<ul><li><a href='/a'>A</a></li></ul><a class='next' href='/page/2'>Older</a>"
+        self.assertEqual(parse(html, {"item_selector": "li", "next_selector": "a.next@href"})["follow"], ["https://example.gov/page/2"])
+        self.assertEqual(parse(html, {"item_selector": "li"})["follow"], [], "no next_selector, no paging")
+        self.assertEqual(parse("<li><a href='/a'>A</a></li>", {"item_selector": "li", "next_selector": "a.next@href"})["follow"], [])
+
     def test_an_empty_page_has_no_items(self):
         self.assertEqual(parse("", {"item_selector": "li"})["items"], [])
 

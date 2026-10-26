@@ -65,6 +65,18 @@ def default_fetcher_factory(state_dir: Path):
 
 # --------------------------------------------------------------------------- polling one source
 
+# Adapters whose follow URLs are older pages, newest first: following stops at a page with nothing new.
+NEWEST_FIRST = ("page", "json-api")
+
+
+def _nothing_new(store: Store, source_id: str, route: dict, raws: list) -> bool:
+    """True when this route pages newest first and every item on the page is already stored, so the
+    pages after it hold only items an earlier poll has."""
+    if route["adapter"] not in NEWEST_FIRST or not raws:
+        return False
+    return all(store.item(items.content_sha256(source_id, r.guid, r.link, r.title)) for r in raws)
+
+
 def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
     """Fetch the source's configured routes in order until one answers, dispatching each body to
     its adapter and following the adapter's `follow` URLs up to the route's bound. A 304 ends the
@@ -100,7 +112,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
         # Every item remembers the page that held it and that fetch's time, so a digest line cites its capture.
         raws = [(raw, url, result.retrieved_at) for raw in parsed["items"]]
         truncated = result.truncated
-        queue = [u for u in (parsed.get("follow") or [])]
+        queue = [] if _nothing_new(store, source.id, route, parsed["items"]) else list(parsed.get("follow") or [])
         budget = adapters.follow_limit(route)
         seen = {url}
         follow_failed = 0
@@ -125,7 +137,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
                 continue
             raws += [(raw, next_url, more.retrieved_at) for raw in extra["items"]]
             truncated = truncated or more.truncated
-            queue += [u for u in (extra.get("follow") or [])]
+            if not _nothing_new(store, source.id, route, extra["items"]):
+                queue += list(extra.get("follow") or [])
         record["failed"] += follow_failed
         new = 0
         for raw, page_url, retrieved_at in raws:
