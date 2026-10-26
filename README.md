@@ -356,7 +356,8 @@ first page whose items are all stored already, so a poll reads what was posted s
  "params": {"item_selector": "div.latest-post, div.post-item", "title_selector": "h3 a",
             "link_selector": "h3 a@href", "date_selector": "div.post-details-meta",
             "date_regex": "\\d{1,2} [A-Za-z]{3}, \\d{4}", "date_format": "%d %b, %Y",
-            "summary_selector": "div.post-body"}}
+            "summary_selector": "div.post-body", "next_selector": "a.bp-link-next@href",
+            "max_pages": 3}}
 ```
 
 ## Rules

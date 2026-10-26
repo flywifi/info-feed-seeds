@@ -17,12 +17,27 @@
           },
           "source_label": "live",
           "tried_at": "2026-10-26T11:16:45Z"
+        },
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 12 items (page); next page https://blog.pcisecuritystandards.org/page/2 parsed 12",
+          "result": "ok",
+          "sample": {
+            "link": "https://blog.pcisecuritystandards.org/build-your-payment-security-expertise-with-pci-ssc-elearning",
+            "published": "2026-10-20T00:00:00Z",
+            "title": "Build Your Payment Security Expertise with PCI SSC eLearning"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-26T12:53:51Z"
         }
       ],
       "last_success": {
         "method": "conditional-get",
         "source_label": "live",
-        "tried_at": "2026-10-26T11:16:45Z"
+        "tried_at": "2026-10-26T12:53:51Z"
       },
       "url": "https://blog.pcisecuritystandards.org/"
     }

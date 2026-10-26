@@ -8,6 +8,8 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- `pci-ssc-blog` pages back through older posts (`next_selector` `a.bp-link-next@href`, up to 3 pages),
+  proven by a live fetch of pages 1 and 2.
 - Paging: a page route's `next_selector` names the link to the next, older page, followed up to
   `max_pages` (default 3). For page and JSON API routes the poller stops at the first page whose
   items are all stored already, so each poll reads what was posted since the last one.
