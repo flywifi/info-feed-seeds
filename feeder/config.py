@@ -219,9 +219,12 @@ def category_allowed(profile: dict, source: Source) -> bool:
 
 
 def profile_selects(profile: dict, source: Source) -> bool:
-    """A source listed by id is selected; otherwise one of its topics must match and its category must be allowed."""
+    """A source listed by id is selected; otherwise it must be enabled, one of its topics must match and its
+    category must be allowed. A disabled source waiting for a live proof is never picked up by topic."""
     if source.id in profile.get("sources", []):
         return True
+    if not source.manifest.get("enabled", True):
+        return False
     wanted = set(profile.get("topics", []))
     if not any(t in wanted or _parent(t) in wanted for t in source.topics):
         return False

@@ -8,6 +8,8 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- A profile no longer selects a disabled source by topic (a source listed by id still is), so stored,
+  unproven sources stay out of the digest and its Source health section.
 - Five sources stored with `enabled: false` until a live proof: `pulse-kalir` (valid feed, no items
   yet), `deepdarkcti` (repository commit feed, 403), and `cisa-ics-advisories`,
   `cisa-ics-medical-advisories` and `cisa-news` (403 bot wall; user-saved copies parsed 30, 30 and 10
