@@ -11,7 +11,7 @@ private notes or anything that identifies a client or a campaign.
 ## Layout
 
 - `feeder/`: the hub CLI (`hub.py`) and its modules: fetching (`fetchkit.py`), feed parsing
-  (`adapters/feed.py`), items, the injection guard, the SQLite store (`store.py`), digest outputs
+  (`adapters/`, with `feed.py` today), items, the injection guard, the SQLite store (`store.py`), digest outputs
   (`outputs.py`), configuration and lint (`config.py`), and the single file writer (`jsonio.py`).
 - `sources/<id>/`: one folder per source. `source.json` lists every known route (feed, page,
   sitemap) with topics, authority, tier and where the source came from. `methods.json` records what
@@ -60,7 +60,7 @@ Other commands:
 
 - `hub lint` validates every source, profile and the releases file (exit 1 on any defect).
 - `hub fmt [--check]` rewrites config JSON in canonical form, or reports files that are not.
-- `hub cat ID` prints a source's manifest, methods and feed route order.
+- `hub cat ID` prints a source's manifest, methods, the routes in poll order and the landing routes it never polls.
 - `hub release SHA --reason TEXT` releases a held item by its `content_sha256`.
 
 Run the tests with `python3 -m unittest discover -s tests -t .`.

@@ -2,6 +2,255 @@
   "$defs": {
     "route": {
       "additionalProperties": false,
+      "else": {
+        "else": {
+          "else": {
+            "else": {
+              "else": {
+                "else": {
+                  "if": {
+                    "properties": {
+                      "adapter": {
+                        "const": "artifact"
+                      }
+                    },
+                    "required": [
+                      "adapter"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "params": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "label": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    }
+                  }
+                },
+                "if": {
+                  "properties": {
+                    "adapter": {
+                      "const": "urllist"
+                    }
+                  },
+                  "required": [
+                    "adapter"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "params": {
+                      "additionalProperties": false,
+                      "properties": {},
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "adapter": {
+                    "const": "json-api"
+                  }
+                },
+                "required": [
+                  "adapter"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "params": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "fields": {
+                        "additionalProperties": {
+                          "type": "string"
+                        },
+                        "type": "object"
+                      },
+                      "items_path": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "max_pages": {
+                        "maximum": 20,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      "next_path": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "items_path",
+                      "fields"
+                    ],
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "if": {
+              "properties": {
+                "adapter": {
+                  "const": "xml"
+                }
+              },
+              "required": [
+                "adapter"
+              ]
+            },
+            "then": {
+              "properties": {
+                "params": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "fields": {
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "item_path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "namespaces": {
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "item_path",
+                    "fields"
+                  ],
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "if": {
+            "properties": {
+              "adapter": {
+                "const": "sitemap"
+              }
+            },
+            "required": [
+              "adapter"
+            ]
+          },
+          "then": {
+            "properties": {
+              "params": {
+                "additionalProperties": false,
+                "properties": {
+                  "lastmod_since": {
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                    "type": "string"
+                  },
+                  "max_sitemaps": {
+                    "maximum": 50,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "path_prefix": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "if": {
+          "properties": {
+            "adapter": {
+              "const": "page"
+            }
+          },
+          "required": [
+            "adapter"
+          ]
+        },
+        "then": {
+          "properties": {
+            "params": {
+              "additionalProperties": false,
+              "if": {
+                "required": [
+                  "title_selector"
+                ]
+              },
+              "properties": {
+                "date_format": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "date_regex": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "date_selector": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "item_selector": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "link_selector": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "max_pages": {
+                  "maximum": 20,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "summary_selector": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "title_selector": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "version_signal": {
+                  "enum": [
+                    "etag",
+                    "last-modified",
+                    "heading-date",
+                    "body-hash"
+                  ]
+                }
+              },
+              "then": {
+                "required": [
+                  "item_selector"
+                ]
+              },
+              "type": "object"
+            }
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "adapter": {
+            "const": "feed"
+          }
+        },
+        "required": [
+          "adapter"
+        ]
+      },
       "properties": {
         "adapter": {
           "description": "Adapter module name under feeder/adapters that reads this route.",
@@ -9,8 +258,10 @@
             "feed",
             "page",
             "sitemap",
+            "xml",
             "json-api",
-            "urllist"
+            "urllist",
+            "artifact"
           ],
           "type": "string"
         },
@@ -22,13 +273,15 @@
             "rdf",
             "jsonfeed",
             "sitemap",
+            "xml",
             "json-api",
-            "urllist"
+            "urllist",
+            "artifact"
           ],
           "type": "string"
         },
         "params": {
-          "description": "Adapter parameters, for example a JSON path or a CSS selector. Public values only.",
+          "description": "Adapter parameters; the allowed keys depend on the adapter (see the per-adapter rules below). Public values only. A page route with no item_selector is a landing route the poller never parses.",
           "type": "object"
         },
         "url": {
@@ -41,6 +294,15 @@
         "url",
         "adapter"
       ],
+      "then": {
+        "properties": {
+          "params": {
+            "additionalProperties": false,
+            "properties": {},
+            "type": "object"
+          }
+        }
+      },
       "type": "object"
     }
   },

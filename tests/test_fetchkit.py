@@ -394,5 +394,15 @@ class ArchiveTests(unittest.TestCase):
         self.assertFalse(any("archive.org" in c for c in f._opener.calls))
 
 
+class SchemeTests(unittest.TestCase):
+    def test_only_http_and_https_are_fetched(self):
+        from feeder.fetchkit import Fetcher
+        fetcher = Fetcher(state_dir=None, opener=lambda req, timeout: (_ for _ in ()).throw(AssertionError("opened")))
+        for url in ("file:///etc/hostname", "ftp://example.gov/x", "data:text/plain,x", "example.gov/x"):
+            with self.subTest(url=url):
+                result = fetcher.get(url)
+                self.assertEqual((result.error, result.body, result.trail), ("scheme-refused", None, ["scheme-refused"]))
+
+
 if __name__ == "__main__":
     unittest.main()

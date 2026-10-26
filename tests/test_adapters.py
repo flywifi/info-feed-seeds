@@ -129,7 +129,7 @@ class RefusalTests(unittest.TestCase):
         self.assertIsNone(feed.detect_kind(b"<html></html>"))
 
     def test_adapter_registry(self):
-        self.assertIs(get_adapter("feed"), feed.parse_feed)
+        self.assertIs(get_adapter("feed"), feed.parse)
         with self.assertRaises(KeyError):
             get_adapter("nope")
 

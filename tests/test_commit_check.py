@@ -376,6 +376,29 @@ class SourcesTests(unittest.TestCase):
         finally:
             repo.close()
 
+    def test_a_proven_route_of_any_adapter_counts_and_a_landing_route_does_not(self):
+        repo = Scratch()
+        try:
+            repo.commit("README.md", b"x\n", "Add README")
+            base = repo.head()
+            manifest = {"routes": [{"adapter": "page", "url": "https://example.gov/blog/", "params": {"item_selector": "li"}},
+                                   {"adapter": "page", "url": "https://example.gov/", "params": {}}], "verified": "2026-10-21"}
+            reach = {"source_label": "live", "http_status": 200, "result": "ok", "tried_at": "2026-10-21T00:00:00Z"}
+            methods = {"routes": [{"url": "https://example.gov/", "attempts": [reach]}]}
+            repo.commit("sources/p/source.json", json.dumps(manifest).encode(), "Add p")
+            repo.commit("sources/p/methods.json", json.dumps(methods).encode(), "Add p methods")
+            self.assertTrue(quiet(cc.check_sources, f"{base}..HEAD", cwd=repo.dir), "reachability alone is not proof")
+            landing_sample = dict(reach, sample={"title": "Home", "link": "https://example.gov/", "published": None})
+            methods["routes"][0]["attempts"] = [landing_sample]
+            repo.commit("sources/p/methods.json", json.dumps(methods).encode(), "Add p landing sample")
+            self.assertTrue(quiet(cc.check_sources, f"{base}..HEAD", cwd=repo.dir), "a landing route with a sample is not proof")
+            proof = dict(reach, sample={"title": "First post", "link": "https://example.gov/blog/1", "published": None})
+            methods["routes"].append({"url": "https://example.gov/blog/", "attempts": [proof]})
+            repo.commit("sources/p/methods.json", json.dumps(methods).encode(), "Add p proof")
+            self.assertEqual(quiet(cc.check_sources, f"{base}..HEAD", cwd=repo.dir), [])
+        finally:
+            repo.close()
+
 
 @unittest.skipIf(shutil.which("sh") is None, "the hooks are sh scripts")
 class HookTests(unittest.TestCase):
