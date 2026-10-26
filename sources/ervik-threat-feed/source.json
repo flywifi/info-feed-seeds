@@ -1,0 +1,41 @@
+{
+  "added": "2026-10-26",
+  "authority": "secondary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-26",
+    "kind": "manual",
+    "ref": "https://www.ervik.as/rss.xml"
+  },
+  "enabled": true,
+  "expected_update_period_days": 1,
+  "homepage": "https://www.ervik.as/",
+  "id": "ervik-threat-feed",
+  "industries": [
+    "cybersecurity"
+  ],
+  "interval_days": 1,
+  "label": "Ervik threat feed (ransomware victims, active zero-days, CVEs, daily briefing)",
+  "publisher": "Ervik",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://www.ervik.as/rss.xml"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "source_category": "attacks",
+  "source_subcategory": "threat-research",
+  "tier": "news",
+  "topics": [
+    "cybersecurity/ransomware",
+    "cybersecurity/vulnerabilities",
+    "cybersecurity/incidents"
+  ],
+  "verified": "2026-10-26"
+}

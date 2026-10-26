@@ -8,6 +8,12 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Every polled item stores its source category and its content category (with the basis of each),
+  and `latest.json` items carry both under `categories`. Registry keywords place ransomware victim
+  posts, active zero-days, CVE entries, ICS advisories and guidance by their titles.
+- `ervik-threat-feed` (ransomware victims, active zero-days, CVEs, daily briefing), proven live with
+  60 items; `seeds/2026-10-26_threat-feeds.md` lists it with the five requested feeds that wait for a
+  live proof (Pulse has no items yet; deepdarkCTI and the three CISA feeds answered 403).
 - `.github/workflows/poll.yml` polls every enabled profile daily at 11:17 UTC (and on demand) and
   publishes the digests on the `data` branch, readable without sign-in at
   `https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/<profile>/latest.md` (and
