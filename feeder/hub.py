@@ -31,7 +31,7 @@ from feeder import ROOT, adapters, guard, items, jsonio, outputs  # noqa: E402
 from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, item_tags,  # noqa: E402
                            json_files, lint, selected_sources)
 from feeder.schema_validate import validate  # noqa: E402
-from feeder.store import DB_NAME, Store  # noqa: E402
+from feeder.store import DB_NAME, Store, StoreError  # noqa: E402
 
 EXIT_OK, EXIT_DEFECT, EXIT_CONFIG, EXIT_ALL_FAILED = 0, 1, 2, 3
 DEFAULT_STATE_DIR = ROOT / ".cache"
@@ -249,7 +249,11 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
 
     state_dir = Path(args.state_dir) if args.state_dir else DEFAULT_STATE_DIR
     out_dir = Path(args.out_dir) if args.out_dir else DEFAULT_OUT_DIR
-    store = Store.open(state_dir, in_memory_copy=args.dry_run)
+    try:
+        store = Store.open(state_dir, in_memory_copy=args.dry_run)
+    except StoreError as exc:
+        warn(f"poll: {state_dir.as_posix()}/{DB_NAME}: {exc}")
+        return EXIT_CONFIG
     now_z = stamp(now)
 
     wanted: dict[str, object] = {}
@@ -439,7 +443,11 @@ def cmd_release(args, repo: Repo, now_fn) -> int:
     if not (state_dir / DB_NAME).exists():
         warn(f"release: no database at {state_dir.as_posix()}/{DB_NAME}; give --state-dir")
         return EXIT_CONFIG
-    store = Store.open(state_dir, in_memory_copy=True)
+    try:
+        store = Store.open(state_dir, in_memory_copy=True)
+    except StoreError as exc:
+        warn(f"release: {state_dir.as_posix()}/{DB_NAME}: {exc}")
+        return EXIT_CONFIG
     item = store.item(sha)
     store.conn.close()
     if item is None:
