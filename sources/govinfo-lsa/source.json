@@ -10,6 +10,9 @@
   "enabled": true,
   "homepage": "https://www.govinfo.gov/app/collection/lsa",
   "id": "govinfo-lsa",
+  "industries": [
+    "federal"
+  ],
   "label": "List of CFR Sections Affected (govinfo)",
   "lists": [
     "govinfo-core"
@@ -39,6 +42,8 @@
     "actions",
     "local"
   ],
+  "source_category": "regulatory",
+  "source_subcategory": "change-tracking",
   "tier": "canonical",
   "topics": [
     "regulation/federal-rulemaking",

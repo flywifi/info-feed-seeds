@@ -11,6 +11,9 @@
   "expected_update_period_days": 7,
   "homepage": "https://fortiguard.fortinet.com/psirt",
   "id": "fortiguard-psirt",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard PSIRT advisories",
   "lists": [
@@ -29,6 +32,8 @@
     "actions",
     "local"
   ],
+  "source_category": "vulnerabilities",
+  "source_subcategory": "vendor-advisories",
   "tier": "vendor",
   "topics": [
     "cybersecurity/vulnerabilities"

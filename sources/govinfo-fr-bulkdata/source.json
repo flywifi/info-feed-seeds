@@ -10,6 +10,9 @@
   "enabled": true,
   "homepage": "https://www.govinfo.gov/bulkdata/FR",
   "id": "govinfo-fr-bulkdata",
+  "industries": [
+    "federal"
+  ],
   "label": "Federal Register bulk data (govinfo)",
   "lists": [
     "govinfo-core",
@@ -34,6 +37,8 @@
     "actions",
     "local"
   ],
+  "source_category": "regulatory",
+  "source_subcategory": "federal-rules",
   "tier": "canonical",
   "topics": [
     "regulation/federal-rulemaking",

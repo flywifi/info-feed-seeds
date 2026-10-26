@@ -10,6 +10,9 @@
   "enabled": true,
   "homepage": "https://www.nist.gov/standards",
   "id": "nist-standards",
+  "industries": [
+    "technology"
+  ],
   "label": "NIST Standards news",
   "lists": [
     "nist-feeds"
@@ -33,6 +36,8 @@
     "actions",
     "local"
   ],
+  "source_category": "standards",
+  "source_subcategory": "measurement",
   "tier": "canonical",
   "topics": [
     "standards/nist"

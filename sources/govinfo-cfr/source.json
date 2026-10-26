@@ -10,6 +10,9 @@
   "enabled": true,
   "homepage": "https://www.govinfo.gov/app/collection/cfr",
   "id": "govinfo-cfr",
+  "industries": [
+    "federal"
+  ],
   "label": "Code of Federal Regulations (govinfo)",
   "lists": [
     "govinfo-core"
@@ -39,6 +42,8 @@
     "actions",
     "local"
   ],
+  "source_category": "regulatory",
+  "source_subcategory": "codified",
   "tier": "canonical",
   "topics": [
     "regulation/federal-rulemaking",

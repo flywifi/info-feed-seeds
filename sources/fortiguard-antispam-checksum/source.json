@@ -11,6 +11,9 @@
   "expected_update_period_days": 1,
   "homepage": "https://www.fortiguard.com/rss-feeds",
   "id": "fortiguard-antispam-checksum",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard antispam checksum updates",
   "lists": [
@@ -29,6 +32,8 @@
     "actions",
     "local"
   ],
+  "source_category": "machine-data",
+  "source_subcategory": "signature-versions",
   "tier": "vendor",
   "topics": [
     "cybersecurity"

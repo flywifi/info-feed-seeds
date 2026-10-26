@@ -11,6 +11,9 @@
   "expected_update_period_days": 30,
   "homepage": "https://www.nist.gov/blogs/cybersecurity-insights",
   "id": "nist-cybersecurity-insights",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "NIST Cybersecurity Insights blog",
   "lists": [
@@ -35,6 +38,8 @@
     "actions",
     "local"
   ],
+  "source_category": "guidance",
+  "source_subcategory": "security-guidance",
   "tier": "canonical",
   "topics": [
     "cybersecurity",
