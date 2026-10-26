@@ -11,6 +11,9 @@
   "expected_update_period_days": 7,
   "homepage": "https://fortiguard.fortinet.com/updates/ips",
   "id": "fortiguard-ips",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard intrusion prevention updates",
   "lists": [
@@ -35,6 +38,8 @@
     "actions",
     "local"
   ],
+  "source_category": "vulnerabilities",
+  "source_subcategory": "detections",
   "tier": "vendor",
   "topics": [
     "cybersecurity/vulnerabilities"

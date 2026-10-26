@@ -1,0 +1,669 @@
+{
+  "categories": {
+    "ai": {
+      "added": "2026-10-26",
+      "digest_default": true,
+      "label": "AI and language models",
+      "order": 9,
+      "reader_purpose": "what changed in AI",
+      "reason": "starting tree",
+      "subcategories": {
+        "business": {
+          "keywords": [
+            "ai startup",
+            "ai funding"
+          ],
+          "label": "Business",
+          "note": "funding, deals, companies",
+          "order": 7,
+          "topics": []
+        },
+        "models": {
+          "keywords": [
+            "benchmark",
+            "open weights",
+            "model release"
+          ],
+          "label": "Models",
+          "note": "model releases and benchmarks",
+          "order": 1,
+          "topics": []
+        },
+        "policy": {
+          "keywords": [
+            "ai act",
+            "ai policy",
+            "ai governance"
+          ],
+          "label": "Policy",
+          "note": "AI rules and governance",
+          "order": 3,
+          "topics": []
+        },
+        "products": {
+          "keywords": [
+            "ai feature",
+            "generative"
+          ],
+          "label": "Products",
+          "note": "AI products and features",
+          "order": 2,
+          "topics": [
+            "technology/ai"
+          ]
+        },
+        "research": {
+          "keywords": [
+            "machine learning",
+            "neural network"
+          ],
+          "label": "Research",
+          "note": "papers and methods",
+          "order": 5,
+          "topics": []
+        },
+        "safety": {
+          "keywords": [
+            "ai safety",
+            "alignment",
+            "red teaming"
+          ],
+          "label": "Safety",
+          "note": "safety research and incidents",
+          "order": 4,
+          "topics": []
+        },
+        "security": {
+          "keywords": [
+            "prompt injection",
+            "model theft"
+          ],
+          "label": "Security",
+          "note": "attacks on and with AI systems",
+          "order": 6,
+          "topics": []
+        }
+      }
+    },
+    "attacks": {
+      "added": "2026-10-26",
+      "digest_default": true,
+      "label": "Attacks and incidents",
+      "order": 4,
+      "reader_purpose": "what is being attacked right now",
+      "reason": "starting tree",
+      "subcategories": {
+        "breaches": {
+          "keywords": [
+            "breach",
+            "data leak",
+            "compromised"
+          ],
+          "label": "Breaches",
+          "note": "confirmed incidents and data breaches",
+          "order": 2,
+          "topics": [
+            "cybersecurity/incidents"
+          ]
+        },
+        "exploited-now": {
+          "keywords": [
+            "exploited",
+            "outbreak",
+            "in the wild"
+          ],
+          "label": "Exploited now",
+          "note": "vulnerabilities under active exploitation",
+          "order": 1,
+          "topics": []
+        },
+        "scams": {
+          "keywords": [
+            "scam",
+            "fraud",
+            "phishing"
+          ],
+          "label": "Scams and fraud",
+          "note": "fraud and social engineering waves",
+          "order": 5,
+          "topics": []
+        },
+        "takedowns": {
+          "keywords": [
+            "arrest",
+            "takedown",
+            "indictment",
+            "seized"
+          ],
+          "label": "Takedowns and arrests",
+          "note": "law enforcement and disruption actions",
+          "order": 4,
+          "topics": []
+        },
+        "threat-research": {
+          "keywords": [
+            "campaign",
+            "malware",
+            "threat actor",
+            "attack"
+          ],
+          "label": "Threat research",
+          "note": "campaign and malware analysis",
+          "order": 3,
+          "topics": [
+            "cybersecurity/ransomware"
+          ]
+        }
+      }
+    },
+    "guidance": {
+      "added": "2026-10-26",
+      "digest_default": true,
+      "label": "Guidance and learning",
+      "order": 7,
+      "reader_purpose": "how to do it right",
+      "reason": "starting tree",
+      "subcategories": {
+        "events": {
+          "keywords": [
+            "webinar",
+            "workshop",
+            "conference",
+            "meeting"
+          ],
+          "label": "Events",
+          "note": "conferences and webinars",
+          "order": 2,
+          "topics": []
+        },
+        "explainers": {
+          "keywords": [
+            "explained",
+            "understanding",
+            "what is"
+          ],
+          "label": "Explainers",
+          "note": "background articles",
+          "order": 3,
+          "topics": []
+        },
+        "security-guidance": {
+          "keywords": [
+            "guidance",
+            "best practices",
+            "tips"
+          ],
+          "label": "Security guidance",
+          "note": "best-practice documents",
+          "order": 1,
+          "topics": []
+        },
+        "workforce": {
+          "keywords": [
+            "workforce",
+            "career",
+            "training"
+          ],
+          "label": "Workforce",
+          "note": "careers, hiring, training",
+          "order": 4,
+          "topics": [
+            "business/workforce"
+          ]
+        }
+      }
+    },
+    "machine-data": {
+      "added": "2026-10-26",
+      "digest_default": false,
+      "label": "Machine data",
+      "order": 8,
+      "reader_purpose": "feeds a program reads; off in the digest unless a profile names it",
+      "reason": "a person never reads these lines; they feed tooling",
+      "subcategories": {
+        "bulk-data": {
+          "keywords": [
+            "bulk data"
+          ],
+          "label": "Bulk data",
+          "note": "bulk downloads and data dumps",
+          "order": 3,
+          "topics": []
+        },
+        "name-lists": {
+          "keywords": [
+            "reputation",
+            "blocklist"
+          ],
+          "label": "Name lists",
+          "note": "lists of domains, hashes, addresses",
+          "order": 2,
+          "topics": []
+        },
+        "signature-versions": {
+          "keywords": [
+            "definitions",
+            "database update"
+          ],
+          "label": "Signature versions",
+          "note": "antivirus and IPS definition version feeds",
+          "order": 1,
+          "topics": []
+        }
+      }
+    },
+    "regulatory": {
+      "added": "2026-10-26",
+      "digest_default": true,
+      "label": "Regulatory updates",
+      "order": 1,
+      "reader_purpose": "what the law and the regulators changed",
+      "reason": "starting tree",
+      "subcategories": {
+        "change-tracking": {
+          "keywords": [
+            "sections affected",
+            "lsa"
+          ],
+          "label": "Change tracking",
+          "note": "lists of sections affected and similar indexes",
+          "order": 3,
+          "topics": []
+        },
+        "codified": {
+          "keywords": [
+            "code of federal regulations",
+            "cfr"
+          ],
+          "label": "Codified regulations",
+          "note": "CFR and eCFR changes",
+          "order": 2,
+          "topics": []
+        },
+        "enforcement": {
+          "keywords": [
+            "settlement",
+            "consent order",
+            "penalty"
+          ],
+          "label": "Enforcement actions",
+          "note": "fines, consent orders, settlements",
+          "order": 6,
+          "topics": [
+            "regulation/enforcement"
+          ]
+        },
+        "federal-rules": {
+          "keywords": [
+            "federal register",
+            "proposed rule",
+            "final rule"
+          ],
+          "label": "Federal rules and notices",
+          "note": "Federal Register documents",
+          "order": 1,
+          "topics": [
+            "regulation/federal-rulemaking"
+          ]
+        },
+        "international": {
+          "keywords": [
+            "european union",
+            "directive"
+          ],
+          "label": "International",
+          "note": "rules outside the US",
+          "order": 7,
+          "topics": [
+            "regulation/eu",
+            "regulation/international"
+          ]
+        },
+        "privacy": {
+          "keywords": [
+            "privacy",
+            "personal data"
+          ],
+          "label": "Privacy and data protection",
+          "note": "privacy rules and enforcement",
+          "order": 4,
+          "topics": [
+            "privacy"
+          ]
+        },
+        "tech-policy": {
+          "keywords": [
+            "executive order",
+            "legislation",
+            "policy"
+          ],
+          "label": "Technology policy",
+          "note": "policy and legislation on technology",
+          "order": 5,
+          "topics": []
+        }
+      }
+    },
+    "releases": {
+      "added": "2026-10-26",
+      "digest_default": true,
+      "label": "Software and firmware releases",
+      "order": 5,
+      "reader_purpose": "what shipped and what to update",
+      "reason": "starting tree",
+      "subcategories": {
+        "browsers-apps": {
+          "keywords": [
+            "browser",
+            "release notes"
+          ],
+          "label": "Browsers and applications",
+          "note": "browser and application releases",
+          "order": 3,
+          "topics": []
+        },
+        "developer": {
+          "keywords": [
+            "sdk",
+            "library",
+            "compiler"
+          ],
+          "label": "Developer tools",
+          "note": "languages, libraries and tooling",
+          "order": 4,
+          "topics": [
+            "technology/software-supply-chain"
+          ]
+        },
+        "firmware": {
+          "keywords": [
+            "firmware"
+          ],
+          "label": "Firmware",
+          "note": "device and appliance firmware",
+          "order": 1,
+          "topics": [
+            "technology/devices"
+          ]
+        },
+        "operating-systems": {
+          "keywords": [
+            "windows",
+            "macos",
+            "linux",
+            "android"
+          ],
+          "label": "Operating systems",
+          "note": "OS releases and patches",
+          "order": 2,
+          "topics": []
+        }
+      }
+    },
+    "standards": {
+      "added": "2026-10-26",
+      "digest_default": true,
+      "label": "Standards and frameworks",
+      "order": 2,
+      "reader_purpose": "what the standards bodies published or changed",
+      "reason": "starting tree",
+      "subcategories": {
+        "compliance": {
+          "keywords": [
+            "certification",
+            "authorization",
+            "assessment"
+          ],
+          "label": "Compliance programmes",
+          "note": "certification and authorization programmes",
+          "order": 4,
+          "topics": [
+            "standards/fedramp",
+            "standards/cmmc",
+            "standards/soc2"
+          ]
+        },
+        "drafts": {
+          "keywords": [
+            "draft",
+            "public comment",
+            "comments"
+          ],
+          "label": "Drafts for comment",
+          "note": "public drafts with comment periods",
+          "order": 3,
+          "topics": []
+        },
+        "measurement": {
+          "keywords": [
+            "measurement",
+            "metrology",
+            "calibration",
+            "reference material"
+          ],
+          "label": "Measurement and metrology",
+          "note": "measurement standards and calibration",
+          "order": 2,
+          "topics": []
+        },
+        "security": {
+          "keywords": [
+            "framework",
+            "sp 800",
+            "controls"
+          ],
+          "label": "Security standards",
+          "note": "control catalogues and security frameworks",
+          "order": 1,
+          "topics": [
+            "cybersecurity/frameworks",
+            "standards/pci"
+          ]
+        }
+      }
+    },
+    "technology": {
+      "added": "2026-10-26",
+      "digest_default": true,
+      "label": "Technology news",
+      "order": 6,
+      "reader_purpose": "what is new in technology",
+      "reason": "starting tree",
+      "subcategories": {
+        "big-tech": {
+          "keywords": [
+            "platform",
+            "antitrust"
+          ],
+          "label": "Big tech",
+          "note": "the large platforms",
+          "order": 4,
+          "topics": []
+        },
+        "chips": {
+          "keywords": [
+            "semiconductor",
+            "chips"
+          ],
+          "label": "Chips",
+          "note": "semiconductors",
+          "order": 7,
+          "topics": []
+        },
+        "enterprise": {
+          "keywords": [
+            "enterprise",
+            "saas"
+          ],
+          "label": "Enterprise",
+          "note": "enterprise products and services",
+          "order": 3,
+          "topics": [
+            "technology/cloud"
+          ]
+        },
+        "gadgets": {
+          "keywords": [
+            "phone",
+            "laptop",
+            "headphones"
+          ],
+          "label": "Gadgets",
+          "note": "consumer devices",
+          "order": 2,
+          "topics": []
+        },
+        "science": {
+          "keywords": [
+            "research",
+            "physics",
+            "quantum",
+            "scientists"
+          ],
+          "label": "Science",
+          "note": "research results",
+          "order": 1,
+          "topics": []
+        },
+        "space-telecom": {
+          "keywords": [
+            "satellite",
+            "5g",
+            "spectrum",
+            "telecom"
+          ],
+          "label": "Space and telecom",
+          "note": "satellites, networks, spectrum",
+          "order": 6,
+          "topics": [
+            "technology/telecom"
+          ]
+        },
+        "startups": {
+          "keywords": [
+            "startup",
+            "raises",
+            "seed round"
+          ],
+          "label": "Startups",
+          "note": "new companies and funding",
+          "order": 5,
+          "topics": []
+        },
+        "transport": {
+          "keywords": [
+            "vehicle",
+            "autonomous",
+            "aviation"
+          ],
+          "label": "Transport",
+          "note": "vehicles and mobility",
+          "order": 8,
+          "topics": []
+        }
+      }
+    },
+    "vulnerabilities": {
+      "added": "2026-10-26",
+      "digest_default": true,
+      "label": "Vulnerabilities and advisories",
+      "order": 3,
+      "reader_purpose": "what is broken and needs patching",
+      "reason": "starting tree",
+      "subcategories": {
+        "detections": {
+          "keywords": [
+            "signature",
+            "detection",
+            "ips"
+          ],
+          "label": "Detections",
+          "note": "signatures and detection content",
+          "order": 4,
+          "topics": []
+        },
+        "disclosures": {
+          "keywords": [
+            "disclosure",
+            "zero-day",
+            "researchers"
+          ],
+          "label": "Disclosures",
+          "note": "researcher and coordinator disclosures",
+          "order": 2,
+          "topics": []
+        },
+        "scoring": {
+          "keywords": [
+            "cvss",
+            "nvd",
+            "known exploited"
+          ],
+          "label": "Scoring and catalogues",
+          "note": "CVE, CVSS and catalogue updates",
+          "order": 3,
+          "topics": []
+        },
+        "vendor-advisories": {
+          "keywords": [
+            "advisory",
+            "psirt",
+            "security update"
+          ],
+          "label": "Vendor advisories",
+          "note": "a vendor's own security advisories",
+          "order": 1,
+          "topics": [
+            "cybersecurity/vulnerabilities"
+          ]
+        }
+      }
+    }
+  },
+  "description": "Reader-facing categories, used two ways. A source category places a feed as a whole (source_category and source_subcategory in its manifest) and decides which sources a profile polls: a profile without source_categories polls every category whose digest_default is true, so machine data is polled only by a profile that names it. A content category places one item by its own title and summary, falling back to the source category when the text gives no signal. keywords and topics are the hints both use; hub categorize proposes a source category and shows the content categories of the items it read.",
+  "industries": {
+    "cloud": {
+      "label": "Cloud services"
+    },
+    "cybersecurity": {
+      "label": "Cybersecurity"
+    },
+    "defense": {
+      "label": "Defense"
+    },
+    "education": {
+      "label": "Education"
+    },
+    "energy": {
+      "label": "Energy"
+    },
+    "federal": {
+      "label": "US federal government"
+    },
+    "finance": {
+      "label": "Finance"
+    },
+    "healthcare": {
+      "label": "Healthcare"
+    },
+    "legal": {
+      "label": "Legal"
+    },
+    "manufacturing": {
+      "label": "Manufacturing"
+    },
+    "payments": {
+      "label": "Payments"
+    },
+    "retail": {
+      "label": "Retail"
+    },
+    "technology": {
+      "label": "Technology"
+    },
+    "telecom": {
+      "label": "Telecommunications"
+    }
+  },
+  "schema_version": 1
+}

@@ -396,6 +396,14 @@
       "pattern": "^[a-z0-9][a-z0-9-]{1,62}$",
       "type": "string"
     },
+    "industries": {
+      "description": "Optional industry ids from schema/categories.json (industries), each once.",
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "type": "array"
+    },
     "interval_days": {
       "description": "Minimum days between polls of this source.",
       "minimum": 0,
@@ -435,6 +443,16 @@
       "minItems": 1,
       "type": "array"
     },
+    "source_category": {
+      "description": "The source category: where this feed sits as a whole, a category id from schema/categories.json. hub categorize reports each item's own content category from its text.",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "type": "string"
+    },
+    "source_subcategory": {
+      "description": "The source subcategory, under the source category in schema/categories.json.",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "type": "string"
+    },
     "tier": {
       "enum": [
         "canonical",
@@ -462,18 +480,20 @@
     }
   },
   "required": [
+    "added",
+    "authority",
+    "classification_review",
+    "discovered_from",
+    "enabled",
+    "homepage",
     "id",
     "label",
     "publisher",
-    "homepage",
     "routes",
-    "topics",
-    "authority",
+    "source_category",
+    "source_subcategory",
     "tier",
-    "classification_review",
-    "enabled",
-    "added",
-    "discovered_from",
+    "topics",
     "verified"
   ],
   "then": {

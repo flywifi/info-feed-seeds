@@ -11,6 +11,9 @@
   "expected_update_period_days": 7,
   "homepage": "https://fortiguard.fortinet.com/outbreak-alert",
   "id": "fortiguard-outbreak-alerts",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard outbreak alerts",
   "lists": [
@@ -29,6 +32,8 @@
     "actions",
     "local"
   ],
+  "source_category": "attacks",
+  "source_subcategory": "exploited-now",
   "tier": "vendor",
   "topics": [
     "cybersecurity/incidents",

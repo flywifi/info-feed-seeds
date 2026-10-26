@@ -11,6 +11,9 @@
   "expected_update_period_days": 7,
   "homepage": "https://support.fortinet.com/",
   "id": "fortinet-firmware",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "Fortinet firmware updates",
   "lists": [
@@ -29,6 +32,8 @@
     "actions",
     "local"
   ],
+  "source_category": "releases",
+  "source_subcategory": "firmware",
   "tier": "vendor",
   "topics": [
     "technology/devices",

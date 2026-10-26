@@ -10,6 +10,10 @@
   "enabled": true,
   "homepage": "https://www.nist.gov/information-technology",
   "id": "nist-information-technology",
+  "industries": [
+    "cybersecurity",
+    "technology"
+  ],
   "label": "NIST Information Technology news",
   "lists": [
     "nist-feeds"
@@ -33,6 +37,8 @@
     "actions",
     "local"
   ],
+  "source_category": "standards",
+  "source_subcategory": "security",
   "tier": "canonical",
   "topics": [
     "technology",
