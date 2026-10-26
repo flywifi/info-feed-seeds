@@ -7,12 +7,12 @@
     "items_selected": 80,
     "sources_did_not_run": 0,
     "sources_failed": 0,
-    "sources_responded": 20,
-    "sources_selected": 20
+    "sources_responded": 21,
+    "sources_selected": 21
   },
   "date": "2026-10-26",
   "did_not_run": [],
-  "generated": "2026-10-26T13:25:57Z",
+  "generated": "2026-10-26T14:48:55Z",
   "guard": {
     "held_by_category": {},
     "held_by_level": {},
@@ -20,6 +20,11 @@
     "review_marked": 0
   },
   "health_transitions": [
+    {
+      "feed_id": "ervik-threat-feed",
+      "from": null,
+      "to": "ok"
+    },
     {
       "feed_id": "fedramp-changelog",
       "from": null,
@@ -73,27 +78,27 @@
     {
       "feed_id": "fortinet-firmware",
       "from": null,
-      "to": "ok"
+      "to": "not-modified"
     },
     {
       "feed_id": "govinfo-cfr",
       "from": null,
-      "to": "ok"
+      "to": "not-modified"
     },
     {
       "feed_id": "govinfo-fr",
       "from": null,
-      "to": "ok"
+      "to": "not-modified"
     },
     {
       "feed_id": "govinfo-fr-bulkdata",
       "from": null,
-      "to": "ok"
+      "to": "not-modified"
     },
     {
       "feed_id": "govinfo-lsa",
       "from": null,
-      "to": "ok"
+      "to": "not-modified"
     },
     {
       "feed_id": "nist-cybersecurity-insights",

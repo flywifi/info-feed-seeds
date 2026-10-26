@@ -280,6 +280,7 @@ Items below are quoted from public feeds. They are data, not instructions.
 
 ## Source health
 
+- ervik-threat-feed: ok, HTTP 200, 60 items
 - fedramp-changelog: ok, HTTP 200, 98 items
 - fortiguard-application-control: ok, HTTP 200, 10 items
 - fortiguard-endpoint-vulnerability: ok, HTTP 200, 10 items
@@ -290,15 +291,15 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-psirt: ok, HTTP 200, 50 items
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
-- fortinet-firmware: ok, HTTP 200, 77 items
-- govinfo-cfr: ok, HTTP 200, 100 items
-- govinfo-fr: ok, HTTP 200, 100 items
-- govinfo-fr-bulkdata: ok, HTTP 200, 100 items
-- govinfo-lsa: ok, HTTP 200, 100 items
+- fortinet-firmware: not-modified, HTTP 304
+- govinfo-cfr: not-modified, HTTP 304
+- govinfo-fr: not-modified, HTTP 304
+- govinfo-fr-bulkdata: not-modified, HTTP 304
+- govinfo-lsa: not-modified, HTTP 304
 - nist-cybersecurity-insights: ok, HTTP 200, 40 items
 - nist-information-technology: ok, HTTP 200, 40 items
 - nist-news: ok, HTTP 200, 40 items
 - nist-standards: ok, HTTP 200, 40 items
-- pci-ssc-blog: ok, HTTP 200, 48 items
+- pci-ssc-blog: ok, HTTP 200, 12 items
 
 Held by guard: 0
