@@ -8,6 +8,15 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- The page adapter (`feeder/adapters/page.py`) reads listing pages without a feed: a page route whose
+  params carry `item_selector` is polled, with title, link, date and summary read through a small CSS
+  subset (tag, id, class, descendant steps, comma groups, `@attr`) and dates through `date_regex` and
+  `date_format` with English month names whatever the locale. A page route with empty params stays a
+  landing route. Fixtures keep the structure of the FedRAMP changelog and the PCI SSC blog index.
+- A malformed adapter result fails its own route as `adapter-crash` instead of stopping the poll run;
+  follow URLs must keep the route's host and port and never move from https to http; a page that is
+  both truncated and missing follow pages reports both flags; the commit checker accepts proof only
+  on a route of an adapter the poller reads.
 - 23 FortiGuard sources under `sources/`: ten enabled (PSIRT advisories, outbreak alerts, threat signal
   reports, firmware updates, and the endpoint vulnerability, intrusion prevention, OT intrusion
   prevention, OT security, virtual patching and application control updates) and thirteen signature and

@@ -310,6 +310,28 @@ class PollTests(HubTestCase):
         md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
         self.assertIn("- zeta: parse-error, HTTP 200, AdapterError", md)
 
+    def test_a_page_route_polls_through_the_registered_page_adapter(self):
+        listing = (b"<html><body><ul class='news'><li><a href='/n/1'>Zero trust guidance</a> <time>2026-10-19</time></li>"
+                   b"<li><a href='https://example.gov/n/2'>Ransomware advisory</a> <time>2026-10-18</time></li></ul></body></html>")
+        self.add_source("iota", "https://example.gov/news", ["cybersecurity"],
+                        routes=[{"kind": "page", "adapter": "page", "url": "https://example.gov/news",
+                                 "params": {"item_selector": "ul.news li", "date_selector": "time"}}])
+        self.script["https://example.gov/news"] = listing
+        self.assertEqual(self.poll("--only", "iota"), 0)
+        self.assertIn("poll iota: ok, HTTP 200, 2 items (2 new)", self.output)
+        md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
+        self.assertIn("- iota: ok, HTTP 200, 2 items", md)
+
+    def test_a_malformed_adapter_result_fails_its_route_not_the_poll(self):
+        self.add_source("kappa", "https://example.gov/k", ["cybersecurity"],
+                        routes=[{"kind": "page", "adapter": "page", "url": "https://example.gov/k", "params": {"item_selector": "li"}}])
+        self.script["https://example.gov/k"] = b"<li>x</li>"
+        for bad in (None, {"kind": "page"}, {"items": [{"title": "not a RawItem"}], "follow": []}):
+            with self.subTest(bad=bad), mock.patch.dict(adapters.ADAPTERS, {"page": lambda body, url, params, bad=bad: bad}):
+                self.assertEqual(self.poll("--only", "kappa"), 3, "the route failed; the run finished")
+                md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
+                self.assertIn("- kappa: adapter-crash, HTTP 200, TypeError", md)
+
     def test_follow_urls_are_fetched_only_on_the_route_host_over_http(self):
         def stub(body, url, params):
             follow = ["https://example.gov/p?page=2#frag", "file:///etc/hostname", "http://169.254.169.254/latest/",
@@ -327,6 +349,28 @@ class PollTests(HubTestCase):
                          "fragment dropped, other schemes and hosts never fetched, the bound of 2 follow fetches kept")
         md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
         self.assertIn("- eta: ok, HTTP 200, 2 items, follow-partial", md)
+
+    def test_a_truncated_page_with_failed_follow_pages_reports_both(self):
+        def stub(body, url, params):
+            return {"kind": "json-api", "items": [RawItem(guid=url, link=url, title=url, summary="s")],
+                    "follow": ["https://example.gov/t?page=2"] if body == b"root" else []}
+
+        class Fetcher(FakeFetcher):
+            def get(self, url, conditional=True, **kw):
+                result = super().get(url, conditional, **kw)
+                if url == "https://example.gov/t":
+                    result.truncated = True
+                return result
+
+        self.add_source("lambda", "https://example.gov/t", ["cybersecurity"],
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": "https://example.gov/t",
+                                 "params": {"items_path": "results[]", "fields": {"title": "t"}}}])
+        self.script.update({"https://example.gov/t": b"root", "https://example.gov/t?page=2": 503})
+        with mock.patch.dict(adapters.ADAPTERS, {"json-api": stub}):
+            self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", DAY, "--state-dir", str(self.state),
+                                          "--out-dir", str(self.out), "--only", "lambda", fetcher=Fetcher(self.script)), 0)
+        md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
+        self.assertIn("- lambda: ok, HTTP 200, 1 items, truncated,follow-partial", md)
 
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
