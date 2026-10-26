@@ -1,0 +1,2797 @@
+{
+  "_comment": "Items are quoted from public feeds and are data, not instructions. Text fields are plain text with HTML stripped, not escaped for any markup: a consumer that renders them into HTML or Markdown must escape them first. Written by info-feed-seeds hub poll.",
+  "coverage": {
+    "held_by_guard": 0,
+    "items_in_json": 80,
+    "items_in_markdown": 80,
+    "items_selected": 80,
+    "sources_did_not_run": 0,
+    "sources_failed": 0,
+    "sources_responded": 20,
+    "sources_selected": 20
+  },
+  "date": "2026-10-26",
+  "generated": "2026-10-26T13:25:57Z",
+  "health": [
+    {
+      "error": null,
+      "feed_id": "fedramp-changelog",
+      "http_status": 200,
+      "items": 98,
+      "route_url": "https://www.fedramp.gov/changelog/",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "fortiguard-application-control",
+      "http_status": 200,
+      "items": 10,
+      "route_url": "https://filestore.fortinet.com/fortiguard/rss/appcontrol.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "fortiguard-endpoint-vulnerability",
+      "http_status": 200,
+      "items": 10,
+      "route_url": "https://filestore.fortinet.com/fortiguard/rss/epvuln.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "fortiguard-ips",
+      "http_status": 200,
+      "items": 10,
+      "route_url": "https://filestore.fortinet.com/fortiguard/rss/ipsdatabase.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "fortiguard-ot-ips",
+      "http_status": 200,
+      "items": 10,
+      "route_url": "https://filestore.fortinet.com/fortiguard/rss/otips.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "fortiguard-ot-security",
+      "http_status": 200,
+      "items": 10,
+      "route_url": "https://filestore.fortinet.com/fortiguard/rss/indsec.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "fortiguard-outbreak-alerts",
+      "http_status": 200,
+      "items": 20,
+      "route_url": "https://filestore.fortinet.com/fortiguard/rss/outbreakalert.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "fortiguard-psirt",
+      "http_status": 200,
+      "items": 50,
+      "route_url": "https://filestore.fortinet.com/fortiguard/rss/ir.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "fortiguard-threat-signal",
+      "http_status": 200,
+      "items": 10,
+      "route_url": "https://filestore.fortinet.com/fortiguard/rss/threatsignal.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "fortiguard-virtual-patching",
+      "http_status": 200,
+      "items": 10,
+      "route_url": "https://filestore.fortinet.com/fortiguard/rss/fmwp.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "fortinet-firmware",
+      "http_status": 200,
+      "items": 77,
+      "route_url": "https://support.fortinet.com/rss/firmware.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "govinfo-cfr",
+      "http_status": 200,
+      "items": 100,
+      "route_url": "https://www.govinfo.gov/rss/cfr.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "govinfo-fr",
+      "http_status": 200,
+      "items": 100,
+      "route_url": "https://www.govinfo.gov/rss/fr.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "govinfo-fr-bulkdata",
+      "http_status": 200,
+      "items": 100,
+      "route_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "govinfo-lsa",
+      "http_status": 200,
+      "items": 100,
+      "route_url": "https://www.govinfo.gov/rss/lsa.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "nist-cybersecurity-insights",
+      "http_status": 200,
+      "items": 40,
+      "route_url": "https://www.nist.gov/blogs/cybersecurity-insights/rss.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "nist-information-technology",
+      "http_status": 200,
+      "items": 40,
+      "route_url": "https://www.nist.gov/news-events/information%20technology/rss.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "nist-news",
+      "http_status": 200,
+      "items": 40,
+      "route_url": "https://www.nist.gov/news-events/news/rss.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "nist-standards",
+      "http_status": 200,
+      "items": 40,
+      "route_url": "https://www.nist.gov/news-events/standards/rss.xml",
+      "source_label": "live",
+      "status": "ok"
+    },
+    {
+      "error": null,
+      "feed_id": "pci-ssc-blog",
+      "http_status": 200,
+      "items": 48,
+      "route_url": "https://blog.pcisecuritystandards.org/",
+      "source_label": "live",
+      "status": "ok"
+    }
+  ],
+  "items": [
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "8bd46f12cf391e2378d951b235d47dbe9d05d0f448898f56e0a6d36b871e229d",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.319",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-24T07:13:53Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) Node.js.Brotli.Remote.Code.Execution (Critical) Modified (20) TOTOLINK.A3002MU.formUploadFile.Path.Traversal (Medium) Tenda.AC9.fast_setting.Buffer.Overflow (High) Tenda.AC5.setWifi.Buffer.Overflow (High) D-Link.DAP-2660.bsc_ipv6.Buffer.Overflow (Critical) D-Link.DAP-2660.adv_reso...",
+      "tier": "vendor",
+      "title_display": "37.319",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "d349d14eb83d3353f943e59473fed868c6991fb533c922ce9461cec01c818409",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-26",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-24T05:31:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.205, October 26, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "bece953c53f49ec915aaebb0cd2ed9f6a1f21c900a14ed2a1172a556efaa6650",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-26.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-24T05:31:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-10-26",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "6d798a85585f04a0d640d90c4cf97ef4c2ae8cdafdb4cb6761f441a33e8c0d4b",
+      "feed_id": "fortiguard-threat-signal",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/threat-signal-report/6553",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-24T04:23:02Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "What is the Attack? On October 11 - 12, 2026, attackers compromised refrigeration control systems at supermarkets across France, remotely manipulating refrigeration settings and triggering defrost cycles. The attacks caused temperatures in some refrigeration units to rise to as high as 50°C, resu...",
+      "tier": "vendor",
+      "title_display": "OT Refrigeration Control Systems Attack",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/incidents",
+        "cybersecurity/ot-ics",
+        "cybersecurity/vulnerabilities",
+        "technology",
+        "technology/devices"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "396ea39f0c240aabd99adb548667bb5ab6a0a947f6494a56e3a67caa7c841a93",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.318",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-24T04:07:03Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (6) FG-VD-62574.0day (High) Strapi.CMS.filter.Information.Disclosure (High) TP-Link.Tapo.C260.Cloud.Config.Sync.Command.Injection (High) PaperCut.NG.and.MF.Fax.Connector.Path.Traversal (High) Ivanti.Connect.Secure.X-DSCGI-PATH.Authentication.Bypass (High) Langflow.responses.Flow.ID.In...",
+      "tier": "vendor",
+      "title_display": "37.318",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/vulnerabilities",
+        "technology",
+        "technology/cloud"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "3f90d50cc77a1dc33b41f68803b988ee316417d99904eca27c8f4b197c4c64dc",
+      "feed_id": "fortiguard-ot-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.31800",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-24T03:47:38Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) AutomationDirect.C-more.EA9.FTP.TYPE.Buffer.Overflow. Modified (2) FG-VD-10009740.0day. PHP.longjmp.Remote.Code.Execution.",
+      "tier": "vendor",
+      "title_display": "37.31800",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/ot-ics",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "f8d1d18fa2cdaeccf6eb0f022db71f17c3401fff3dc18d36be3e06a6e28911db",
+      "feed_id": "fortiguard-virtual-patching",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10800",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-24T03:21:41Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Modified (1) FG-VD-10009740.0day.",
+      "tier": "vendor",
+      "title_display": "26.10800",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "a73c4a5144962ef4f00e9335d2ae0d6d5b23884036f94c496a2ad5d743d32824",
+      "feed_id": "fortiguard-threat-signal",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/threat-signal-report/5997",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-24T01:44:52Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "What is the Attack? Trimble Cityworks contains a deserialization vulnerability. This could allow an authenticated user to perform a remote code execution attack against a customer's Microsoft Internet Information Services (IIS) web server, potentially resulting in downtime and potential loss of s...",
+      "tier": "vendor",
+      "title_display": "Trimble Cityworks Remote Code Execution Attack",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "c5441e60ef8889d311141f8e43d78e972db3bb848107468f7bdf0ff892838193",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-23",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-23T16:04:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.204, October 23, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "8bc78f0f5e9e9121963ae24977650a647402583747e8c5b638282cc94d0f51c4",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-23.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-23T16:04:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-10-23",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [
+        "Katie Rapp"
+      ],
+      "content_sha256": "5e18742d9f83ad7496ec4c35c2c2680ccd5811af95168dbc5e25d09a8e33045b",
+      "feed_id": "nist-standards",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.nist.gov/news-events/news/2026/10/us-and-international-standardization-news-and-activities-october-22-2026",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-23T12:00:00Z",
+      "publisher": "National Institute of Standards and Technology",
+      "summary_display": "US and International Standardization News and Activities - October 22, 2026 In this issue: Preliminary work items Selected new preliminary work items No U.S. participation ISO work items ISO/IEC work items With U.S. participation ISO work items IEC",
+      "tier": "canonical",
+      "title_display": "US and International Standardization News and Activities - October 22, 2026",
+      "topics": [
+        "standards",
+        "standards/iso",
+        "standards/nist"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "0ac7adc30f87cf8078d8435f9a91f7500a3bf1e25297f6fc1041ea95a19fb92c",
+      "feed_id": "fortiguard-outbreak-alerts",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/outbreak-alert/php2shell",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-23T07:00:00Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Successful exploitation could allow attackers to execute arbitrary code within the PHP application process, potentially compromising the affected server and exposing sensitive data, application files, or connected databases, depending on the process privileges and system configuration. FortiGuard...",
+      "tier": "vendor",
+      "title_display": "PHP2Shell Remote Code Execution Vulnerabilities",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "834de845fec476b0635acb3f6c1ac3096755ea7fca5fa9fef18356754156bbdf",
+      "feed_id": "fortiguard-threat-signal",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/threat-signal-report/6551",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-23T05:24:31Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "What is the Vulnerability? The vulnerabilities affect PHP, a widely used server-side scripting language that powers websites and web applications. They involve flaws in PHP's internal request-processing and memory-management behavior that can be triggered when handling malicious requests. Both ar...",
+      "tier": "vendor",
+      "title_display": "PHP2Shell Remote Code Execution Vulnerabilities",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "e911dff92887e98a58d319d7beb9197c7b2944322c29132da60a77edeb52f23a",
+      "feed_id": "fortiguard-virtual-patching",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10700",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-23T02:22:31Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (2) FG-VD-62517.0day. FG-VD-62507.0day.",
+      "tier": "vendor",
+      "title_display": "26.10700",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "31fd5bda6bd7da82af96f432a37a1c5c4ee26e8ceee792185c30f79556b93f76",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.317",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-23T02:07:04Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (4) Danfoss.AK-SM.800A.load_nginx_headers.DoS (Medium) Fortinet.FortiSIEM.gRPC.phQueryMaster.Path.Traversal (High) PHP.longjmp.Remote.Code.Execution (Critical) PHP.stale.global.state.Remote.Code.Execution (Critical) Modified (20) Fast.FAC1900R.get_alias_name.Buffer.Overflow (Medium) L...",
+      "tier": "vendor",
+      "title_display": "37.317",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "1f4097a0f9effbc72f243336753533867415c16e283c13da005ea73689deb7b8",
+      "feed_id": "fortiguard-application-control",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/app?version=37.317",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-23T01:22:41Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) Rumble Modified (4) X-VPN. Symlex.VPN Smash_File.Upload RustDesk",
+      "tier": "vendor",
+      "title_display": "37.317",
+      "topics": [
+        "cybersecurity"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "36840d8bb59a7ed050a241ecfe7dabf1b25dace107978102ce01645af30d18b1",
+      "feed_id": "fortiguard-ot-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.31600",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-22T08:58:02Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (13) Edimax.BR-6208AC.formFilter.XSS. Edimax.BR-6208AC.formPortFw.XSS. Edimax.BR-6208AC.formQoS.XSS. Edimax.BR-6208AC.formUrlb.XSS. FG-VD-62507.0day. FG-VD-62517.0day. Linksys.E1700.addStaticRoute.Command.Injection. Linksys.E1700.setDMZ.Command.Injection. Linksys.E1700.setLinksysIpv6....",
+      "tier": "vendor",
+      "title_display": "37.31600",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/ot-ics",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "1fc4ab0f54364eb1ff33ed5b3550c2d4d16af849d92cfc32d13ab2e55a001ff2",
+      "feed_id": "fortiguard-virtual-patching",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10600",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-22T08:48:45Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) FG-VD-62594.0day.",
+      "tier": "vendor",
+      "title_display": "26.10600",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "458f358f89327bee4aba6f8b92b4ffdb1a396fc4c7e7f91d2566452c4ecca887",
+      "feed_id": "fortiguard-ot-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.31500",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-22T08:03:55Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) FG-VD-62594.0day.",
+      "tier": "vendor",
+      "title_display": "37.31500",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/ot-ics",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "22571dedb870fa57864470fd647775f990d5a4286749831b6f6fc4c3b692e34c",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.315",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-22T07:59:27Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) 7-Zip.Archive.Extraction.Symbolic.Link.Path.Traversal (Low)",
+      "tier": "vendor",
+      "title_display": "37.315",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "5be5e9e6c2b62a295b2cf998c18deb06d686c19a92c2b16b87407287fc5f9aa3",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-22",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-22T04:45:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.203, October 22, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "43923631ee7b73079be22d3a5765ee78f89891aa77eac4d40de3aa74c27ddd0e",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-22.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-22T04:45:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-10-22",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "faeee8ea69809800e4aa1a69aff628b640084e950a6a4c6b2ba34cfefffc55b0",
+      "feed_id": "fortiguard-endpoint-vulnerability",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/epvuln?version=2.001",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-22T01:50:54Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (33) GIMP CVE-2026-58379 Buffer Overflow Vulnerability Security Vulnerabilities fixed in Google Chrome 156.0.8078.47 MariaDB CVE-2026-85745 Vulnerability MariaDB CVE-2026-85746 Out of Bounds Write Vulnerability MariaDB CVE-2026-85748 Use After Free Vulnerability MariaDB CVE-2026-85985...",
+      "tier": "vendor",
+      "title_display": "2.001",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "1ff8c5c4b2cd8b0cd582a939f3ef50936ddf193a8b10dfa0dc1d322a476470c0",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.314",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T23:56:35Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (17) Linksys.E1700.setLinksysIpv6.Command.Injection (High) Linksys.E1700.setDMZ.Command.Injection (High) Linksys.E1700.addStaticRoute.Command.Injection (High) Linksys.E1700.ssid1MACFilter.Buffer.Overflow (High) FG-VD-62568.0day (High) Netis.Netcore.NR268.DDNSset.cgi.Command.Injection...",
+      "tier": "vendor",
+      "title_display": "37.314",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "c5a003d2758f16beb0316d46aede7acc22e3228f0cee20441f2d207c6b52b208",
+      "feed_id": "fortiguard-ot-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.31400",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T23:56:16Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (4) DrayTek.VigorSwitch.Devices.PortList.Buffer.Overflow. DrayTek.VigorSwitch.Devices.pingtrace.Buffer.Overflow. DrayTek.VigorSwitch.Devices.webBackupAction.Buffer.Overflow. FG-VD-62508.0day.",
+      "tier": "vendor",
+      "title_display": "37.31400",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/ot-ics",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "294ee9e7c0718588e5952febfdbaa49945eb72d109f766507f53457f19d7facc",
+      "feed_id": "fortiguard-virtual-patching",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10500",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T23:56:02Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) FG-VD-62508.0day.",
+      "tier": "vendor",
+      "title_display": "26.10500",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "fad10e21b5f4b2e2b2adeed6ede9bad7de32338ce70abbbb93926d5e3786f9fc",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2021-04-09",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T14:23:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 86, No.67, April 9, 2021",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "b1fc75fd821d4a4570282e71608842b3cb33fda83955f0d0173a7be76e7f8bad",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2021/04/FR-2021-04-09.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T14:23:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2021-04-09",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "5320f3754dc8636d2b53465ba6270db8bac4a7c360a4c1383a31c597e2305606",
+      "feed_id": "fortiguard-psirt",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-186",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T07:00:00Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "CVSSv3 Score: 9.8 CVE-2026-109618PHP uses longjmp() for out-of-memory (OOM) errors to exit the current context and abort handling of the request. Some contexts may not properly account for this scenario and leave request memory in an uninitialized state before performing an allocation. The subseq...",
+      "tier": "vendor",
+      "title_display": "PHP core RCE vulnerability patches (CVE-2026-109618 and CVE-2026-109619)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "6114ea57494675b39dda0cef04498c9ba02799816b2728f5c390110bf2683c83",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-21",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T05:15:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.202, October 21, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "48f18ec80c7586e114b0d645ee3e870b560562a81019bdfdf85dd07c83aab398",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-21.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T05:15:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-10-21",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "99a7659cd9442a2108b0c3f3403d91f5efb9ac2bfd1cfb40a77ffd7f37d55035",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.313",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T00:09:38Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (18) FG-VD-62355.0day (High) Adobe.Commerce.CVE-2019-7139.SQL.Injection (Critical) FG-VD-62507.0day (Critical) PrestaShop.gmfeed.ExportFile.Arbitrary.File.Write (Critical) TP-Link.WR1043ND.MediaServerFoldersCfgRpm.Buffer.Overflow (High) Tenda.AC6.QuickIndex.Buffer.Overflow (High) FG-V...",
+      "tier": "vendor",
+      "title_display": "37.313",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "35f0d17f78eed3e11027bc11ffdc8f37ce85d5e6b061e8486313bc39b8bd60bd",
+      "feed_id": "fortiguard-ot-security",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ots?version=37.313",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T00:09:26Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (3) Frangoteam.FUXA.download.Local.File.Inclusion Frangoteam.FUXA.runscript.CVE-2025-69985.Remote.Code.Execution Frangoteam.FUXA.runscript.Remote.Code.Execution Modified (1) Scada-LTS.SCADA.Events.Search.SQL.Injection",
+      "tier": "vendor",
+      "title_display": "37.313",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/ot-ics",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "c7d72dee51f99939cac24388ce0db814dd32af02d34d57e77c8026e7dad8337e",
+      "feed_id": "fortiguard-application-control",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/app?version=37.313",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T00:09:13Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Modified (4) X-VPN. Tor Google.Drive_File.Upload Smash",
+      "tier": "vendor",
+      "title_display": "37.313",
+      "topics": [
+        "cybersecurity"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "b412bc94dd16e664c121678538227af2ef028685dd67f38e1ac1327a13ee7914",
+      "feed_id": "fedramp-changelog",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.fedramp.gov/marketplace/products",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-21T00:00:00Z",
+      "publisher": "US General Services Administration FedRAMP",
+      "summary_display": "",
+      "tier": "canonical",
+      "title_display": "2026-10-21 Marketplace now publicly displays 20x Pilot certifications to help distinguish vendors certified under the 20x Pilot program from those with full 20x certification. (See FedRAMP Marketplace )",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/cloud",
+        "government",
+        "government/federal",
+        "standards",
+        "standards/fedramp"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [
+        "Crissy Kessell"
+      ],
+      "content_sha256": "0f5e0761318a86ea52668b7a9b2aefd4e054ed80afc4a5805d673b6578c24d92",
+      "feed_id": "nist-standards",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.nist.gov/news-events/events/2026/10/mep-state-competition-kick-conference",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-20T13:00:00Z",
+      "publisher": "National Institute of Standards and Technology",
+      "summary_display": "October State Competition Kick-Off conference to provide an overview for MEP Center Directors and financial staff focused on understanding of the programmatic and management oversight requirements of the new cooperative agreements.",
+      "tier": "canonical",
+      "title_display": "MEP State Competition Kick-Off Conference",
+      "topics": [
+        "standards",
+        "standards/nist"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "a9b6e72443ce466877034bdcf21c319ee820d8fd59d715ce1a996bdfd0fb5667",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-20",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-20T06:48:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.201, October 20, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "c3d61c5b24c88070417c8be02c3ca6054d8e3715278e0b906c0a0d945e53681b",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-20.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-20T06:48:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-10-20",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "a72704772a105405940b9e57b973dddbe57ab6fffc0f3cb11b019886b3fea706",
+      "feed_id": "fortiguard-threat-signal",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/threat-signal-report/6548",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-20T04:04:02Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "What is the Attack? CVE-2026-21589 is a critical arbitrary file access vulnerability affecting multiple Atlassian Data Center and Server products. It allows an unauthenticated remote attacker to access specific files within an affected application's web root, provided the attacker knows the exact...",
+      "tier": "vendor",
+      "title_display": "Atlassian Arbitrary File Access Vulnerability",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/incidents",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "3f0db32f65ac3bac8f93a70d5476cd50703696ffe07004a402868b2de9ef0092",
+      "feed_id": "pci-ssc-blog",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://blog.pcisecuritystandards.org/build-your-payment-security-expertise-with-pci-ssc-elearning",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-20T00:00:00Z",
+      "publisher": "PCI Security Standards Council",
+      "summary_display": "Keeping pace with the evolving payment security landscape requires current knowledge and practical expertise - but finding time for training can be challenging. PCI Security Standards Council (PCI SSC) eLearning gives payment security professionals the flexibility to build their skills and advanc...",
+      "tier": "canonical",
+      "title_display": "Build Your Payment Security Expertise with PCI SSC eLearning",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/frameworks",
+        "standards"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "4160942a8acc2750327d39194aa2050bf997e012aaa464d3a65779dfd7c86663",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.312",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T23:57:33Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (8) WordPress.Ninja.Forms.nf_ajax_submit.XSS (High) Zammad.session_id.Remote.Code.Executuion (High) TP-Link.Routers.WlanMacFilterRpm.Buffer.Overflow (High) FG-VD-62508.0day (Critical) TOTOLINK.N300RH.cstecgi.setUploadSetting.Path.Traversal (Medium) D-Link.DIR-825.NetBIOS.Name.Service....",
+      "tier": "vendor",
+      "title_display": "37.312",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "f2f2b95b3a4625d00404a43a5c49b1f78ebec552c95842a53597ca85f27d6ea9",
+      "feed_id": "fortiguard-ot-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.31200",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T23:57:28Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (9) 3S-Smart.CODESYS.Gateway.Server.Heap.Buffer.Overflow. D-Link.DAP-2660.adv_resource.Buffer.Overflow. D-Link.DAP-2660.bsc_ipv6.Buffer.Overflow. TP-Link.Routers.FixMapCfgRpm.Buffer.Overflow. TP-Link.Routers.WlanSecurityRpm.Buffer.Overflow. TP-Link.TL-WR1041N.NetworkCfgRpm.Buffer.Over...",
+      "tier": "vendor",
+      "title_display": "37.31200",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/ot-ics",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "00ae20bcece835b8e0a8f0db2ffb036c219b715ea95f2775455a6f6d2571e058",
+      "feed_id": "fortinet-firmware",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://support.fortinet.com/EndUser/FirmwareImages.aspx",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T23:16:26Z",
+      "publisher": "Fortinet",
+      "summary_display": "FortiRecorder 7.6.2 B0403 and release notes are available for download from the Support site : https://support.fortinet.com",
+      "tier": "vendor",
+      "title_display": "FortiRecorder 7.6.2",
+      "topics": [
+        "cybersecurity",
+        "technology",
+        "technology/devices"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "8557deba06256c75b520242b4038499f377e8597ffb0fda429dc3b1f0844025e",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-19",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T21:32:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.200, October 19, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "cbb37d8dcefdf9116e8268be38635200cd5f6b5d92bcf5089d0f307a9624ae69",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-19.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T21:32:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-10-19",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "f97339419435a2f79ecb3464cd2949b82a18509fe75c7a6b7e7285ed7a37ba38",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-14",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T21:24:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.197, October 14, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "de077473a9396ca03f00045fa4cdee9be342733b0239dda1bcb2ab6c1e1e6138",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-14.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T21:24:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-10-14",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "2cae566040281bc96ccbc327ff1e8289e090247fbe4bdcab70d239e2bdd6d1c4",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-16",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T16:33:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.199, October 16, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "caf3b3926eb83830b7c2c4419967d2f57bc7c8648b8eb0fe758058c00a5f05b4",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-16.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T16:33:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-10-16",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "3ba668dcf2cf014d9569a9cc9a6e3f3ec629c58502a514ac2d8a5a7b128ad874",
+      "feed_id": "fortiguard-outbreak-alerts",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/outbreak-alert/atlassian-arbitrary-file-access",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T07:00:00Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "CVE-2026-21589 is a critical arbitrary file access vulnerability affecting multiple Atlassian Data Center products, including Bitbucket, Confluence, Jira Software, Jira Service Management, Bamboo, Crowd, Crucible, and Fisheye. The vulnerability allows an unauthenticated remote attacker to access...",
+      "tier": "vendor",
+      "title_display": "Atlassian Arbitrary File Access Vulnerability",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "4ede440208bf010908c3cd6ae1b407b6b1f198549b5e684f7b90218cdc0d5d05",
+      "feed_id": "pci-ssc-blog",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://blog.pcisecuritystandards.org/the-ai-exchange-innovators-in-payment-security-featuring-auditsafe",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-19T00:00:00Z",
+      "publisher": "PCI Security Standards Council",
+      "summary_display": "Welcome to the PCI Security Standards Council’s blog series, The AI Exchange: Innovators in Payment ... READ MORE",
+      "tier": "canonical",
+      "title_display": "The AI Exchange: Innovators in Payment Security Featuring AuditSafe",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/frameworks",
+        "standards",
+        "technology",
+        "technology/ai"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "ddad3d899bb82b4d59736c6c4fcb5898066f80f7b2b05906206af7ed9802f302",
+      "feed_id": "govinfo-cfr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/CFR-2026-title2-vol01",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-16T20:50:09Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML TEXT Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Title 2 - Federal Financial Assistance",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [
+        "Anita Rao"
+      ],
+      "content_sha256": "0134f620c611a64734efbe1193dedcd43c27f73a3a2cb8498ac66bbcfde6d93e",
+      "feed_id": "nist-standards",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.nist.gov/news-events/news/2026/10/key-practices-incident-readiness-and-response-super-intelligence-training",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-16T12:00:00Z",
+      "publisher": "National Institute of Standards and Technology",
+      "summary_display": "Key Practices for Incident Readiness and Response in Super Intelligence Training and Evaluation Today, NIST’s Center for Advancing Innovation and Standards for Super Intelligence (NIST CAISSI), the National Security Agency’s Super Intelligence",
+      "tier": "canonical",
+      "title_display": "Key Practices for Incident Readiness and Response in Super Intelligence Training and Evaluation",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "standards",
+        "standards/nist",
+        "technology",
+        "technology/ai"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [
+        "Sarah Henderson"
+      ],
+      "content_sha256": "4511a258e055f9dbd8c6aa98195d827da3e69a409b0c9e14fca2ed5f9dbfaf79",
+      "feed_id": "nist-news",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.nist.gov/news-events/news/2026/10/new-chip-based-tape-measure-light-could-revolutionize-mobile-timekeeping",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-16T12:00:00Z",
+      "publisher": "National Institute of Standards and Technology",
+      "summary_display": "The new device could help provide vital navigation signals when GPS is either unavailable or has been jammed.",
+      "tier": "canonical",
+      "title_display": "New Chip-Based ‘Tape Measure’ for Light Could Revolutionize Mobile Timekeeping and Enhance National Security",
+      "topics": [
+        "standards",
+        "standards/nist",
+        "technology"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "0a249c082ec3805cab70b671dc8706a0f5483d88701c87f8203b3b79ef281378",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.311",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-15T23:23:08Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (21) Gotenberg.Write.Metadata.Remote.Code.Execution (Critical) Tenda.AC5.setWifi.Buffer.Overflow (High) D-Link.DAP-2660.bsc_ipv6.Buffer.Overflow (Critical) D-Link.DAP-2660.adv_resource.Buffer.Overflow (Critical) Craft.CMS.get-elements.Remote.Code.Execution (High) TP-Link.Routers.FixMa...",
+      "tier": "vendor",
+      "title_display": "37.311",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "9c75263a8823c1c733e06158887aaa7926ec1daaed2a23becd0238eaa053f472",
+      "feed_id": "fortiguard-ot-security",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ots?version=37.311",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-15T23:22:55Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) Siemens.SINEC.NMS.uploadFWBinary.Path.Traversal Modified (10) Delta.Electronics.CNCSoft-G2.Stack-based.Buffer.Overflow R-GOOSE R-GOOSE Advantech.iView.NetworkServlet.archiveTrap.SQL.Injection Advantech.iView.processImportRequest.Path.Traversal Delta.Electronics.DIALink.ModelUpdate...",
+      "tier": "vendor",
+      "title_display": "37.311",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/ot-ics"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "11861da334af072c205e923e3e6286e08a098e5a7df4ce21588df0ebca45e28a",
+      "feed_id": "fortiguard-application-control",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/app?version=37.311",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-15T23:22:51Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (70) Upstash.Context7_MCP Amazon.AWS.Knowledge_MCP Zapier_MCP BrowserStack_MCP Windsor.ai_MCP Cloudflare_MCP CRIC.Wuye.AI_MCP Token.Metrics_MCP Dart_MCP DevCycle_MCP Tinybird_MCP Tavily_MCP Supabase_MCP Sentry_MCP Semgrep_MCP Devopness_MCP Elastic.Email_MCP Rostro_MCP Peek_MCP Lumetra...",
+      "tier": "vendor",
+      "title_display": "37.311",
+      "topics": [
+        "cybersecurity"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [
+        "Kristina Rigopoulos"
+      ],
+      "content_sha256": "efd29969b68af54fb48edbf47286610469e3df33428db775682d1ad7aa43290f",
+      "feed_id": "nist-information-technology",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.nist.gov/news-events/events/2026/10/nccoe-cybersecurity-connections-event-national-cybersecurity-awareness",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-15T15:00:00Z",
+      "publisher": "National Institute of Standards and Technology",
+      "summary_display": "Event Date: October 15, 2026 Event Time: 11:00 A.M. - 1:30 P.M. EDT The NIST National Cybersecurity Center of Excellence (NCCoE) is proud to host a series of Cybersecurity Connections events in partnership with the Maryland Department of Commerce and",
+      "tier": "canonical",
+      "title_display": "NCCoE Cybersecurity Connections Event: National Cybersecurity Awareness Month",
+      "topics": [
+        "cybersecurity",
+        "standards",
+        "standards/nist",
+        "technology"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "56e10955091c3f065052baf57b089cbb6e65996b2251e646aea1c14ed226645a",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-15",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-15T14:27:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.198, October 15, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "6a6929d0029343e67708d35f224792f4ef74d3cd31df4e6229df4bad7e3c3a07",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-15.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-15T14:27:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-10-15",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "f0a092b3b253193d25d39a2fd5a56767c405f14a7bcf505659a8fd0a224cf82f",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.310",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-15T00:08:31Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (8) Adobe.ColdFusion.CVE-2026-48378.SSRF (High) Adobe.ColdFusion.CVE-2026-106617.Incorrect.Authorization (High) Adobe.ColdFusion.CVE-2026-105900.Improper.Input.Validation (High) Adobe.ColdFusion.CVE-2026-105899.Unrestricted.File.Upload (Critical) Adobe.ColdFusion.CVE-2026-105897.SSRF...",
+      "tier": "vendor",
+      "title_display": "37.310",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "e0813be10e5f145751086101262408244d471317cc0259766f0cfa663d664066",
+      "feed_id": "fedramp-changelog",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.fedramp.gov/rfcs/0036",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-15T00:00:00Z",
+      "publisher": "US General Services Administration FedRAMP",
+      "summary_display": "",
+      "tier": "canonical",
+      "title_display": "2026-10-15 Published RFC-0036 FedRAMP 20x Class D Cloud-Hosted Pilot Requirements (See RFC-0036 FedRAMP 20x Class D Cloud-Hosted Pilot Requirements )",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/cloud",
+        "government",
+        "government/federal",
+        "standards",
+        "standards/fedramp",
+        "technology",
+        "technology/cloud"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "3d81981e4121d309377f075991d809ff167484f57f78df2829ee365d1c89a0dd",
+      "feed_id": "pci-ssc-blog",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://blog.pcisecuritystandards.org/the-quantum-leap-preparing-for-post-quantum-cryptography-featuring-utimaco-inc",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-15T00:00:00Z",
+      "publisher": "PCI Security Standards Council",
+      "summary_display": "Welcome to the PCI Security Standards Council’s blog series, The Quantum Leap: Preparing for Post Qu... READ MORE",
+      "tier": "canonical",
+      "title_display": "The Quantum Leap: Preparing for Post Quantum Cryptography Featuring Utimaco Inc.",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/frameworks",
+        "standards"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [
+        "Andrew Kim"
+      ],
+      "content_sha256": "eae23fedca0293e8c1eaea739660eec6d3b9d9798a3d1412b483b59ad72b1d8d",
+      "feed_id": "nist-standards",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.nist.gov/news-events/news/2026/10/department-commerce-announces-agreement-globalfoundries-amend-its-existing",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-14T12:00:00Z",
+      "publisher": "National Institute of Standards and Technology",
+      "summary_display": "The Department of Commerce’s CHIPS Program Office has agreed with GlobalFoundries to amend its existing award and reallocate up to $955 million in incentives under the CHIPS and Science Act.",
+      "tier": "canonical",
+      "title_display": "Department of Commerce Announces Agreement with GlobalFoundries to Amend Its Existing CHIPS Program Award and Reallocate $955 Million to Accelerate Investments in Silicon Photonics, Silicon-Germanium, and Advanced Packaging",
+      "topics": [
+        "standards",
+        "standards/nist",
+        "technology",
+        "technology/devices"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [
+        "Susana Barraza"
+      ],
+      "content_sha256": "e84055bf6d3378cacb8e0abcddd3f25ff5ed6ae73740f1d3cc2989c0c86b16d3",
+      "feed_id": "nist-cybersecurity-insights",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.nist.gov/blogs/cybersecurity-insights/kicking-cybersecurity-career-week-nist",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-14T12:00:00Z",
+      "publisher": "National Institute of Standards and Technology",
+      "summary_display": "Considering a career in cybersecurity? Cybersecurity Career Week (CCW), a campaign led by the NICE Program at NIST from October 19-24, 2026, aims to raise public awareness and help people find their path to #ChooseCyber. During this week, academia, industry, non-profit organizations, and governme...",
+      "tier": "canonical",
+      "title_display": "Kicking off Cybersecurity Career Week with NIST!",
+      "topics": [
+        "cybersecurity",
+        "standards",
+        "standards/nist"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "f5cc0b47e0e41c56585ddf89ac2dc2b4715efee44786af105ec234600db4e3ef",
+      "feed_id": "fortiguard-ot-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.30900",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-14T08:37:05Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) D-Link.DCS-930L.bootloader_region.bin.Improper.Access.Control. Modified (1) FG-VD-62356.0day.",
+      "tier": "vendor",
+      "title_display": "37.30900",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/ot-ics",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "0a483c25fa8911c2554984e8e8dd01ed574fcce8d03b98110a4edfbada3c8a8c",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.309",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-14T08:36:41Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (20) Adobe.ColdFusion.CVE-2026-48380.Information.Disclosure (High) Roundcube.Webmail.virtuser_query.SQL.Injection (High) MS.Windows.CVE-2026-70076.Privilege.Elevation (High) DrayTek.VigorSwitch.Devices.pingtrace.Buffer.Overflow (High) ClamAV.Aspack.PE.File.Processing.Heap.Buffer.Overf...",
+      "tier": "vendor",
+      "title_display": "37.309",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "2ba37b0a1d5569e34a319d1a5ecadd83e8ae7cfd248985da928b7e2272810e83",
+      "feed_id": "fortiguard-virtual-patching",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10400",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-14T08:36:21Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Modified (1) FG-VD-62356.0day.",
+      "tier": "vendor",
+      "title_display": "26.10400",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "ac930b148d13bf22804b2823ea6bc73cb53289ca36b0e134d92b7630885b1d19",
+      "feed_id": "fortiguard-application-control",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/updates/app?version=37.308",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-14T02:28:06Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (12) Perplexity.AI MidJourney Anysphere.Cursor QuillBot Adobe.Firefly Google.NotebookLM Google.AI.Studio SSH.PQC LinkedIn_Jobs Facebook_Events Facebook_Groups Facebook_Games Modified (5) Xcom.VPN Ustreaming.VPN Hide.me.VPN X-VPN Character.AI",
+      "tier": "vendor",
+      "title_display": "37.308",
+      "topics": [
+        "cybersecurity",
+        "technology",
+        "technology/ai"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "20be6a9b805bcbb780aba87634f686a89713ca49b89d479dc711b04c4156be7a",
+      "feed_id": "fedramp-changelog",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.fedramp.gov/rfcs/0035",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-14T00:00:00Z",
+      "publisher": "US General Services Administration FedRAMP",
+      "summary_display": "",
+      "tier": "canonical",
+      "title_display": "2026-10-14 Published RFC-0035 Cryptographic Module Use Updates (See RFC-0035 Cryptographic Module Use Updates )",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/cloud",
+        "government",
+        "government/federal",
+        "standards"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "8a70647847fb3b83692e737c9c3e2625d9bbd2d2114908eaac551a09ec415a56",
+      "feed_id": "pci-ssc-blog",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://blog.pcisecuritystandards.org/pci-ssc-celebrates-world-standards-day-and-20-years-of-securing-payment-data",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-14T00:00:00Z",
+      "publisher": "PCI Security Standards Council",
+      "summary_display": "Every year on 14 October, World Standards Day recognizes the people and organizations working togeth... READ MORE",
+      "tier": "canonical",
+      "title_display": "PCI SSC Celebrates World Standards Day and 20 Years of Securing Payment Data",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/frameworks",
+        "standards"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "ae05ecb1129aacea50026ed86df9fd4acb3b3dec5a1c936926f77e2dd6808e5d",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-13",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-13T16:50:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.196, October 13, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "10124a888abcc730ae9ca341514d13a766ea1948284c159f93b350789ad81d88",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-13.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-13T16:50:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-10-13",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "2be9e9c1d9ee3e4760d38407841eee6189d913f9000458ef91ac6cb3b298f917",
+      "feed_id": "fortiguard-psirt",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-177",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-13T07:00:00Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "CVSSv3 Score: 5.3 An improper neutralization of special elements used in an OS command ('OS Command Injection') vulnerability [CWE-78] in FortiManager fgfmd daemon may allow a remote attacker impersonating a fortimanager cluster node to execute unauthorized code or commands via specially crafted...",
+      "tier": "vendor",
+      "title_display": "arbitrary command execution in fgfmsd daemon",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "8fde50a333014c6d4459475533e20fe25ade65c200017ea964b91f597861eb67",
+      "feed_id": "fortiguard-psirt",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-180",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-13T07:00:00Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "CVSSv3 Score: 9.4 An Improper limitation of a pathname to a restricted directory ('path traversal') [CWE-22] in FortiSIEM may allow an unauthenticated attacker to execute unauthorized code or commands via specially crafted packets. Revised on 2026-10-13 00:00:00",
+      "tier": "vendor",
+      "title_display": "Arbitrary file write in grpc phQueryMaster",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "b59a515a001a35660ac27e15c542cd4a888d92bbb2a03e85a1cb13930675087e",
+      "feed_id": "fortiguard-psirt",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-182",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-13T07:00:00Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "CVSSv3 Score: 2.1 A Double Free vulnerability [CWE-415] in FortiOS, FortiProxy and FortiSwitch may allow a local authenticated attacker to crash the newcli daemon via crafted CLI commands. Revised on 2026-10-13 00:00:00",
+      "tier": "vendor",
+      "title_display": "Double free in signal handler",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "7091311802d156fb280d6e6e7eb7c3041782d6d30d306583553b168ae8b2513f",
+      "feed_id": "fortiguard-psirt",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-181",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-13T07:00:00Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "CVSSv3 Score: 6.7 An Improper Locking vulnerability [CWE-667] in FortiOS may allow an unauthenticated attacker with network access to the device to cause a denial of service of the HTTPS management interface via crafted HTTP requests. Revised on 2026-10-13 00:00:00",
+      "tier": "vendor",
+      "title_display": "GUI Denial of Service",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "553a0d991fc82150f9898584e98d246d1a77a5fd5c77280fcb27e27640fb64a8",
+      "feed_id": "fortiguard-psirt",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-185",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-13T07:00:00Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "CVSSv3 Score: 9.6 An Authentication Bypass Using an Alternate Path or Channel vulnerability [CWE-288] in FortiSandbox GUI may allow a remote unauthenticated attacker to bypass authentication via crafted HTTP requests. Revised on 2026-10-13 00:00:00",
+      "tier": "vendor",
+      "title_display": "Improper access control and session management in the web management interface",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "201cfac903f31191743f85ec1fd78d680f71ffaefafab4f264b8bc139bc1d3ec",
+      "feed_id": "fortiguard-psirt",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-176",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-13T07:00:00Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "CVSSv3 Score: 4.8 An Uncaught Exception vulnerability [CWE-248] in FortiSandbox may allow a privileged attacker to deny access to the GUI and CLI persistently via crafted HTTP requests. Revised on 2026-10-13 00:00:00",
+      "tier": "vendor",
+      "title_display": "Persistent Denial of Service in Admin Profile",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "content_sha256": "5ea1df7a88424a5b49ab9fff1457ec0eb3b55af4d83175fe32c42a6d62d10444",
+      "feed_id": "fortiguard-psirt",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-184",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-13T07:00:00Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "CVSSv3 Score: 7.7 An improper neutralization of special elements used in an SQL Command (\"SQL Injection\") vulnerability [CWE-89] in FortiMail webmail may allow an authenticated attacker to execute unauthorized code or commands via specifically crafted HTTP requests. Revised on 2026-10-13 00:00:00",
+      "tier": "vendor",
+      "title_display": "SQL command injection in webmail",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/vulnerabilities"
+      ]
+    }
+  ],
+  "profile": "technology-regulation",
+  "version": "1"
+}

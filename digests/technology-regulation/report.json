@@ -1,0 +1,126 @@
+{
+  "_comment": "Run report. Guard holds are counts by level and category only; no item text.",
+  "coverage": {
+    "held_by_guard": 0,
+    "items_in_json": 80,
+    "items_in_markdown": 80,
+    "items_selected": 80,
+    "sources_did_not_run": 0,
+    "sources_failed": 0,
+    "sources_responded": 20,
+    "sources_selected": 20
+  },
+  "date": "2026-10-26",
+  "did_not_run": [],
+  "generated": "2026-10-26T13:25:57Z",
+  "guard": {
+    "held_by_category": {},
+    "held_by_level": {},
+    "released_shown": 0,
+    "review_marked": 0
+  },
+  "health_transitions": [
+    {
+      "feed_id": "fedramp-changelog",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "fortiguard-application-control",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "fortiguard-endpoint-vulnerability",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "fortiguard-ips",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "fortiguard-ot-ips",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "fortiguard-ot-security",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "fortiguard-outbreak-alerts",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "fortiguard-psirt",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "fortiguard-threat-signal",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "fortiguard-virtual-patching",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "fortinet-firmware",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "govinfo-cfr",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "govinfo-fr",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "govinfo-fr-bulkdata",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "govinfo-lsa",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "nist-cybersecurity-insights",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "nist-information-technology",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "nist-news",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "nist-standards",
+      "from": null,
+      "to": "ok"
+    },
+    {
+      "feed_id": "pci-ssc-blog",
+      "from": null,
+      "to": "ok"
+    }
+  ],
+  "profile": "technology-regulation",
+  "version": "1"
+}
