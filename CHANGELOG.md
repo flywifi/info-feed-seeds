@@ -8,6 +8,15 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Store schema version 2: `feeder/store.py` records the schema version in `PRAGMA user_version`,
+  migrates an older `feeder.db` in place (missing columns and indexes added, every row, hit and health
+  record kept, a second open adds nothing; the dry-run copy is migrated in memory and the file is left
+  as it was) and refuses a file written by newer code (`hub poll` and `hub release` exit 2). Items gain
+  filter columns: publisher; the source category and source subcategory (where the feed sits as a
+  whole) apart from the content category and content subcategory (from the item's own text) with the
+  basis of each; industries, standards, editions, change types, CVE ids, vendors and link hosts as
+  lowercase lists; severity and its rank, exploited, language, deadline and updated. A sighting writes
+  only the filter fields it carries, so a later sighting without enrichment keeps what is stored.
 - Category registry: `schema/categories.json` (9 categories, 46 subcategories and an industries
   list, checked against `schema/categories.schema.json`) and `feeder/categories.py`, used two ways
   that are kept apart. The source category places a feed as a whole: every source carries a

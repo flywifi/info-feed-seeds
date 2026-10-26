@@ -372,6 +372,29 @@ class PollTests(HubTestCase):
         self.assertIn("- iota: adapter-crash, HTTP 200, RuntimeError", md)
         self.assertIn("New cybersecurity framework profile released", md, "alpha was still polled")
 
+    def test_poll_over_an_older_database_keeps_its_earlier_hits(self):
+        import sqlite3
+        from tests.test_store import V1_SCHEMA
+        self.state.mkdir(parents=True)
+        conn = sqlite3.connect(str(self.state / "feeder.db"))
+        conn.executescript(V1_SCHEMA.replace("'tr', 'a1', '2026-10-01'", f"'tr', 'a1', '{DAY}'").replace("nist-news", "alpha"))
+        conn.commit()
+        conn.close()
+        self.assertEqual(self.poll(), 0)
+        md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
+        self.assertIn("Old item", md, "the hit stored before the migration stays on its day")
+        self.assertIn("Final rule on cloud reporting", md, "new items are stored in the migrated file")
+
+    def test_a_database_from_newer_code_is_refused(self):
+        import sqlite3
+        self.state.mkdir(parents=True)
+        conn = sqlite3.connect(str(self.state / "feeder.db"))
+        conn.execute("PRAGMA user_version = 99")
+        conn.commit()
+        conn.close()
+        self.assertEqual(self.poll(), 2)
+        self.assertEqual(self.fetcher.calls, [])
+
     def add_machine_source(self, sid="mach", **extra):
         self.add_source(sid, f"https://example.gov/{sid}.xml", ["cybersecurity"],
                         source_category="machine-data", source_subcategory="signature-versions", **extra)
