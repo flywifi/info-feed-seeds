@@ -27,6 +27,7 @@ import re
 import socket
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import urllib.robotparser
 import zlib
@@ -72,7 +73,23 @@ class BudgetExhausted(Exception):
 
 
 class RedirectRefused(Exception):
-    """A redirect from https to http was refused."""
+    """A redirect was refused: https to http, a scheme other than http or https, or (for a request
+    pinned to an origin) another host or port."""
+
+
+_DEFAULT_PORTS = {"http": 80, "https": 443}
+
+
+def origin_of(url: str) -> tuple[str, int | None] | None:
+    """(host, port) with the scheme's default port read as None; None for a URL without a usable host."""
+    parts = urllib.parse.urlsplit(url)
+    try:
+        port = parts.port
+    except ValueError:
+        return None
+    if not parts.hostname:
+        return None
+    return parts.hostname.lower(), None if port == _DEFAULT_PORTS.get(parts.scheme.lower()) else port
 
 
 def host_of(url: str) -> str:
@@ -89,7 +106,9 @@ def utc_now_z(clock: Callable[[], float] = time.time) -> str:
 # --------------------------------------------------------------------------- redirects
 
 class HopRecorder(urllib.request.HTTPRedirectHandler):
-    """Records every redirect hop and refuses a downgrade from https to http."""
+    """Records every redirect hop and refuses a downgrade from https to http and any scheme but http
+    and https. A request carrying `pinned_origin` (host, port) is also refused a hop to another origin,
+    before that hop is requested."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -99,7 +118,15 @@ class HopRecorder(urllib.request.HTTPRedirectHandler):
         self.hops.append({"from": req.full_url, "to": newurl, "status": code})
         if req.full_url.lower().startswith("https://") and newurl.lower().startswith("http://"):
             raise RedirectRefused(f"refused https to http redirect: {req.full_url} -> {newurl}")
-        return super().redirect_request(req, fp, code, msg, headers, newurl)
+        if urllib.parse.urlsplit(newurl).scheme.lower() not in _DEFAULT_PORTS:
+            raise RedirectRefused(f"refused redirect to another scheme: {req.full_url} -> {newurl}")
+        pinned = getattr(req, "pinned_origin", None)
+        if pinned is not None and origin_of(newurl) != pinned:
+            raise RedirectRefused(f"refused redirect to another host: {req.full_url} -> {newurl}")
+        new = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if new is not None and pinned is not None:
+            new.pinned_origin = pinned
+        return new
 
 
 def default_opener(req: urllib.request.Request, timeout: float):
@@ -536,7 +563,8 @@ class Fetcher:
     # -- the live prong
 
     def get(self, url: str, *, conditional: bool = True, extra_headers: dict | None = None,
-            respect_robots: bool = True) -> FetchResult:
+            respect_robots: bool = True, same_origin: bool = False) -> FetchResult:
+        """`same_origin` refuses any redirect off the URL's own host and port before it is followed."""
         scheme = url.partition(":")[0].lower() if ":" in url else ""
         if scheme not in ("http", "https"):
             # urllib's default opener would read file:, ftp: and data: URLs; a feed never needs them.
@@ -560,6 +588,8 @@ class Fetcher:
                 return self._result(url, trail=trail, robots=robots_status, error="robots-disallowed")
 
         req = urllib.request.Request(url, headers=self._headers(url, conditional, extra_headers))
+        if same_origin:
+            req.pinned_origin = origin_of(url)
         attempts = 0
         failure: dict = {"status": 0, "error": "error", "headers": {}, "hops": []}
         while attempts <= self.retries:

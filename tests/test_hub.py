@@ -373,6 +373,28 @@ class PollTests(HubTestCase):
         md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
         self.assertIn("- lambda: ok, HTTP 200, 1 items, truncated,follow-partial", md)
 
+    def test_follow_fetches_are_pinned_to_their_origin_and_the_route_fetch_is_not(self):
+        def stub(body, url, params):
+            return {"kind": "json-api", "items": [RawItem(guid=url, link=url, title=url, summary="s")],
+                    "follow": ["https://example.gov/o?page=2"] if body == b"root" else []}
+
+        class Fetcher(FakeFetcher):
+            pins = {}
+
+            def get(self, url, conditional=True, **kw):
+                self.pins[url] = kw.get("same_origin", False)
+                return super().get(url, conditional, **kw)
+
+        self.add_source("mu", "https://example.gov/o", ["cybersecurity"],
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": "https://example.gov/o",
+                                 "params": {"items_path": "results[]", "fields": {"title": "t"}}}])
+        self.script.update({"https://example.gov/o": b"root", "https://example.gov/o?page=2": b"two"})
+        fetcher = Fetcher(self.script)
+        with mock.patch.dict(adapters.ADAPTERS, {"json-api": stub}):
+            self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", DAY, "--state-dir", str(self.state),
+                                          "--out-dir", str(self.out), "--only", "mu", fetcher=fetcher), 0)
+        self.assertEqual(fetcher.pins, {"https://example.gov/o": False, "https://example.gov/o?page=2": True})
+
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
             records = []

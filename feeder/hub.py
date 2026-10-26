@@ -111,7 +111,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str) -> dict:
             seen.add(next_url)
             budget -= 1
             record["attempted"] += 1
-            more = fetcher.get(next_url)
+            more = fetcher.get(next_url, same_origin=True)
             if more.error is not None or more.body is None:
                 follow_failed += 1
                 continue

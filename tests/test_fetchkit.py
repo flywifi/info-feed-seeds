@@ -188,6 +188,33 @@ class RedirectTests(unittest.TestCase):
             rec.redirect_request(urllib.request.Request("https://b.example/y"), None, 302, "found", {}, "http://b.example/y")
         self.assertEqual(len(rec.hops), 2, "the refused hop is still recorded")
 
+    def test_a_pinned_request_is_refused_a_hop_to_another_origin(self):
+        rec = fetchkit.HopRecorder()
+        req = urllib.request.Request("https://a.example/p?page=2")
+        req.pinned_origin = fetchkit.origin_of(req.full_url)
+        new = rec.redirect_request(req, None, 301, "moved", {}, "https://a.example:443/p2")
+        self.assertEqual(new.pinned_origin, ("a.example", None), "the pin rides on the next hop")
+        for target in ("https://b.example/p2", "https://a.example:8443/p2", "http://a.example/p2"):
+            with self.subTest(target=target), self.assertRaises(fetchkit.RedirectRefused):
+                rec.redirect_request(new, None, 302, "found", {}, target)
+        free = rec.redirect_request(urllib.request.Request("https://a.example/x"), None, 301, "moved", {}, "https://b.example/y")
+        self.assertIsNotNone(free, "an unpinned request may still move host")
+
+    def test_a_redirect_to_another_scheme_is_always_refused(self):
+        with self.assertRaises(fetchkit.RedirectRefused):
+            fetchkit.HopRecorder().redirect_request(urllib.request.Request("http://a.example/x"), None, 301, "moved", {}, "ftp://a.example/x")
+
+    def test_same_origin_pins_the_request_the_opener_sees(self):
+        seen = []
+
+        def opener(req, timeout):
+            seen.append(getattr(req, "pinned_origin", "unset"))
+            raise fetchkit.RedirectRefused("refused redirect to another host")
+
+        f = fetchkit.Fetcher(state_dir=None, opener=opener, sleeper=lambda s: None)
+        res = f.get("https://a.example:8443/x", respect_robots=False, same_origin=True)
+        self.assertEqual((seen, res.error), ([("a.example", 8443)], "redirect-refused"))
+
     def test_fetcher_reports_refused_redirect(self):
         f = fetcher([fetchkit.RedirectRefused("refused https to http redirect")])
         res = f.get("https://a.example/x")
