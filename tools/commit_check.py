@@ -1110,7 +1110,7 @@ def check_pre_push(remote: str, url: str, lines: list[str], cwd: Path | None = N
 
 # The adapters the poller reads and the params a route must carry first (feeder/adapters keeps the same
 # tables; tests/test_adapter_registry.py holds them equal).
-_POLLED_ADAPTERS = ("feed", "page")
+_POLLED_ADAPTERS = ("feed", "page", "sitemap", "xml", "json-api", "urllist", "artifact")
 _ROUTE_PARAMS = {"page": ("item_selector",), "xml": ("item_path", "fields"), "json-api": ("items_path", "fields")}
 
 
