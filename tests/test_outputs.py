@@ -109,7 +109,7 @@ class LatestJsonShapeTests(unittest.TestCase):
         self.assertEqual(doc["version"], "1")
         self.assertEqual(set(doc["items"][0]), {
             "content_sha256", "feed_id", "publisher", "title_display", "authors", "link",
-            "summary_display", "published", "first_seen", "topics", "authority", "tier", "offline_pattern_scan"})
+            "summary_display", "published", "first_seen", "topics", "authority", "tier", "categories", "offline_pattern_scan"})
         self.assertEqual(doc["items"][0]["authors"], ["Jane Example"], "bylines are kept as the feed gave them")
         self.assertIn("must escape", doc["_comment"])
         self.assertEqual(cov["sources_responded"], 1)
