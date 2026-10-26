@@ -33,8 +33,8 @@ lives in the tool's own folder and is tracked.
 
 - `main`: code, sources, profiles, schemas, docs. Changes arrive only through pull requests that the maintainer merges.
   Never push to main directly, never force-push, never rewrite history.
-- `data`: machine output only (`digests/`, `state/`, `ledger/`). Written only by the poll workflow (planned;
-  the branch does not exist yet). Never edit it by hand or in a pull request.
+- `data`: machine output only (`digests/`, `state/`, `ledger/`). Written only by the poll workflow
+  (`.github/workflows/poll.yml`, daily; the branch appears with its first run). Never edit it by hand or in a pull request.
 - `job/<name>`: one branch per job for your work. Push it with `git push -u origin <branch>` (retry network
   failures with backoff) and open one pull request into main per job. Use the REST API
   (`gh api repos/flywifi/info-feed-seeds/pulls`) when `gh pr` cannot reach GitHub through the session's
