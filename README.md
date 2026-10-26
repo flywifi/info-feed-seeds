@@ -346,7 +346,8 @@ an item already shown on an earlier day can appear again.
    `classification_review` stays `pending`.
 3. Reference the id or its topics in a profile if wanted, and add a CHANGELOG line.
 4. Run `hub lint` and `hub fmt --check`, then open a pull request. Unproven sources go in the pull
-   request description with their HTTP result, never into `sources/`.
+   request description with their HTTP result. One worth keeping goes into `sources/` with
+   `enabled: false` and `verified` null; it is never polled until a live proof enables it.
 
 `hub add`, which will do steps 1 and 2 in one command, is planned.
 

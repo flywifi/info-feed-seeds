@@ -161,8 +161,9 @@ lives in the tool's own folder and is tracked.
 2. Reference the id in a profile if wanted, add a CHANGELOG line, run `hub lint` and `hub fmt --check`.
 3. Push the job branch and open a pull request. CI checks the proof record of every new or changed source
    (a live 200 with a sample item in `methods.json`); it fetches nothing itself. Unproven
-   sources go in the pull request description as a table with the HTTP result; never commit an unproven
-   source.
+   sources go in the pull request description as a table with the HTTP result; one the maintainer
+   wants kept is committed with `enabled: false`, `verified` null and its failed attempts recorded, and is
+   enabled only after a live proof.
 
 ## The doctor
 

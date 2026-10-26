@@ -8,6 +8,9 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- A source with `enabled: false` may wait for its first live proof (`verified` null, its failed
+  attempts recorded): `hub lint` and the commit checker require a live 200 with a sample only for an
+  enabled source, and the poller never fetches a disabled one.
 - Every polled item stores its source category and its content category (with the basis of each),
   and `latest.json` items carry both under `categories`. Registry keywords place ransomware victim
   posts, active zero-days, CVE entries, ICS advisories and guidance by their titles.

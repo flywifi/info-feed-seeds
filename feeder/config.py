@@ -353,7 +353,9 @@ def lint(repo: Repo) -> list[str]:
         if src.methods is None:
             problems.append(f"{rel}: no methods.json")
         else:
-            if src.poll_routes() and not any(adapters.live_proof(a) for a in src.proof_records()):
+            # A disabled source may wait for its first live proof; enabling it needs one.
+            if (src.manifest.get("enabled", True) and src.poll_routes()
+                    and not any(adapters.live_proof(a) for a in src.proof_records())):
                 problems.append(f"{rel}/methods.json: no configured route whose latest attempt is a live 200 "
                                 "with a sample item")
             problems += [f"{rel}/methods.json: {e}" for e in validate(src.methods, methods_schema)]

@@ -29,8 +29,10 @@ class SourceFolderTests(unittest.TestCase):
                 self.assertEqual(methods["id"], folder.name)
                 for tag in manifest["topics"]:
                     self.assertIn(tag, tags)
-                self.assertIsNotNone(manifest["verified"], "only proven sources are committed")
                 self.assertEqual(manifest["classification_review"], "pending")
+                if not manifest.get("enabled", True) and manifest["verified"] is None:
+                    continue   # stored disabled until its first live proof
+                self.assertIsNotNone(manifest["verified"], "only proven sources are enabled")
                 polled = {r["url"] for r in manifest["routes"] if adapters.configured(r)}
                 proven = [r for r in methods["routes"] if r["url"] in polled and r["last_success"]]
                 self.assertTrue(proven, "a configured route has a recorded success")
