@@ -15,12 +15,17 @@ from __future__ import annotations
 from urllib.parse import urldefrag, urlsplit
 
 from ..items import RawItem
-from . import feed, page
+from . import feed, files, page
 from .base import AdapterError
 
 ADAPTERS = {
     "feed": feed.parse,
     "page": page.parse,
+    "sitemap": files.parse_sitemap,
+    "xml": files.parse_xml,
+    "json-api": files.parse_json_api,
+    "urllist": files.parse_urllist,
+    "artifact": files.parse_artifact,
 }
 
 # Params a route must carry before the poller reads it, by adapter name (every name the schema allows).
@@ -140,5 +145,5 @@ def live_proof(attempt: dict | None) -> bool:
 
 
 __all__ = ["ADAPTERS", "ALLOWED_KINDS", "AdapterError", "DEFAULT_FOLLOW_LIMIT", "DEFAULT_PORTS", "PAGE_SELECTOR_KEYS",
-           "REQUIRED_PARAMS", "check_result", "configured", "feed", "follow_limit", "follow_url", "get_adapter",
+           "REQUIRED_PARAMS", "check_result", "configured", "feed", "files", "follow_limit", "follow_url", "get_adapter",
            "lint_route", "live_proof", "page"]

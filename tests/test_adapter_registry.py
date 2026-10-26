@@ -26,7 +26,7 @@ class RegistryTests(unittest.TestCase):
     def test_configured_routes(self):
         self.assertTrue(adapters.configured({"adapter": "feed", "url": "u", "params": {}}))
         self.assertFalse(adapters.configured({"adapter": "page", "url": "u", "params": {}}), "a landing route")
-        self.assertFalse(adapters.configured({"adapter": "sitemap", "url": "u", "params": {}}), "no module yet")
+        self.assertTrue(adapters.configured({"adapter": "sitemap", "url": "u", "params": {}}))
         self.assertFalse(adapters.configured({"adapter": "bogus", "url": "u"}))
         self.assertTrue(adapters.configured({"adapter": "page", "url": "u", "params": {"item_selector": "li"}}))
         self.assertFalse(adapters.configured({"adapter": "page", "url": "u", "params": {"title_selector": "h2"}}))

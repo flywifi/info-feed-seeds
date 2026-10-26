@@ -8,6 +8,12 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- File adapters (`feeder/adapters/files.py`): `sitemap` (urlset items with lastmod dates, a
+  sitemap index followed to its children, gzip read), `urllist`, `xml` (item and field paths,
+  namespaces), `json-api` (item and field paths, next-page following) and `artifact` (one item per
+  distinct file content). All are registered and the commit checker accepts proof on their routes.
+  The four govinfo sources' sitemap routes are now polled as a fallback after their feeds. README
+  lists every adapter and its params.
 - The page adapter (`feeder/adapters/page.py`) reads listing pages without a feed: a page route whose
   params carry `item_selector` is polled, with title, link, date and summary read through a small CSS
   subset (tag, id, class, descendant steps, comma groups, `@attr`) and dates through `date_regex` and

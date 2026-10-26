@@ -285,6 +285,28 @@ a written reason of at least 25 characters. Hooks and CI read the list from `ori
 entry counts only after the owner merges it. The golden test fails on an entry whose path is not
 tracked or that no longer exempts anything. Advisory lines are never exempted.
 
+## Route adapters
+
+Each route in a manifest names an `adapter` and its `params` (`schema/source.schema.json` holds the
+exact rules). The poller tries the routes in manifest order, the one that worked last first, and the
+first that yields items wins. A route without the params its adapter requires is a landing route:
+recorded for reachability, never polled.
+
+| adapter | reads | required params | optional params |
+|---|---|---|---|
+| `feed` | RSS, Atom, RDF, JSON Feed | none | none |
+| `page` | an HTML listing | `item_selector` | `title_selector`, `link_selector`, `date_selector`, `date_regex`, `date_format`, `summary_selector` |
+| `sitemap` | an XML sitemap or sitemap index (gzip too) | none | `lastmod_since`, `path_prefix`, `max_sitemaps` |
+| `urllist` | a text file of URLs, `#` comments | none | none |
+| `xml` | any XML document | `item_path`, `fields` | `namespaces` |
+| `json-api` | a JSON API response | `items_path`, `fields` | `next_path`, `max_pages` |
+| `artifact` | one file, a new item each time its sha256 changes | none | `label` |
+
+`fields` maps item fields (`title`, `link`, `guid`, `summary`, `published`) to paths: ElementTree
+paths for `xml` (`name@attr` for an attribute, `.` for the item text), dotted paths for `json-api`
+(`results[].title`). Follow URLs (child sitemaps, next pages) stay on the route's host and port and
+are capped by `max_sitemaps` or `max_pages` (default 3).
+
 ## Outputs
 
 Each profile gets `YYYY-MM-DD.md`, `latest.md` (a byte copy of the newest day), `latest.json` and
