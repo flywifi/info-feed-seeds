@@ -1,10 +1,17 @@
 """The reader-category registry (`schema/categories.json`): load it, check it, extend it, and
-propose a placement for a new source.
+place sources and items in it.
 
-Every source carries one category and one subcategory. A profile without a `categories` list shows
-every category whose `digest_default` is true; a category with `digest_default` false (machine data)
-is shown only by a profile that names it. `suggest()` reads a source's item titles and topics against
-the registry's hints and the shape of the titles; its result is a proposal a person confirms."""
+The registry is used two ways, and the two are kept apart:
+
+- The source category places a feed as a whole (`source_category` and `source_subcategory` in its
+  manifest) and decides which sources a profile polls. A profile without `source_categories` polls
+  every category whose `digest_default` is true; a category with `digest_default` false (machine
+  data) is polled only by a profile that names it. `suggest()` proposes a source category from a
+  feed's item titles and topics; a person confirms it.
+- The content category places one item by its own title and summary (`content_category()`). A
+  vendor advisory feed can carry an item about an attack under way; that item's content category
+  says so while the feed's source category stays the same. When the text gives no signal the item
+  takes the source category, and the result says which basis was used."""
 from __future__ import annotations
 
 import copy
@@ -143,6 +150,63 @@ def suggest(reg: dict, titles: list[str], source_topics: list[str]) -> list[dict
     return out
 
 
+def content_category(reg: dict, title: str, summary: str, source_category: str | None,
+                     source_subcategory: str | None) -> dict:
+    """One item's content category and content subcategory, each decided on its own:
+    {"category", "subcategory", "category_basis", "subcategory_basis", "reasons"}. A basis is "item"
+    when the item's own text decided that level and "source" when it fell back to the source category
+    or source subcategory. A version-number or record-id title decides both levels. Otherwise each
+    keyword scores 2 in the title and 1 in the summary: the category with the highest total (2 or more)
+    wins, then the subcategory with the highest score inside it (2 or more, or any score when the
+    category is not the source category). Ties keep the source category and source subcategory."""
+    text_title = " ".join((title or "").split())
+    for rx, ref, what in ((VERSION_TITLE, "machine-data/signature-versions", "version number"),
+                          (RECORD_ID_TITLE, "machine-data/bulk-data", "record id")):
+        if text_title and rx.match(text_title) and ref in all_refs(reg):
+            cid, sid = ref.split("/")
+            return {"category": cid, "subcategory": sid, "category_basis": "item", "subcategory_basis": "item",
+                    "reasons": [f"the title is a {what}"]}
+    low_title, low_summary = text_title.lower(), " ".join((summary or "").split()).lower()
+    scores: dict[str, dict[str, int]] = {}
+    reasons: dict[tuple[str, str], list[str]] = {}
+    for cid, entry in ordered(reg):
+        for sid, sub in sorted(entry["subcategories"].items(), key=lambda kv: kv[1]["order"]):
+            score, why = 0, []
+            for kw in sub.get("keywords", []):
+                rx = _word(kw)
+                if rx.search(low_title):
+                    score, why = score + 2, why + [f"title has {kw!r}"]
+                elif rx.search(low_summary):
+                    score, why = score + 1, why + [f"summary has {kw!r}"]
+            scores.setdefault(cid, {})[sid] = score
+            reasons[(cid, sid)] = why
+
+    def pick(options: dict[str, int], preferred: str | None) -> tuple[str | None, int]:
+        best, best_score = None, 0
+        for key, score in options.items():   # options keep registry order
+            if score > best_score or (score == best_score and score and key == preferred):
+                best, best_score = key, score
+        return best, best_score
+
+    cat, cat_score = pick({cid: sum(subs.values()) for cid, subs in scores.items()}, source_category)
+    if cat is not None and cat_score >= 2:
+        category, category_basis = cat, "item"
+    else:
+        category, category_basis = source_category, "source"
+    sub_scores = scores.get(category or "", {})
+    sid, sid_score = pick(sub_scores, source_subcategory if category == source_category else None)
+    if sid is not None and (sid_score >= 2 or (category != source_category and sid_score >= 1)):
+        subcategory, subcategory_basis = sid, "item"
+    elif category == source_category:
+        subcategory, subcategory_basis = source_subcategory, "source"
+    else:
+        subcategory, subcategory_basis = sid, "item"
+    why = reasons.get((category, subcategory), []) if "item" in (category_basis, subcategory_basis) else []
+    return {"category": category, "subcategory": subcategory, "category_basis": category_basis,
+            "subcategory_basis": subcategory_basis,
+            "reasons": why or ["no signal in the item text; the source category and source subcategory"]}
+
+
 def add_entry(reg: dict, ref: str, *, label: str, note: str, today: str, keywords: list[str] | None = None,
               category_label: str | None = None, purpose: str | None = None, reason: str | None = None,
               machine_data: bool = False) -> dict:
@@ -175,5 +239,5 @@ def add_entry(reg: dict, ref: str, *, label: str, note: str, today: str, keyword
     return out
 
 
-__all__ = ["CATEGORIES_FILE", "add_entry", "all_refs", "default_on", "digest_default", "duplicate_keys",
+__all__ = ["CATEGORIES_FILE", "add_entry", "all_refs", "content_category", "default_on", "digest_default", "duplicate_keys",
            "industry_ids", "is_valid_pair", "load_categories", "ordered", "registry_problems", "suggest"]

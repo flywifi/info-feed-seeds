@@ -88,6 +88,44 @@ class SuggestTests(unittest.TestCase):
         self.assertEqual(categories.suggest(REG, [], []), [])
 
 
+class ContentCategoryTests(unittest.TestCase):
+    """An item's content category and content subcategory are its own; the source's stay in the manifest."""
+
+    def place(self, title, summary="", source=("vulnerabilities", "vendor-advisories")):
+        return categories.content_category(REG, title, summary, *source)
+
+    def test_an_item_can_differ_from_its_source_at_both_levels(self):
+        self.assertEqual(self.place("Ransomware campaign hits hospitals"),
+                         {"category": "attacks", "subcategory": "threat-research", "category_basis": "item",
+                          "subcategory_basis": "item", "reasons": ["title has 'campaign'"]})
+        placed = self.place("PHP core RCE vulnerability patches", "actively exploited in the wild")
+        self.assertEqual((placed["category"], placed["subcategory"]), ("attacks", "exploited-now"))
+
+    def test_the_subcategory_is_decided_inside_the_category(self):
+        placed = self.place("Data breach at a retailer", source=("attacks", "exploited-now"))
+        self.assertEqual((placed["category"], placed["subcategory"], placed["subcategory_basis"]),
+                         ("attacks", "breaches", "item"), "same category as the source, its own subcategory")
+        weak = self.place("Note", "a phishing wave and a data leak", source=("attacks", "exploited-now"))
+        self.assertEqual((weak["category"], weak["category_basis"], weak["subcategory"], weak["subcategory_basis"]),
+                         ("attacks", "item", "exploited-now", "source"), "the text settles the category but not the subcategory")
+
+    def test_no_signal_falls_back_to_the_source_at_both_levels(self):
+        self.assertEqual(self.place("Quarterly update"),
+                         {"category": "vulnerabilities", "subcategory": "vendor-advisories", "category_basis": "source",
+                          "subcategory_basis": "source",
+                          "reasons": ["no signal in the item text; the source category and source subcategory"]})
+        one_hit = self.place("Note", "about a webinar")
+        self.assertEqual(one_hit["category_basis"], "source", "a single summary hit is not enough")
+
+    def test_title_shapes_decide_both_levels(self):
+        self.assertEqual(self.place("37.319", source=("vulnerabilities", "detections"))["subcategory"], "signature-versions")
+        self.assertEqual(self.place("FR-2022-04-07", source=("regulatory", "federal-rules"))["category"], "machine-data")
+
+    def test_a_tie_keeps_the_source(self):
+        placed = self.place("Advisory on a phishing campaign", source=("attacks", "scams"))
+        self.assertEqual((placed["category"], placed["subcategory"]), ("attacks", "scams"))
+
+
 class AddEntryTests(unittest.TestCase):
     def test_add_a_subcategory_to_an_existing_category(self):
         new = categories.add_entry(REG, "technology/robotics", label="Robotics", note="robots and automation",

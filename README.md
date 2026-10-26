@@ -20,8 +20,10 @@ private notes or anything that identifies a client or a campaign.
 - `profiles/<name>.json`: one per project: topics, keywords per subtopic, daily cap, window,
   backfill, outputs and the guard hold level.
 - `schema/`: JSON Schemas for sources, methods, profiles and items, plus `topics.json`, the
-  two-level topic registry, and `categories.json`, the reader-category registry. A profile shows the
-  categories its `categories` list names, or every category but machine data when it has no list.
+  two-level topic registry, and `categories.json`, the reader-category registry. A source carries a
+  source category and source subcategory (where the feed sits as a whole); each item gets its own
+  content category and content subcategory from its text. A profile polls the source categories its
+  `source_categories` list names, or every category but machine data when it has no list.
 - `guard/releases.json`: items held by the injection guard that a person has released.
 - `seeds/`: dated seed files. These are imports; `sources/` is the truth.
 - `tools/`: the commit checker, its hooks, its exemptions list, the acknowledged-commit list and the
@@ -63,7 +65,8 @@ Other commands:
 - `hub lint` validates every source, profile and the releases file (exit 1 on any defect).
 - `hub fmt [--check]` rewrites config JSON in canonical form, or reports files that are not.
 - `hub cat ID` prints a source's manifest, methods, the routes in poll order and the landing routes it never polls.
-- `hub categorize ID [--write] [--offline]` proposes a category for a source from its item titles and topics.
+- `hub categorize ID [--write] [--offline]` proposes a source category from a source's item titles and topics and
+  shows the content categories of the items it read.
 - `hub categories` lists the category registry; `hub categories add category/subcategory --label L --note N`
   extends it.
 - `hub release SHA --reason TEXT` releases a held item by its `content_sha256`.
@@ -300,8 +303,8 @@ The `data` branch does not exist yet.
 
 1. Fetch the feed with the named User-Agent and confirm it parses at least one item.
 2. Write `sources/<id>/source.json` and `methods.json` from that real fetch. The folder name is the
-   id, topics come from `schema/topics.json`, the category, subcategory and industries from
-   `schema/categories.json` (`hub categorize ID` proposes them), and `classification_review` stays `pending`.
+   id, topics come from `schema/topics.json`, the source category, source subcategory and industries
+   from `schema/categories.json` (`hub categorize ID` proposes them), and `classification_review` stays `pending`.
 3. Reference the id or its topics in a profile if wanted, and add a CHANGELOG line.
 4. Run `hub lint` and `hub fmt --check`, then open a pull request. Unproven sources go in the pull
    request description with their HTTP result, never into `sources/`.

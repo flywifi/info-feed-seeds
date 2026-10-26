@@ -32,15 +32,16 @@ class Source:
     methods: dict | None
     folder: Path
     local: bool = False
-    digest_default: bool = True   # False when the source's category is shown only by a profile that names it
+    digest_default: bool = True   # False when the source category is polled only by a profile that names it
 
     @property
-    def category(self) -> str | None:
-        return self.manifest.get("category")
+    def source_category(self) -> str | None:
+        """Where the feed sits as a whole; an item's content category comes from its own text."""
+        return self.manifest.get("source_category")
 
     @property
-    def subcategory(self) -> str | None:
-        return self.manifest.get("subcategory")
+    def source_subcategory(self) -> str | None:
+        return self.manifest.get("source_subcategory")
 
     @property
     def publisher(self) -> str:
@@ -136,7 +137,7 @@ class Repo:
         except ValueError as exc:
             raise ConfigError(f"{_rel(folder, self.root)}: invalid JSON: {exc}") from None
         reg = self.categories()
-        shown = True if reg is None else categories.digest_default(reg, manifest.get("category"))
+        shown = True if reg is None else categories.digest_default(reg, manifest.get("source_category"))
         return Source(id=folder.name, manifest=manifest, methods=methods, folder=folder, local=local,
                       digest_default=shown)
 
@@ -208,12 +209,13 @@ def _parent(tag: str) -> str:
 
 
 def category_allowed(profile: dict, source: Source) -> bool:
-    """A profile's `categories` list (category or category/subcategory) names what it shows; without
-    the list it shows every category whose digest_default is true, so machine data stays out."""
-    names = profile.get("categories")
+    """A profile's `source_categories` list (category or category/subcategory) names the source
+    categories it polls; without the list it polls every category whose digest_default is true, so
+    machine data stays out. This reads the source category only; item content categories are separate."""
+    names = profile.get("source_categories")
     if names is None:
         return source.digest_default
-    return source.category in names or f"{source.category}/{source.subcategory}" in names
+    return source.source_category in names or f"{source.source_category}/{source.source_subcategory}" in names
 
 
 def profile_selects(profile: dict, source: Source) -> bool:
@@ -330,11 +332,12 @@ def lint(repo: Repo) -> list[str]:
         for tag in src.topics:
             if tag not in tags:
                 problems.append(f"{rel}/{name}: topic {tag!r} is not in schema/topics.json")
-        if refs is not None and src.category is not None:
-            if src.category not in reg["categories"]:
-                problems.append(f"{rel}/{name}: category {src.category!r} is not in schema/categories.json")
-            elif not categories.is_valid_pair(reg, src.category, src.subcategory):
-                problems.append(f"{rel}/{name}: subcategory {src.subcategory!r} is not under category {src.category!r}")
+        if refs is not None and src.source_category is not None:
+            if src.source_category not in reg["categories"]:
+                problems.append(f"{rel}/{name}: source category {src.source_category!r} is not in schema/categories.json")
+            elif not categories.is_valid_pair(reg, src.source_category, src.source_subcategory):
+                problems.append(f"{rel}/{name}: source subcategory {src.source_subcategory!r} is not under "
+                                f"category {src.source_category!r}")
             for industry in src.manifest.get("industries", []):
                 if industry not in categories.industry_ids(reg):
                     problems.append(f"{rel}/{name}: industry {industry!r} is not in schema/categories.json")
@@ -377,9 +380,9 @@ def lint(repo: Repo) -> list[str]:
         for sid in profile.get("sources", []):
             if sid not in known_ids:
                 problems.append(f"{rel}: source {sid!r} has no folder under sources/")
-        for ref in profile.get("categories", []):
+        for ref in profile.get("source_categories", []):
             if refs is not None and ref not in refs:
-                problems.append(f"{rel}: category {ref!r} is not in schema/categories.json")
+                problems.append(f"{rel}: source category {ref!r} is not in schema/categories.json")
 
     if repo.releases_file.exists():
         try:

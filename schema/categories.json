@@ -620,7 +620,7 @@
       }
     }
   },
-  "description": "Reader-facing categories for the digest: each category holds subcategories. Every source carries one category and one subcategory. A profile without a categories list shows every category whose digest_default is true; a category with digest_default false (machine data) is shown only by a profile that names it. keywords and topics are hints for hub categorize, which proposes a placement for a new source.",
+  "description": "Reader-facing categories, used two ways. A source category places a feed as a whole (source_category and source_subcategory in its manifest) and decides which sources a profile polls: a profile without source_categories polls every category whose digest_default is true, so machine data is polled only by a profile that names it. A content category places one item by its own title and summary, falling back to the source category when the text gives no signal. keywords and topics are the hints both use; hub categorize proposes a source category and shows the content categories of the items it read.",
   "industries": {
     "cloud": {
       "label": "Cloud services"

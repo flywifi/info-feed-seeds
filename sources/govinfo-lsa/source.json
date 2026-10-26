@@ -1,7 +1,6 @@
 {
   "added": "2026-10-20",
   "authority": "primary",
-  "category": "regulatory",
   "classification_review": "pending",
   "discovered_from": {
     "date": "2026-10-20",
@@ -43,7 +42,8 @@
     "actions",
     "local"
   ],
-  "subcategory": "change-tracking",
+  "source_category": "regulatory",
+  "source_subcategory": "change-tracking",
   "tier": "canonical",
   "topics": [
     "regulation/federal-rulemaking",

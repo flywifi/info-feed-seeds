@@ -9,20 +9,25 @@ All notable changes to this repository are recorded here. The format follows
 ### Added
 
 - Category registry: `schema/categories.json` (9 categories, 46 subcategories and an industries
-  list, checked against `schema/categories.schema.json`) and `feeder/categories.py`. Every source
-  carries a `category`, a `subcategory` and `industries`; the 32 sources are placed, the 13 FortiGuard
-  signature and reputation feeds and the two govinfo bulk-data feeds in machine data. A profile's
-  optional `categories` list names what it shows; without it a profile shows every category whose
-  `digest_default` is true, so machine data appears only in a profile that names it, and a source
-  listed by id is always selected. The technology-regulation profile names none, so its digest drops
+  list, checked against `schema/categories.schema.json`) and `feeder/categories.py`, used two ways
+  that are kept apart. The source category places a feed as a whole: every source carries a
+  `source_category`, a `source_subcategory` and `industries`; the 32 sources are placed, the 13
+  FortiGuard signature and reputation feeds and the two govinfo bulk-data feeds in machine data. The
+  content category places one item by its own title and summary: `content_category()` decides the
+  content category and the content subcategory separately and records for each whether the item text
+  or the source decided it. A profile's optional `source_categories` list names the source categories
+  it polls; without it a profile polls every category whose `digest_default` is true, so machine data
+  appears only in a profile that names it, and a source listed by id is always selected. The
+  technology-regulation profile names none, so its digest drops
   the 13 skipped FortiGuard lines and the Federal Register bulk-data feed: 17 sources are selected
   instead of 31, and its daily cap stays 80. `hub lint` reports an unknown category, a subcategory
   under the wrong category, an unknown industry, an unknown profile category and registry defects
   (shared orders, empty categories, bad ids, topic hints not in `schema/topics.json`, duplicate keys).
-  `hub categorize ID` proposes a placement for a source from its item titles (live, or the proof
-  samples with `--offline`) and topics: mostly version-number titles mean signature versions, mostly
-  record-id titles mean bulk data, otherwise the registry's topic and keyword hints score each
-  subcategory; `--write` puts the best proposal in the manifest. `hub categories` lists the registry
+  `hub categorize ID` proposes a source category for a source from its item titles (live, or the
+  proof samples with `--offline`) and topics: mostly version-number titles mean signature versions,
+  mostly record-id titles mean bulk data, otherwise the registry's topic and keyword hints score each
+  subcategory; it also shows the content categories of the items it read, and `--write` puts the best
+  source category in the manifest. `hub categories` lists the registry
   and `hub categories add category/subcategory` extends it (a new category needs its label, reader
   purpose and reason, and `--machine-data` keeps it out of digests unless named).
 - 23 FortiGuard sources under `sources/`: ten enabled (PSIRT advisories, outbreak alerts, threat signal

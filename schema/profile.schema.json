@@ -9,15 +9,6 @@
       "minimum": 0,
       "type": "integer"
     },
-    "categories": {
-      "description": "category or category/subcategory references from schema/categories.json. Without this list a profile shows every category whose digest_default is true.",
-      "items": {
-        "pattern": "^[a-z][a-z0-9-]*(/[a-z][a-z0-9-]*)?$",
-        "type": "string"
-      },
-      "minItems": 1,
-      "type": "array"
-    },
     "daily_cap": {
       "description": "Maximum items per daily digest.",
       "minimum": 1,
@@ -74,6 +65,15 @@
           "md",
           "json"
         ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "source_categories": {
+      "description": "Source categories this profile polls: category or category/subcategory references from schema/categories.json, matched against each source's source_category. Without this list a profile polls every category whose digest_default is true.",
+      "items": {
+        "pattern": "^[a-z][a-z0-9-]*(/[a-z][a-z0-9-]*)?$",
         "type": "string"
       },
       "minItems": 1,

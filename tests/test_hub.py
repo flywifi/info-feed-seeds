@@ -70,7 +70,7 @@ def source_manifest(sid, url, topics, **extra):
          "routes": [{"kind": "rss", "adapter": "feed", "url": url, "params": {}}], "topics": topics,
          "authority": "primary", "tier": "canonical", "classification_review": "pending", "enabled": True,
          "added": DAY, "discovered_from": {"kind": "manual", "ref": "test", "date": DAY}, "verified": DAY,
-         "category": "vulnerabilities", "subcategory": "vendor-advisories", "industries": []}
+         "source_category": "vulnerabilities", "source_subcategory": "vendor-advisories", "industries": []}
     m.update(extra)
     return m
 
@@ -374,7 +374,7 @@ class PollTests(HubTestCase):
 
     def add_machine_source(self, sid="mach", **extra):
         self.add_source(sid, f"https://example.gov/{sid}.xml", ["cybersecurity"],
-                        category="machine-data", subcategory="signature-versions", **extra)
+                        source_category="machine-data", source_subcategory="signature-versions", **extra)
         self.script[f"https://example.gov/{sid}.xml"] = rss_with("Machine line")
 
     def test_a_profile_without_categories_leaves_machine_data_out(self):
@@ -386,15 +386,15 @@ class PollTests(HubTestCase):
 
     def test_a_profile_that_names_machine_data_selects_it(self):
         self.add_machine_source()
-        self.profile["categories"] = ["machine-data", "vulnerabilities"]
+        self.profile["source_categories"] = ["machine-data", "vulnerabilities"]
         jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
         self.assertEqual(self.poll(), 0)
         self.assertIn("https://example.gov/mach.xml", self.fetcher.calls)
 
     def test_a_profile_naming_one_subcategory_excludes_the_rest(self):
-        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"], category="attacks", subcategory="breaches")
+        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"], source_category="attacks", source_subcategory="breaches")
         self.script["https://example.gov/gamma.xml"] = rss_with("Breach line")
-        self.profile["categories"] = ["attacks/breaches"]
+        self.profile["source_categories"] = ["attacks/breaches"]
         jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
         self.assertEqual(self.poll(), 0)
         self.assertEqual(self.fetcher.calls, ["https://example.gov/gamma.xml"])
@@ -576,21 +576,21 @@ class LintFmtCatTests(HubTestCase):
         return self.output
 
     def test_lint_reports_an_unknown_category_and_a_subcategory_of_another_category(self):
-        m = source_manifest("alpha", "https://example.gov/alpha.xml", ["cybersecurity"], category="gadgetry")
+        m = source_manifest("alpha", "https://example.gov/alpha.xml", ["cybersecurity"], source_category="gadgetry")
         out = self.lint_after(lambda: jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", m))
-        self.assertIn("category 'gadgetry' is not in schema/categories.json", out)
-        m.update(category="attacks", subcategory="science")
+        self.assertIn("source category 'gadgetry' is not in schema/categories.json", out)
+        m.update(source_category="attacks", source_subcategory="science")
         out = self.lint_after(lambda: jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", m))
-        self.assertIn("subcategory 'science' is not under category 'attacks'", out)
+        self.assertIn("source subcategory 'science' is not under category 'attacks'", out)
 
     def test_lint_reports_an_unknown_industry_and_a_profile_category(self):
         m = source_manifest("alpha", "https://example.gov/alpha.xml", ["cybersecurity"], industries=["pets"])
         out = self.lint_after(lambda: jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", m))
         self.assertIn("industry 'pets' is not in schema/categories.json", out)
         jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", source_manifest("alpha", "https://example.gov/alpha.xml", ["cybersecurity"]))
-        self.profile["categories"] = ["attacks/science"]
+        self.profile["source_categories"] = ["attacks/science"]
         out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
-        self.assertIn("category 'attacks/science' is not in schema/categories.json", out)
+        self.assertIn("source category 'attacks/science' is not in schema/categories.json", out)
 
     def test_lint_reports_registry_defects(self):
         path = self.root / "schema" / "categories.json"
@@ -611,24 +611,25 @@ class LintFmtCatTests(HubTestCase):
     def test_categorize_proposes_from_live_titles_and_writes_on_request(self):
         self.script["https://example.gov/alpha.xml"] = rss_with("37.319", "37.318", "37.317")
         self.assertEqual(self.run_hub("categorize", "alpha"), 0)
-        self.assertIn("current vulnerabilities/vendor-advisories; read 3 title(s) from https://example.gov/alpha.xml", self.output)
-        self.assertIn("suggest machine-data/signature-versions (score 3): 3 of 3 titles are version numbers", self.output)
+        self.assertIn("source category vulnerabilities/vendor-advisories; read 3 title(s) from https://example.gov/alpha.xml", self.output)
+        self.assertIn("suggest source category machine-data/signature-versions (score 3): 3 of 3 titles are version numbers", self.output)
+        self.assertIn("content machine-data/signature-versions: 3 item(s); category from the item, subcategory from the item", self.output)
         before = jsonio.load_json(self.root / "sources" / "alpha" / "source.json")
-        self.assertEqual(before["category"], "vulnerabilities", "no write without --write")
+        self.assertEqual(before["source_category"], "vulnerabilities", "no write without --write")
         self.assertEqual(self.run_hub("categorize", "alpha", "--write"), 0)
         after = jsonio.load_json(self.root / "sources" / "alpha" / "source.json")
-        self.assertEqual((after["category"], after["subcategory"]), ("machine-data", "signature-versions"))
-        self.assertEqual({k: v for k, v in after.items() if k not in ("category", "subcategory")},
-                         {k: v for k, v in before.items() if k not in ("category", "subcategory")})
+        self.assertEqual((after["source_category"], after["source_subcategory"]), ("machine-data", "signature-versions"))
+        self.assertEqual({k: v for k, v in after.items() if k not in ("source_category", "source_subcategory")},
+                         {k: v for k, v in before.items() if k not in ("source_category", "source_subcategory")})
 
     def test_categorize_offline_reads_samples_and_says_when_nothing_fits(self):
         self.assertEqual(self.run_hub("categorize", "beta", "--offline", "--write"), 0)
         self.assertIn("read 1 title(s) from proof samples", self.output)
-        self.assertIn("suggest regulatory/federal-rules (score 2): topic regulation/federal-rulemaking", self.output)
-        self.assertEqual(jsonio.load_json(self.root / "sources" / "beta" / "source.json")["category"], "regulatory")
+        self.assertIn("suggest source category regulatory/federal-rules (score 2): topic regulation/federal-rulemaking", self.output)
+        self.assertEqual(jsonio.load_json(self.root / "sources" / "beta" / "source.json")["source_category"], "regulatory")
         self.assertEqual(self.run_hub("categorize", "alpha", "--offline", "--write"), 1, "nothing fits a title 't'")
         self.assertIn("no suggestion", self.output)
-        self.assertEqual(jsonio.load_json(self.root / "sources" / "alpha" / "source.json")["category"], "vulnerabilities")
+        self.assertEqual(jsonio.load_json(self.root / "sources" / "alpha" / "source.json")["source_category"], "vulnerabilities")
         self.assertEqual(self.fetcher.calls, [])
         self.assertEqual(self.run_hub("categorize", "nope"), 2)
 

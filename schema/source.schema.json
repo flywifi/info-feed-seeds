@@ -342,11 +342,6 @@
       ],
       "type": "string"
     },
-    "category": {
-      "description": "A category id from schema/categories.json.",
-      "pattern": "^[a-z][a-z0-9-]*$",
-      "type": "string"
-    },
     "classification_review": {
       "description": "pending until a person confirms authority and tier.",
       "enum": [
@@ -448,8 +443,13 @@
       "minItems": 1,
       "type": "array"
     },
-    "subcategory": {
-      "description": "A subcategory id under the source's category in schema/categories.json.",
+    "source_category": {
+      "description": "The source category: where this feed sits as a whole, a category id from schema/categories.json. Each item also gets its own content category from its text.",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "type": "string"
+    },
+    "source_subcategory": {
+      "description": "The source subcategory, under the source category in schema/categories.json.",
       "pattern": "^[a-z][a-z0-9-]*$",
       "type": "string"
     },
@@ -482,7 +482,6 @@
   "required": [
     "added",
     "authority",
-    "category",
     "classification_review",
     "discovered_from",
     "enabled",
@@ -491,7 +490,8 @@
     "label",
     "publisher",
     "routes",
-    "subcategory",
+    "source_category",
+    "source_subcategory",
     "tier",
     "topics",
     "verified"

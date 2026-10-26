@@ -465,8 +465,9 @@ def cmd_release(args, repo: Repo, now_fn) -> int:
 
 
 def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
-    """Propose a category for a source from its item titles and topics; --write puts the best one in
-    the manifest. Live by default (the source's configured routes); --offline reads the proof samples."""
+    """Propose a source category for a source from its item titles and topics, and show the content
+    category of each item read; --write puts the best source category in the manifest. Live by default
+    (the source's configured routes); --offline reads the proof samples."""
     folder = repo.sources_dir / args.id
     if not folder.is_dir():
         warn(f"categorize: no source folder sources/{args.id}")
@@ -481,10 +482,12 @@ def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
         warn(f"categorize: {exc}")
         return EXIT_CONFIG
     titles: list[str] = []
+    summaries: list[str] = []
     origin = "proof samples"
     if args.offline:
         titles = [a["sample"]["title"] for rec in (src.methods or {}).get("routes", [])
                   for a in rec.get("attempts", []) if a.get("sample")]
+        summaries = [""] * len(titles)
     else:
         state_dir = Path(args.state_dir) if args.state_dir else DEFAULT_STATE_DIR
         fetcher = fetcher_factory(state_dir)
@@ -499,22 +502,31 @@ def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
                 say(f"categorize: {route['url']}: {type(exc).__name__}")
                 continue
             titles, origin = [raw.title for raw in parsed["items"]], route["url"]
+            summaries = [items.sanitize(raw.summary) for raw in parsed["items"]]
             break
         if hasattr(fetcher, "save"):
             fetcher.save()
-    current = f"{src.category}/{src.subcategory}" if src.category else "none"
-    say(f"categorize {src.id}: current {current}; read {len(titles)} title(s) from {origin}")
+    current = f"{src.source_category}/{src.source_subcategory}" if src.source_category else "none"
+    say(f"categorize {src.id}: source category {current}; read {len(titles)} title(s) from {origin}")
     found = categories.suggest(reg, titles, src.topics)
     for s in found[:3]:
-        say(f"  suggest {s['ref']} (score {s['score']}): {'; '.join(s['reasons'])}")
+        say(f"  suggest source category {s['ref']} (score {s['score']}): {'; '.join(s['reasons'])}")
     if not found:
-        say("  no suggestion; pick a category from `hub categories` and set it by hand")
+        say("  no suggestion; pick a source category from `hub categories` and set it by hand")
+    spread: dict[tuple[str, str, str, str], int] = {}
+    for title, summary in zip(titles, summaries):
+        placed = categories.content_category(reg, title, summary, src.source_category, src.source_subcategory)
+        key = (placed["category"] or "none", placed["subcategory"] or "none", placed["category_basis"], placed["subcategory_basis"])
+        spread[key] = spread.get(key, 0) + 1
+    for (cat, subcat, cat_basis, sub_basis), count in sorted(spread.items(), key=lambda kv: (-kv[1], kv[0])):
+        say(f"  content {cat}/{subcat}: {count} item(s); category from the {cat_basis}, subcategory from the {sub_basis}")
+    if not found:
         return EXIT_DEFECT if args.write else EXIT_OK
     if args.write:
         best_cat, best_sub = found[0]["ref"].split("/")
-        manifest = dict(src.manifest, category=best_cat, subcategory=best_sub)
+        manifest = dict(src.manifest, source_category=best_cat, source_subcategory=best_sub)
         jsonio.dump_json(folder / ("source.local.json" if src.local else "source.json"), manifest)
-        say(f"categorize: wrote {found[0]['ref']} to sources/{src.id}; check it before committing")
+        say(f"categorize: wrote source category {found[0]['ref']} to sources/{src.id}; check it before committing")
     return EXIT_OK
 
 
@@ -573,9 +585,9 @@ def build_parser() -> argparse.ArgumentParser:
     rel.add_argument("sha")
     rel.add_argument("--reason", required=True)
     rel.add_argument("--state-dir", help="where feeder.db lives (default .cache)")
-    cz = sub.add_parser("categorize", help="propose a category for a source from its titles and topics")
+    cz = sub.add_parser("categorize", help="propose a source category and show item content categories")
     cz.add_argument("id")
-    cz.add_argument("--write", action="store_true", help="write the best proposal into the manifest")
+    cz.add_argument("--write", action="store_true", help="write the best source category into the manifest")
     cz.add_argument("--offline", action="store_true", help="read the proof samples instead of fetching")
     cz.add_argument("--state-dir", help="fetch cache directory (default .cache)")
     cats = sub.add_parser("categories", help="list the category registry, or add an entry to it")

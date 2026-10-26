@@ -41,7 +41,7 @@ class SourceFolderTests(unittest.TestCase):
         for folder in REPO.source_folders():
             with self.subTest(source=folder.name):
                 manifest = jsonio.load_json(folder / "source.json")
-                self.assertTrue(categories.is_valid_pair(reg, manifest["category"], manifest["subcategory"]))
+                self.assertTrue(categories.is_valid_pair(reg, manifest["source_category"], manifest["source_subcategory"]))
                 for industry in manifest.get("industries", []):
                     self.assertIn(industry, categories.industry_ids(reg))
 

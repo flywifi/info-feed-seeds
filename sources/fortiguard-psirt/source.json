@@ -1,7 +1,6 @@
 {
   "added": "2026-10-25",
   "authority": "primary",
-  "category": "vulnerabilities",
   "classification_review": "pending",
   "discovered_from": {
     "date": "2026-10-23",
@@ -33,7 +32,8 @@
     "actions",
     "local"
   ],
-  "subcategory": "vendor-advisories",
+  "source_category": "vulnerabilities",
+  "source_subcategory": "vendor-advisories",
   "tier": "vendor",
   "topics": [
     "cybersecurity/vulnerabilities"

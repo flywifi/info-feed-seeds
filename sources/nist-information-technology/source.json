@@ -1,7 +1,6 @@
 {
   "added": "2026-10-20",
   "authority": "primary",
-  "category": "standards",
   "classification_review": "pending",
   "discovered_from": {
     "date": "2026-10-20",
@@ -38,7 +37,8 @@
     "actions",
     "local"
   ],
-  "subcategory": "security",
+  "source_category": "standards",
+  "source_subcategory": "security",
   "tier": "canonical",
   "topics": [
     "technology",
