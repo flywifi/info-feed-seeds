@@ -1,0 +1,49 @@
+{
+  "added": "2026-10-26",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-26",
+    "kind": "manual",
+    "ref": "https://blog.pcisecuritystandards.org/"
+  },
+  "enabled": true,
+  "expected_update_period_days": 14,
+  "homepage": "https://blog.pcisecuritystandards.org/",
+  "id": "pci-ssc-blog",
+  "industries": [
+    "payments",
+    "retail"
+  ],
+  "interval_days": 1,
+  "label": "PCI Security Standards Council blog",
+  "publisher": "PCI Security Standards Council",
+  "routes": [
+    {
+      "adapter": "page",
+      "kind": "page",
+      "params": {
+        "date_format": "%d %b, %Y",
+        "date_regex": "\\d{1,2} [A-Za-z]{3}, \\d{4}",
+        "date_selector": "div.post-details-meta",
+        "item_selector": "div.latest-post, div.post-item",
+        "link_selector": "h3 a@href",
+        "summary_selector": "div.post-body",
+        "title_selector": "h3 a"
+      },
+      "url": "https://blog.pcisecuritystandards.org/"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "source_category": "standards",
+  "source_subcategory": "security",
+  "tier": "canonical",
+  "topics": [
+    "standards",
+    "cybersecurity/frameworks"
+  ],
+  "verified": "2026-10-26"
+}

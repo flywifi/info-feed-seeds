@@ -1,0 +1,30 @@
+{
+  "id": "fedramp-changelog",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 98 items (page)",
+          "result": "ok",
+          "sample": {
+            "link": "https://www.fedramp.gov/marketplace/products",
+            "published": "2026-10-21T00:00:00Z",
+            "title": "2026-10-21 Marketplace now publicly displays 20x Pilot certifications to help distinguish vendors certified under the 20x Pilot program from those with full 20x certification. (See FedRAMP Marketplace )"
+          },
+          "source_label": "live",
+          "tried_at": "2026-10-26T11:16:42Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-10-26T11:16:42Z"
+      },
+      "url": "https://www.fedramp.gov/changelog/"
+    }
+  ]
+}
