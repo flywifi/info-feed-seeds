@@ -132,6 +132,9 @@ class ContentCategoryTests(unittest.TestCase):
     def test_title_shapes_decide_inside_a_machine_data_source(self):
         placed = self.place("FR-2022-04-07", source=("machine-data", "signature-versions"))
         self.assertEqual((placed["category"], placed["subcategory"], placed["category_basis"]), ("machine-data", "bulk-data", "item"))
+        placed = self.place("37.319", source=("machine-data", "bulk-data"))
+        self.assertEqual((placed["category"], placed["subcategory"], placed["category_basis"], placed["subcategory_basis"]),
+                         ("machine-data", "signature-versions", "item", "item"), "a version-number title decides both levels")
 
     def test_a_tie_keeps_the_source(self):
         placed = self.place("Advisory on a phishing campaign", source=("attacks", "scams"))

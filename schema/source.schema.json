@@ -444,7 +444,7 @@
       "type": "array"
     },
     "source_category": {
-      "description": "The source category: where this feed sits as a whole, a category id from schema/categories.json. Each item also gets its own content category from its text.",
+      "description": "The source category: where this feed sits as a whole, a category id from schema/categories.json. hub categorize reports each item's own content category from its text.",
       "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
       "type": "string"
     },

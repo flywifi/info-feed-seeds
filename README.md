@@ -21,8 +21,9 @@ private notes or anything that identifies a client or a campaign.
   backfill, outputs and the guard hold level.
 - `schema/`: JSON Schemas for sources, methods, profiles and items, plus `topics.json`, the
   two-level topic registry, and `categories.json`, the reader-category registry. A source carries a
-  source category and source subcategory (where the feed sits as a whole); each item gets its own
-  content category and content subcategory from its text. A profile polls the source categories its
+  source category and source subcategory (where the feed sits as a whole); `hub categorize` reports
+  each item's own content category and content subcategory from its text (storing them on each
+  polled item is planned). A profile polls the source categories its
   `source_categories` list names, or every category but machine data when it has no list.
 - `guard/releases.json`: items held by the injection guard that a person has released.
 - `seeds/`: dated seed files. These are imports; `sources/` is the truth.
