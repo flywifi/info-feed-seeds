@@ -40,7 +40,7 @@ REQUIRED_PARAMS = {
 }
 
 # A page route that names any of these without item_selector is a configuration error, not a landing route.
-PAGE_SELECTOR_KEYS = ("title_selector", "link_selector", "date_selector", "summary_selector")
+PAGE_SELECTOR_KEYS = ("title_selector", "link_selector", "date_selector", "summary_selector", "next_selector")
 
 # The route kinds each adapter reads; `kind` names the document, `adapter` the reader.
 ALLOWED_KINDS = {

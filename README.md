@@ -295,7 +295,7 @@ recorded for reachability, never polled.
 | adapter | reads | required params | optional params |
 |---|---|---|---|
 | `feed` | RSS, Atom, RDF, JSON Feed | none | none |
-| `page` | an HTML listing | `item_selector` | `title_selector`, `link_selector`, `date_selector`, `date_regex`, `date_format`, `summary_selector` |
+| `page` | an HTML listing | `item_selector` | `title_selector`, `link_selector`, `date_selector`, `date_regex`, `date_format`, `summary_selector`, `next_selector`, `max_pages` |
 | `sitemap` | an XML sitemap or sitemap index (gzip too) | none | `lastmod_since`, `path_prefix`, `max_sitemaps` |
 | `urllist` | a text file of URLs, `#` comments | none | none |
 | `xml` | any XML document | `item_path`, `fields` | `namespaces` |
@@ -346,7 +346,9 @@ the other selectors read inside it. Selectors are `tag`, `#id`, `.class`, combin
 (`div.post.item`), descendant steps separated by spaces and comma groups; `sel@attr` reads an
 attribute and `.` is the item node. Dates: `date_regex` picks the date out of the text and
 `date_format` is a strptime format (English month names on any machine). Without `item_selector` a
-page route is a landing route, checked for reachability and never polled.
+page route is a landing route, checked for reachability and never polled. `next_selector`
+(for example `a.next@href`) follows older pages up to `max_pages` (default 3); paging stops at the
+first page whose items are all stored already, so a poll reads what was posted since the last one.
 `sources/pci-ssc-blog/source.json` is a working example:
 
 ```json

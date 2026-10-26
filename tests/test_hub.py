@@ -395,6 +395,29 @@ class PollTests(HubTestCase):
                                           "--out-dir", str(self.out), "--only", "mu", fetcher=fetcher), 0)
         self.assertEqual(fetcher.pins, {"https://example.gov/o": False, "https://example.gov/o?page=2": True})
 
+    def test_paging_reads_what_was_posted_since_the_last_poll(self):
+        def listing(titles, nxt):
+            lis = "".join(f"<li><a href='/n/{t}'>{t}</a></li>" for t in titles)
+            more = f"<a class='next' href='/blog/{nxt}'>Older</a>" if nxt else ""
+            return f"<ul class='posts'>{lis}</ul>{more}".encode()
+
+        self.add_source("nu", "https://example.gov/blog/1", ["cybersecurity"],
+                        routes=[{"kind": "page", "adapter": "page", "url": "https://example.gov/blog/1",
+                                 "params": {"item_selector": "ul.posts li", "next_selector": "a.next@href", "max_pages": 5}}])
+        self.script.update({"https://example.gov/blog/1": listing(["e", "d"], 2), "https://example.gov/blog/2": listing(["c", "b"], 3),
+                            "https://example.gov/blog/3": listing(["a"], None)})
+        self.assertEqual(self.poll("--only", "nu"), 0)
+        self.assertEqual(self.fetcher.calls, ["https://example.gov/blog/1", "https://example.gov/blog/2", "https://example.gov/blog/3"],
+                         "the first poll pages back to the end")
+        self.assertEqual(self.poll("--only", "nu"), 0)
+        self.assertEqual(self.fetcher.calls, ["https://example.gov/blog/1"], "nothing new on page 1, so no paging")
+        self.script.update({"https://example.gov/blog/1": listing(["g", "f"], 2), "https://example.gov/blog/2": listing(["e", "d"], 3),
+                            "https://example.gov/blog/3": listing(["c", "b"], 4)})
+        self.assertEqual(self.poll("--only", "nu"), 0)
+        self.assertEqual(self.fetcher.calls, ["https://example.gov/blog/1", "https://example.gov/blog/2"],
+                         "two new posts: page 2 holds only stored items, so paging stops there")
+        self.assertIn("poll nu: ok, HTTP 200, 4 items (2 new)", self.output)
+
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
             records = []
@@ -402,6 +425,9 @@ class PollTests(HubTestCase):
             def upsert_item(self, rec, first_seen):
                 self.records.append(rec)
                 return True
+
+            def item(self, sha):
+                return None
 
         def stub(body, url, params):
             return {"kind": "json-api", "items": [RawItem(guid=url, link=url, title=url, summary="s")],

@@ -214,6 +214,11 @@
                   "minimum": 0,
                   "type": "integer"
                 },
+                "next_selector": {
+                  "description": "Selector with @href for the link to the next, older page; followed up to max_pages, stopping at a page with nothing new.",
+                  "minLength": 1,
+                  "type": "string"
+                },
                 "summary_selector": {
                   "minLength": 1,
                   "type": "string"

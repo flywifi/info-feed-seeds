@@ -8,6 +8,9 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Paging: a page route's `next_selector` names the link to the next, older page, followed up to
+  `max_pages` (default 3). For page and JSON API routes the poller stops at the first page whose
+  items are all stored already, so each poll reads what was posted since the last one.
 - Follow fetches (next pages, child sitemaps) are pinned to their own host and port: a redirect
   to another host or port is refused before it is requested, and any fetch is refused a redirect to
   a scheme other than http or https.
