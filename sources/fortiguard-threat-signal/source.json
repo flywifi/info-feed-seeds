@@ -11,6 +11,9 @@
   "expected_update_period_days": 7,
   "homepage": "https://fortiguard.fortinet.com/threat-signal-report",
   "id": "fortiguard-threat-signal",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard threat signal reports",
   "lists": [
@@ -29,6 +32,8 @@
     "actions",
     "local"
   ],
+  "source_category": "attacks",
+  "source_subcategory": "threat-research",
   "tier": "vendor",
   "topics": [
     "cybersecurity/incidents"

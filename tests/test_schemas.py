@@ -67,6 +67,19 @@ class SchemaFixtureTests(unittest.TestCase):
         bad_review["classification_review"] = "done"
         self.assertTrue(validate(bad_review, schema))
 
+        no_category = copy.deepcopy(base)
+        del no_category["source_category"]
+        self.assertEqual(validate(no_category, schema), ["$: missing required property 'source_category'"])
+        old_name = copy.deepcopy(base)
+        old_name["category"] = old_name.pop("source_category")
+        self.assertIn("$: unexpected property 'category'", validate(old_name, schema))
+        bad_category = copy.deepcopy(base)
+        bad_category["source_subcategory"] = "Security Guidance"
+        self.assertTrue(validate(bad_category, schema))
+        bad_industry = copy.deepcopy(base)
+        bad_industry["industries"] = ["Cyber"]
+        self.assertTrue(validate(bad_industry, schema))
+
     def test_route_params_follow_the_adapter(self):
         schema = load_schema("source.schema.json")
         base = load_fixture("source_example.json")
@@ -134,6 +147,14 @@ class SchemaFixtureTests(unittest.TestCase):
         bad_result["routes"][0]["attempts"][0]["result"] = "maybe"
         self.assertTrue(validate(bad_result, schema))
         self.assertIn("source_label", attempt)
+
+    def test_profile_categories(self):
+        schema = load_schema("profile.schema.json")
+        base = load_fixture("profile_example.json")
+        self.assertEqual(validate(dict(base, source_categories=["regulatory", "attacks/breaches"]), schema), [])
+        self.assertTrue(validate(dict(base, source_categories=[]), schema), "an empty list would select nothing")
+        self.assertTrue(validate(dict(base, source_categories=["Attacks"]), schema))
+        self.assertTrue(validate(dict(base, categories=["regulatory"]), schema), "the key names the source category")
 
     def test_profile_example_validates(self):
         self.assertEqual(validate(load_fixture("profile_example.json"), load_schema("profile.schema.json")), [])

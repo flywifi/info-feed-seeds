@@ -11,6 +11,9 @@
   "expected_update_period_days": 1,
   "homepage": "https://fortiguard.fortinet.com/updates/antivirus",
   "id": "fortiguard-antivirus",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard antivirus definition updates",
   "lists": [
@@ -35,6 +38,8 @@
     "actions",
     "local"
   ],
+  "source_category": "machine-data",
+  "source_subcategory": "signature-versions",
   "tier": "vendor",
   "topics": [
     "cybersecurity"

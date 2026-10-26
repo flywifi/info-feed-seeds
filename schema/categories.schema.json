@@ -1,0 +1,125 @@
+{
+  "$defs": {
+    "category": {
+      "additionalProperties": false,
+      "properties": {
+        "added": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "type": "string"
+        },
+        "digest_default": {
+          "type": "boolean"
+        },
+        "label": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "order": {
+          "maximum": 99,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "reader_purpose": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "subcategories": {
+          "additionalProperties": {
+            "$ref": "#/$defs/subcategory"
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "label",
+        "order",
+        "reader_purpose",
+        "digest_default",
+        "subcategories",
+        "added",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "subcategory": {
+      "additionalProperties": false,
+      "properties": {
+        "keywords": {
+          "items": {
+            "minLength": 2,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "label": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "note": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "order": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "topics": {
+          "items": {
+            "pattern": "^[a-z0-9][a-z0-9-]*(/[a-z0-9][a-z0-9-]*)?$",
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "label",
+        "order",
+        "note"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "The reader-category registry, schema/categories.json. Ids, unique orders and non-empty categories are checked by hub lint.",
+  "properties": {
+    "categories": {
+      "additionalProperties": {
+        "$ref": "#/$defs/category"
+      },
+      "type": "object"
+    },
+    "description": {
+      "type": "string"
+    },
+    "industries": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "label"
+        ],
+        "type": "object"
+      },
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 1
+    }
+  },
+  "required": [
+    "description",
+    "schema_version",
+    "categories",
+    "industries"
+  ],
+  "type": "object"
+}

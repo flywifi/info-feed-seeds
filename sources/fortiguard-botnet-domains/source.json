@@ -11,6 +11,9 @@
   "expected_update_period_days": 7,
   "homepage": "https://fortiguard.fortinet.com/updates/botnetdom",
   "id": "fortiguard-botnet-domains",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard botnet domain reputation updates",
   "lists": [
@@ -35,6 +38,8 @@
     "actions",
     "local"
   ],
+  "source_category": "machine-data",
+  "source_subcategory": "name-lists",
   "tier": "vendor",
   "topics": [
     "cybersecurity"

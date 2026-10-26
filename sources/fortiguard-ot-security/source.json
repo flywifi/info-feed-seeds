@@ -11,6 +11,9 @@
   "expected_update_period_days": 14,
   "homepage": "https://fortiguard.fortinet.com/updates/ots",
   "id": "fortiguard-ot-security",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard operational technology security services",
   "lists": [
@@ -35,6 +38,8 @@
     "actions",
     "local"
   ],
+  "source_category": "vulnerabilities",
+  "source_subcategory": "detections",
   "tier": "vendor",
   "topics": [
     "cybersecurity/ot-ics"

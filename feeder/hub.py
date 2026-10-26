@@ -9,6 +9,9 @@ Usage (Windows: `py -3 -I feeder\\hub.py ...`; elsewhere: `python3 feeder/hub.py
   fmt [--check]
   cat ID
   release SHA --reason TEXT
+  categorize ID [--write [--allow-machine-data]] [--offline]
+  categories [add CATEGORY/SUBCATEGORY --label L --note N [--keywords a,b]
+             [--category-label L --purpose P --reason R [--machine-data]]]
 
 poll exit codes: 0 success, even when some sources failed; 2 configuration or usage error; 3 every
 fetch that was attempted failed. lint and fmt --check exit 1 when they find a defect.
@@ -27,7 +30,7 @@ if __package__ in (None, ""):
     # repository on sys.path, so add the repository root for the `feeder` package.
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from feeder import ROOT, adapters, guard, items, jsonio, outputs  # noqa: E402
+from feeder import ROOT, adapters, categories, guard, items, jsonio, outputs  # noqa: E402
 from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, item_tags,  # noqa: E402
                            json_files, lint, selected_sources)
 from feeder.schema_validate import validate  # noqa: E402
@@ -461,6 +464,111 @@ def cmd_release(args, repo: Repo, now_fn) -> int:
     return EXIT_OK
 
 
+def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
+    """Propose a source category for a source from its item titles and topics, and show the content
+    category of each item read; --write puts the best source category in the manifest, never machine
+    data unless --allow-machine-data is given. Live by default: each configured route is fetched once,
+    unconditionally, by a fetcher that keeps no state, so the poll's cache and validators are never
+    touched. --offline reads the proof samples instead."""
+    folder = repo.sources_dir / args.id
+    if not folder.is_dir():
+        warn(f"categorize: no source folder sources/{args.id}")
+        return EXIT_CONFIG
+    reg = repo.categories()
+    if reg is None:
+        warn("categorize: schema/categories.json is missing or not valid JSON")
+        return EXIT_CONFIG
+    try:
+        src = repo.load_source(folder)
+    except ConfigError as exc:
+        warn(f"categorize: {exc}")
+        return EXIT_CONFIG
+    titles: list[str] = []
+    summaries: list[str] = []
+    origin = "nothing (every route failed)"
+    if args.offline:
+        titles = [a["sample"]["title"] for rec in (src.methods or {}).get("routes", [])
+                  for a in rec.get("attempts", []) if a.get("sample")]
+        summaries = [""] * len(titles)
+        origin = "proof samples"
+    else:
+        fetcher = fetcher_factory(None)   # no state directory: nothing read or saved
+        for route in src.poll_routes():
+            result = fetcher.get(route["url"], conditional=False)
+            if result.error is not None or result.body is None:
+                say(f"categorize: {route['url']}: {result.error or 'no body'}")
+                continue
+            try:
+                parsed = adapters.ADAPTERS[route["adapter"]](result.body, url=route["url"], params=route.get("params") or {})
+            except adapters.AdapterError as exc:
+                say(f"categorize: {route['url']}: {type(exc).__name__}")
+                continue
+            titles, origin = [raw.title for raw in parsed["items"]], route["url"]
+            summaries = [items.sanitize(raw.summary) for raw in parsed["items"]]
+            break
+    current = f"{src.source_category}/{src.source_subcategory}" if src.source_category else "none"
+    say(f"categorize {src.id}: source category {current}; read {len(titles)} title(s) from {origin}")
+    found = categories.suggest(reg, titles, src.topics)
+    for s in found[:3]:
+        say(f"  suggest source category {s['ref']} (score {s['score']}): {'; '.join(s['reasons'])}")
+    if not found:
+        say("  no suggestion; pick a source category from `hub categories` and set it by hand")
+    spread: dict[tuple[str, str, str, str], int] = {}
+    for title, summary in zip(titles, summaries):
+        placed = categories.content_category(reg, title, summary, src.source_category, src.source_subcategory)
+        key = (placed["category"] or "none", placed["subcategory"] or "none", placed["category_basis"], placed["subcategory_basis"])
+        spread[key] = spread.get(key, 0) + 1
+    for (cat, subcat, cat_basis, sub_basis), count in sorted(spread.items(), key=lambda kv: (-kv[1], kv[0])):
+        say(f"  content {cat}/{subcat}: {count} item(s); category from the {cat_basis}, subcategory from the {sub_basis}")
+    if not args.write:
+        return EXIT_OK
+    writable = [s for s in found if args.allow_machine_data or categories.digest_default(reg, s["ref"].split("/")[0])]
+    if found and not writable:
+        say(f"categorize: {found[0]['ref']} is machine data, which no profile polls by default; "
+            "give --allow-machine-data to write it")
+    if not writable:
+        return EXIT_DEFECT
+    best_cat, best_sub = writable[0]["ref"].split("/")
+    manifest = dict(src.manifest, source_category=best_cat, source_subcategory=best_sub)
+    jsonio.dump_json(folder / ("source.local.json" if src.local else "source.json"), manifest)
+    say(f"categorize: wrote source category {writable[0]['ref']} to sources/{src.id}; check it before committing")
+    return EXIT_OK
+
+
+def cmd_categories(args, repo: Repo, now_fn) -> int:
+    reg = repo.categories()
+    if reg is None:
+        warn("categories: schema/categories.json is missing or not valid JSON")
+        return EXIT_CONFIG
+    if args.action == "add":
+        doubled = categories.duplicate_keys(repo.categories_file)
+        if doubled:
+            warn(f"categories add: schema/categories.json repeats the key(s) {', '.join(sorted(set(doubled)))}; "
+                 "fix the file first, a rewrite would drop one of them")
+            return EXIT_CONFIG
+        try:
+            new = categories.add_entry(
+                reg, args.ref, label=args.label, note=args.note, today=now_fn().date().isoformat(),
+                keywords=(args.keywords or "").split(","), category_label=args.category_label,
+                purpose=args.purpose, reason=args.reason, machine_data=args.machine_data)
+        except ValueError as exc:
+            warn(f"categories add: {exc}")
+            return EXIT_CONFIG
+        errors = validate(new, repo.schema("categories.schema.json")) + categories.registry_problems(new)
+        if errors:
+            warn("categories add: the result would not validate: " + "; ".join(errors))
+            return EXIT_CONFIG
+        jsonio.dump_json(repo.categories_file, new)
+        say(f"categories: added {args.ref} to schema/categories.json; add a CHANGELOG line")
+        return EXIT_OK
+    for cid, entry in categories.ordered(reg):
+        shown = "" if entry["digest_default"] else " (shown only when a profile names it)"
+        say(f"{entry['order']}. {cid}: {entry['label']}{shown}")
+        for sid, s in sorted(entry["subcategories"].items(), key=lambda kv: kv[1]["order"]):
+            say(f"   {cid}/{sid}: {s['label']}, {s['note']}")
+    return EXIT_OK
+
+
 # --------------------------------------------------------------------------- entry point
 
 def build_parser() -> argparse.ArgumentParser:
@@ -487,6 +595,22 @@ def build_parser() -> argparse.ArgumentParser:
     rel.add_argument("sha")
     rel.add_argument("--reason", required=True)
     rel.add_argument("--state-dir", help="where feeder.db lives (default .cache)")
+    cz = sub.add_parser("categorize", help="propose a source category and show item content categories")
+    cz.add_argument("id")
+    cz.add_argument("--write", action="store_true", help="write the best source category into the manifest")
+    cz.add_argument("--offline", action="store_true", help="read the proof samples instead of fetching")
+    cz.add_argument("--allow-machine-data", action="store_true", help="let --write put the source in machine data")
+    cats = sub.add_parser("categories", help="list the category registry, or add an entry to it")
+    cats_sub = cats.add_subparsers(dest="action")
+    add = cats_sub.add_parser("add", help="add category/subcategory (a new category needs its label, purpose and reason)")
+    add.add_argument("ref", help="category/subcategory")
+    add.add_argument("--label", required=True, help="the subcategory's label")
+    add.add_argument("--note", required=True, help="one line on what belongs in the subcategory")
+    add.add_argument("--keywords", help="comma-separated title keywords for hub categorize")
+    add.add_argument("--category-label")
+    add.add_argument("--purpose", help="a new category's reader purpose")
+    add.add_argument("--reason", help="why a new category is needed")
+    add.add_argument("--machine-data", action="store_true", help="a new category shown only by a profile that names it")
     return ap
 
 
@@ -509,6 +633,10 @@ def main(argv: list[str] | None = None, *, root: Path | None = None, fetcher_fac
         return cmd_cat(args, repo)
     if args.command == "release":
         return cmd_release(args, repo, now_fn)
+    if args.command == "categorize":
+        return cmd_categorize(args, repo, fetcher_factory or default_fetcher_factory)
+    if args.command == "categories":
+        return cmd_categories(args, repo, now_fn)
     return EXIT_CONFIG
 
 

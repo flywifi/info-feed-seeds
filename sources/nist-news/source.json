@@ -10,6 +10,9 @@
   "enabled": true,
   "homepage": "https://www.nist.gov/news-events/news",
   "id": "nist-news",
+  "industries": [
+    "technology"
+  ],
   "label": "NIST News",
   "lists": [
     "nist-feeds"
@@ -33,6 +36,8 @@
     "actions",
     "local"
   ],
+  "source_category": "technology",
+  "source_subcategory": "science",
   "tier": "canonical",
   "topics": [
     "technology",

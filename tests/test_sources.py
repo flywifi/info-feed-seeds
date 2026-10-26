@@ -2,7 +2,7 @@
 The committed profile and guard releases file validate too."""
 import unittest
 
-from feeder import adapters, jsonio
+from feeder import adapters, categories, jsonio
 from feeder.config import Repo, lint, release_problems
 from feeder.schema_validate import validate
 from feeder.topics import all_tags
@@ -35,6 +35,33 @@ class SourceFolderTests(unittest.TestCase):
                 proven = [r for r in methods["routes"] if r["url"] in polled and r["last_success"]]
                 self.assertTrue(proven, "a configured route has a recorded success")
                 self.assertEqual(proven[0]["last_success"]["source_label"], "live")
+
+    def test_every_source_is_placed_in_the_category_registry(self):
+        reg = categories.load_categories(ROOT / "schema" / "categories.json")
+        for folder in REPO.source_folders():
+            with self.subTest(source=folder.name):
+                manifest = jsonio.load_json(folder / "source.json")
+                self.assertTrue(categories.is_valid_pair(reg, manifest["source_category"], manifest["source_subcategory"]))
+                for industry in manifest.get("industries", []):
+                    self.assertIn(industry, categories.industry_ids(reg))
+
+    def test_every_machine_data_source_is_stored_off(self):
+        machine = [sid for sid, src in REPO.load_sources().items() if not src.digest_default]
+        self.assertEqual(len(machine), 13)
+        self.assertTrue(all(sid.startswith("fortiguard-") for sid in machine))
+        for sid in machine:
+            with self.subTest(source=sid):
+                self.assertFalse(REPO.load_sources()[sid].manifest["enabled"])
+
+    def test_the_fortiguard_seed_table_matches_the_manifests(self):
+        import re
+        text = (ROOT / "seeds" / "2026-10-23_fortiguard.md").read_text(encoding="utf-8")
+        rows = re.findall(r"^\| (fort[a-z0-9-]+) \| [^|]+ \| [^|]+ \| [^|]+ \| ([a-z-]+/[a-z-]+) \|", text, re.M)
+        self.assertEqual(len(rows), 23)
+        for sid, ref in rows:
+            with self.subTest(source=sid):
+                manifest = jsonio.load_json(ROOT / "sources" / sid / "source.json")
+                self.assertEqual(f"{manifest['source_category']}/{manifest['source_subcategory']}", ref)
 
     def test_lint_is_clean(self):
         self.assertEqual(lint(REPO), [])

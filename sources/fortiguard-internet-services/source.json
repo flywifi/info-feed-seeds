@@ -11,6 +11,9 @@
   "expected_update_period_days": 7,
   "homepage": "https://fortiguard.fortinet.com/updates/isdb",
   "id": "fortiguard-internet-services",
+  "industries": [
+    "cybersecurity"
+  ],
   "interval_days": 1,
   "label": "FortiGuard internet services database updates",
   "lists": [
@@ -35,6 +38,8 @@
     "actions",
     "local"
   ],
+  "source_category": "machine-data",
+  "source_subcategory": "name-lists",
   "tier": "vendor",
   "topics": [
     "cybersecurity"
