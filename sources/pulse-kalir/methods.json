@@ -1,0 +1,21 @@
+{
+  "id": "pulse-kalir",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "live fetch: HTTP 200, no error, 0 items",
+          "result": "empty",
+          "source_label": "live",
+          "tried_at": "2026-10-26T14:34:01Z"
+        }
+      ],
+      "last_success": null,
+      "url": "https://pulse.kalir.io/en/feed.xml"
+    }
+  ]
+}

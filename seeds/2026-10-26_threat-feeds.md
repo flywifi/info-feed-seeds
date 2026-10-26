@@ -2,7 +2,9 @@
 # Threat and advisory feeds requested on 2026-10-26
 
 Fetched from a cloud session with the named User-Agent on 2026-10-26. Only a live 200 that parses proves a
-source, so only ervik-threat-feed is in `sources/`; the rest wait for a live proof.
+source. ervik-threat-feed is enabled; the other five are in `sources/` with `enabled: false` and
+`verified` null (pulse-kalir, deepdarkcti, cisa-ics-advisories, cisa-ics-medical-advisories, cisa-news),
+each with its live attempt recorded, and are enabled after a live 200 that parses.
 
 | feed | url | result | items | intended source category | topics |
 |---|---|---|---|---|---|

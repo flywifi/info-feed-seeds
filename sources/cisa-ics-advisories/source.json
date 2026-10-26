@@ -1,0 +1,41 @@
+{
+  "added": "2026-10-26",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-26",
+    "kind": "manual",
+    "ref": "https://www.cisa.gov/cybersecurity-advisories/ics-advisories.xml"
+  },
+  "enabled": false,
+  "expected_update_period_days": 7,
+  "homepage": "https://www.cisa.gov/news-events/cybersecurity-advisories",
+  "id": "cisa-ics-advisories",
+  "industries": [
+    "energy",
+    "manufacturing"
+  ],
+  "interval_days": 1,
+  "label": "CISA ICS advisories",
+  "publisher": "Cybersecurity and Infrastructure Security Agency",
+  "routes": [
+    {
+      "adapter": "feed",
+      "kind": "rss",
+      "params": {},
+      "url": "https://www.cisa.gov/cybersecurity-advisories/ics-advisories.xml"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "source_category": "vulnerabilities",
+  "source_subcategory": "vendor-advisories",
+  "tier": "canonical",
+  "topics": [
+    "cybersecurity/ot-ics",
+    "cybersecurity/vulnerabilities"
+  ],
+  "verified": null
+}
