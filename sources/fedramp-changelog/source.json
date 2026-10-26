@@ -1,0 +1,47 @@
+{
+  "added": "2026-10-26",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-10-26",
+    "kind": "manual",
+    "ref": "https://www.fedramp.gov/changelog/"
+  },
+  "enabled": true,
+  "expected_update_period_days": 7,
+  "homepage": "https://www.fedramp.gov/changelog/",
+  "id": "fedramp-changelog",
+  "industries": [
+    "federal",
+    "cloud"
+  ],
+  "interval_days": 1,
+  "label": "FedRAMP changelog",
+  "publisher": "US General Services Administration FedRAMP",
+  "routes": [
+    {
+      "adapter": "page",
+      "kind": "page",
+      "params": {
+        "date_selector": "span.entry-date",
+        "item_selector": "div.fiscal-year-container li",
+        "link_selector": "a@href",
+        "title_selector": "."
+      },
+      "url": "https://www.fedramp.gov/changelog/"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "source_category": "standards",
+  "source_subcategory": "compliance",
+  "tier": "canonical",
+  "topics": [
+    "cybersecurity/cloud",
+    "standards",
+    "government/federal"
+  ],
+  "verified": "2026-10-26"
+}
