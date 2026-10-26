@@ -418,6 +418,22 @@ class PollTests(HubTestCase):
                          "two new posts: page 2 holds only stored items, so paging stops there")
         self.assertIn("poll nu: ok, HTTP 200, 4 items (2 new)", self.output)
 
+    def test_a_disabled_source_may_wait_for_its_first_live_proof(self):
+        self.add_source("xi", "https://example.gov/xi.xml", ["cybersecurity"], enabled=False, verified=None)
+        folder = self.root / "sources" / "xi"
+        methods = jsonio.load_json(folder / "methods.json")
+        methods["routes"][0]["attempts"] = [{"capture_url": None, "http_status": 403, "media": [], "method": "conditional-get",
+                                             "note": "bot wall", "result": "refused", "source_label": "live",
+                                             "tried_at": "2026-10-26T00:00:00Z"}]
+        methods["routes"][0]["last_success"] = None
+        jsonio.dump_json(folder / "methods.json", methods)
+        self.assertEqual(self.run_hub("lint"), 0, self.output)
+        manifest = jsonio.load_json(folder / "source.json")
+        manifest["enabled"] = True
+        jsonio.dump_json(folder / "source.json", manifest)
+        self.assertEqual(self.run_hub("lint"), 1, "enabling it needs a live proof")
+        self.assertIn("no configured route whose latest attempt is a live 200", self.output)
+
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
             records = []

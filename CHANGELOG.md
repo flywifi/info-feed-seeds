@@ -8,6 +8,9 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- A source with `enabled: false` may wait for its first live proof (`verified` null, its failed
+  attempts recorded): `hub lint` and the commit checker require a live 200 with a sample only for an
+  enabled source, and the poller never fetches a disabled one.
 - `.github/workflows/poll.yml` polls every enabled profile daily at 11:17 UTC (and on demand) and
   publishes the digests on the `data` branch, readable without sign-in at
   `https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/<profile>/latest.md` (and
