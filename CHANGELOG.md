@@ -14,6 +14,11 @@ All notable changes to this repository are recorded here. The format follows
 - `ervik-threat-feed` (ransomware victims, active zero-days, CVEs, daily briefing), proven live with
   60 items; `seeds/2026-10-26_threat-feeds.md` lists it with the five requested feeds that wait for a
   live proof (Pulse has no items yet; deepdarkCTI and the three CISA feeds answered 403).
+- `.github/workflows/poll.yml` polls every enabled profile daily at 11:17 UTC (and on demand) and
+  publishes the digests on the `data` branch, readable without sign-in at
+  `https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/<profile>/latest.md` (and
+  `latest.json`, `report.json`). The item database persists in the Actions cache. Commits on `data`
+  are authored as flywifi.
 - `pci-ssc-blog` pages back through older posts (`next_selector` `a.bp-link-next@href`, up to 3 pages),
   proven by a live fetch of pages 1 and 2.
 - Paging: a page route's `next_selector` names the link to the next, older page, followed up to

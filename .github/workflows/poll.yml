@@ -1,0 +1,87 @@
+# Polls every enabled profile once a day and publishes the digests on the data branch, where anyone can
+# read them without signing in:
+#   https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/<profile>/latest.md
+# The data branch holds machine output only (digests/). It starts as an orphan branch on the first run.
+# The item database (.cache/feeder.db and the fetch validators) persists between runs in the Actions
+# cache; it is never committed. CI (ci.yml) ignores pushes to data.
+name: poll
+
+on:
+  schedule:
+    - cron: "17 11 * * *"   # 11:17 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# One poll at a time; a run that starts while another is running waits for it.
+concurrency:
+  group: poll
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore the item database
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache
+          key: feeder-state-${{ github.run_id }}
+          restore-keys: feeder-state-
+
+      - name: Check out the data branch (or start it)
+        run: |
+          git config --global user.name flywifi
+          git config --global user.email 236871844+flywifi@users.noreply.github.com
+          if git fetch --depth=1 origin data:refs/remotes/origin/data; then
+            git worktree add -B data data-out origin/data
+          else
+            git worktree add --detach data-out
+            git -C data-out switch --orphan data
+          fi
+
+      - name: Poll
+        id: poll
+        run: |
+          set +e
+          python -I feeder/hub.py poll --all --surface actions --state-dir .cache \
+            --out-dir data-out/digests --summary "$RUNNER_TEMP/summary.md" --commit-msg "$RUNNER_TEMP/commit.txt"
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          [ -f "$RUNNER_TEMP/summary.md" ] && cat "$RUNNER_TEMP/summary.md" >> "$GITHUB_STEP_SUMMARY"
+          # 3 means every fetch failed; the digest still records that in Source health, so it is published.
+          [ "$code" = 0 ] || [ "$code" = 3 ]
+
+      - name: Save the item database
+        if: always() && steps.poll.outcome != 'skipped'
+        uses: actions/cache/save@v4
+        with:
+          path: .cache
+          key: feeder-state-${{ github.run_id }}
+
+      - name: Publish the digests
+        run: |
+          cd data-out
+          git add -A digests
+          if git diff --cached --quiet; then
+            echo "No digest changed."
+            exit 0
+          fi
+          git commit -q -F "$RUNNER_TEMP/commit.txt"
+          git push origin HEAD:data
+
+      - name: Fail when every fetch failed
+        if: steps.poll.outputs.code == '3'
+        run: |
+          echo "::error::every fetch failed; the digest was published with its Source health section"
+          exit 1
