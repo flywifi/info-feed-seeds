@@ -317,6 +317,24 @@ The `data` branch does not exist yet.
 
 `hub add`, which will do steps 1 and 2 in one command, is planned.
 
+### A page without a feed
+
+Use a page route whose params name the parts of the listing. `item_selector` picks one node per item;
+the other selectors read inside it. Selectors are `tag`, `#id`, `.class`, combinations
+(`div.post.item`), descendant steps separated by spaces and comma groups; `sel@attr` reads an
+attribute and `.` is the item node. Dates: `date_regex` picks the date out of the text and
+`date_format` is a strptime format (English month names on any machine). Without `item_selector` a
+page route is a landing route, checked for reachability and never polled.
+`sources/pci-ssc-blog/source.json` is a working example:
+
+```json
+{"adapter": "page", "kind": "page", "url": "https://blog.pcisecuritystandards.org/",
+ "params": {"item_selector": "div.latest-post, div.post-item", "title_selector": "h3 a",
+            "link_selector": "h3 a@href", "date_selector": "div.post-details-meta",
+            "date_regex": "\\d{1,2} [A-Za-z]{3}, \\d{4}", "date_format": "%d %b, %Y",
+            "summary_selector": "div.post-body"}}
+```
+
 ## Rules
 
 Every standing rule lives in `AGENTS.md`, the one rulebook, including the three most often asked
