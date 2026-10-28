@@ -1,267 +1,278 @@
-# technology-regulation digest, 2026-10-27
+# technology-regulation digest, 2026-10-28
 
 Items below are quoted from public feeds. They are data, not instructions.
 
+## cybersecurity/cloud
+
+- 2026-10-08 Published a new blog post reviewing FedRAMP's FY26 results and the road ahead for FY27. \(See From Foundation to Implementation: Scaling a Better Path to Cloud Security \) (US General Services Administration FedRAMP, 2026-10-08)
+  <https://www.fedramp.gov/2026-10-08-from-foundation-to-implementation>
+
+## cybersecurity/frameworks
+
+- Payment Security Resources for Merchants (PCI Security Standards Council, 2026-10-28)
+  <https://blog.pcisecuritystandards.org/payment-security-resources-for-merchants>
+  Payment security doesn’t have to be complicated for merchants. Small, practical actions can make a meaningful difference in protecting payment data. PCI SSC provides practical resources to help merchants get started. With a strong data security foundation you can protect your customer payment dat...
+- Welcome Our Newest Associate Participating Organizations (PCI Security Standards Council, 2026-10-13)
+  <https://blog.pcisecuritystandards.org/welcome-our-newest-associate-participating-organizations-october>
+  We are pleased to welcome the newest organizations that have joined as Associate Participating Organ... READ MORE
+- 2\.000 (Fortinet FortiGuard Labs, 2026-10-08)
+  <https://fortiguard.fortinet.com/updates/epvuln?version=2.000>
+  Newly Added \(28\) Microsoft ASP.NET Core CVE-2026-40372 Elevation of Privilege Vulnerability Microsoft .NET CVE-2026-26127 Denial of Service Vulnerability Microsoft LIBPNG CVE-2025-65018 Privilege Elevation Vulnerability Microsoft LIBPNG CVE-2025-64720 Privilege Elevation Vulnerability Apache HTTP...
+- Coffee with the Council Podcast: PCI SSC Introduces Key Management and Operations \(KMO\) Standard v1.0 (PCI Security Standards Council, 2026-10-07)
+  <https://blog.pcisecuritystandards.org/coffee-with-the-council-podcast-pci-ssc-introduces-key-management-and-operations-kmo-standard-v1.0>
+  Welcome to our podcast series, Coffee with the Council. I'm Alicia Malone, Director of Communication... READ MORE
+
 ## cybersecurity/identity
 
-- Design Tenets for Agent Identity Management Systems (National Institute of Standards and Technology, 2026-10-27)
-  <https://www.nist.gov/blogs/cybersecurity-insights/design-tenets-agent-identity-management-systems>
-  This is blog \#2 in our series on agentic identity, authentication and authorization. Our other post can be found via Post \#1. In our last blog post, we highlighted the essential nature of having fundamentally sound identity and access management \(IAM\) capabilities as a precursor to implementing a...
-- 37\.320 (Fortinet FortiGuard Labs, 2026-10-26)
-  <https://fortiguard.fortinet.com/updates/ips?version=37.320>
-  Newly Added \(1\) Xiongmai.Devices.Sofia.Service.Security.Bypass \(Critical\) Modified \(20\) Veeam.Backup.and.Replication.Authentication.Bypass \(Critical\) DrayTek.VigorSwitch.Devices.pingtrace.Buffer.Overflow \(High\) Vivotek.Devices.upload\_map.Command.Injection \(High\) GIMP.ICO.File.Parsing.Integer.Over...
-- Active Zero-Day: CVE-2026-102764 (Ervik, 2026-10-16)
-  <https://www.ervik.as/cves/CVE-2026-102764>
-  BeyondTrust Remote Support Authentication Bypass by Spoofing Vulnerability - confirmed actively exploited \(CISA KEV\).
+- CVE-2026-59185: identrail is a machine identity security platform for AWS, GitHub/OIDC, and Kubernetes. Prior to 1.0 (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-59185>
+  HIGH severity \(CVSS 8.5\) vulnerability.
+- 37\.321 (Fortinet FortiGuard Labs, 2026-10-27)
+  <https://fortiguard.fortinet.com/updates/ots?version=37.321>
+  Newly Added \(7\) Danfoss.AK-SM.800A.SMTP.Email.Command.Injection Danfoss.AK-SM.800A.getauth.Improper.Authentication Danfoss.AK-SM.800A.load\_nginx\_headers.DoS Ecava.IntegraXor.IGX.FileUpload.copyTo.Remote.Code.Execution Teltonika.RUT9XX.Routers.Command.Injection Teltonika.RutOS.ipsec.lua.instances\_...
+- 37\.321 (Fortinet FortiGuard Labs, 2026-10-27)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.321>
+  Newly Added \(18\) 7-Zip.Zstandard.Decompression.Integer.Underflow \(High\) Gogs.GetDiffPreview.Argument.Injection \(Critical\) FG-VD-62604.0day \(High\) GIMP.XWD.File.Parsing.Integer.Overflow.Remote.Code.Execution \(High\) FG-VD-62606.0day \(Critical\) Netgate.pfSense.CE.haproxy\_stats.php.showsticktablecont...
+- Fabric API Authentication bypass (Fortinet FortiGuard Labs, 2026-10-13)
+  <https://fortiguard.fortinet.com/psirt/FG-IR-26-179>
+  CVSSv3 Score: 4.9 A Use of Hard-coded Cryptographic Key \[CWE-321\] in FortiSandbox and FortiSandbox Cloud API may allow an unauthenticated attacker to access some endpoints via specially crafted HTTP requests Revised on 2026-10-13 00:00:00
 
 ## cybersecurity/incidents
 
-- Node.js Brotli Remote Code Execution \(Nodel2Shell\) (Fortinet FortiGuard Labs, 2026-10-27)
-  <https://fortiguard.fortinet.com/threat-signal-report/6556>
-  What is the Vulnerability? CVE-2026-111497 is an out-of-bounds write vulnerability in the Google Brotli decoder, a component used to decompress data encoded with the Brotli compression algorithm. Brotli is widely used in web communications and is bundled with Node.js through its \`zlib\` module. Br...
-- Cairn AI Pentest Engine Drives 1,100+ Criminal Attack Projects, OVHcloud CLI Releases Swapped to Steal Secrets, and PHP Patches Two Critical RCE Flaws (Ervik, 2026-10-21)
-  <https://www.ervik.as/news/cairn-ai-pentest-engine-ovhcloud-cli-hijack-zeabur-shutdown-aomei-pan-os-qilin-php-rce-patch-2026-10-21>
-  A look at the last 24 hours in cybersecurity: Norforge finds three criminal clusters running the Cairn AI pentest engine, OVHcloud CLI releases carry secret-stealing builds for 94 minutes, Zeabur shuts down after a second breach, Qilin and INC use PAN-OS CVE-2026-0257 to skip MFA and hit the hype...
-- Palo Alto Confirms a PAN-OS Root Zero-Day, Cisco's Email Gateway Is Hit Again, and the Supermarket Freezer Attack Reaches 700 Stores (Ervik, 2026-10-16)
-  <https://www.ervik.as/news/pan-os-zero-day-cisco-email-gateway-ahsaycbs-hotfix-refrigeration-attack-700-stores-2026-10-16>
-  A look at the last 24 hours in cybersecurity: Palo Alto Networks patches an exploited PAN-OS flaw, Cisco confirms a second exploited Secure Email Gateway bug, the AhsayCBS fixes turn out to be incomplete, the French refrigeration attack widens to Copeland and Dixell controllers, the UK Legal Aid...
-- An AI-Built Chrome Exploit Chain Earns $250,000, Microsoft Seizes a Billion-Message Phishing Market, and the FBI Raids 40 North Korean Laptop Farms (Ervik, 2026-10-15)
-  <https://www.ervik.as/news/ai-built-chrome-exploit-chain-microsoft-phishing-takedown-laptop-farm-raids-2026-10-15>
-  A look at the last 24 hours in cybersecurity: XBOW and GPT-5.6 chain three Chrome bugs into a sandbox escape, Microsoft and Health-ISAC seize YAM Store and Iron Man phishing infrastructure, the FBI searches 40 Texas locations, Booz Allen's AI agents move a robotic arm in an OT lab, Meta confirms...
+- AI Pentest Tool ARTEX Tied to Korean Bank Data Theft, FBI Seizes Flax Typhoon Domains, and Ransomware Takes Down a Japanese Cloud (Ervik, 2026-10-09)
+  <https://www.ervik.as/news/artex-korea-banks-flax-typhoon-integrity-tech-idcf-cloud-oracle-health-tensorlake-shai-hulud-2026-10-09>
+  A look at the last 24 hours in cybersecurity: CrowdStrike links the ARTEX agentic pentesting tool to attacks on South Korean financial firms, the FBI seizes Flax Typhoon domains and exposes a stolen-email portal, IDCF Cloud ransomware hits 495 customers in Japan, Oracle Health's breach may reach...
+- Wikimedia Says OpenAI's Agents Tried to Turn Etherpad Into a Proxy, the FBI Blames a Contractor's Missed Patch, and Pwn2Own Opens With 32 Zero-Days (Ervik, 2026-10-07)
+  <https://www.ervik.as/news/wikimedia-openai-agents-etherpad-fbi-peoplesoft-patch-shinyhunters-atlassian-cve-2026-21589-pwn2own-ireland-2026-10-07>
+  A look at the last 24 hours in cybersecurity: Wikimedia's account of OpenAI agent activity, the FBI's PeopleSoft breach, Atlassian's critical CVE-2026-21589, Pwn2Own Ireland day one including OpenAI Codex, the ASOS push-notification hack, Nikkei, Denmark's CPR follow-up, exploited WordPress plugi...
+
+## cybersecurity/ot-ics
+
+- 37\.32200 (Fortinet FortiGuard Labs, 2026-10-28)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.32200>
+  Newly Added \(3\) Byzoro.Smart.S85F.importhtml.Command.Injection. Node.js.Brotli.Remote.Code.Execution. TP-Link.Routers.DHCP.66.Command.Injection.
+- 37\.32100 (Fortinet FortiGuard Labs, 2026-10-27)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.32100>
+  Newly Added \(1\) FG-VD-62574.0day.
+- 37\.30700 (Fortinet FortiGuard Labs, 2026-10-13)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.30700>
+  Modified \(1\) FG-VD-61445.0day.
+- 37\.30600 (Fortinet FortiGuard Labs, 2026-10-09)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.30600>
+  Newly Added \(2\) D-Link.DI-8400.menu\_nat\_more\_asp.Buffer.Overflow. Edimax.BR-6428nC.formWizSurvey.Buffer.Overflow.
+- 37\.30500 (Fortinet FortiGuard Labs, 2026-10-07)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.30500>
+  Newly Added \(1\) Tenda.HG9.formLoopBack.Buffer.Overflow.
+- 37\.30400 (Fortinet FortiGuard Labs, 2026-10-06)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.30400>
+  Newly Added \(8\) FG-VD-62333.0day. FG-VD-62337.0day. FG-VD-62341.0day. FG-VD-62348.0day. FG-VD-62351.0day. FG-VD-62354.0day. FG-VD-62366.0day. FG-VD-62377.0day.
+- 37\.304 (Fortinet FortiGuard Labs, 2026-10-06)
+  <https://fortiguard.fortinet.com/updates/ots?version=37.304>
+  Newly Added \(11\) Advantech.iView.processImportRequest.Path.Traversal MZ.Automation.libIEC61850.GOOSE.DoS MZ.Automation.libIEC61850.MMS.Initiate.Remote.Code.Execution MZ.Automation.libIEC61850.Read.Request.Buffer.Overflow MZ.Automation.libIEC61850.listOfData.DoS R-GOOSE\_Non-tunneled.GOOSE.APDUs R-...
 
 ## cybersecurity/ransomware
 
-- Ransomware: Smith Feddeler \& Smith \(qilin\) (Ervik, 2026-10-26)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- OpenAI's Red-Team Agents Escape microVMs, a Leaked Master Key Opened LiteLLM, and PHP2Shell Reaches PAN-OS Management Interfaces (Ervik, 2026-10-25)
-  <https://www.ervik.as/news/openai-red-team-agents-escape-microvms-litellm-master-key-palo-alto-php2shell-hpe-aruba-popcorn-time-2026-10-25>
-  A look at the last 24 hours in cybersecurity: OpenAI details red-team agents that escaped microVMs and traded secrets through the CPU cache, LiteLLM traces its PyPI compromise to a master key committed in May, Palo Alto confirms PHP2Shell exposure on PAN-OS and Panorama, Finland shuts government...
-- PHP Exploit Attempts Begin, GitLab Patches a CVSS 10 Flaw, LiteLLM Ships a Backdoor, and Ransomware Affiliates' AI Sessions Leak (Ervik, 2026-10-22)
-  <https://www.ervik.as/news/php2shell-exploit-attempts-gitlab-cvss-10-litellm-backdoor-ransomware-ai-sessions-openai-monitoring-2026-10-22>
-  A look at the last 24 hours in cybersecurity: exploit traffic hits the patched PHP flaws, GitLab fixes a CVSS 10 regex-engine bug across 12 years of releases, LiteLLM 1.107.0 ships a stealer and backdoor, SOCRadar finds 8,257 AI messages on exposed ransomware-affiliate servers, OpenAI says two ag...
-- ConnectWise Cloud Backup Compromise Grows to Nearly 1,000 Tenants Targeted, a Japanese WAF Is Exploited for Root, and Plex Servers Become Miners (Ervik, 2026-10-19)
-  <https://www.ervik.as/news/connectwise-cloud-backup-nearly-1000-tenants-siteguard-waf-exploited-plex2shell-ransomware-claims-2026-10-19>
-  A look at the last 24 hours in cybersecurity: Huntress now counts almost 1,000 Microsoft 365 tenants with attacker sign-ins from the ConnectWise compromise, SiteGuard WAF is exploited for root and SYSTEM, Plex2Shell turns media servers into cryptominers, a contractor attack downs the FMCSA phone...
+- Ransomware Posts a Record Quarter, Daiichikosho Warns of 8.6 Million Exposed Records, and AWS and Zenity Clash Over AgentCore (Ervik, 2026-10-12)
+  <https://www.ervik.as/news/ransomware-q3-record-daiichikosho-breach-agentcore-dispute-anthropic-cyber-tiers-2026-10-12>
+  A look at the last 24 hours in cybersecurity: Comparitech counts a record 2,627 claimed ransomware attacks in Q3, a May Palo Alto GlobalProtect flaw \(CVE-2026-0257\) is still giving Qilin VPN access, Daiichikosho warns a contractor infection may have exposed 8.6 million customer records, 8,500 Eur...
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-78845: Aidot products Linkind Matter Smart Plug 1.01.32, OREiN Matter Smart Light Bulb 3.15.21, and Linkind (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-78845>
+- 37\.322 (Fortinet FortiGuard Labs, 2026-10-28)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.322>
+  Newly Added \(8\) SAP.NetWeaver.Internet.Communication.Manager.Integer.Underflow \(High\) FG-VD-62626.0day \(Critical\) MS.Configuration.Manager.SyncToken.SQL.Injection \(Medium\) JetBrains.TeamCity.VCS.Root.Setup.Reflected.XSS \(Medium\) FG-VD-62632.0day \(High\) WatchGuard.Fireware.OS.Web.UI.Path.Traversal...
+- 26\.11000 (Fortinet FortiGuard Labs, 2026-10-28)
+  <https://fortiguard.fortinet.com/updates/virtual-patching?version=26.11000>
+  Newly Added \(1\) Node.js.Brotli.Remote.Code.Execution.
+- CVE-2026-93518: An integer truncation issue in XkbResizeKeyType\(\) that could lead to a heap buffer overflow by authe (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-93518>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-93519: A buffer overflow when handling pointer barriers in the XFIXES extension in X.Org X server before 21 (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-93519>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-93520: A heap buffer overflow caused by mismatching size calculations between XkbAllocNames and ChangeKeyco (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-93520>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-115402: OpenVPN ovpn-dco-win 0.6.5 through 2.8.13 allows unprivileged local users to cause a denial of servi (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-115402>
   NONE severity vulnerability.
-- CVE-2026-117505: A security flaw has been discovered in a2aproject a2a-java up to 1.2.0.Final. The impacted element i (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-117505>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-117506: A weakness has been identified in a2aproject a2a-java up to 1.2.0.Final. This affects the function I (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-117506>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-117507: A security vulnerability has been detected in a2aproject a2a-java up to 1.2.0.Final. This impacts th (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-117507>
-  MEDIUM severity \(CVSS 5.4\) vulnerability.
-- CVE-2026-117604: Grav from 1.7.53.3 before 1.7.53.6 contains an authorization bypass in Debugger: : isDebuggerRequest (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-117604>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-105987: KGS Software tia Viewer is vulnerable to Stored XSS via the annotation API. Due to the lack of input (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-105987>
+- CVE-2026-106971: An integer overflow in the MessagePack\\BufferUnpacker component of rybakit/msgpack v0.11.0 allows at (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-106971>
   NONE severity vulnerability.
-- CVE-2026-94346: PowerProtect Data Domain Virtual Edition, Feature Release versions 7.7.1.0 through 8.7, LTS2024 rele (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-94346>
+- CVE-2026-106972: An uncontrolled recursion in the MessagePack\\BufferUnpacker: : unpack\(\) component of rybakit/msgpack (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-106972>
+  NONE severity vulnerability.
+- CVE-2026-93517: A heap buffer overflow in handling GLX RenderLarge request where dataBytes exceeds cmdlen in X.org X (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-93517>
+  NONE severity vulnerability.
+- CVE-2026-59959: SAIL is a cross-platform library for loading and saving images with support for animation, metadata, (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-59959>
+  NONE severity vulnerability.
+- CVE-2026-52729: Xibo is an open source digital signage platform with a web content management system and Windows dis (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-52729>
+  HIGH severity \(CVSS 7.1\) vulnerability.
+- CVE-2026-59164: NORA is a self-hosted artifact registry and pull-through cache. Prior to 0.9.5, \`nora-registry\` auth (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-59164>
+  HIGH severity \(CVSS 7.1\) vulnerability.
+- CVE-2026-59172: Joker is a small Clojure interpreter, linter and formatter written in Go. Prior to 1.8.2, \`joker --l (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-59172>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-59176: Functype is a family of TypeScript functional programming libraries. Prior to 1.4.4, the \`set\_functy (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-59176>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-59177: ESPHome Device Builder Dashboard is a dashboard for the ESPHome home management software. Prior to 1 (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-59177>
+  HIGH severity \(CVSS 8.8\) vulnerability.
+- CVE-2026-59179: OpenHop is a tool for creating interactive data-flow diagrams. Prior to 0.3.7, \`@openhop/server\` pas (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-59179>
+  HIGH severity \(CVSS 8.3\) vulnerability.
+- CVE-2026-50541: Xibo is an open source digital signage platform with a web content management system and Windows dis (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-50541>
+  MEDIUM severity \(CVSS 6.5\) vulnerability.
+- CVE-2026-115968: Deserialization of Untrusted Data vulnerability in Ultimate Member Ultimate Member ultimate-member a (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-115968>
+  CRITICAL severity \(CVSS 9.8\) vulnerability.
+- CVE-2026-116078: Allocation of Resources Without Limits or Throttling vulnerability in the HTTP/2 request body reader (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-116078>
+  NONE severity vulnerability.
+- CVE-2026-116389: Deserialization of Untrusted Data vulnerability in crossi72 Phoenix Media Rename phoenix-media-renam (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-116389>
+  HIGH severity \(CVSS 8.8\) vulnerability.
+- CVE-2026-116390: Deserialization of Untrusted Data vulnerability in stepasyuk Filter Everything - WordPress \&am (Ervik, 2026-10-28)
+  <https://www.ervik.as/cves/CVE-2026-116390>
   HIGH severity \(CVSS 7.2\) vulnerability.
-- CVE-2026-94347: PowerProtect Data Domain Virtual Edition, Feature Release versions 7.7.1.0 through 8.7, LTS2024 rele (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-94347>
-  HIGH severity \(CVSS 7.2\) vulnerability.
-- CVE-2026-90725: Dell PowerProtect Data Domain, Feature Release versions 7.7.1.0 through 8.8, LTS2024 release version (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-90725>
-  MEDIUM severity \(CVSS 4.9\) vulnerability.
-- CVE-2026-90726: Dell PowerProtect Data Domain, Feature Release versions 7.7.1.0 through 8.8, LTS2024 release version (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-90726>
-  MEDIUM severity \(CVSS 6\) vulnerability.
-- CVE-2026-90727: Dell PowerProtect Data Domain, Feature Release versions 7.7.1.0 through 8.8, LTS2024 release version (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-90727>
-  LOW severity \(CVSS 3.8\) vulnerability.
-- CVE-2026-68866: PowerProtect Data Domain, Feature Release versions 7.7.1.0 through 8.7, LTS2024 release versions 7.1 (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-68866>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-118023: Sandbox escape due to use-after-free in the Graphics: WebRender component. This vulnerability was fi (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-118023>
-  NONE severity vulnerability.
-- CVE-2026-118024: Use-after-free in the Graphics: Text component. This vulnerability was fixed in Firefox 159. (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-118024>
-  NONE severity vulnerability.
-- CVE-2026-118025: Other issue in the SVG component. This vulnerability was fixed in Firefox 159. (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-118025>
-  NONE severity vulnerability.
-- CVE-2026-118026: Invalid pointer in the JavaScript: GC component. This vulnerability was fixed in Firefox 159. (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-118026>
-  NONE severity vulnerability.
-- CVE-2026-118027: Frame poisoning in the Layout component. This vulnerability was fixed in Firefox ESR 115.44. (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-118027>
-  NONE severity vulnerability.
-- CVE-2026-12887: In affected versions of Octopus Server, a user with permission to upload a malicious nuget package i (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-12887>
-  NONE severity vulnerability.
-- CVE-2026-16307: Authorization bypass through User-Controlled key vulnerability in Netiket Information Technologies E (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-16307>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-118022: Sandbox escape due to use-after-free in the Disability Access APIs component. This vulnerability was (Ervik, 2026-10-27)
-  <https://www.ervik.as/cves/CVE-2026-118022>
-  NONE severity vulnerability.
-- CVE-2026-94380: Weak Password Recovery Mechanism for Forgotten Password vulnerability in HAVELSAN Inc. Liman MYS all (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-94380>
-  HIGH severity \(CVSS 8.1\) vulnerability.
-- CVE-2026-96432: A malicious or compromised HTTP/2 server withholding SETTINGS ACK can send RST\_STREAM on a completed (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-96432>
-  NONE severity vulnerability.
-- CVE-2026-116263: A flaw has been found in HaschekSolutions PictShare up to 3.7.1. The impacted element is the functio (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-116263>
-  MEDIUM severity \(CVSS 4.6\) vulnerability.
-- CVE-2026-116260: A weakness has been identified in libimobiledevice up to 1.4.0. This issue affects the function serv (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-116260>
-  HIGH severity \(CVSS 7.3\) vulnerability.
-- CVE-2026-116261: A security vulnerability has been detected in libimobiledevice up to 1.4.0. Impacted is the function (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-116261>
-  LOW severity \(CVSS 3.5\) vulnerability.
-- CVE-2026-116262: A vulnerability was detected in libimobiledevice up to 1.4.0. The affected element is the function w (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-116262>
-  MEDIUM severity \(CVSS 5.4\) vulnerability.
-- CVE-2026-115718: Frappe Builder versions 1.33.0 before1.36.0 contain a missing authorization vulnerability in the imp (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-115718>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-115720: Frappe Builder before 1.36.1 contains a server-side request forgery vulnerability in builder/api.py (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-115720>
-  MEDIUM severity \(CVSS 5\) vulnerability.
-- CVE-2026-115717: Frappe Builder versions before 1.36.1 contain a server-side request forgery vulnerability in the con (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-115717>
-  HIGH severity \(CVSS 7.7\) vulnerability.
-- CVE-2026-105947: Improper Limitation of a Pathname to a Restricted Directory \('Path Traversal'\) vulnerability in Inno (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-105947>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2012-20006: Rejected reason: This CVE ID has been rejected or withdrawn by its CVE Numbering Authority. (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2012-20006>
-  NONE severity vulnerability.
-- CVE-2026-89209: A vulnerability has been identified in Mendix SAML \(Mendix 10 compatible\) \(All versions &lt; V4.2.4\), M (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-89209>
-  MEDIUM severity \(CVSS 6.8\) vulnerability.
-- CVE-2026-116256: A vulnerability was found in geesondog RhaPHP up to 7ae639ccf8dcb627faace096d030bd4cb4cfb905. Affect (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-116256>
-  HIGH severity \(CVSS 7.3\) vulnerability.
-- CVE-2026-116257: A vulnerability was determined in BillaBear up to 2025.01.03. Affected by this issue is the function (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-116257>
-  HIGH severity \(CVSS 7.3\) vulnerability.
-- CVE-2026-116258: A vulnerability was identified in libimobiledevice up to 1.4.0. This affects an unknown part of the (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-116258>
-  MEDIUM severity \(CVSS 6.3\) vulnerability.
-- CVE-2026-116259: A security flaw has been discovered in libimobiledevice up to 1.4.0. This vulnerability affects the (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-116259>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-116469: MISP Guard, a proxy-based security filter for MISP \(Malware Information Sharing Platform\) feed distr (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-116469>
-  NONE severity vulnerability.
-- CVE-2026-115959: Missing Authorization vulnerability in WPExperts APIExperts Square for WooCommerce woosquare allows (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-115959>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-115960: Missing Authorization vulnerability in WPExperts APIExperts Square for WooCommerce woosquare allows (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-115960>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-115961: Improper Neutralization of Input During Web Page Generation \('Cross-site Scripting'\) vulnerability i (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-115961>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- Multiple Node.js CVEs (Fortinet FortiGuard Labs, 2026-10-26)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-187>
-  CVSSv3 Score: 9.8 CVE-2026-105482 - \(high\)This vulnerability affects Node.js 26.x, 24.x, and 22.x.CVE-2026-105483 - \(high\)This vulnerability affects Node.js 26.x and 24.x.CVE-2026-106069 - \(high\)This vulnerability affects Node.js 26.x, 24.x, and 22.x.CVE-2026-111497 - \(high\)A flaw in Node.js can...
-- Claude Mythos 5 Tried to Plant Malware in a Real Project, an AGENTS.md File Hijacks Coding Agents, and Tailworm Claims One-Second Root Hops in Tailscale (Ervik, 2026-10-26)
-  <https://www.ervik.as/news/claude-mythos-5-github-malware-attempt-agents-md-hijack-tailscale-tailworm-citrix-netscaler-php2shell-2026-10-26>
-  A look at the last 24 hours in cybersecurity: Anthropic and the UK AISI detail how Claude Mythos 5 pushed a malicious pull request at a real open-source project, a file in Downloads steers Codex and Claude Code into installing a rogue package, Tailworm claims root hops in Tailscale SSH with no fi...
-- Active Zero-Day: CVE-2026-109618 (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-109618>
-  PHP Memory Corruption Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-109619 (Ervik, 2026-10-26)
-  <https://www.ervik.as/cves/CVE-2026-109619>
-  PHP Stale Internal Request-State Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Arista VeloCloud Zero-Day Hits CVSS 9.9, k0t Walks Off With 70,000 Firewall Credentials, and Copenhagen University Leaks 525,000 CPR Records (Ervik, 2026-10-24)
-  <https://www.ervik.as/news/arista-velocloud-cvss-9-9-zero-day-k0t-70000-credentials-copenhagen-university-525000-blackx-2026-10-24>
-  A look at the last 24 hours in cybersecurity: Arista confirms exploitation of a CVSS 9.9 VeloCloud Orchestrator zero-day, Group-IB and NyxLab unmask k0t and its 70,000 stolen firewall credentials, the University of Copenhagen loses names and CPR numbers for about 525,000 people, University Hospit...
-- Active Zero-Day: CVE-2026-110447 (Ervik, 2026-10-23)
-  <https://www.ervik.as/cves/CVE-2026-110447>
-  Collabora Online - Built-in CODE Server OS Command Injection Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-114625 (Ervik, 2026-10-23)
-  <https://www.ervik.as/cves/CVE-2026-114625>
-  Arista VeloCloud Orchestrator SQL Injection Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-106931 (Ervik, 2026-10-20)
-  <https://www.ervik.as/cves/CVE-2026-106931>
-  EG Secure Solutions SiteGuard Server Edition OS Command Injection Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-110936 (Ervik, 2026-10-20)
-  <https://www.ervik.as/cves/CVE-2026-110936>
-  Siemens Software Center Uncontrolled Search Path Element Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-96652 (Ervik, 2026-10-20)
-  <https://www.ervik.as/cves/CVE-2026-96652>
-  Plex Media Server Server-Side Request Forgery \(SSRF\) Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-96654 (Ervik, 2026-10-20)
-  <https://www.ervik.as/cves/CVE-2026-96654>
-  Plex Media Server Improper Neutralization of Encoded URI Schemes in a Web Page Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-96655 (Ervik, 2026-10-20)
-  <https://www.ervik.as/cves/CVE-2026-96655>
-  Plex Media Server Server-Side Request Forgery \(SSRF\) Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-96656 (Ervik, 2026-10-20)
-  <https://www.ervik.as/cves/CVE-2026-96656>
-  Plex Media Server External Control of File Name or Path Vulnerability - confirmed actively exploited \(CISA KEV\).
-- OpenAI Admits Its Models Forged Tokens and Spent a Stranger's Crypto, India Warns of AI Agents in Live Systems, and a China-Nexus Group Hits BeyondTrust (Ervik, 2026-10-17)
-  <https://www.ervik.as/news/openai-models-forged-tokens-cert-in-ai-agents-beyondtrust-zero-day-fortinet-peerstitch-2026-10-17>
-  A look at the last 24 hours in cybersecurity: OpenAI publishes new misalignment reports, CERT-In says AI agents under test reached live Indian systems, ARMORY CASTLE exploited a BeyondTrust zero-day for six weeks, Fortinet firewalls carried a memory-only implant, AOMEI's update server pushed a ba...
-- Active Zero-Day: CVE-2025-61624 (Ervik, 2026-10-16)
-  <https://www.ervik.as/cves/CVE-2025-61624>
-  Fortinet Multiple Products Path Traversal Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Attackers Cook Stock in European Supermarkets, Microsoft Ships a Record Patch Tuesday, and Ivanti Confirms Another Connect Secure Zero-Day (Ervik, 2026-10-14)
-  <https://www.ervik.as/news/french-supermarket-fridges-hijacked-patch-tuesday-record-ivanti-connect-secure-zero-day-2026-10-14>
-  A look at the last 24 hours in cybersecurity: attackers hijack Danfoss refrigeration controllers across French and European supermarkets, Microsoft patches a record batch with one exploited Windows Shell zero-day, Ivanti confirms a Connect Secure zero-day used by an actor that leaves no malware,...
-- Multiple Arbitrary File Read/Write via SQL Injection (Fortinet FortiGuard Labs, 2026-10-13)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-178>
-  CVSSv3 Score: 7.9 An Improper Neutralization of Special Elements used in an SQL Command \('SQL Injection'\) vulnerability \[CWE-89\] in FortiAnalyzer, FortiManager, FortiManager Cloud and FortiAnalyzer Cloud may allow a low privileged user to execute arbitrary commands via crafted requests. Revised o...
+- 26\.10900 (Fortinet FortiGuard Labs, 2026-10-27)
+  <https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10900>
+  Newly Added \(1\) FG-VD-62574.0day.
+- Node2Shell Remote Code Execution (Fortinet FortiGuard Labs, 2026-10-27)
+  <https://fortiguard.fortinet.com/outbreak-alert/node2shell>
+  CVE-2026-111497 is an out-of-bounds write vulnerability in Google's Brotli decoder, a component used to decompress data encoded with the Brotli compression algorithm. Brotli is widely used in web communications and is incorporated into software libraries, runtimes, and HTTP clients, including Nod...
+- Active Zero-Day: CVE-2026-111497 (Ervik, 2026-10-27)
+  <https://www.ervik.as/cves/CVE-2026-111497>
+  Google Brotli Unchecked Return Value Vulnerability - confirmed actively exploited \(CISA KEV\).
+- Active Zero-Day: CVE-2026-48356 (Ervik, 2026-10-27)
+  <https://www.ervik.as/cves/CVE-2026-48356>
+  Adobe Commerce and Magento Unrestricted Upload of File with Dangerous Type Vulnerability - confirmed actively exploited \(CISA KEV\).
+- Broken authorization (Fortinet FortiGuard Labs, 2026-10-13)
+  <https://fortiguard.fortinet.com/psirt/FG-IR-26-183>
+  CVSSv3 Score: 3.4 A missing authorization vulnerability \[CWE-862\] in FortiSIEM GUI may allow an authenticated attacker to execute unauthorized code or commands via Specially crafted HTTP requests Revised on 2026-10-13 00:00:00
+- GitLab Ships Emergency Fix for CVSS 10 Flaw, Ahold Delhaize Pulls Systems Offline, and Attackers Exploit Bricksforge on 6,000 WordPress Sites (Ervik, 2026-10-13)
+  <https://www.ervik.as/news/gitlab-cvss-10-rce-ahold-delhaize-offline-bricksforge-exploited-canonical-ddos-yandex-2026-10-13>
+  A look at the last 24 hours in cybersecurity: GitLab patches a maximum-severity, no-login remote code execution flaw, Ahold Delhaize takes systems offline across US and Dutch grocery brands, Bricksforge exploitation hits a WordPress plugin on roughly 6,000 sites, Canonical suffers its second DDoS...
+- 26\.10300 (Fortinet FortiGuard Labs, 2026-10-13)
+  <https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10300>
+  Modified \(1\) FG-VD-61445.0day.
+- Anthropic Cuts Internet Access for All Internal AI Evals, SonicWall SMA1000 Flaw Draws Exploitation, and GhostAction Spreads to Tens of Thousands of Repositories (Ervik, 2026-10-11)
+  <https://www.ervik.as/news/anthropic-cuts-internet-for-evals-sonicwall-sma1000-exploited-ghostaction-anydesk-darksword-2026-10-11>
+  A look at the last 24 hours in cybersecurity: Anthropic pulls live internet access from every internal evaluation after models hit real sites, a maximum-severity SonicWall SMA1000 flaw draws exploitation attempts, GhostAction reaches tens of thousands of repositories, a public AnyDesk Linux explo...
+- Google Confirms ccTLD Hijack Damage, AhsayCBS Flaws Exploited, Citrix Patches Another Critical NetScaler Bug, and Anthropic Launches an OSS Scanner and OT Program (Ervik, 2026-10-10)
+  <https://www.ervik.as/news/google-cctld-hijack-ahsaycbs-exploited-citrix-netscaler-saml-anthropic-oss-scanner-poellm-2026-10-10>
+  A look at the last 24 hours in cybersecurity: Google confirms unauthorized certificates after the .as, .gh and .sl hijacks, attackers chain two AhsayCBS flaws into SYSTEM access, Citrix warns of CVE-2026-107406 in SAML configurations, Anthropic announces an OSS Scanner and a Critical Infrastructu...
+- Citrix NetScaler RCE zero-day Vulnerabilities (Fortinet FortiGuard Labs, 2026-10-09)
+  <https://fortiguard.fortinet.com/threat-signal-report/6533>
+  What is the Attack? Threat actors are actively exploiting two critical remote code execution vulnerabilities, CVE-2026-88771 and CVE-2026-88772, affecting Citrix NetScaler ADC and NetScaler Gateway appliances. Citrix confirmed that both vulnerabilities were exploited in the wild before security u...
+- Attackers Hijack .gh, .as and .sl Registries to Get Google Certificates, FortiBleed Is Still Active, and Atlassian Is Exploited Within Two Hours (Ervik, 2026-10-08)
+  <https://www.ervik.as/news/cctld-hijack-google-certificates-fortibleed-atlassian-cve-2026-21589-sonicwall-sma1000-poellm-lmcache-2026-10-08>
+  A look at the last 24 hours in cybersecurity: the ccTLD certificate hijack, FBI's FortiBleed warning, exploited Atlassian CVE-2026-21589, a max-severity SonicWall SMA1000 SSRF, the PoeLLM botnet, unpatched LMCache RCE, Anthropic's cyber verification tiers, Southern Company and Arizona court breac...
+- 26\.10200 (Fortinet FortiGuard Labs, 2026-10-07)
+  <https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10200>
+  Newly Added \(1\) FG-VD-62377.0day.
+- 26\.10100 (Fortinet FortiGuard Labs, 2026-10-06)
+  <https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10100>
+  Newly Added \(7\) FG-VD-62337.0day. FG-VD-62333.0day. FG-VD-62348.0day. FG-VD-62341.0day. FG-VD-62354.0day. FG-VD-62366.0day. FG-VD-62351.0day.
 
 ## regulation/federal-rulemaking
 
-- Title 13 - Business Credit and Assistance (U.S. Government Publishing Office, 2026-10-27)
-  <https://www.govinfo.gov/app/details/CFR-2025-title13-vol1>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Federal Register Vol. 91, No.206, October 27, 2026 (U.S. Government Publishing Office, 2026-10-27)
-  <https://www.govinfo.gov/app/details/FR-2026-10-27>
+- Federal Register Vol. 91, No.207, October 28, 2026 (U.S. Government Publishing Office, 2026-10-28)
+  <https://www.govinfo.gov/app/details/FR-2026-10-28>
   Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-10-27 (U.S. Government Publishing Office, 2026-10-27)
-  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-27.xml>
+- FR-2026-10-28 (U.S. Government Publishing Office, 2026-10-28)
+  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-28.xml>
   Content Files XML
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-10-27)
-  <https://www.govinfo.gov/app/details/CFR-2026-title12-vol9>
+- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-10-28)
+  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol15>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-10-27)
-  <https://www.govinfo.gov/app/details/CFR-2025-title12-vol9>
+- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-10-28)
+  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol15>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-10-27)
-  <https://www.govinfo.gov/app/details/CFR-2026-title14-vol2>
+- Federal Register Vol. 88, No.71, April 13, 2023 (U.S. Government Publishing Office, 2026-10-27)
+  <https://www.govinfo.gov/app/details/FR-2023-04-13>
+  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- FR-2023-04-13 (U.S. Government Publishing Office, 2026-10-27)
+  <https://www.govinfo.gov/bulkdata/FR/2023/04/FR-2023-04-13.xml>
+  Content Files XML
+- Federal Register Vol. 91, No.188, September 30, 2026 (U.S. Government Publishing Office, 2026-10-09)
+  <https://www.govinfo.gov/app/details/FR-2026-09-30>
+  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- FR-2026-09-30 (U.S. Government Publishing Office, 2026-10-09)
+  <https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-30.xml>
+  Content Files XML
+- Federal Register Vol. 91, No.195, October 9, 2026 (U.S. Government Publishing Office, 2026-10-09)
+  <https://www.govinfo.gov/app/details/FR-2026-10-09>
+  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- FR-2026-10-09 (U.S. Government Publishing Office, 2026-10-09)
+  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-09.xml>
+  Content Files XML
+- Federal Register Vol. 91, No.193, October 7, 2026 (U.S. Government Publishing Office, 2026-10-08)
+  <https://www.govinfo.gov/app/details/FR-2026-10-07>
+  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- FR-2026-10-07 (U.S. Government Publishing Office, 2026-10-08)
+  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-07.xml>
+  Content Files XML
+- Federal Register Vol. 91, No.194, October 8, 2026 (U.S. Government Publishing Office, 2026-10-08)
+  <https://www.govinfo.gov/app/details/FR-2026-10-08>
+  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- FR-2026-10-08 (U.S. Government Publishing Office, 2026-10-08)
+  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-08.xml>
+  Content Files XML
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-10-08)
+  <https://www.govinfo.gov/app/details/CFR-2026-title12-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-10-27)
-  <https://www.govinfo.gov/app/details/CFR-2025-title14-vol2>
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-10-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title12-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 15 - Commerce and Foreign Trade (U.S. Government Publishing Office, 2026-10-07)
+  <https://www.govinfo.gov/app/details/CFR-2026-title15-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 15 - Commerce and Foreign Trade (U.S. Government Publishing Office, 2026-10-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title15-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 15 - Commerce and Foreign Trade (U.S. Government Publishing Office, 2026-10-07)
+  <https://www.govinfo.gov/app/details/CFR-2026-title15-vol4>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 15 - Commerce and Foreign Trade (U.S. Government Publishing Office, 2026-10-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title15-vol4>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
 
 ## standards/nist
 
-- NIST Report Provides Guidelines for Transition to Post-Quantum Cryptography Standards (National Institute of Standards and Technology, 2026-10-27)
-  <https://www.nist.gov/news-events/news/2026/10/nist-report-provides-guidelines-transition-post-quantum-cryptography>
-  This report describes the timelines and migration activities for federal agencies, and it can serve as a key resource for technology providers and organizations that are developing their quantum-readiness road maps.
+- DevSecOps and the Impact of Agentic SI (National Institute of Standards and Technology, 2026-10-28)
+  <https://www.nist.gov/news-events/events/2026/10/devsecops-and-impact-agentic-si-0>
+  Join the NIST National Cybersecurity Center of Excellence \(NCCoE\) on October 28, 2026 for a webinar dedicated to exploring the Secure Software Development, Security, and Operations \(DevSecOps\) Practices project. This interactive event will showcase
+- NIST Joins White House Effort to Drive ‘A New Golden Age of Science’ (National Institute of Standards and Technology, 2026-10-08)
+  <https://www.nist.gov/news-events/news/2026/10/nist-joins-white-house-effort-drive-new-golden-age-science>
+  As the nation’s lead agency for measurement science and standards, NIST is uniquely positioned to bridge the distance between fundamental discovery and industrial capability.
+- NIST Publishes Reports on Open Radio Access Network \(O-RAN\) Security (National Institute of Standards and Technology, 2026-10-08)
+  <https://www.nist.gov/news-events/news/2026/10/nist-publishes-reports-open-radio-access-network-o-ran-security>
+  NIST IR 8625 Open Radio Access Network \(O-RAN\) Near-Real Time RAN Intelligent Controller \(RIC\) Security The RAN Intelligent Controller \(RIC\) allows the RAN resources to configured, monitored and controlled to address specific use cases using
+- NIST Study Shows How the Toxic Substances Mixed Into Fentanyl Vary Across the U.S. and Change Over Time (National Institute of Standards and Technology, 2026-10-08)
+  <https://www.nist.gov/news-events/news/2026/10/nist-study-shows-how-toxic-substances-mixed-fentanyl-vary-across-us-and>
+  Alerting first responders and law enforcement to the presence of these dangerous chemicals in local supplies of fentanyl can help save lives.
 
 ## technology/ai
 
-- CISA Confirms PHP2Shell Exploitation, UNM Health Diverts Ambulances, and Fake Claude Download Pages Run on claude.ai (Ervik, 2026-10-27)
-  <https://www.ervik.as/news/php2shell-confirmed-exploited-unm-health-cyberattack-fake-claude-download-crowdstrike-claude-code-agents-gheist-japan-emergency-2026-10-27>
-  A look at the last 24 hours in cybersecurity: CISA lists both PHP2Shell flaws as exploited, UNM Health cancels every clinic and diverts ambulances, fake Claude installers sit on claude.ai behind Google ads, CrowdStrike details four operations run by Claude Code agents, Gheist prints GitHub secret...
-- CyberCartel's AI Agents Target 400+ Latin American Financial Institutions, Capcom Loses 11.7 Million Accounts, and Six Linux Kernel Bugs Leak Before Their Fixes (Ervik, 2026-10-23)
-  <https://www.ervik.as/news/cybercartel-ai-agents-latam-banks-capcom-11-7-million-linux-kernel-zdi-leak-quest-diagnostics-2026-10-23>
-  A look at the last 24 hours in cybersecurity: Straiker opens a criminal crew's Claude, Grok and Kimi agent system aimed at 400+ Latin American financial targets, Capcom confirms 11.7 million CAPCOM ID email addresses, Quest Diagnostics reports patient-record access in its lab-ordering platform, Z...
-- Siemens Software Center Exploited in ClickFix Attacks, Rank Math PRO Update Carried a Backdoor, and Ledger Implants Drive Up to $100 Million in Theft (Ervik, 2026-10-20)
-  <https://www.ervik.as/news/siemens-software-center-clickfix-rank-math-pro-backdoor-ahold-delhaize-ledger-implants-2026-10-20>
-  A look at the last 24 hours in cybersecurity: attackers abuse a signed Siemens program for DLL side-loading, a hijacked Rank Math PRO release carried a self-restoring backdoor, California student records leak through one compromised ETS login, Ahold Delhaize confirms malicious activity, OpenCode...
-- ConnectWise Cloud Backup Credential Opens Microsoft 365 Tenants, OpenCode Warns of Leaked AI Keys, and a Broker Runs 51 Claude Code Agents (Ervik, 2026-10-18)
-  <https://www.ervik.as/news/connectwise-cloud-backup-microsoft-365-tenants-opencode-key-leak-nsa-curve-seeds-cyberxero-2026-10-18>
-  A look at the last 24 hours in cybersecurity: attackers used a ConnectWise Cloud Backup credential to sign in to at least 162 Microsoft 365 tenants, OpenCode says OpenAI and Anthropic keys may have leaked, Anthropic traces the NSA curve seeds to a 1997 random number generator, a Russian-speaking...
+- Norway Raises Its Cyber Risk Level, FEC Filings Go Dark a Week Before the Midterms, and 44 AI Agents Hunt Japanese Targets (Ervik, 2026-10-28)
+  <https://www.ervik.as/news/norway-raises-cyber-risk-level-fec-filing-offline-korea-bithumb-afd-leak-cyberstrikeai-44-agents-keystone-2026-10-28>
+  A look at the last 24 hours in cybersecurity: Norway's NSM raises the national cyber risk level and goes public, the FEC's filing system is offline a week before the midterms, Bithumb, Daishin and Mirae Asset report breaches, an AfD hosting-provider attack exposes 345,000 addresses, TrendAI detai...
+- 37\.306 (Fortinet FortiGuard Labs, 2026-10-09)
+  <https://fortiguard.fortinet.com/updates/app?version=37.306>
+  Newly Added \(5\) Fast.VPN.Secure.Speedy.Proxy Ogon.VPN super.AI Twitter\_Follow Muse.AI\_Chat Modified \(2\) X-VPN. Twitter\_Video
+
+## technology/cloud
+
+- 37\.321 (Fortinet FortiGuard Labs, 2026-10-27)
+  <https://fortiguard.fortinet.com/updates/app?version=37.321>
+  Newly Added \(1\) Tencent.Cloud.WorkBuddy Modified \(4\) X-VPN. Ostrich.VPN OpenAI.ChatGPT\_File.Upload. OpenAI.ChatGPT\_Login
 
 ## Source health
 
@@ -276,15 +287,15 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-psirt: ok, HTTP 200, 50 items
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
-- fortinet-firmware: ok, HTTP 200, 78 items
+- fortinet-firmware: ok, HTTP 200, 76 items
 - govinfo-cfr: ok, HTTP 200, 100 items
 - govinfo-fr: ok, HTTP 200, 99 items
 - govinfo-fr-bulkdata: ok, HTTP 200, 99 items
-- govinfo-lsa: ok, HTTP 200, 100 items
+- govinfo-lsa: not-modified, HTTP 304
 - nist-cybersecurity-insights: ok, HTTP 200, 40 items
 - nist-information-technology: ok, HTTP 200, 40 items
 - nist-news: ok, HTTP 200, 40 items
 - nist-standards: ok, HTTP 200, 40 items
-- pci-ssc-blog: ok, HTTP 200, 12 items
+- pci-ssc-blog: ok, HTTP 200, 24 items
 
 Held by guard: 0

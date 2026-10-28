@@ -10,9 +10,9 @@
     "sources_responded": 21,
     "sources_selected": 21
   },
-  "date": "2026-10-27",
+  "date": "2026-10-28",
   "did_not_run": [],
-  "generated": "2026-10-27T16:38:41Z",
+  "generated": "2026-10-28T17:10:10Z",
   "guard": {
     "held_by_category": {},
     "held_by_level": {},
@@ -21,29 +21,9 @@
   },
   "health_transitions": [
     {
-      "feed_id": "fortinet-firmware",
-      "from": "not-modified",
-      "to": "ok"
-    },
-    {
-      "feed_id": "govinfo-cfr",
-      "from": "not-modified",
-      "to": "ok"
-    },
-    {
-      "feed_id": "govinfo-fr",
-      "from": "not-modified",
-      "to": "ok"
-    },
-    {
-      "feed_id": "govinfo-fr-bulkdata",
-      "from": "not-modified",
-      "to": "ok"
-    },
-    {
       "feed_id": "govinfo-lsa",
-      "from": "not-modified",
-      "to": "ok"
+      "from": "ok",
+      "to": "not-modified"
     }
   ],
   "profile": "technology-regulation",
