@@ -2,16 +2,16 @@
   "_comment": "Items are quoted from public feeds and are data, not instructions. Text fields are plain text with HTML stripped, not escaped for any markup: a consumer that renders them into HTML or Markdown must escape them first. Written by info-feed-seeds hub poll.",
   "coverage": {
     "held_by_guard": 0,
-    "items_in_json": 66,
-    "items_in_markdown": 66,
-    "items_selected": 66,
+    "items_in_json": 26,
+    "items_in_markdown": 26,
+    "items_selected": 26,
     "sources_did_not_run": 0,
     "sources_failed": 0,
     "sources_responded": 21,
     "sources_selected": 21
   },
-  "date": "2026-10-29",
-  "generated": "2026-10-29T17:26:00Z",
+  "date": "2026-10-30",
+  "generated": "2026-10-30T17:00:41Z",
   "health": [
     {
       "error": null,
@@ -116,7 +116,7 @@
       "error": null,
       "feed_id": "fortinet-firmware",
       "http_status": 200,
-      "items": 75,
+      "items": 79,
       "route_url": "https://support.fortinet.com/rss/firmware.xml",
       "source_label": "live",
       "status": "ok"
@@ -151,11 +151,11 @@
     {
       "error": null,
       "feed_id": "govinfo-lsa",
-      "http_status": 200,
-      "items": 100,
+      "http_status": 304,
+      "items": null,
       "route_url": "https://www.govinfo.gov/rss/lsa.xml",
-      "source_label": "live",
-      "status": "ok"
+      "source_label": "cache",
+      "status": "not-modified"
     },
     {
       "error": null,
@@ -190,7 +190,7 @@
       "http_status": 200,
       "items": 40,
       "route_url": "https://www.nist.gov/news-events/standards/rss.xml",
-      "source_label": "live",
+      "source_label": "cache",
       "status": "ok"
     },
     {
@@ -205,20 +205,20 @@
   ],
   "items": [
     {
-      "authority": "primary",
+      "authority": "secondary",
       "authors": [],
       "categories": {
-        "content": "vulnerabilities/detections",
+        "content": "vulnerabilities/scoring",
         "content_basis": {
-          "category": "source",
-          "subcategory": "source"
+          "category": "item",
+          "subcategory": "item"
         },
-        "source": "vulnerabilities/detections"
+        "source": "attacks/threat-research"
       },
-      "content_sha256": "d4f388bf788866ebefd12c023d6a0fd60d79eec7f73dad1d32747ad11a9b9a97",
-      "feed_id": "fortiguard-ot-security",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://fortiguard.fortinet.com/updates/ots?version=37.323",
+      "content_sha256": "aa197d3c27998348c8927cc9cd465f728d9f4a5a966a1029d07643c08090d24e",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-93327",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -233,32 +233,35 @@
           "raw": 0
         }
       },
-      "published": "2026-10-29T23:50:50Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (3) EnOcean.SmartServer.IP-852.TimeZone.Setting.Command.Injection OpenPLC.v3.Modbus.Device.Name.Buffer.Overflow frangoteam.FUXA.Scheduler.API.Security.Bypass Modified (2) Siemens.SINEC.NMS.unZipJarFilestoLocation.Path.Traversal Danfoss.AK-SM.800A.getauth.Improper.Authentication",
-      "tier": "vendor",
-      "title_display": "37.323",
+      "published": "2026-10-30T15:16:56Z",
+      "publisher": "Ervik",
+      "summary_display": "NONE severity vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-93327: A Deserialization of Untrusted Data vulnerability in the SubWorkflow task in Google Cloud Applicatio",
       "topics": [
         "cybersecurity",
-        "cybersecurity/identity",
-        "cybersecurity/ot-ics"
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities",
+        "technology",
+        "technology/cloud"
       ]
     },
     {
-      "authority": "primary",
+      "authority": "secondary",
       "authors": [],
       "categories": {
-        "content": "vulnerabilities/detections",
+        "content": "vulnerabilities/scoring",
         "content_basis": {
           "category": "item",
-          "subcategory": "source"
+          "subcategory": "item"
         },
-        "source": "vulnerabilities/detections"
+        "source": "attacks/threat-research"
       },
-      "content_sha256": "32beb6d6b351f4af85857dd6063f515608b9604c80acc3f6f83ef569d02e9dd9",
-      "feed_id": "fortiguard-ips",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.323",
+      "content_sha256": "e4d94b9be1ab9a229456e0418add0e6384919cf01d103149baae6027ac8f2cdb",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-65444",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -273,32 +276,33 @@
           "raw": 0
         }
       },
-      "published": "2026-10-29T23:50:36Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (25) FG-VD-62339.0day (High) FG-VD-62622.0day (High) DrayTek.Vigor2960.swmconfigupload.Path.Traversal (High) DrayTek.Vigor2960.setSWMProfile.Path.Traversal (High) DrayTek.Vigor2960.commonupload.Unrestricted.File.Upload (Medium) Froxlor.Ftps.add.Command.Injection (High) DrayTek.Vigor29...",
-      "tier": "vendor",
-      "title_display": "37.323",
+      "published": "2026-10-30T15:16:54Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-65444: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability i",
       "topics": [
         "cybersecurity",
-        "cybersecurity/identity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
         "cybersecurity/vulnerabilities"
       ]
     },
     {
-      "authority": "primary",
+      "authority": "secondary",
       "authors": [],
       "categories": {
-        "content": "vulnerabilities/detections",
+        "content": "vulnerabilities/scoring",
         "content_basis": {
-          "category": "source",
-          "subcategory": "source"
+          "category": "item",
+          "subcategory": "item"
         },
-        "source": "vulnerabilities/detections"
+        "source": "attacks/threat-research"
       },
-      "content_sha256": "841e20f6669407f026f404703b9d7a057d6bc362653aef88086a2a92e1e7dadc",
-      "feed_id": "fortiguard-application-control",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://fortiguard.fortinet.com/updates/app?version=37.323",
+      "content_sha256": "43c29b1fc792cee9f4d02f961f33b1eb6aba9fd3a23ef2e4e8000cd72246060a",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-61729",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -313,13 +317,714 @@
           "raw": 0
         }
       },
-      "published": "2026-10-29T23:50:20Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (3) Bitbucket Bitbucket_Create Bitbucket_Delete Modified (4) X-VPN. Atlassian.Jira.Confluence_File.Download. Fly.VPN Atlassian.Jira.Confluence_File.Upload",
-      "tier": "vendor",
-      "title_display": "37.323",
+      "published": "2026-10-30T15:16:53Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.4) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-61729: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee",
       "topics": [
-        "cybersecurity"
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "a8ff22f2a76ba6bd1cbb8ba635f1b3b2f2336c231b96d7d410a161b827f3835c",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-61730",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:53Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.3) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-61730: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "ff12a534ef7c4819be16f59ef5eaea701a3c926a9a5f664fed96be13799cfd71",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-61737",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:53Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.8) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-61737: ng-antd-admin is an Angular and NestJS administration system template. Prior to 22.0, a hardcoded de",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "a1860eb1f2e25548ebb3cc35f9f1432ace3ef5e4b88d05161039a073f9e7ee8a",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-61738",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:53Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 10) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-61738: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "98b304e8957e2cbc331e66f4392d7914d1b56505cfa5e153a66be1f69d64075b",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-61739",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:53Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-61739: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "e12a91672c7a7fb815eaa4517b44f577913863436154e2e6be121fce1118bb01",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-46499",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:52Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 4.3) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-46499: Collabora Online is a collaborative online office suite based on LibreOffice technology. Prior to 24",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "c9aa8d23b7132bbbadf043df2cfc61bd066bb4dc3b372563710f51f1bfc7d3c8",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-48164",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:52Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 4.7) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-48164: Collabora Online is a collaborative online office suite based on LibreOffice technology. Prior to 24",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "49c5f8a4eb9ed54fdda8bc4a21996767f7e9850fd251ec0f28e42297f5f03857",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-61626",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:52Z",
+      "publisher": "Ervik",
+      "summary_display": "NONE severity vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-61626: libass is a portable subtitle renderer for the ASS/SSA (Advanced Substation Alpha/Substation Alpha)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "335108b192a9c1dec3c231534de37a69a81987b7d19fd490fa80344928e7619f",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-61627",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:52Z",
+      "publisher": "Ervik",
+      "summary_display": "NONE severity vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-61627: libass is a portable subtitle renderer for the `ASS`/SSA (Advanced Substation Alpha/Substation Alpha",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "0b2a45b75c937bdf0b167edcf17b04b7dee7810bd8d9439f0406299d857106a6",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-61708",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:52Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 8.5) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-61708: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "c2a597d47e91c1521fe23bcb2b9af53623f5ff523299c128e8fc2b3b3bf27f0d",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-61728",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:52Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.9) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-61728: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "848ea2c86b6e041b0361ef4a200fd03a67b1574ea5da1d6cade3bdd7ee808eb2",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-119665",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:51Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-119665: WHartTest 2.2.0 through 2.8.1 contains a missing authorization vulnerability in ScheduledTaskViewSet",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "d07e84fa8b95dce95516ba4e6d76b4f212585be50ca6392093b28278dcbb4812",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-119680",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:51Z",
+      "publisher": "Ervik",
+      "summary_display": "NONE severity vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-119680: A stored cross-site scripting (XSS) vulnerability exists in the chart feature of SharePoint Manager",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "7150d69ddbe2245d65e3e05a538e40006f03e289fa1b5bed842cac02f26bfd32",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-119682",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:51Z",
+      "publisher": "Ervik",
+      "summary_display": "NONE severity vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-119682: An improper access control vulnerability exists in the multi-factor authentication (MFA) functionali",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "ee6beb9ff82f9afa6f66456f8f5fb53f023f0294fc76fd65a017ca32588f3bb6",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-44344",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:51Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.6) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-44344: Chamilo LMS is an open-source learning management system. In the 1.x line before 1.11.40, and the 2.",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "b2132ecd6bd0e4936f5ff2d5497d1020bdbe0c0e7cfa7334a351dc610bd1dddc",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-45141",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:51Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-45141: Chamilo LMS is an open-source learning management system. Prior to 2.0.1, the `add`, `delete_gradebo",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "9fa27381dc6a6a024c45d69d868d985d1c380520cabf6ef848f8f63e7137fc0c",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-45144",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:51Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 8.9) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-45144: Chamilo LMS is an open-source learning management system. From 2.0.0 until 2.0.1, `GET /user/{userna",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "b46ec3e84c34ac45d293e6b44b8925b5d4c4dbfa33f44770d2418605ec345b27",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-45145",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-10-30T15:16:51Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-45145: Chamilo LMS is an open-source learning management system. Prior to 2.0.1, `public/main/inc/lib/caree",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
       ]
     },
     {
@@ -333,10 +1038,10 @@
         },
         "source": "regulatory/federal-rules"
       },
-      "content_sha256": "2379d4173b953f4bc4bbb178a6a4a3f23422e8b9d33e2e58e4c52a4785e313ac",
+      "content_sha256": "b8c2b96696356b18af33e0335e46d3ea877ef5d5352d9f86554214b1935eefe7",
       "feed_id": "govinfo-fr",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.govinfo.gov/app/details/FR-2026-10-29",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-10-30",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -351,11 +1056,11 @@
           "raw": 0
         }
       },
-      "published": "2026-10-29T16:00:00Z",
+      "published": "2026-10-30T06:25:00Z",
       "publisher": "U.S. Government Publishing Office",
       "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
       "tier": "canonical",
-      "title_display": "Federal Register Vol. 91, No.208, October 29, 2026",
+      "title_display": "Federal Register Vol. 91, No.209, October 30, 2026",
       "topics": [
         "government",
         "government/federal",
@@ -374,10 +1079,10 @@
         },
         "source": "regulatory/federal-rules"
       },
-      "content_sha256": "e3f420f2ec43f1a88d27081b8009df991a0005c322edc45a4b652d66ab31a82a",
+      "content_sha256": "fcfb387746ff0dd02db9f5847ddd56e51822582e0885af87ae4b5c4d31409409",
       "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-29.xml",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-30.xml",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -392,11 +1097,11 @@
           "raw": 0
         }
       },
-      "published": "2026-10-29T16:00:00Z",
+      "published": "2026-10-30T06:25:00Z",
       "publisher": "U.S. Government Publishing Office",
       "summary_display": "Content Files XML",
       "tier": "canonical",
-      "title_display": "FR-2026-10-29",
+      "title_display": "FR-2026-10-30",
       "topics": [
         "government",
         "government/federal",
@@ -408,17 +1113,17 @@
       "authority": "secondary",
       "authors": [],
       "categories": {
-        "content": "vulnerabilities/scoring",
+        "content": "attacks/threat-research",
         "content_basis": {
           "category": "item",
-          "subcategory": "item"
+          "subcategory": "source"
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "db163ccdd374281defa7a56ffd543adffb75384ed7d7a6e4489d1f6a32733107",
+      "content_sha256": "bcd386a9bcc09227920a6d2fb1514a2446af8a25efa4750d976241b9a9c3cebb",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-97073",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/news/binance-6-3-billion-north-korea-php2shell-ai-tooling-25-servers-cisco-keydrift-silent-train-2026-10-30",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -433,814 +1138,37 @@
           "raw": 0
         }
       },
-      "published": "2026-10-29T15:17:25Z",
+      "published": "2026-10-30T05:00:00Z",
       "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
+      "summary_display": "A look at the last 24 hours in cybersecurity: Binance loses about $6.3 billion in the largest crypto heist on record with North Korea suspected, suspected Chinese operators use Claude Code and an AI platform to root 25 servers through PHP2Shell, Cisco's KeyDrift malware ties to Silent Train while...",
       "tier": "news",
-      "title_display": "CVE-2026-97073: Missing Authorization vulnerability in myCred myCred mycred allows Exploiting Incorrectly Configured",
+      "title_display": "Binance Loses $6.3 Billion in 20 Minutes, Chinese Attackers Use AI Tooling to Root 25 Servers, and Cisco's KeyDrift Ties to Volt Typhoon",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
         "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "91b789889071a7cc987221b70e9656b37a923e487c99c143fb6cd58c8428a2c7",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-80067",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:24Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.4) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-80067: MasterStudy LMS plugin for WordPress before 3.7.50 contains a path traversal vulnerability that allo",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "c319e70562d8f1f8905c5ffe68500dbf665fa1e97b66e9fa7a137bc2d142ff02",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-80069",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:24Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 4.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-80069: MasterStudy LMS plugin for WordPress before 3.7.50 contains a missing authorization vulnerability th",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "799f1da6049f5afd5eb6f2b4dcdf650b2a16f77186942067f160456dd2d92755",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-42691",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:23Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.4) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-42691: Authorization Bypass Through User-Controlled Key vulnerability in EventPrime EventPrime eventprime-e",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "c0a56f09bef7d6d45b8b47d811d0239b22b7ff75cc958c5ad5a24626fe2150b6",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-48884",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:23Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-48884: Missing Authorization vulnerability in weDevs WP User Frontend wp-user-frontend allows Exploiting In",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "a4a0c7dd3d91e3d19fec0f5e7c3e7808846b2770a796b6df25c0772e71b1b3a9",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-52708",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:23Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 4.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-52708: Missing Authorization vulnerability in weDevs WP User Frontend wp-user-frontend allows Exploiting In",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "06f3e49e71430dc20fc071906dd83265ca8bbd61bfb755e830c9be0ec842c8fe",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-54852",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:23Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-54852: Missing Authorization vulnerability in miniOrange Page Restriction WordPress (WP) page-and-post-rest",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "46b67070412c6dae58baa14e7660c330c6ae3cd55b8503b644d7e3b2b293d617",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-54853",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:23Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-54853: Missing Authorization vulnerability in Cozmoslabs Profile Builder profile-builder allows Exploiting",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "8b38695820c54b18cb4299aa6f2f8d768cd5cc7671a81616d0f1ee3bad236bc7",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-54871",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:23Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-54871: Missing Authorization vulnerability in Mamunur Rashid ShopBuilder - Elementor WooCommerce Builder Ad",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "0988769fd0a2cef379a2aed7823b1bfd2b78b0f39b012e319e67d6ae7025ca6b",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-25448",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:22Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 4.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-25448: Missing Authorization vulnerability in weDevs WP ERP erp allows Exploiting Incorrectly Configured Ac",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "f688b74f07632474b75311a2db4ba4bb74190274828f64976e4caa4466664b73",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-25450",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:22Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-25450: Missing Authorization vulnerability in ThemeGrill User Registration user-registration allows Exploit",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "ab486c2708aeb12f11cf4fd8e984ca67f8a78f15dacefbe88e6f6a7604fa6677",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-27062",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:22Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 4.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-27062: Cross-Site Request Forgery (CSRF) vulnerability in WPFunnels Team WPFunnels wpfunnels allows Cross S",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "08b4afa826b17ecd45bb61ef78c454a4ce582f60fcb18a170f9ade47a86c5683",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-27063",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:22Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-27063: Missing Authorization vulnerability in Kit Kit (formerly ConvertKit) convertkit allows Exploiting In",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "994fd62525f7ca5869f9c216757002b7f17eb97f47a770e45aa24b34ad890e6c",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-39737",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:22Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-39737: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability i",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "4fb12e2cfb36951cff06fb00b04c2fcc13b67c18da365c2cca3b95c457a7107d",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-39742",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:22Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-39742: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability i",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "c416e3758c9d96b631d9cf44d24edde814c614b8a4b52069fb219e0ef1e0bb65",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-118092",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:21Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 4.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-118092: Missing Authorization vulnerability in StylemixThemes MasterStudy LMS masterstudy-lms-learning-manag",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "5f057e3b70d2c388fb991d98735f8730d6baf05cceb49796e84cb0e6dd874e58",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-118095",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:21Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-118095: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability i",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "b6f6779e2000a5e746b2643a22e7b85bf87d07cfcb156b7d4c299d7e7eadbbfb",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-118097",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:21Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-118097: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') vulnerability i",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "d40cb2e67664bbdd8e6d382b1f7cf58ab22b482b145f789f5ed0d589deb2148e",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-118088",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:20Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-118088: Missing Authorization vulnerability in WPFunnels Team WPFunnels wpfunnels allows Exploiting Incorrec",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "a88163fb9caefc0fe416d2cb6832712a9c3d8fd03515b3bf5dcd112925e79682",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-118091",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T15:17:20Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-118091: Missing Authorization vulnerability in WPFunnels Team WPFunnels wpfunnels allows Exploiting Incorrec",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
+        "cybersecurity/vulnerabilities",
+        "technology",
+        "technology/ai"
       ]
     },
     {
       "authority": "primary",
       "authors": [
-        "Ashlee Walker"
+        "Kristina Rigopoulos"
       ],
       "categories": {
-        "content": "standards/measurement",
+        "content": "regulatory/privacy",
         "content_basis": {
-          "category": "source",
-          "subcategory": "source"
+          "category": "item",
+          "subcategory": "item"
         },
-        "source": "standards/measurement"
+        "source": "standards/security"
       },
-      "content_sha256": "c2d4048eb177db725d0b7eead42e2ae2396e0b046e05f8a2e96d12da7342bf94",
-      "feed_id": "nist-standards",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.nist.gov/news-events/news/2026/10/nist-ctl-announces-new-low-uncertainty-broadband-antenna-gain-calibrations",
+      "content_sha256": "96ec351f69b50178ad7148e823a0bb9c88735b19c9a47ff207eed905a0724a4d",
+      "feed_id": "nist-information-technology",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.nist.gov/news-events/news/2026/10/privacy-preserving-federated-learning-ppfl-testbed-and-curated-dataset",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1257,98 +1185,14 @@
       },
       "published": "2026-10-29T12:00:00Z",
       "publisher": "National Institute of Standards and Technology",
-      "summary_display": "Standard gain horn (SGH) antennas are widely used as the industry standard for low-uncertainty antenna gain calibrations, much like a calibrated weight on a scale. However, many SGHs are needed in order to cover multiple frequency bands. Such is the",
+      "summary_display": "Today, the NIST National Cybersecurity Center of Excellence (NCCoE) released the open-source Privacy-Preserving Federated Learning (PPFL) Testbed, along with a curated genomic dataset. The PPFL Testbed is a component of the NIST Privacy-Enhancing",
       "tier": "canonical",
-      "title_display": "NIST CTL Announces New Low-Uncertainty Broadband Antenna Gain Calibrations",
-      "topics": [
-        "standards",
-        "standards/nist",
-        "technology",
-        "technology/telecom"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/threat-research",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "84baca1a38e1c01710ee6167fd5214a05ded85c4603b1517efa8ea090fc7da49",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/news/gmo-50-million-ransom-refused-123-reg-ai-driven-attack-oracle-peoplesoft-three-flaws-silent-train-anthropic-exploit-chains-2026-10-29",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-29T05:00:00Z",
-      "publisher": "Ervik",
-      "summary_display": "A look at the last 24 hours in cybersecurity: GMO refuses a $50 million ransom and offers a $1 million bounty, 123 Reg says an AI-driven attack read its customer data, PeopleSoft's exploited zero-day is three chained flaws while Oracle EBS is probed, Lumen exposes Volt Typhoon's Silent Train rela...",
-      "tier": "news",
-      "title_display": "GMO Refuses a $50 Million Ransom, 123 Reg Blames an AI-Driven Attack, and Oracle's PeopleSoft Zero-Day Turns Out to Be Three Bugs",
+      "title_display": "Privacy-Preserving Federated Learning (PPFL) Testbed and Curated Dataset",
       "topics": [
         "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities",
-        "technology",
-        "technology/ai"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/change-tracking",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "regulatory/change-tracking"
-      },
-      "content_sha256": "bbefb2140009253d28e81c5381181ce069774939a8e6d6326846815d88b67d92",
-      "feed_id": "govinfo-lsa",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.govinfo.gov/app/details/LSA-2026-09",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-28T23:13:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "LSA, September 2026 - List of CFR Sections Affected (LSA), September 2026",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
+        "standards",
+        "standards/nist",
+        "technology"
       ]
     },
     {
@@ -1362,10 +1206,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "d74e18677426c9c33294535e99fbaaa9af7a839ffae4efc9f50feb184169f52f",
+      "content_sha256": "eb9da98923e30ea10241584e91d5069f46d03ecbff5ba74a827d823e3335bc43",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-41709",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-76418",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1380,11 +1224,11 @@
           "raw": 0
         }
       },
-      "published": "2026-10-28T00:00:00Z",
+      "published": "2026-10-29T00:00:00Z",
       "publisher": "Ervik",
-      "summary_display": "Broadcom VMWare ESX Insufficient Logging Vulnerability - confirmed actively exploited (CISA KEV).",
+      "summary_display": "Cisco Secure Firewall ASA Software and Cisco Secure FTD Software Unchecked Return Value to NULL Pointer Dereference Vulnerability - confirmed actively exploited (CISA KEV).",
       "tier": "news",
-      "title_display": "Active Zero-Day: CVE-2026-41709",
+      "title_display": "Active Zero-Day: CVE-2026-76418",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -1403,10 +1247,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "1771761424c439327ef26258f02949f561b1357dbfe1994a47681065c5d23373",
+      "content_sha256": "24dc4ec233fe7322c71a1cbdb74ca70bcbe20556428fab386b59d63da1fe3395",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-46300",
+      "first_seen": "2026-10-30T17:00:41Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-97229",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1421,1494 +1265,16 @@
           "raw": 0
         }
       },
-      "published": "2026-10-28T00:00:00Z",
+      "published": "2026-10-29T00:00:00Z",
       "publisher": "Ervik",
-      "summary_display": "Linux Kernel Missing Initialization of a Variable Vulnerability - confirmed actively exploited (CISA KEV).",
+      "summary_display": "GitLab Community Edition and Enterprise Edition Integer Overflow or Wraparound Vulnerability - confirmed actively exploited (CISA KEV).",
       "tier": "news",
-      "title_display": "Active Zero-Day: CVE-2026-46300",
+      "title_display": "Active Zero-Day: CVE-2026-97229",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
         "cybersecurity/ransomware",
         "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [
-        "Vontress Henderson"
-      ],
-      "categories": {
-        "content": "standards/security",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "standards/security"
-      },
-      "content_sha256": "e4623e9976f9880a5cd84bccee638f184bbd7109b039f551343f165f863e7d64",
-      "feed_id": "nist-information-technology",
-      "first_seen": "2026-10-29T17:26:00Z",
-      "link": "https://www.nist.gov/news-events/events/2026/10/wpec2026",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-26T04:00:00Z",
-      "publisher": "National Institute of Standards and Technology",
-      "summary_display": "WPEC 2026 (October 26 - 28) is a virtual workshop, organized by the Privacy-Enhancing Cryptography (PEC) program. Featured topics: Fully-Homomorphic Encryption ( FHE); Private-Set Intersection ( PSI); Zero-Knowledge Proofs ( ZKP), Anonymous credentials",
-      "tier": "canonical",
-      "title_display": "WPEC2026",
-      "topics": [
-        "cybersecurity",
-        "standards",
-        "standards/nist",
-        "technology"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "657b069a1afb95f9315b57894bbf06c92069d497874090171973795b22d76cd9",
-      "feed_id": "fortiguard-application-control",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://fortiguard.fortinet.com/updates/app?version=37.304",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-06T23:56:06Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (6) Brave.Leo.AI OpenAI.ChatGPT_Delete inDrive Muse.AI YouTube_Share Muse.AI_Login Modified (6) Atlassian.Jira X-VPN Psiphon. UFO.VPN Salesforce_Login Twitter_Login.",
-      "tier": "vendor",
-      "title_display": "37.304",
-      "topics": [
-        "cybersecurity",
-        "technology",
-        "technology/ai"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "0722ad5766c312fc24244e2697495548a3adfc12344f52ff0ea29599d7ce7148",
-      "feed_id": "govinfo-fr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/FR-2026-04-01",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-06T21:00:14Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Federal Register Vol. 91, No.62, April 1, 2026",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "cdf70fd8aaea2facdf14117a831bc503a3f0e7184bf7118481f03e55b825595b",
-      "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/bulkdata/FR/2026/04/FR-2026-04-01.xml",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-06T20:58:03Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files XML",
-      "tier": "canonical",
-      "title_display": "FR-2026-04-01",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "6a398f39bf7585ae2062f8d854b358175971aeeb575afa9546e89e460e3fbe98",
-      "feed_id": "govinfo-fr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/FR-2026-10-05",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-06T14:34:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Federal Register Vol. 91, No.191, October 5, 2026",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "59ad7faae8e1d9fee2f15946b5e7037d0c0f00d8ec79057494b6a2fd3f103843",
-      "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-05.xml",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-06T14:34:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files XML",
-      "tier": "canonical",
-      "title_display": "FR-2026-10-05",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "fe69d2fc972c066b51327817ec19283e63ad5fc4139b287443867e3604e9c913",
-      "feed_id": "govinfo-fr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/FR-2026-10-06",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-06T07:45:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Federal Register Vol. 91, No.192, October 6, 2026",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "997e0d826839b88690bb7031959d89815d3075e89dec4d6d05c847d0105a7bde",
-      "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-06.xml",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-06T07:45:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files XML",
-      "tier": "canonical",
-      "title_display": "FR-2026-10-06",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "e1b0e2ef9d86583ed567f98a835fb26c5a60f7c2b717b67fc72de34232a00590",
-      "feed_id": "fortiguard-virtual-patching",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10000",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-06T00:00:08Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (15) FG-VD-10009874.0day. FG-VD-10009876.0day. FG-VD-62368.0day. FG-VD-62336.0day. FG-VD-62362.0day. FG-VD-62356.0day. FG-VD-62350.0day. FG-VD-62358.0day. FG-VD-62361.0day. FG-VD-62355.0day. FG-VD-62338.0day. FG-VD-62343.0day. FG-VD-62352.0day. FG-VD-62339.0day. FG-VD-62342.0day. Modi...",
-      "tier": "vendor",
-      "title_display": "26.10000",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [
-        "Daniel Eliot"
-      ],
-      "categories": {
-        "content": "guidance/security-guidance",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "guidance/security-guidance"
-      },
-      "content_sha256": "66ba379b80c7a0edd9f333515a3a2d34c1ceb8f15795c93b83cb544c8724abbb",
-      "feed_id": "nist-cybersecurity-insights",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.nist.gov/blogs/cybersecurity-insights/introducing-new-small-business-cybersecurity-support-program-finder",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-05T12:00:00Z",
-      "publisher": "National Institute of Standards and Technology",
-      "summary_display": "For small businesses who are often confronted with limited resources, knowing how to get started and where to find support with planning, implementing, or evaluating a cybersecurity risk management strategy can be challenging - sometimes making cybersecurity feel like an insurmountable hurdle. Ho...",
-      "tier": "canonical",
-      "title_display": "Introducing the New Small Business Cybersecurity Support Program Finder",
-      "topics": [
-        "cybersecurity",
-        "standards",
-        "standards/nist"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [
-        "Sarah Henderson"
-      ],
-      "categories": {
-        "content": "technology/science",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "technology/science"
-      },
-      "content_sha256": "07f5c55d49c1e8f0ca618d606733f0d7783ad31ed72cc1cb015a9be8ebc58662",
-      "feed_id": "nist-news",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.nist.gov/news-events/news/2026/10/physicist-jun-ye-wins-wolf-prize-physics",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-05T12:00:00Z",
-      "publisher": "National Institute of Standards and Technology",
-      "summary_display": "The award cites Ye’s achievement in “transformative, widely applicable advances in the control of ultracold atomic systems.”",
-      "tier": "canonical",
-      "title_display": "Physicist Jun Ye Wins Wolf Prize in Physics",
-      "topics": [
-        "standards",
-        "standards/nist",
-        "technology"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "standards/security",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "standards/security"
-      },
-      "content_sha256": "760d11df03f137748534d71aa50d6d203b79805a75cdc6eb758f610719a4cd08",
-      "feed_id": "pci-ssc-blog",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://blog.pcisecuritystandards.org/the-ai-exchange-innovators-in-payment-security-featuring-coalfire",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-05T00:00:00Z",
-      "publisher": "PCI Security Standards Council",
-      "summary_display": "Welcome to the PCI Security Standards Council’s blog series, The AI Exchange: Innovators in Payment ... READ MORE",
-      "tier": "canonical",
-      "title_display": "The AI Exchange: Innovators in Payment Security Featuring Coalfire",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/frameworks",
-        "standards",
-        "technology",
-        "technology/ai"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/codified",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/codified"
-      },
-      "content_sha256": "32d390d0e836ba59820949bc836e6bdf855c9bf161219e131e7b3e6638827fab",
-      "feed_id": "govinfo-cfr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/CFR-2026-title7-vol14",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-02T19:07:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML TEXT Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Title 7 - Agriculture",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/codified",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/codified"
-      },
-      "content_sha256": "fb90f48120cb229fbe6935c54ed89199f71743a3020dc238a55cbf61ed748aaf",
-      "feed_id": "govinfo-cfr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/CFR-2025-title7-vol14",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-02T19:07:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML TEXT Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Title 7 - Agriculture",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/codified",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/codified"
-      },
-      "content_sha256": "5901e19231fb4228a047b0d04272656f82d0303216b6dead14b84a6098d0013f",
-      "feed_id": "govinfo-cfr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/CFR-2026-title7-vol9",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-02T19:01:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML TEXT Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Title 7 - Agriculture",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/codified",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/codified"
-      },
-      "content_sha256": "4e07687742e12de02df356cf95a1aee08b62663354eab0fed1926df4272e4085",
-      "feed_id": "govinfo-cfr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/CFR-2025-title7-vol9",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-02T18:58:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML TEXT Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Title 7 - Agriculture",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "bb48e705d0a78508b4995e9f8de5466a102ee891efd2045469940664debb1513",
-      "feed_id": "govinfo-fr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/FR-2026-10-02",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-02T06:17:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Federal Register Vol. 91, No.190, October 2, 2026",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "e9f26805538a33c4d1852436682a4bbc6707cd6c3b8c9e935751c8e98f347a30",
-      "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-02.xml",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-02T06:17:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files XML",
-      "tier": "canonical",
-      "title_display": "FR-2026-10-02",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "3612817970a60a017545d2ae3ad8c22971ebd0afb5572a8eee7a612a256b4c3b",
-      "feed_id": "fortiguard-virtual-patching",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://fortiguard.fortinet.com/updates/virtual-patching?version=26.09600",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-01T23:45:20Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (2) FG-VD-10009882.0day. FG-VD-10009895.0day. Removed (1) FG-VD-10009874.0day.",
-      "tier": "vendor",
-      "title_display": "26.09600",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "0f3efac81b24351dbd50f41ced5d92b5ad313414afb1fde9fb38795070bb9ffd",
-      "feed_id": "fortiguard-application-control",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://fortiguard.fortinet.com/updates/app?version=37.302",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-01T23:45:09Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (2) Aloha.Private.Browser.VPN Virola Modified (3) X-VPN. Microsoft.365_File.Access. Psiphon.",
-      "tier": "vendor",
-      "title_display": "37.302",
-      "topics": [
-        "cybersecurity"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "3094b4b9f29d8cfbf889180f8081405947e32fb6b71b7a8469bc5342d00d1662",
-      "feed_id": "govinfo-fr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/FR-2026-10-01",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-01T19:26:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Federal Register Vol. 91, No.189, October 1, 2026",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "4ede2b5421c8f98b9956177ee48d01add67bdb6da01e4a08c9272366e89862d8",
-      "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-01.xml",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-01T19:26:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files XML",
-      "tier": "canonical",
-      "title_display": "FR-2026-10-01",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [
-        "CheeYee Tang , Robert Stea, John Wiltberger"
-      ],
-      "categories": {
-        "content": "guidance/security-guidance",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "guidance/security-guidance"
-      },
-      "content_sha256": "90c9f48549f8709855fb21136cb0c346ecef5a302161993b2430235f1229cdfe",
-      "feed_id": "nist-cybersecurity-insights",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.nist.gov/blogs/cybersecurity-insights/securing-water-and-wastewater-operational-technology-environments",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-01T12:00:00Z",
-      "publisher": "National Institute of Standards and Technology",
-      "summary_display": "Recent cyberattacks on the U.S. water and wastewater systems (WWS) sector are highlighting the escalating threat to our nation’s critical infrastructure and the practical challenges of securing it. These incidents underscore an important challenge: the connectivity that utilities depend upon must...",
-      "tier": "canonical",
-      "title_display": "Securing Water and Wastewater Operational Technology Environments",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/ot-ics",
-        "standards",
-        "standards/nist"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/exploited-now",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "vulnerabilities/vendor-advisories"
-      },
-      "content_sha256": "5db43c0027200e88b6e21c8f83add191641668dce0eb6b0adf6aa5c71c852f5c",
-      "feed_id": "fortiguard-psirt",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-175",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-01T07:00:00Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "CVSSv3 Score: 9.8 An Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') [CWE-22] and Improper Neutralization of NULL Byte or NULL Character [CWE-158] vulnerability may allow an unauthenticated attacker to write arbitrary files on the underlying system via crafted HTTP...",
-      "tier": "vendor",
-      "title_display": "Improper limitation of a pathname to a restricted directory",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "90e4fc46677907c544b53cdc9f4d60c5db6fc9444e15b6d1d1e78f31eedd13a1",
-      "feed_id": "govinfo-fr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/FR-2023-02-07",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-30T18:16:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Federal Register Vol. 88, No.25, February 7, 2023",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "afbc16f9cfef667104dd342417a17374aef0d9ed6b8391a3753d3ff3aea5820d",
-      "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/bulkdata/FR/2023/02/FR-2023-02-07.xml",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-30T18:16:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files XML",
-      "tier": "canonical",
-      "title_display": "FR-2023-02-07",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [
-        "Kristina Rigopoulos"
-      ],
-      "categories": {
-        "content": "standards/drafts",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "standards/security"
-      },
-      "content_sha256": "e5bc3dc00747e217a81c8bd00948050e8e47844c6bed6a7b2a541bba4e95cf70",
-      "feed_id": "nist-information-technology",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.nist.gov/news-events/news/2026/09/draft-5g-white-paper-now-available-false-base-station",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-30T12:00:00Z",
-      "publisher": "National Institute of Standards and Technology",
-      "summary_display": "The NIST National Cybersecurity Center of Excellence (NCCoE) has released the initial public draft Cybersecurity White Paper (CSWP) 36G, False Base Station, which details how the availability of inexpensive, off-the-shelf hardware and software tools",
-      "tier": "canonical",
-      "title_display": "Draft 5G White Paper Now Available: False Base Station",
-      "topics": [
-        "cybersecurity",
-        "standards",
-        "standards/nist",
-        "technology",
-        "technology/telecom"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "9c99812a57745450af30a58f3dbddf3eae2274e1478ba2ecde95220f4e1d4457",
-      "feed_id": "fortiguard-application-control",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://fortiguard.fortinet.com/updates/app?version=37.301",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-30T00:14:18Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Modified (3) Nexis.VPN AnonyTun Smash_File.Upload",
-      "tier": "vendor",
-      "title_display": "37.301",
-      "topics": [
-        "cybersecurity"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "7437ab5d037ac0909ad9211c706177141d38856c8099a92186ce6e9a6f29e6cc",
-      "feed_id": "fortiguard-ot-security",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://fortiguard.fortinet.com/updates/ots?version=37.301",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-30T00:14:16Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "",
-      "tier": "vendor",
-      "title_display": "37.301",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/ot-ics"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "8fff890dc5c6785814805f85305a037a9f5ed0f7a0f7e5da627fa1bb292bdcea",
-      "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/bulkdata/FR/2026/08/FR-2026-08-24.xml",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-29T22:44:11Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files XML",
-      "tier": "canonical",
-      "title_display": "FR-2026-08-24",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "3bde8c253669ec6d9a06040b343da2de565c9f8f1a59fcd491080c74942c10c0",
-      "feed_id": "govinfo-fr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/FR-2026-08-24",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-29T22:44:09Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Federal Register Vol. 91, No.162, August 24, 2026",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [
-        "Kristina Rigopoulos"
-      ],
-      "categories": {
-        "content": "standards/security",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "standards/security"
-      },
-      "content_sha256": "a89649e9883101b2966fb21cb598e855140c812d6851486c28ff165ca1b3e6d1",
-      "feed_id": "nist-information-technology",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.nist.gov/news-events/events/2026/09/nist-supply-chain-traceability-and-manufacturing-meta-framework-webinar",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-29T17:00:00Z",
-      "publisher": "National Institute of Standards and Technology",
-      "summary_display": "Join the NIST National Cybersecurity Center of Excellence (NCCoE) for a webinar to explore the newly available NIST IR 8536, Supply Chain Traceability Principles: A Manufacturing Meta-Framework. Background While organizations use NIST guidelines such",
-      "tier": "canonical",
-      "title_display": "NIST Supply Chain Traceability and Manufacturing Meta-Framework Webinar",
-      "topics": [
-        "cybersecurity",
-        "standards",
-        "standards/nist",
-        "technology"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [
-        "Kristina Rigopoulos"
-      ],
-      "categories": {
-        "content": "standards/drafts",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "standards/security"
-      },
-      "content_sha256": "2f392abbfe04d461f532d9a1fb35792fd13d5aae955117e6356d1a2ada0520c2",
-      "feed_id": "nist-information-technology",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.nist.gov/news-events/news/2026/09/comments-software-and-agentic-ai-identity-concept-paper",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-29T12:00:00Z",
-      "publisher": "National Institute of Standards and Technology",
-      "summary_display": "The NIST National Cybersecurity Center of Excellence (NCCoE) has released a summary of comments received on the Software and Agentic Artificial Intelligence (AI) Identity and Authorization concept paper. This deliverable is available now on the",
-      "tier": "canonical",
-      "title_display": "Comments on Software and Agentic AI Identity Concept Paper",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/identity",
-        "standards",
-        "standards/nist",
-        "technology",
-        "technology/ai"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "1bc8be680873957bddb59c940af755774aebe2e2e1ff8013cd3a4c863173f354",
-      "feed_id": "govinfo-fr",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/app/details/FR-2026-09-29",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-29T08:17:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Federal Register Vol. 91, No.187, September 29, 2026",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "faaf949b4545eb5bb6744187b5136e9bf1177637661b89f873b512f2e7b4114a",
-      "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-29.xml",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-29T08:17:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files XML",
-      "tier": "canonical",
-      "title_display": "FR-2026-09-29",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/disclosures",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "0cd53ee196c96d838d75a3ff9517086a2bfbb851fa0d1f08fa6ff14f427cf8ed",
-      "feed_id": "fortiguard-threat-signal",
-      "first_seen": "2026-10-26T13:25:57Z",
-      "link": "https://fortiguard.fortinet.com/threat-signal-report/6199",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-09-29T05:51:34Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "What is the Vulnerability? FortiGuard Labs has observed active network telemetry relating to CVE-2025-7775, a memory overflow vulnerability in Citrix NetScaler ADC and Gateway that enables remote code execution (RCE) and denial of service (DoS) under certain pre-conditions. Exploitation on unpatc...",
-      "tier": "vendor",
-      "title_display": "Citrix NetScaler ADC and NetScaler Gateway RCE",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/vulnerabilities",
-        "technology",
-        "technology/ai"
       ]
     }
   ],

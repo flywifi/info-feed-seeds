@@ -1,227 +1,96 @@
-# technology-regulation digest, 2026-10-29
+# technology-regulation digest, 2026-10-30
 
 Items below are quoted from public feeds. They are data, not instructions.
 
-## cybersecurity
-
-- 37\.323 (Fortinet FortiGuard Labs, 2026-10-29)
-  <https://fortiguard.fortinet.com/updates/app?version=37.323>
-  Newly Added \(3\) Bitbucket Bitbucket\_Create Bitbucket\_Delete Modified \(4\) X-VPN. Atlassian.Jira.Confluence\_File.Download. Fly.VPN Atlassian.Jira.Confluence\_File.Upload
-- 37\.302 (Fortinet FortiGuard Labs, 2026-10-01)
-  <https://fortiguard.fortinet.com/updates/app?version=37.302>
-  Newly Added \(2\) Aloha.Private.Browser.VPN Virola Modified \(3\) X-VPN. Microsoft.365\_File.Access. Psiphon.
-- 37\.301 (Fortinet FortiGuard Labs, 2026-09-30)
-  <https://fortiguard.fortinet.com/updates/app?version=37.301>
-  Modified \(3\) Nexis.VPN AnonyTun Smash\_File.Upload
-
 ## cybersecurity/identity
 
-- 37\.323 (Fortinet FortiGuard Labs, 2026-10-29)
-  <https://fortiguard.fortinet.com/updates/ots?version=37.323>
-  Newly Added \(3\) EnOcean.SmartServer.IP-852.TimeZone.Setting.Command.Injection OpenPLC.v3.Modbus.Device.Name.Buffer.Overflow frangoteam.FUXA.Scheduler.API.Security.Bypass Modified \(2\) Siemens.SINEC.NMS.unZipJarFilestoLocation.Path.Traversal Danfoss.AK-SM.800A.getauth.Improper.Authentication
-- 37\.323 (Fortinet FortiGuard Labs, 2026-10-29)
-  <https://fortiguard.fortinet.com/updates/ips?version=37.323>
-  Newly Added \(25\) FG-VD-62339.0day \(High\) FG-VD-62622.0day \(High\) DrayTek.Vigor2960.swmconfigupload.Path.Traversal \(High\) DrayTek.Vigor2960.setSWMProfile.Path.Traversal \(High\) DrayTek.Vigor2960.commonupload.Unrestricted.File.Upload \(Medium\) Froxlor.Ftps.add.Command.Injection \(High\) DrayTek.Vigor29...
-- Comments on Software and Agentic AI Identity Concept Paper (National Institute of Standards and Technology, 2026-09-29)
-  <https://www.nist.gov/news-events/news/2026/09/comments-software-and-agentic-ai-identity-concept-paper>
-  The NIST National Cybersecurity Center of Excellence \(NCCoE\) has released a summary of comments received on the Software and Agentic Artificial Intelligence \(AI\) Identity and Authorization concept paper. This deliverable is available now on the
-
-## cybersecurity/incidents
-
-- Citrix NetScaler ADC and NetScaler Gateway RCE (Fortinet FortiGuard Labs, 2026-09-29)
-  <https://fortiguard.fortinet.com/threat-signal-report/6199>
-  What is the Vulnerability? FortiGuard Labs has observed active network telemetry relating to CVE-2025-7775, a memory overflow vulnerability in Citrix NetScaler ADC and Gateway that enables remote code execution \(RCE\) and denial of service \(DoS\) under certain pre-conditions. Exploitation on unpatc...
-
-## cybersecurity/ot-ics
-
-- Securing Water and Wastewater Operational Technology Environments (National Institute of Standards and Technology, 2026-10-01)
-  <https://www.nist.gov/blogs/cybersecurity-insights/securing-water-and-wastewater-operational-technology-environments>
-  Recent cyberattacks on the U.S. water and wastewater systems \(WWS\) sector are highlighting the escalating threat to our nation’s critical infrastructure and the practical challenges of securing it. These incidents underscore an important challenge: the connectivity that utilities depend upon must...
-- 37\.301 (Fortinet FortiGuard Labs, 2026-09-30)
-  <https://fortiguard.fortinet.com/updates/ots?version=37.301>
+- CVE-2026-119682: An improper access control vulnerability exists in the multi-factor authentication \(MFA\) functionali (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-119682>
+  NONE severity vulnerability.
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-97073: Missing Authorization vulnerability in myCred myCred mycred allows Exploiting Incorrectly Configured (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-97073>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-80067: MasterStudy LMS plugin for WordPress before 3.7.50 contains a path traversal vulnerability that allo (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-80067>
-  MEDIUM severity \(CVSS 5.4\) vulnerability.
-- CVE-2026-80069: MasterStudy LMS plugin for WordPress before 3.7.50 contains a missing authorization vulnerability th (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-80069>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-42691: Authorization Bypass Through User-Controlled Key vulnerability in EventPrime EventPrime eventprime-e (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-42691>
-  MEDIUM severity \(CVSS 5.4\) vulnerability.
-- CVE-2026-48884: Missing Authorization vulnerability in weDevs WP User Frontend wp-user-frontend allows Exploiting In (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-48884>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-52708: Missing Authorization vulnerability in weDevs WP User Frontend wp-user-frontend allows Exploiting In (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-52708>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-54852: Missing Authorization vulnerability in miniOrange Page Restriction WordPress \(WP\) page-and-post-rest (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-54852>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-54853: Missing Authorization vulnerability in Cozmoslabs Profile Builder profile-builder allows Exploiting (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-54853>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-54871: Missing Authorization vulnerability in Mamunur Rashid ShopBuilder - Elementor WooCommerce Builder Ad (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-54871>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-25448: Missing Authorization vulnerability in weDevs WP ERP erp allows Exploiting Incorrectly Configured Ac (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-25448>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-25450: Missing Authorization vulnerability in ThemeGrill User Registration user-registration allows Exploit (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-25450>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-27062: Cross-Site Request Forgery \(CSRF\) vulnerability in WPFunnels Team WPFunnels wpfunnels allows Cross S (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-27062>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-27063: Missing Authorization vulnerability in Kit Kit \(formerly ConvertKit\) convertkit allows Exploiting In (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-27063>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-39737: Improper Neutralization of Input During Web Page Generation \('Cross-site Scripting'\) vulnerability i (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-39737>
+- CVE-2026-93327: A Deserialization of Untrusted Data vulnerability in the SubWorkflow task in Google Cloud Applicatio (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-93327>
+  NONE severity vulnerability.
+- CVE-2026-65444: Improper Neutralization of Input During Web Page Generation \('Cross-site Scripting'\) vulnerability i (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-65444>
   MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-39742: Improper Neutralization of Input During Web Page Generation \('Cross-site Scripting'\) vulnerability i (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-39742>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-118092: Missing Authorization vulnerability in StylemixThemes MasterStudy LMS masterstudy-lms-learning-manag (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-118092>
+- CVE-2026-61729: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-61729>
+  CRITICAL severity \(CVSS 9.4\) vulnerability.
+- CVE-2026-61730: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-61730>
+  CRITICAL severity \(CVSS 9.3\) vulnerability.
+- CVE-2026-61737: ng-antd-admin is an Angular and NestJS administration system template. Prior to 22.0, a hardcoded de (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-61737>
+  CRITICAL severity \(CVSS 9.8\) vulnerability.
+- CVE-2026-61738: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-61738>
+  CRITICAL severity \(CVSS 10\) vulnerability.
+- CVE-2026-61739: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-61739>
+  HIGH severity \(CVSS 7.5\) vulnerability.
+- CVE-2026-46499: Collabora Online is a collaborative online office suite based on LibreOffice technology. Prior to 24 (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-46499>
   MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-118095: Improper Neutralization of Input During Web Page Generation \('Cross-site Scripting'\) vulnerability i (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-118095>
+- CVE-2026-48164: Collabora Online is a collaborative online office suite based on LibreOffice technology. Prior to 24 (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-48164>
+  MEDIUM severity \(CVSS 4.7\) vulnerability.
+- CVE-2026-61626: libass is a portable subtitle renderer for the ASS/SSA \(Advanced Substation Alpha/Substation Alpha\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-61626>
+  NONE severity vulnerability.
+- CVE-2026-61627: libass is a portable subtitle renderer for the \`ASS\`/SSA \(Advanced Substation Alpha/Substation Alpha (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-61627>
+  NONE severity vulnerability.
+- CVE-2026-61708: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-61708>
+  HIGH severity \(CVSS 8.5\) vulnerability.
+- CVE-2026-61728: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-61728>
+  CRITICAL severity \(CVSS 9.9\) vulnerability.
+- CVE-2026-119665: WHartTest 2.2.0 through 2.8.1 contains a missing authorization vulnerability in ScheduledTaskViewSet (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-119665>
+  MEDIUM severity \(CVSS 6.3\) vulnerability.
+- CVE-2026-119680: A stored cross-site scripting \(XSS\) vulnerability exists in the chart feature of SharePoint Manager (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-119680>
+  NONE severity vulnerability.
+- CVE-2026-44344: Chamilo LMS is an open-source learning management system. In the 1.x line before 1.11.40, and the 2. (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-44344>
+  MEDIUM severity \(CVSS 6.6\) vulnerability.
+- CVE-2026-45141: Chamilo LMS is an open-source learning management system. Prior to 2.0.1, the \`add\`, \`delete\_gradebo (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-45141>
   MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-118097: Improper Neutralization of Input During Web Page Generation \('Cross-site Scripting'\) vulnerability i (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-118097>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-118088: Missing Authorization vulnerability in WPFunnels Team WPFunnels wpfunnels allows Exploiting Incorrec (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-118088>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-118091: Missing Authorization vulnerability in WPFunnels Team WPFunnels wpfunnels allows Exploiting Incorrec (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-118091>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- GMO Refuses a $50 Million Ransom, 123 Reg Blames an AI-Driven Attack, and Oracle's PeopleSoft Zero-Day Turns Out to Be Three Bugs (Ervik, 2026-10-29)
-  <https://www.ervik.as/news/gmo-50-million-ransom-refused-123-reg-ai-driven-attack-oracle-peoplesoft-three-flaws-silent-train-anthropic-exploit-chains-2026-10-29>
-  A look at the last 24 hours in cybersecurity: GMO refuses a $50 million ransom and offers a $1 million bounty, 123 Reg says an AI-driven attack read its customer data, PeopleSoft's exploited zero-day is three chained flaws while Oracle EBS is probed, Lumen exposes Volt Typhoon's Silent Train rela...
-- Active Zero-Day: CVE-2026-41709 (Ervik, 2026-10-28)
-  <https://www.ervik.as/cves/CVE-2026-41709>
-  Broadcom VMWare ESX Insufficient Logging Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-46300 (Ervik, 2026-10-28)
-  <https://www.ervik.as/cves/CVE-2026-46300>
-  Linux Kernel Missing Initialization of a Variable Vulnerability - confirmed actively exploited \(CISA KEV\).
-- 26\.10000 (Fortinet FortiGuard Labs, 2026-10-06)
-  <https://fortiguard.fortinet.com/updates/virtual-patching?version=26.10000>
-  Newly Added \(15\) FG-VD-10009874.0day. FG-VD-10009876.0day. FG-VD-62368.0day. FG-VD-62336.0day. FG-VD-62362.0day. FG-VD-62356.0day. FG-VD-62350.0day. FG-VD-62358.0day. FG-VD-62361.0day. FG-VD-62355.0day. FG-VD-62338.0day. FG-VD-62343.0day. FG-VD-62352.0day. FG-VD-62339.0day. FG-VD-62342.0day. Modi...
-- 26\.09600 (Fortinet FortiGuard Labs, 2026-10-01)
-  <https://fortiguard.fortinet.com/updates/virtual-patching?version=26.09600>
-  Newly Added \(2\) FG-VD-10009882.0day. FG-VD-10009895.0day. Removed \(1\) FG-VD-10009874.0day.
-- Improper limitation of a pathname to a restricted directory (Fortinet FortiGuard Labs, 2026-10-01)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-175>
-  CVSSv3 Score: 9.8 An Improper Limitation of a Pathname to a Restricted Directory \('Path Traversal'\) \[CWE-22\] and Improper Neutralization of NULL Byte or NULL Character \[CWE-158\] vulnerability may allow an unauthenticated attacker to write arbitrary files on the underlying system via crafted HTTP...
+- CVE-2026-45144: Chamilo LMS is an open-source learning management system. From 2.0.0 until 2.0.1, \`GET /user/{userna (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-45144>
+  HIGH severity \(CVSS 8.9\) vulnerability.
+- CVE-2026-45145: Chamilo LMS is an open-source learning management system. Prior to 2.0.1, \`public/main/inc/lib/caree (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-45145>
+  HIGH severity \(CVSS 7.5\) vulnerability.
+- Binance Loses $6.3 Billion in 20 Minutes, Chinese Attackers Use AI Tooling to Root 25 Servers, and Cisco's KeyDrift Ties to Volt Typhoon (Ervik, 2026-10-30)
+  <https://www.ervik.as/news/binance-6-3-billion-north-korea-php2shell-ai-tooling-25-servers-cisco-keydrift-silent-train-2026-10-30>
+  A look at the last 24 hours in cybersecurity: Binance loses about $6.3 billion in the largest crypto heist on record with North Korea suspected, suspected Chinese operators use Claude Code and an AI platform to root 25 servers through PHP2Shell, Cisco's KeyDrift malware ties to Silent Train while...
+- Active Zero-Day: CVE-2026-76418 (Ervik, 2026-10-29)
+  <https://www.ervik.as/cves/CVE-2026-76418>
+  Cisco Secure Firewall ASA Software and Cisco Secure FTD Software Unchecked Return Value to NULL Pointer Dereference Vulnerability - confirmed actively exploited \(CISA KEV\).
+- Active Zero-Day: CVE-2026-97229 (Ervik, 2026-10-29)
+  <https://www.ervik.as/cves/CVE-2026-97229>
+  GitLab Community Edition and Enterprise Edition Integer Overflow or Wraparound Vulnerability - confirmed actively exploited \(CISA KEV\).
 
 ## regulation/federal-rulemaking
 
-- Federal Register Vol. 91, No.208, October 29, 2026 (U.S. Government Publishing Office, 2026-10-29)
-  <https://www.govinfo.gov/app/details/FR-2026-10-29>
+- Federal Register Vol. 91, No.209, October 30, 2026 (U.S. Government Publishing Office, 2026-10-30)
+  <https://www.govinfo.gov/app/details/FR-2026-10-30>
   Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-10-29 (U.S. Government Publishing Office, 2026-10-29)
-  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-29.xml>
-  Content Files XML
-- LSA, September 2026 - List of CFR Sections Affected \(LSA\), September 2026 (U.S. Government Publishing Office, 2026-10-28)
-  <https://www.govinfo.gov/app/details/LSA-2026-09>
-  Content Files PDF Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Federal Register Vol. 91, No.62, April 1, 2026 (U.S. Government Publishing Office, 2026-10-06)
-  <https://www.govinfo.gov/app/details/FR-2026-04-01>
-  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-04-01 (U.S. Government Publishing Office, 2026-10-06)
-  <https://www.govinfo.gov/bulkdata/FR/2026/04/FR-2026-04-01.xml>
-  Content Files XML
-- Federal Register Vol. 91, No.191, October 5, 2026 (U.S. Government Publishing Office, 2026-10-06)
-  <https://www.govinfo.gov/app/details/FR-2026-10-05>
-  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-10-05 (U.S. Government Publishing Office, 2026-10-06)
-  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-05.xml>
-  Content Files XML
-- Federal Register Vol. 91, No.192, October 6, 2026 (U.S. Government Publishing Office, 2026-10-06)
-  <https://www.govinfo.gov/app/details/FR-2026-10-06>
-  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-10-06 (U.S. Government Publishing Office, 2026-10-06)
-  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-06.xml>
-  Content Files XML
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-10-02)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol14>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-10-02)
-  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol14>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-10-02)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol9>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-10-02)
-  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol9>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Federal Register Vol. 91, No.190, October 2, 2026 (U.S. Government Publishing Office, 2026-10-02)
-  <https://www.govinfo.gov/app/details/FR-2026-10-02>
-  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-10-02 (U.S. Government Publishing Office, 2026-10-02)
-  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-02.xml>
-  Content Files XML
-- Federal Register Vol. 91, No.189, October 1, 2026 (U.S. Government Publishing Office, 2026-10-01)
-  <https://www.govinfo.gov/app/details/FR-2026-10-01>
-  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-10-01 (U.S. Government Publishing Office, 2026-10-01)
-  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-01.xml>
-  Content Files XML
-- Federal Register Vol. 88, No.25, February 7, 2023 (U.S. Government Publishing Office, 2026-09-30)
-  <https://www.govinfo.gov/app/details/FR-2023-02-07>
-  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2023-02-07 (U.S. Government Publishing Office, 2026-09-30)
-  <https://www.govinfo.gov/bulkdata/FR/2023/02/FR-2023-02-07.xml>
-  Content Files XML
-- FR-2026-08-24 (U.S. Government Publishing Office, 2026-09-29)
-  <https://www.govinfo.gov/bulkdata/FR/2026/08/FR-2026-08-24.xml>
-  Content Files XML
-- Federal Register Vol. 91, No.162, August 24, 2026 (U.S. Government Publishing Office, 2026-09-29)
-  <https://www.govinfo.gov/app/details/FR-2026-08-24>
-  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Federal Register Vol. 91, No.187, September 29, 2026 (U.S. Government Publishing Office, 2026-09-29)
-  <https://www.govinfo.gov/app/details/FR-2026-09-29>
-  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-09-29 (U.S. Government Publishing Office, 2026-09-29)
-  <https://www.govinfo.gov/bulkdata/FR/2026/09/FR-2026-09-29.xml>
+- FR-2026-10-30 (U.S. Government Publishing Office, 2026-10-30)
+  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-30.xml>
   Content Files XML
 
 ## standards/nist
 
-- NIST CTL Announces New Low-Uncertainty Broadband Antenna Gain Calibrations (National Institute of Standards and Technology, 2026-10-29)
-  <https://www.nist.gov/news-events/news/2026/10/nist-ctl-announces-new-low-uncertainty-broadband-antenna-gain-calibrations>
-  Standard gain horn \(SGH\) antennas are widely used as the industry standard for low-uncertainty antenna gain calibrations, much like a calibrated weight on a scale. However, many SGHs are needed in order to cover multiple frequency bands. Such is the
-- WPEC2026 (National Institute of Standards and Technology, 2026-10-26)
-  <https://www.nist.gov/news-events/events/2026/10/wpec2026>
-  WPEC 2026 \(October 26 - 28\) is a virtual workshop, organized by the Privacy-Enhancing Cryptography \(PEC\) program. Featured topics: Fully-Homomorphic Encryption \( FHE\); Private-Set Intersection \( PSI\); Zero-Knowledge Proofs \( ZKP\), Anonymous credentials
-- Introducing the New Small Business Cybersecurity Support Program Finder (National Institute of Standards and Technology, 2026-10-05)
-  <https://www.nist.gov/blogs/cybersecurity-insights/introducing-new-small-business-cybersecurity-support-program-finder>
-  For small businesses who are often confronted with limited resources, knowing how to get started and where to find support with planning, implementing, or evaluating a cybersecurity risk management strategy can be challenging - sometimes making cybersecurity feel like an insurmountable hurdle. Ho...
-- Physicist Jun Ye Wins Wolf Prize in Physics (National Institute of Standards and Technology, 2026-10-05)
-  <https://www.nist.gov/news-events/news/2026/10/physicist-jun-ye-wins-wolf-prize-physics>
-  The award cites Ye’s achievement in “transformative, widely applicable advances in the control of ultracold atomic systems.”
-- Draft 5G White Paper Now Available: False Base Station (National Institute of Standards and Technology, 2026-09-30)
-  <https://www.nist.gov/news-events/news/2026/09/draft-5g-white-paper-now-available-false-base-station>
-  The NIST National Cybersecurity Center of Excellence \(NCCoE\) has released the initial public draft Cybersecurity White Paper \(CSWP\) 36G, False Base Station, which details how the availability of inexpensive, off-the-shelf hardware and software tools
-- NIST Supply Chain Traceability and Manufacturing Meta-Framework Webinar (National Institute of Standards and Technology, 2026-09-29)
-  <https://www.nist.gov/news-events/events/2026/09/nist-supply-chain-traceability-and-manufacturing-meta-framework-webinar>
-  Join the NIST National Cybersecurity Center of Excellence \(NCCoE\) for a webinar to explore the newly available NIST IR 8536, Supply Chain Traceability Principles: A Manufacturing Meta-Framework. Background While organizations use NIST guidelines such
-
-## technology/ai
-
-- 37\.304 (Fortinet FortiGuard Labs, 2026-10-06)
-  <https://fortiguard.fortinet.com/updates/app?version=37.304>
-  Newly Added \(6\) Brave.Leo.AI OpenAI.ChatGPT\_Delete inDrive Muse.AI YouTube\_Share Muse.AI\_Login Modified \(6\) Atlassian.Jira X-VPN Psiphon. UFO.VPN Salesforce\_Login Twitter\_Login.
-- The AI Exchange: Innovators in Payment Security Featuring Coalfire (PCI Security Standards Council, 2026-10-05)
-  <https://blog.pcisecuritystandards.org/the-ai-exchange-innovators-in-payment-security-featuring-coalfire>
-  Welcome to the PCI Security Standards Council’s blog series, The AI Exchange: Innovators in Payment ... READ MORE
+- Privacy-Preserving Federated Learning \(PPFL\) Testbed and Curated Dataset (National Institute of Standards and Technology, 2026-10-29)
+  <https://www.nist.gov/news-events/news/2026/10/privacy-preserving-federated-learning-ppfl-testbed-and-curated-dataset>
+  Today, the NIST National Cybersecurity Center of Excellence \(NCCoE\) released the open-source Privacy-Preserving Federated Learning \(PPFL\) Testbed, along with a curated genomic dataset. The PPFL Testbed is a component of the NIST Privacy-Enhancing
 
 ## Source health
 
@@ -236,11 +105,11 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-psirt: ok, HTTP 200, 50 items
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
-- fortinet-firmware: ok, HTTP 200, 75 items
+- fortinet-firmware: ok, HTTP 200, 79 items
 - govinfo-cfr: not-modified, HTTP 304
 - govinfo-fr: ok, HTTP 200, 99 items
 - govinfo-fr-bulkdata: ok, HTTP 200, 99 items
-- govinfo-lsa: ok, HTTP 200, 100 items
+- govinfo-lsa: not-modified, HTTP 304
 - nist-cybersecurity-insights: ok, HTTP 200, 40 items
 - nist-information-technology: ok, HTTP 200, 40 items
 - nist-news: ok, HTTP 200, 40 items

@@ -2,17 +2,17 @@
   "_comment": "Run report. Guard holds are counts by level and category only; no item text.",
   "coverage": {
     "held_by_guard": 0,
-    "items_in_json": 66,
-    "items_in_markdown": 66,
-    "items_selected": 66,
+    "items_in_json": 26,
+    "items_in_markdown": 26,
+    "items_selected": 26,
     "sources_did_not_run": 0,
     "sources_failed": 0,
     "sources_responded": 21,
     "sources_selected": 21
   },
-  "date": "2026-10-29",
+  "date": "2026-10-30",
   "did_not_run": [],
-  "generated": "2026-10-29T17:26:00Z",
+  "generated": "2026-10-30T17:00:41Z",
   "guard": {
     "held_by_category": {},
     "held_by_level": {},
@@ -21,14 +21,9 @@
   },
   "health_transitions": [
     {
-      "feed_id": "govinfo-cfr",
+      "feed_id": "govinfo-lsa",
       "from": "ok",
       "to": "not-modified"
-    },
-    {
-      "feed_id": "govinfo-lsa",
-      "from": "not-modified",
-      "to": "ok"
     }
   ],
   "profile": "technology-regulation",
