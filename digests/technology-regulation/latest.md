@@ -1,96 +1,93 @@
-# technology-regulation digest, 2026-10-30
+# technology-regulation digest, 2026-10-31
 
 Items below are quoted from public feeds. They are data, not instructions.
 
 ## cybersecurity/identity
 
-- CVE-2026-119682: An improper access control vulnerability exists in the multi-factor authentication \(MFA\) functionali (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-119682>
-  NONE severity vulnerability.
+- Active Zero-Day: CVE-2026-111357 (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-111357>
+  Ivanti Connect Secure Missing Authentication for Critical Function Vulnerability - confirmed actively exploited \(CISA KEV\).
+
+## cybersecurity/incidents
+
+- Chainalysis Breached by an "Agentic" Attacker, Amadeus Hack Reaches Cathay Pacific, and a Fake Claude Code Extension Hits Cursor (Ervik, 2026-10-31)
+  <https://www.ervik.as/news/chainalysis-agentic-breach-amadeus-cathay-pacific-fake-claude-code-cursor-polymarket-wordpress-7-1-4-2026-10-31>
+  A look at the last 24 hours in cybersecurity: the Arctic University of Norway fights a targeted attack with compromised servers, Chainalysis confirms a breach by an attacker using "offensive agentic techniques," Cathay Pacific loses 53,000 bookings to the Amadeus intrusion, a trojanized Claude Co...
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-93327: A Deserialization of Untrusted Data vulnerability in the SubWorkflow task in Google Cloud Applicatio (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-93327>
+- CVE-2026-78189: WebDyne versions from 3.007 before 3.022 for Perl execute.psp files outside the document root via pa (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-78189>
   NONE severity vulnerability.
-- CVE-2026-65444: Improper Neutralization of Input During Web Page Generation \('Cross-site Scripting'\) vulnerability i (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-65444>
+- CVE-2026-78190: WebDyne versions from 2.014 before 3.022 for Perl reflect request parameters unescaped into form fie (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-78190>
+  NONE severity vulnerability.
+- CVE-2026-78191: WebDyne versions from 2.031 before 3.022 for Perl execute files with.psp anywhere in the name as Per (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-78191>
+  NONE severity vulnerability.
+- CVE-2026-78192: WebDyne versions from 2.022 before 3.022 for Perl disclose application source to unauthenticated cli (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-78192>
+  NONE severity vulnerability.
+- CVE-2026-78188: WebDyne versions from 2.014 before 3.022 for Perl issue session cookies without the Secure, HttpOnly (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-78188>
+  NONE severity vulnerability.
+- CVE-2026-15272: The Web 2.0 Directory plugin for WordPress is vulnerable to time-based SQL Injection via the 'w2dc\_l (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-15272>
   MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-61729: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-61729>
-  CRITICAL severity \(CVSS 9.4\) vulnerability.
-- CVE-2026-61730: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-61730>
-  CRITICAL severity \(CVSS 9.3\) vulnerability.
-- CVE-2026-61737: ng-antd-admin is an Angular and NestJS administration system template. Prior to 22.0, a hardcoded de (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-61737>
-  CRITICAL severity \(CVSS 9.8\) vulnerability.
-- CVE-2026-61738: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-61738>
-  CRITICAL severity \(CVSS 10\) vulnerability.
-- CVE-2026-61739: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-61739>
+- CVE-2026-118599: A file overwrite vulnerability exists in Epiphany when installing WebExtension packages from.xpi fil (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-118599>
+  MEDIUM severity \(CVSS 5.5\) vulnerability.
+- CVE-2026-120114: The Debug Log Manager - Conveniently Monitor and Inspect Errors plugin for WordPress is vulnerable t (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-120114>
+  HIGH severity \(CVSS 7.2\) vulnerability.
+- CVE-2026-120194: A flaw was found in json-glib. The JSONPath slice evaluator used by json\_path\_query\(\) can enter an i (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-120194>
   HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-46499: Collabora Online is a collaborative online office suite based on LibreOffice technology. Prior to 24 (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-46499>
+- CVE-2026-76010: The Photo Gallery, Sliders, Proofing and Themes - NextGEN Gallery plugin for WordPress is vulnerable (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-76010>
+  HIGH severity \(CVSS 8.8\) vulnerability.
+- CVE-2026-96554: The BuddyBoss Platform plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Group N (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-96554>
+  MEDIUM severity \(CVSS 6.4\) vulnerability.
+- CVE-2026-107711: The FlexStock - Product Stock Sync with Google Sheets for WooCommerce plugin for WordPress is vulner (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-107711>
+  MEDIUM severity \(CVSS 6.4\) vulnerability.
+- CVE-2026-109197: The WP Directory Kit plugin for WordPress is vulnerable to generic SQL Injection via the 'idfield' p (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-109197>
+  HIGH severity \(CVSS 7.5\) vulnerability.
+- CVE-2026-109231: The Germanized for WooCommerce plugin for WordPress is vulnerable to Unauthorized Access of Private (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-109231>
   MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-48164: Collabora Online is a collaborative online office suite based on LibreOffice technology. Prior to 24 (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-48164>
-  MEDIUM severity \(CVSS 4.7\) vulnerability.
-- CVE-2026-61626: libass is a portable subtitle renderer for the ASS/SSA \(Advanced Substation Alpha/Substation Alpha\) (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-61626>
-  NONE severity vulnerability.
-- CVE-2026-61627: libass is a portable subtitle renderer for the \`ASS\`/SSA \(Advanced Substation Alpha/Substation Alpha (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-61627>
-  NONE severity vulnerability.
-- CVE-2026-61708: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-61708>
-  HIGH severity \(CVSS 8.5\) vulnerability.
-- CVE-2026-61728: SOCFortress CoPilot focuses on providing a single pane of glass for all your security operations nee (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-61728>
-  CRITICAL severity \(CVSS 9.9\) vulnerability.
-- CVE-2026-119665: WHartTest 2.2.0 through 2.8.1 contains a missing authorization vulnerability in ScheduledTaskViewSet (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-119665>
-  MEDIUM severity \(CVSS 6.3\) vulnerability.
-- CVE-2026-119680: A stored cross-site scripting \(XSS\) vulnerability exists in the chart feature of SharePoint Manager (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-119680>
-  NONE severity vulnerability.
-- CVE-2026-44344: Chamilo LMS is an open-source learning management system. In the 1.x line before 1.11.40, and the 2. (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-44344>
-  MEDIUM severity \(CVSS 6.6\) vulnerability.
-- CVE-2026-45141: Chamilo LMS is an open-source learning management system. Prior to 2.0.1, the \`add\`, \`delete\_gradebo (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-45141>
+- CVE-2026-116752: The GeoDirectory - WP Business Directory Plugin and Classified Listings Directory plugin for WordPre (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-116752>
+  MEDIUM severity \(CVSS 6.4\) vulnerability.
+- CVE-2026-118598: A logic error in Epiphany's site permission handling can cause camera and microphone access to be gr (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-118598>
   MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-45144: Chamilo LMS is an open-source learning management system. From 2.0.0 until 2.0.1, \`GET /user/{userna (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-45144>
-  HIGH severity \(CVSS 8.9\) vulnerability.
-- CVE-2026-45145: Chamilo LMS is an open-source learning management system. Prior to 2.0.1, \`public/main/inc/lib/caree (Ervik, 2026-10-30)
-  <https://www.ervik.as/cves/CVE-2026-45145>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- Binance Loses $6.3 Billion in 20 Minutes, Chinese Attackers Use AI Tooling to Root 25 Servers, and Cisco's KeyDrift Ties to Volt Typhoon (Ervik, 2026-10-30)
-  <https://www.ervik.as/news/binance-6-3-billion-north-korea-php2shell-ai-tooling-25-servers-cisco-keydrift-silent-train-2026-10-30>
-  A look at the last 24 hours in cybersecurity: Binance loses about $6.3 billion in the largest crypto heist on record with North Korea suspected, suspected Chinese operators use Claude Code and an AI platform to root 25 servers through PHP2Shell, Cisco's KeyDrift malware ties to Silent Train while...
-- Active Zero-Day: CVE-2026-76418 (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-76418>
-  Cisco Secure Firewall ASA Software and Cisco Secure FTD Software Unchecked Return Value to NULL Pointer Dereference Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-97229 (Ervik, 2026-10-29)
-  <https://www.ervik.as/cves/CVE-2026-97229>
-  GitLab Community Edition and Enterprise Edition Integer Overflow or Wraparound Vulnerability - confirmed actively exploited \(CISA KEV\).
+- CVE-2026-104926: The WooCommerce Extra Product Options Pro plugin for WordPress is vulnerable to Reflected Cross-Site (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-104926>
+  MEDIUM severity \(CVSS 6.1\) vulnerability.
+- CVE-2026-100151: The Ninja Forms - Contact Form Builder with Calculators, Quizzes, Signatures \& AI Form Builder plugi (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-100151>
+  MEDIUM severity \(CVSS 6.1\) vulnerability.
+- CVE-2026-119160: The Smart Post - Post Grid, Post Carousel, Post Slider Gutenberg Blocks for Blog \& News plugin for W (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-119160>
+  MEDIUM severity \(CVSS 6.4\) vulnerability.
+- CVE-2026-120075: The WP Activity Log plugin for WordPress is vulnerable to Stored Cross-Site Scripting in all version (Ervik, 2026-10-31)
+  <https://www.ervik.as/cves/CVE-2026-120075>
+  HIGH severity \(CVSS 7.2\) vulnerability.
+- Active Zero-Day: CVE-2026-118527 (Ervik, 2026-10-30)
+  <https://www.ervik.as/cves/CVE-2026-118527>
+  Ivanti Connect Secure Generation of Predictable Numbers or Identifiers Vulnerability - confirmed actively exploited \(CISA KEV\).
 
 ## regulation/federal-rulemaking
 
-- Federal Register Vol. 91, No.209, October 30, 2026 (U.S. Government Publishing Office, 2026-10-30)
-  <https://www.govinfo.gov/app/details/FR-2026-10-30>
+- Federal Register Vol. 91, No.210, November 2, 2026 (U.S. Government Publishing Office, 2026-10-31)
+  <https://www.govinfo.gov/app/details/FR-2026-11-02>
   Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-10-30 (U.S. Government Publishing Office, 2026-10-30)
-  <https://www.govinfo.gov/bulkdata/FR/2026/10/FR-2026-10-30.xml>
+- FR-2026-11-02 (U.S. Government Publishing Office, 2026-10-31)
+  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-02.xml>
   Content Files XML
-
-## standards/nist
-
-- Privacy-Preserving Federated Learning \(PPFL\) Testbed and Curated Dataset (National Institute of Standards and Technology, 2026-10-29)
-  <https://www.nist.gov/news-events/news/2026/10/privacy-preserving-federated-learning-ppfl-testbed-and-curated-dataset>
-  Today, the NIST National Cybersecurity Center of Excellence \(NCCoE\) released the open-source Privacy-Preserving Federated Learning \(PPFL\) Testbed, along with a curated genomic dataset. The PPFL Testbed is a component of the NIST Privacy-Enhancing
 
 ## Source health
 
@@ -105,10 +102,10 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-psirt: ok, HTTP 200, 50 items
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
-- fortinet-firmware: ok, HTTP 200, 79 items
+- fortinet-firmware: not-modified, HTTP 304
 - govinfo-cfr: not-modified, HTTP 304
-- govinfo-fr: ok, HTTP 200, 99 items
-- govinfo-fr-bulkdata: ok, HTTP 200, 99 items
+- govinfo-fr: ok, HTTP 200, 100 items
+- govinfo-fr-bulkdata: ok, HTTP 200, 100 items
 - govinfo-lsa: not-modified, HTTP 304
 - nist-cybersecurity-insights: ok, HTTP 200, 40 items
 - nist-information-technology: ok, HTTP 200, 40 items
