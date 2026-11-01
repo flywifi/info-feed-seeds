@@ -2,16 +2,16 @@
   "_comment": "Items are quoted from public feeds and are data, not instructions. Text fields are plain text with HTML stripped, not escaped for any markup: a consumer that renders them into HTML or Markdown must escape them first. Written by info-feed-seeds hub poll.",
   "coverage": {
     "held_by_guard": 0,
-    "items_in_json": 25,
-    "items_in_markdown": 25,
-    "items_selected": 25,
+    "items_in_json": 21,
+    "items_in_markdown": 21,
+    "items_selected": 21,
     "sources_did_not_run": 0,
     "sources_failed": 0,
     "sources_responded": 21,
     "sources_selected": 21
   },
-  "date": "2026-10-31",
-  "generated": "2026-10-31T16:06:07Z",
+  "date": "2026-11-01",
+  "generated": "2026-11-01T17:07:51Z",
   "health": [
     {
       "error": null,
@@ -133,20 +133,20 @@
     {
       "error": null,
       "feed_id": "govinfo-fr",
-      "http_status": 200,
-      "items": 100,
+      "http_status": 304,
+      "items": null,
       "route_url": "https://www.govinfo.gov/rss/fr.xml",
-      "source_label": "live",
-      "status": "ok"
+      "source_label": "cache",
+      "status": "not-modified"
     },
     {
       "error": null,
       "feed_id": "govinfo-fr-bulkdata",
-      "http_status": 200,
-      "items": 100,
+      "http_status": 304,
+      "items": null,
       "route_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
-      "source_label": "live",
-      "status": "ok"
+      "source_label": "cache",
+      "status": "not-modified"
     },
     {
       "error": null,
@@ -215,10 +215,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "e263ae4d38d66fe4b3134c66188ad3f899f9034f3273bb327d26d080a56c03c1",
+      "content_sha256": "c1d48d7ceb57c339425bea783b2ea8b7a7adc585d1b90f806158e9106b2cbe13",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-78189",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-120306",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -233,11 +233,216 @@
           "raw": 0
         }
       },
-      "published": "2026-10-31T15:16:54Z",
+      "published": "2026-11-01T13:18:01Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.9) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-120306: Beta9 turns each shell command in a tenant image definition into a Dockerfile RUN line and executes",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "809ba5b57a965197a0094d5d15d662b14778ce13718006741464cec8ab2e316e",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-120307",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-01T13:18:01Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.9) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-120307: The Beta9 worker serves the sandbox file API from outside the container. getHostPathFromContainerPat",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "e88703ac473613dedcc5d7847731d6ef2b3a3f5848f2dfee0d058547757668f4",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-120308",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-01T13:18:01Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.9) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-120308: A Beta9 tenant can attach a volume when deploying a function, endpoint, or task queue. The gateway b",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "5c10e342e44f76186a0f7a35463b9e848926b4a3f59507c8a1f0506fbb977701",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-120227",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-01T13:18:00Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.9) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-120227: A vulnerability was detected in WAVLINK WN701AE M01AE_V260105. This affects the function del_staticr",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "bea6887f5c73ba89a88ae9ba4ee4257a45a03737a66687821fff3e28409bd5cf",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-120226",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-01T12:17:09Z",
+      "publisher": "Ervik",
+      "summary_display": "LOW severity (CVSS 3.3) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-120226: A security vulnerability has been detected in Hangzhou Xiongmai Technology P2PAPI.dll 1.3.3.32 on Wi",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "5dab0c58927514669222c61a110be9f7ef5226c13132faeb3cfd3b072463bc0b",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-13575",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-01T11:18:58Z",
       "publisher": "Ervik",
       "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-78189: WebDyne versions from 3.007 before 3.022 for Perl execute.psp files outside the document root via pa",
+      "title_display": "CVE-2026-13575: HTTP: : Session versions before 0.54 for Perl allow memcached command injection via unfiltered sessi",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -256,10 +461,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "748ef0411aade4f589ef1f541ace9f557c9d673f5e01c80982bdcb156a00f432",
+      "content_sha256": "1176ea8506327f7835f6aa63d4e1afb5f4afa595cdcd41bdd4dad5dec9a3e222",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-78190",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-120224",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -274,11 +479,93 @@
           "raw": 0
         }
       },
-      "published": "2026-10-31T15:16:54Z",
+      "published": "2026-11-01T11:18:57Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.9) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-120224: A security flaw has been discovered in Oray Pugongying X5 Pro up to 7.6.1. Affected is the function",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "4d9c54f4da48d9c2639a22145b4a2bee1dd6b95ca4ed01e038f33669e3c98679",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-120225",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-01T11:18:57Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.1) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-120225: A weakness has been identified in Oray Pugongying X5 Pro up to 7.6.1. Affected by this vulnerability",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "7c62859146ad060710919480039b6971740789b08ff823bc1c59cb9164af41ca",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-119627",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-01T10:18:37Z",
       "publisher": "Ervik",
       "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-78190: WebDyne versions from 2.014 before 3.022 for Perl reflect request parameters unescaped into form fie",
+      "title_display": "CVE-2026-119627: The web profile and RSS/Atom feed routes of users and organizations checked only whether a signed-in",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -297,10 +584,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "36b8ebef30747f92452c5ab3380c29910a6152bac02b1c17674915b71c9deab3",
+      "content_sha256": "671c8f7aa010002d6bac58636fb24e5f08e3d780b22be72ebf14fe97d737ac95",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-78191",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-120223",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -315,11 +602,52 @@
           "raw": 0
         }
       },
-      "published": "2026-10-31T15:16:54Z",
+      "published": "2026-11-01T10:18:37Z",
+      "publisher": "Ervik",
+      "summary_display": "LOW severity (CVSS 3.1) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-120223: A vulnerability was identified in Oray Pugongying X5 Pro up to 7.6.1. This impacts the function sess",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "f48d1f68fe54fed47241072c7cc8e8b31535979c1c3b0d56dd421cc224f85260",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-120263",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-01T10:18:37Z",
       "publisher": "Ervik",
       "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-78191: WebDyne versions from 2.031 before 3.022 for Perl execute files with.psp anywhere in the name as Per",
+      "title_display": "CVE-2026-120263: When `[oauth2_client].ACCOUNT_LINKING` is set to `auto` (not the default) and registration is enable",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -338,10 +666,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "246af00284d59bc8593d2ecae0ee29262225503d3f05077b0a3ffa9ce53c54e1",
+      "content_sha256": "749b08294bc0fcb667f6c4157935215e04493819bc21e33e0cd4bbe71abda0ad",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-78192",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-118386",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -356,11 +684,11 @@
           "raw": 0
         }
       },
-      "published": "2026-10-31T15:16:54Z",
+      "published": "2026-11-01T10:18:36Z",
       "publisher": "Ervik",
       "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-78192: WebDyne versions from 2.022 before 3.022 for Perl disclose application source to unauthenticated cli",
+      "title_display": "CVE-2026-118386: Workflows triggered by a pull request review were read from the commit named in the review's `commit",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -379,10 +707,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "2528a5f8313512b019ee721553bd7fb8248eb78383911ce96297a2c8e5de0c0c",
+      "content_sha256": "1ad3bd3c1172ad490ed9e36dac7a98bed3e6d58c6009badbca128f3149909a12",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-78188",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-118394",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -397,11 +725,11 @@
           "raw": 0
         }
       },
-      "published": "2026-10-31T15:16:53Z",
+      "published": "2026-11-01T10:18:36Z",
       "publisher": "Ervik",
       "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-78188: WebDyne versions from 2.014 before 3.022 for Perl issue session cookies without the Secure, HttpOnly",
+      "title_display": "CVE-2026-118394: The OAuth2 userinfo endpoint (`/login/oauth/userinfo`) decided whether to limit the `groups` claim t",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -420,10 +748,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "e4c6fbf19eeceecafc0f759d1fec923fd5c6942dea1aad2e8b31cff1a6e8d838",
+      "content_sha256": "d09e3b9b10eeb0a82745d0634530c37e5528d51c1c52547d2a749815d179e632",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-15272",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-118395",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -438,11 +766,11 @@
           "raw": 0
         }
       },
-      "published": "2026-10-31T12:16:27Z",
+      "published": "2026-11-01T10:18:36Z",
       "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
+      "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-15272: The Web 2.0 Directory plugin for WordPress is vulnerable to time-based SQL Injection via the 'w2dc_l",
+      "title_display": "CVE-2026-118395: Gitea 1.27.3 stopped personal access tokens restricted to public resources (`public-only`) from crea",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -461,10 +789,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "7475e2c3bd2e4d3f7bd4032b744bb7b2144402d3e09e82608e0702160a9ed35c",
+      "content_sha256": "556e43b272cc7779e11f3416478e2bbd5152d3dafdd1772f114d63b615e0b9ca",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-118599",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-118504",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -479,11 +807,11 @@
           "raw": 0
         }
       },
-      "published": "2026-10-31T10:16:38Z",
+      "published": "2026-11-01T10:18:36Z",
       "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.5) vulnerability.",
+      "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-118599: A file overwrite vulnerability exists in Epiphany when installing WebExtension packages from.xpi fil",
+      "title_display": "CVE-2026-118504: The web interface blocks issue and pull request changes on archived repositories, but several issue",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -502,10 +830,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "3b339d504175505eabe0d8e5ee494584387ecfb96de4a14ee3b0ddafa2c24e24",
+      "content_sha256": "961c6cdcc194db55bf02dee440cc1fc231b3e20a9ccea93770e5195b2a771a62",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120114",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-119441",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -520,11 +848,11 @@
           "raw": 0
         }
       },
-      "published": "2026-10-31T10:16:38Z",
+      "published": "2026-11-01T10:18:36Z",
       "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.2) vulnerability.",
+      "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-120114: The Debug Log Manager - Conveniently Monitor and Inspect Errors plugin for WordPress is vulnerable t",
+      "title_display": "CVE-2026-119441: `DELETE /api/v1/orgs/{org}/repos` deletes all repositories of an organization, but it did not enforc",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -543,10 +871,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "96e7c0ffa52acff229453df46c4e4dc402beb0012a26e044d6ec2b26a8b8998b",
+      "content_sha256": "3843a2967d13edf5a0d1df3633e1c4258b0add91ce2109bc51f5d507fd0b6846",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120194",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-119533",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -561,11 +889,11 @@
           "raw": 0
         }
       },
-      "published": "2026-10-31T10:16:38Z",
+      "published": "2026-11-01T10:18:36Z",
       "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
+      "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-120194: A flaw was found in json-glib. The JSONPath slice evaluator used by json_path_query() can enter an i",
+      "title_display": "CVE-2026-119533: Repository and organization project boards listed the pull requests that reference each issue on the",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -584,10 +912,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "61b8228471ce6b91ca6fd4b216213bc474b5cb733b6a52a5b4cb4e5bd2560402",
+      "content_sha256": "2e07551368e284bb1fe05a8c5d71be9f39951d58a823694cf8281ce708300197",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-76010",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-119625",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -602,587 +930,11 @@
           "raw": 0
         }
       },
-      "published": "2026-10-31T10:16:38Z",
+      "published": "2026-11-01T10:18:36Z",
       "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 8.8) vulnerability.",
+      "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-76010: The Photo Gallery, Sliders, Proofing and Themes - NextGEN Gallery plugin for WordPress is vulnerable",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "1ae1288422bff7f4ca996dbba6498cb1fcd40366393c3ce3411ac3f89320e1fe",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-96554",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T10:16:38Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.4) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-96554: The BuddyBoss Platform plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Group N",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "0e818f7cd8878eb74f430c6e4a1112fa290b88a8748d2eee69b9ad394314229e",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-107711",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T10:16:37Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.4) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-107711: The FlexStock - Product Stock Sync with Google Sheets for WooCommerce plugin for WordPress is vulner",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "175801542a541d81dff12bc350077e852f59d290529949dc5a9aec3efa522274",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-109197",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T10:16:37Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-109197: The WP Directory Kit plugin for WordPress is vulnerable to generic SQL Injection via the 'idfield' p",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "57939aad9915ecedaf70016053c5897eb8af91eafdda57c75158cd5fb93db4b2",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-109231",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T10:16:37Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 4.3) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-109231: The Germanized for WooCommerce plugin for WordPress is vulnerable to Unauthorized Access of Private",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "92b5ca268803ccedf787b2f5270c62e4501134f45d280d90b906c9d6634a278e",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-116752",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T10:16:37Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.4) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-116752: The GeoDirectory - WP Business Directory Plugin and Classified Listings Directory plugin for WordPre",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "fe26c31cf1f9361d941d2cd5084f0b434435f76bb0486fcd7bb319d027330e67",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-118598",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T10:16:37Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-118598: A logic error in Epiphany's site permission handling can cause camera and microphone access to be gr",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "bcf5643de5b7ad87dfdcb94ae537667c683b191a699c2ede34093ee75d44f569",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-104926",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T10:16:36Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.1) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-104926: The WooCommerce Extra Product Options Pro plugin for WordPress is vulnerable to Reflected Cross-Site",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "e952bfb227cf46353ec32062b9e5de0b2a38d609c8d100f8852ff0d2a7c4cd8c",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-100151",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T10:16:29Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.1) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-100151: The Ninja Forms - Contact Form Builder with Calculators, Quizzes, Signatures & AI Form Builder plugi",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities",
-        "technology",
-        "technology/ai"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "1da4af23c9b879970293af4af3f8dedd7f9cc62ee2dafdd005d1387827bf10e0",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-119160",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T09:16:33Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.4) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-119160: The Smart Post - Post Grid, Post Carousel, Post Slider Gutenberg Blocks for Blog & News plugin for W",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "3dc85b7b4604d9979bc264db06cc32ff3d27c3cc985c5adb0f3b39e7ffef6c4d",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120075",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T09:16:33Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.2) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-120075: The WP Activity Log plugin for WordPress is vulnerable to Stored Cross-Site Scripting in all version",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "e73bdd4d4002a86ca25a5813a7a898bbf661726cff5ca6b4ac74893826f6dc13",
-      "feed_id": "govinfo-fr",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.govinfo.gov/app/details/FR-2026-11-02",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T08:48:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
-      "tier": "canonical",
-      "title_display": "Federal Register Vol. 91, No.210, November 2, 2026",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "regulatory/federal-rules",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "source": "regulatory/federal-rules"
-      },
-      "content_sha256": "f9a454474271e142f5d167e249aa5b5b75146144c9728362591579082fb1b904",
-      "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-02.xml",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T08:48:00Z",
-      "publisher": "U.S. Government Publishing Office",
-      "summary_display": "Content Files XML",
-      "tier": "canonical",
-      "title_display": "FR-2026-11-02",
-      "topics": [
-        "government",
-        "government/federal",
-        "regulation",
-        "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/breaches",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "c476f7c64bcfb9766e39cd19d948fe3fe9ac28c573478d62f4f9a4741e0cd167",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/news/chainalysis-agentic-breach-amadeus-cathay-pacific-fake-claude-code-cursor-polymarket-wordpress-7-1-4-2026-10-31",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-31T05:30:00Z",
-      "publisher": "Ervik",
-      "summary_display": "A look at the last 24 hours in cybersecurity: the Arctic University of Norway fights a targeted attack with compromised servers, Chainalysis confirms a breach by an attacker using \"offensive agentic techniques,\" Cathay Pacific loses 53,000 bookings to the Amadeus intrusion, a trojanized Claude Co...",
-      "tier": "news",
-      "title_display": "Chainalysis Breached by an \"Agentic\" Attacker, Amadeus Hack Reaches Cathay Pacific, and a Fake Claude Code Extension Hits Cursor",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/exploited-now",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "bb6bf1a0ea826debc136dfd6a04147b615ceb5d10ef8089c188b5e65fa508840",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-111357",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-10-30T00:00:00Z",
-      "publisher": "Ervik",
-      "summary_display": "Ivanti Connect Secure Missing Authentication for Critical Function Vulnerability - confirmed actively exploited (CISA KEV).",
-      "tier": "news",
-      "title_display": "Active Zero-Day: CVE-2026-111357",
+      "title_display": "CVE-2026-119625: The `/{username}` web route accepted personal access tokens over HTTP Basic authentication without c",
       "topics": [
         "cybersecurity",
         "cybersecurity/identity",
@@ -1195,17 +947,17 @@
       "authority": "secondary",
       "authors": [],
       "categories": {
-        "content": "attacks/exploited-now",
+        "content": "vulnerabilities/scoring",
         "content_basis": {
           "category": "item",
           "subcategory": "item"
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "2cfcbb0dd41b61a9ecd16f60f56a80c579ccc64970939d1d38b9de6d95628779",
+      "content_sha256": "ea4e58214cb46c57a21477c31d86d6ccf93d007975d64bb035302dd3893947e0",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-10-31T16:06:07Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-118527",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-117677",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1220,11 +972,93 @@
           "raw": 0
         }
       },
-      "published": "2026-10-30T00:00:00Z",
+      "published": "2026-11-01T10:18:35Z",
       "publisher": "Ervik",
-      "summary_display": "Ivanti Connect Secure Generation of Predictable Numbers or Identifiers Vulnerability - confirmed actively exploited (CISA KEV).",
+      "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "Active Zero-Day: CVE-2026-118527",
+      "title_display": "CVE-2026-117677: When parsing an uploaded Helm chart, Gitea decompressed the archive and read every tar entry while l",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "b46fb4a1224ccc176a1b23bde91aa0746f84ce915f3f549eb2e56af49bbdfb2d",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-117685",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-01T10:18:35Z",
+      "publisher": "Ervik",
+      "summary_display": "NONE severity vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-117685: The OCI registry's cross-repository blob mount checked the target package against the token's `publi",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "releases/operating-systems",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "acefb00756e7be36502d616901984829855451ba59bc68f52b47c42c0b2eb9ae",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-01T17:07:51Z",
+      "link": "https://www.ervik.as/news/binance-refills-6-billion-sophos-cursor-aur0ra-agents-netamloader-uit-2026-11-01",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-01T05:30:00Z",
+      "publisher": "Ervik",
+      "summary_display": "A look at the last 24 hours in cybersecurity: Binance says it has replaced about 90 percent of the $6.3 billion stolen and aims to reopen withdrawals, the Arctic University of Norway takes compromised servers offline while the attacker keeps trying to get in, Sophos details how Cursor agents reac...",
+      "tier": "news",
+      "title_display": "Binance Refills $6 Billion Without Naming a Root Cause, Sophos Shows Cursor Agents Inside Ransomware Intrusions, and NetamLoader Hides in a Windows Update Folder",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
