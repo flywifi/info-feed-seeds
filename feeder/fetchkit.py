@@ -144,6 +144,13 @@ def default_opener(req: urllib.request.Request, timeout: float):
 
 # --------------------------------------------------------------------------- bodies
 
+def inflate_capped(data: bytes, wbits: int, cap: int) -> tuple[bytes, bool]:
+    """Decompress at most `cap` bytes of output. Returns (bytes, truncated); a body that would expand past
+    the cap is cut there, never inflated in full. Raises zlib.error for data that is not compressed."""
+    out = zlib.decompressobj(wbits).decompress(data, cap + 1)
+    return (out[:cap], True) if len(out) > cap else (out, False)
+
+
 def read_body(resp, cap: int) -> tuple[bytes, bool]:
     """Stream the body up to `cap` bytes. Returns (bytes, truncated). Handles gzip and deflate
     transparently, including a truncated gzip stream, and never raises on a mislabelled encoding."""
@@ -164,16 +171,14 @@ def read_body(resp, cap: int) -> tuple[bytes, bool]:
     encoding = (headers.get("Content-Encoding") or "").lower()
     if encoding in ("gzip", "x-gzip", "deflate"):
         wbits = 16 + zlib.MAX_WBITS if encoding != "deflate" else zlib.MAX_WBITS
-        try:
-            body = zlib.decompressobj(wbits).decompress(body)
-        except zlib.error:
+        for bits in (wbits, -zlib.MAX_WBITS):
             try:
-                body = zlib.decompressobj(-zlib.MAX_WBITS).decompress(body)
+                body, cut = inflate_capped(body, bits, cap)
             except zlib.error:
-                pass  # mislabelled encoding: keep the raw bytes
-        if len(body) > cap:
-            body = body[:cap]
-            truncated = True
+                continue
+            truncated = truncated or cut
+            break
+        # neither worked: a mislabelled encoding, so the raw bytes are kept
     return body, truncated
 
 

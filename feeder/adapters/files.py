@@ -17,12 +17,13 @@ Documents that declare XML entities are refused. Dates go through items.to_utc_z
 parse stays null."""
 from __future__ import annotations
 
-import gzip
 import hashlib
 import json
 import re
 import xml.etree.ElementTree as ET
+import zlib
 
+from ..fetchkit import DEFAULT_BODY_CAP, inflate_capped
 from ..items import RawItem, to_utc_z
 from .base import AdapterError
 
@@ -33,10 +34,12 @@ ITEM_FIELDS = ("title", "link", "guid", "summary", "published")
 def _xml_root(data: bytes) -> ET.Element:
     if data[:2] == b"\x1f\x8b":
         try:
-            data = gzip.decompress(data)
-        except (OSError, EOFError) as exc:
+            data, cut = inflate_capped(data, 16 + zlib.MAX_WBITS, DEFAULT_BODY_CAP)
+        except zlib.error as exc:
             raise AdapterError(f"bad gzip body: {exc}") from None
-    if re.search(rb"<!ENTITY", data[:65536], re.I):
+        if cut:
+            raise AdapterError(f"gzip body expands past {DEFAULT_BODY_CAP} bytes; refused")
+    if re.search(rb"<!ENTITY", data, re.I):
         raise AdapterError("document declares entities")
     try:
         return ET.fromstring(data)

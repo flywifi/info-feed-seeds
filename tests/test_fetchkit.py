@@ -1,6 +1,7 @@
 """Offline tests for feeder/fetchkit.py: injected opener, fake clock, no network, no persisted state
 unless the test creates a temporary directory for it."""
 import gzip
+import zlib
 import json
 import socket
 import tempfile
@@ -164,6 +165,13 @@ class BodyTests(unittest.TestCase):
         self.assertTrue(truncated)
         body, truncated = fetchkit.read_body(FakeResp(200, {}, b"short"), 100)
         self.assertEqual((body, truncated), (b"short", False))
+
+    def test_a_compression_bomb_is_cut_at_the_cap_without_inflating_it(self):
+        bomb = gzip.compress(b"\0" * (64 * 1024 * 1024))   # 64 MiB of zeros, about 64 KiB compressed
+        body, truncated = fetchkit.read_body(FakeResp(200, {"Content-Encoding": "gzip"}, bomb), 1024 * 1024)
+        self.assertEqual((len(body), truncated), (1024 * 1024, True))
+        out, cut = fetchkit.inflate_capped(bomb, 16 + zlib.MAX_WBITS, 1000)
+        self.assertEqual((len(out), cut), (1000, True))
 
     def test_gzip_and_mislabelled_encoding(self):
         payload = gzip.compress(b"hello gzip")

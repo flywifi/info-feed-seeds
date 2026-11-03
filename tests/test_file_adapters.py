@@ -40,6 +40,18 @@ class SitemapTests(unittest.TestCase):
                 call("sitemap", body)
 
 
+class XmlSafetyTests(unittest.TestCase):
+    def test_a_gzip_sitemap_that_expands_past_the_body_cap_is_refused(self):
+        bomb = gzip.compress(b"<urlset>" + b" " * (6 * 1024 * 1024) + b"</urlset>")
+        with self.assertRaisesRegex(adapters.AdapterError, "expands past"):
+            call("sitemap", bomb)
+
+    def test_an_entity_declaration_after_a_long_comment_is_refused(self):
+        body = b"<!--" + b"x" * 70000 + b'--><!DOCTYPE u [<!ENTITY a "b">]><urlset/>'
+        with self.assertRaisesRegex(adapters.AdapterError, "entities"):
+            call("sitemap", body)
+
+
 class UrlListTests(unittest.TestCase):
     def test_comments_non_http_and_duplicates_are_dropped(self):
         body = b"\xef\xbb\xbfhttps://example.gov/a\r\n# note\nftp://example.gov/f\nhttps://example.gov/b # why\nhttps://example.gov/a\n\n"

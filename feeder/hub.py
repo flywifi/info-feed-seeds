@@ -174,8 +174,15 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
     day_dt = date.fromisoformat(day)
     earliest = (day_dt - timedelta(days=int(profile["window_days"]))).isoformat()
 
+    rows = store.items_for_feeds(sorted(chosen))
+    # A link one source gives to several distinct items (a shared listing page) does not identify an
+    # item, so those items are keyed by their own hash instead of being merged as one story.
+    per_source: dict[tuple[str, str], int] = {}
+    for row in rows:
+        if row["link_key"]:
+            per_source[(row["feed_id"], row["link_key"])] = per_source.get((row["feed_id"], row["link_key"]), 0) + 1
     groups: dict[str, list[tuple[dict, list[str]]]] = {}
-    for row in store.items_for_feeds(sorted(chosen)):
+    for row in rows:
         if row["content_sha256"] in taken:
             continue
         ref = (row["published"] or row["first_seen"])[:10]
@@ -184,7 +191,8 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
         if not accepts(profile, row):
             continue
         tags, _ = item_tags(profile, chosen[row["feed_id"]], row)
-        key = row["link_key"] or row["content_sha256"]
+        shared = per_source.get((row["feed_id"], row["link_key"]), 0) > 1
+        key = row["content_sha256"] if shared or not row["link_key"] else row["link_key"]
         groups.setdefault(key, []).append((row, tags))
 
     ordered = []

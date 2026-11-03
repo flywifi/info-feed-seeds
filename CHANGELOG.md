@@ -6,6 +6,14 @@ All notable changes to this repository are recorded here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Items one source gives the same link (Ervik's ransomware victim posts all link to /ransomware)
+  are keyed by their own hash, so each reaches the digest; before, only the first was ever shown.
+- Compressed bodies are inflated with a hard output cap (the 5 MiB body cap) in the fetcher and in
+  the gzip sitemap reader, which refuses a body that expands past it; a small compression bomb no
+  longer exhausts memory. The XML entity check reads the whole body, not its first 64 KiB.
+
 ### Added
 
 - A profile no longer selects a disabled source by topic (a source listed by id still is), so stored,
@@ -258,6 +266,7 @@ All notable changes to this repository are recorded here. The format follows
   says consumers must escape text fields before rendering them.
 
 ### Fixed
+
 
 - Digest Markdown escapes the Markdown metacharacters in feed text, so a feed title written as a
   link or image renders as plain text instead of a live link or a remote image load.

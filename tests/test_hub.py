@@ -444,6 +444,21 @@ class PollTests(HubTestCase):
             self.assertRegex(c["content"], r"^[a-z-]+/[a-z-]+$", "every polled item has a content category")
             self.assertIn(c["content_basis"]["category"], ("item", "source"))
 
+    def test_items_sharing_one_link_in_a_source_each_reach_the_digest(self):
+        def feed(*titles):
+            entries = "".join(f"<item><title>{t}</title><link>https://example.gov/victims</link><guid>{t}</guid>"
+                              f"<pubDate>Mon, 19 Oct 2026 0{i}:00:00 GMT</pubDate><description>cybersecurity</description></item>"
+                              for i, t in enumerate(titles))
+            return (f'<?xml version="1.0"?><rss version="2.0"><channel><title>V</title><link>https://example.gov/</link>'
+                    f"<description>d</description>{entries}</channel></rss>").encode()
+
+        self.add_source("omicron", "https://example.gov/v.xml", ["cybersecurity"])
+        self.script["https://example.gov/v.xml"] = feed("Ransomware: Alpha Ltd", "Ransomware: Beta Ltd")
+        self.assertEqual(self.poll("--only", "omicron"), 0)
+        md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
+        self.assertIn("Alpha Ltd", md)
+        self.assertIn("Beta Ltd", md, "a shared listing link does not merge two posts")
+
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
             records = []
