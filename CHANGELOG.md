@@ -13,6 +13,13 @@ All notable changes to this repository are recorded here. The format follows
 - An unproven disabled source must keep `verified` null and record at least one attempt (lint and
   the commit checker).
 - Refused follow URLs (another host, port or scheme) are counted and reported as `follow-refused`.
+- Follow URLs on the address a route redirected to (example.gov to www.example.gov) are fetched,
+  not refused.
+- The poll workflow saves the database after any successful publish, even when the run is then
+  cancelled.
+- `tools/preflight.py` hands the ignored local name list to the base branch's checker through
+  `IFS_PERSON_FINGERPRINTS` when that variable is empty, so the rehearsal reads the same names as the
+  hooks.
 - Store columns: the source and content category pairs and their basis are filled at ingest; publisher,
   industries, standards, editions, change types, CVEs, vendors, link hosts, severity and its rank,
   exploited, language, deadline and updated stay empty until tag extraction lands.

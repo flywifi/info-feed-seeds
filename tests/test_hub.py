@@ -456,6 +456,28 @@ class PollTests(HubTestCase):
             self.assertRegex(c["content"], r"^[a-z-]+/[a-z-]+$", "every polled item has a content category")
             self.assertIn(c["content_basis"]["category"], ("item", "source"))
 
+    def test_follow_links_on_the_address_the_route_redirected_to_are_fetched(self):
+        def stub(body, url, params):
+            return {"kind": "json-api", "items": [RawItem(guid=url, link=url, title=url, summary="s")],
+                    "follow": ["https://www.example.gov/r?page=2"] if body == b"root" else []}
+
+        class Redirecting(FakeFetcher):
+            def get(self, url, conditional=True, **kw):
+                result = super().get(url, conditional, **kw)
+                if url == "https://example.gov/r":
+                    result.final_url = "https://www.example.gov/r"
+                return result
+
+        self.add_source("pi", "https://example.gov/r", ["cybersecurity"],
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": "https://example.gov/r",
+                                 "params": {"items_path": "results[]", "fields": {"title": "t"}}}])
+        self.script.update({"https://example.gov/r": b"root", "https://www.example.gov/r?page=2": b"two"})
+        fetcher = Redirecting(self.script)
+        with mock.patch.dict(adapters.ADAPTERS, {"json-api": stub}):
+            self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", DAY, "--state-dir", str(self.state),
+                                          "--out-dir", str(self.out), "--only", "pi", fetcher=fetcher), 0)
+        self.assertEqual(fetcher.calls, ["https://example.gov/r", "https://www.example.gov/r?page=2"])
+
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
             records = []

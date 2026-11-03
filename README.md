@@ -324,7 +324,7 @@ https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/<profile>
 ```
 
 `.github/workflows/poll.yml` polls every enabled profile at 11:17 UTC each day (and on demand from
-the Actions tab) and publishes on `data`. The branch appears with the first run. For the
+the Actions tab) and publishes on `data`. For the
 technology-regulation profile:
 
 - Today's digest to read: https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/technology-regulation/latest.md
@@ -333,7 +333,8 @@ technology-regulation profile:
 - Every day's file: https://github.com/flywifi/info-feed-seeds/tree/data/digests/technology-regulation
 
 The repository is public, so these need no sign-in. The item database lives in the Actions cache
-between runs and is never committed; if the cache is lost, the next run starts a fresh database and
+between runs, saved only after the digests reached `data` (a failed push leaves the previous
+database, so no item is marked shown in a digest that was not published), and is never committed; if the cache is lost, the next run starts a fresh database and
 an item already shown on an earlier day can appear again.
 
 ## Adding a source

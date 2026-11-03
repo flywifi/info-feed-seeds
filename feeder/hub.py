@@ -116,8 +116,12 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
         budget = adapters.follow_limit(route)
         seen = {url}
         follow_failed = follow_refused = 0
+        base = result.final_url or url
         while queue and budget > 0:
-            next_url = adapters.follow_url(url, queue.pop(0))
+            candidate = queue.pop(0)
+            # The route's own address or, after a redirect, the address that answered (example.gov to
+            # www.example.gov): links on either are the same site.
+            next_url = adapters.follow_url(url, candidate) or adapters.follow_url(base, candidate)
             if next_url is None:
                 follow_refused += 1   # another host, port or scheme: never fetched, but counted
                 continue
@@ -130,7 +134,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             if more.error is not None or more.body is None:
                 follow_failed += 1
                 continue
-            if adapters.follow_url(url, more.final_url) is None:
+            if adapters.follow_url(url, more.final_url) is None and adapters.follow_url(base, more.final_url) is None:
                 follow_failed += 1
                 continue
             try:

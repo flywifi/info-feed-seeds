@@ -356,6 +356,23 @@ class RangeTests(unittest.TestCase):
         self.assertNotIn("GIT_DIR", env)
         self.assertNotIn("GIT_INDEX_FILE", env)
 
+    def test_rehearsal_hands_the_local_name_list_to_the_base_checker(self):
+        import preflight
+        digest = "ab" * 32
+        base = {k: v for k, v in os.environ.items() if k != "IFS_PERSON_FINGERPRINTS"}
+
+        def env_for(listed, extra=None):
+            with tempfile.TemporaryDirectory() as td, mock.patch.dict(os.environ, dict(base, **(extra or {})), clear=True), \
+                    mock.patch.object(preflight, "LOCAL_FINGERPRINTS", listed):
+                return preflight.job_env({}, td)
+
+        with tempfile.TemporaryDirectory() as store:
+            listed = Path(store) / "person_fingerprints.local.json"
+            listed.write_text(json.dumps({"fingerprints": [digest, "not-hex"]}), encoding="utf-8")
+            self.assertEqual(env_for(listed)["IFS_PERSON_FINGERPRINTS"], digest)
+            self.assertEqual(env_for(listed, {"IFS_PERSON_FINGERPRINTS": "cd" * 32})["IFS_PERSON_FINGERPRINTS"], "cd" * 32,
+                             "a variable already set wins")
+            self.assertNotIn("IFS_PERSON_FINGERPRINTS", env_for(Path(store) / "missing.json"))
 
 class SourcesTests(unittest.TestCase):
     def test_changed_source_needs_live_sample(self):

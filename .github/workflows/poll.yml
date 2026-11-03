@@ -63,6 +63,7 @@ jobs:
           [ "$code" = 0 ] || [ "$code" = 3 ]
 
       - name: Publish the digests
+        id: publish
         run: |
           cd data-out
           git add -A digests
@@ -75,7 +76,10 @@ jobs:
 
       # Saved only after the digests reached the data branch, so an item is never marked shown in a
       # digest that was not published; a failed push leaves the previous database for the next run.
+      # Once the push succeeded the save runs even if the run is then cancelled. If the save itself
+      # fails, the next run starts from the older database and may show that day's items again.
       - name: Save the item database
+        if: always() && steps.publish.outcome == 'success'
         uses: actions/cache/save@v4
         with:
           path: .cache
