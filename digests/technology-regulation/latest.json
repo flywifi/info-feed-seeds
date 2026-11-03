@@ -2,16 +2,16 @@
   "_comment": "Items are quoted from public feeds and are data, not instructions. Text fields are plain text with HTML stripped, not escaped for any markup: a consumer that renders them into HTML or Markdown must escape them first. Written by info-feed-seeds hub poll.",
   "coverage": {
     "held_by_guard": 0,
-    "items_in_json": 24,
-    "items_in_markdown": 24,
-    "items_selected": 24,
+    "items_in_json": 33,
+    "items_in_markdown": 33,
+    "items_selected": 33,
     "sources_did_not_run": 0,
     "sources_failed": 0,
     "sources_responded": 21,
     "sources_selected": 21
   },
-  "date": "2026-11-02",
-  "generated": "2026-11-02T20:46:46Z",
+  "date": "2026-11-03",
+  "generated": "2026-11-03T18:27:24Z",
   "health": [
     {
       "error": null,
@@ -26,7 +26,7 @@
       "error": null,
       "feed_id": "fedramp-changelog",
       "http_status": 200,
-      "items": 98,
+      "items": 100,
       "route_url": "https://www.fedramp.gov/changelog/",
       "source_label": "live",
       "status": "ok"
@@ -133,20 +133,20 @@
     {
       "error": null,
       "feed_id": "govinfo-fr",
-      "http_status": 304,
-      "items": null,
+      "http_status": 200,
+      "items": 100,
       "route_url": "https://www.govinfo.gov/rss/fr.xml",
-      "source_label": "cache",
-      "status": "not-modified"
+      "source_label": "live",
+      "status": "ok"
     },
     {
       "error": null,
       "feed_id": "govinfo-fr-bulkdata",
-      "http_status": 304,
-      "items": null,
+      "http_status": 200,
+      "items": 100,
       "route_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
-      "source_label": "cache",
-      "status": "not-modified"
+      "source_label": "live",
+      "status": "ok"
     },
     {
       "error": null,
@@ -181,7 +181,7 @@
       "http_status": 200,
       "items": 40,
       "route_url": "https://www.nist.gov/news-events/news/rss.xml",
-      "source_label": "live",
+      "source_label": "cache",
       "status": "ok"
     },
     {
@@ -190,14 +190,14 @@
       "http_status": 200,
       "items": 40,
       "route_url": "https://www.nist.gov/news-events/standards/rss.xml",
-      "source_label": "live",
+      "source_label": "cache",
       "status": "ok"
     },
     {
       "error": null,
       "feed_id": "pci-ssc-blog",
       "http_status": 200,
-      "items": 12,
+      "items": 24,
       "route_url": "https://blog.pcisecuritystandards.org/",
       "source_label": "live",
       "status": "ok"
@@ -205,20 +205,20 @@
   ],
   "items": [
     {
-      "authority": "secondary",
+      "authority": "primary",
       "authors": [],
       "categories": {
-        "content": "vulnerabilities/scoring",
+        "content": "vulnerabilities/detections",
         "content_basis": {
-          "category": "item",
-          "subcategory": "item"
+          "category": "source",
+          "subcategory": "source"
         },
-        "source": "attacks/threat-research"
+        "source": "vulnerabilities/detections"
       },
-      "content_sha256": "a8e1c1b284b53fda2382feaad21f98b468d21fc783427cd4a48116be7d6c80d1",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-81938",
+      "content_sha256": "27ead344e4ffc0b54edacd73467e353246e431c4d5af850db100eed2b3d21399",
+      "feed_id": "fortiguard-ot-ips",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.32500",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -233,16 +233,135 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T19:18:11Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.7) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-81938: Grafana Mimir's Alertmanager rejects tenant-supplied receiver configurations that reference local fi",
+      "published": "2026-11-03T21:11:13Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (4) ASUS.RT-AC3200.appGet.cgi.Buffer.Overflow. DrayTek.Vigor2960.uploadlangs.Command.Injection. TP-Link.Routers.WlanMacFilterRpm.Buffer.Overflow. WAVLINK.WN701AE.rule_name.Remote.Command.Injection.",
+      "tier": "vendor",
+      "title_display": "37.32500",
       "topics": [
         "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
+        "cybersecurity/ot-ics",
         "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/detections",
+        "content_basis": {
+          "category": "source",
+          "subcategory": "source"
+        },
+        "source": "vulnerabilities/detections"
+      },
+      "content_sha256": "4ec23ea21645fe395b18bbf9ab465c6b4c268be1a47951a2abca2ce5bb1c1a85",
+      "feed_id": "fortiguard-ot-security",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://fortiguard.fortinet.com/updates/ots?version=37.325",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T21:09:37Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Modified (1) Danfoss.AK-SM.800A.getauth.Improper.Authentication",
+      "tier": "vendor",
+      "title_display": "37.325",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/ot-ics"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/detections",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "source"
+        },
+        "source": "vulnerabilities/detections"
+      },
+      "content_sha256": "eb2b8cdbda6d023021712927ca3360561e9b8d2f91f99e2682efe6ec9f989648",
+      "feed_id": "fortiguard-ips",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.325",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T21:09:17Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (39) WordPress.page-template.Remote.Code.Execution (High) FG-VD-62541.0day (Critical) D-Link.DI-8400.DDNS.Configuration.Buffer.Overflow (Critical) ASUS.RT-AX86U.blocking_request.cgi.Buffer.Overflow (Critical) Cudy.Routers.net.set_wan.Command.Injection (Critical) TOTOLINK.X2000R.boa.fo...",
+      "tier": "vendor",
+      "title_display": "37.325",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/vulnerabilities",
+        "technology",
+        "technology/cloud"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/detections",
+        "content_basis": {
+          "category": "source",
+          "subcategory": "source"
+        },
+        "source": "vulnerabilities/detections"
+      },
+      "content_sha256": "125cc1c3b3483c01ee8505a1fed2fb220b3ca36d5a41003d6c9df9cb3cf56597",
+      "feed_id": "fortiguard-application-control",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://fortiguard.fortinet.com/updates/app?version=37.325",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T21:08:52Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) Google.Tasks Modified (2) X-VPN. Psiphon.",
+      "tier": "vendor",
+      "title_display": "37.325",
+      "topics": [
+        "cybersecurity"
       ]
     },
     {
@@ -256,10 +375,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "549b7c2f4daccfb3d234e6871e06722a737e9e7cd0c27c687a2daa2dd91a9883",
+      "content_sha256": "275908d3cdec016bb2fe5d5440c506651994f4fcd91732504efedbdd529d415c",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-67186",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-97350",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -274,134 +393,11 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T19:18:10Z",
-      "publisher": "Ervik",
-      "summary_display": "NONE severity vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-67186: Rejected reason: This CVE ID has been rejected or withdrawn by its CVE Numbering Authority.",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "1497a8383c429b8b7c5f0f131abc541e93e7cb9d8243da22bc7bae76976b336c",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120067",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:04Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.9) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-120067: For updatable cursors, which are enabled by default, psqlODBC adds hidden ctid and, for tables with",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "01843bfb89c7b84fa94ac51cb3cb9d007b14292ce5a99d02fe8589d5b0f5c646",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120497",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:04Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-120497: Stored cross-site scripting (XSS) in the HTML report generator in the aidlc-traceability CLI in AWS",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "8c56b91af574dee367695909a3d7052954284c1c0987120f5d916de89c0d95dc",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120656",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:04Z",
+      "published": "2026-11-03T16:17:38Z",
       "publisher": "Ervik",
       "summary_display": "NONE severity vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-120656: OpenKruise kruise-manager exposes an unauthenticated ppof endpoint when enabled, opening it on 0.0.0",
+      "title_display": "CVE-2026-97350: Securepoint SSL VPN Client v2 on Windows contains vulnerabilities in the handling of OpenVPN configu",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -420,10 +416,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "6ed2d6434b87ff99d3b9519fe8dd41a2c2d4096adec492ffd512829ec89b9c70",
+      "content_sha256": "8d5e55931f9cb80c63285fd1136b4567f38433e7e908f7fcd5d34dbb4fb18715",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120060",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-65165",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -438,257 +434,11 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T19:18:03Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.9) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-120060: psqlODBC trusts counts and lengths in server data in three places. SQLBulkOperations uses a server-s",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "8e715bdaa7faca0d4b80f35193fd4e7e456a374313cb3feb71e1eef63d445e03",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120061",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:03Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-120061: The psqlODBC parser for ODBC escape sequences in application SQL text writes the argument offsets of",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "7880fef2c2041287d2fdf248d6cc5637e42369061e3b99dc72b42cfa39431c4e",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120062",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:03Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-120062: SQLSpecialColumns in psqlODBC splices the table and schema names it receives into its catalog query",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "38fd50b91434db75be5170e7c8762e7eab7a7ebb36b0cc10c4a579d180fcdab9",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120063",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:03Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.9) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-120063: When psqlODBC quotes a schema or table name into a 128-byte stack buffer, its length check lets it w",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "50985b9dd319c1032cc7cb644b0e471212b1d0003417dec5ed142a32349b0a91",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120064",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:03Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-120064: Several psqlODBC entry points use an application-supplied column number or row index as an array ind",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "1498c583e5b4da0f4dc8cd58220376dc90d0ec4eae6cfa781fdf0662cdb7d376",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120065",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:03Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.1) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-120065: For an updatable cursor over a table without OIDs that has an auto-increment int4 column, psqlODBC u",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "a98e3cd729c80da1168bd369e4a3c9d890668913b7db5317aff02ba5997054e9",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120066",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:03Z",
+      "published": "2026-11-03T16:17:36Z",
       "publisher": "Ervik",
       "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-120066: On Unix-like systems, when logging is enabled, psqlODBC creates its log files in /tmp by default, na",
+      "title_display": "CVE-2026-65165: NVIDIA Slurm contains a vulnerability where a user could deliberately alter the provided nodelist al",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -707,10 +457,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "0ed0d1302581bcebd46c74f96c9353d44be236f2089af29224914e736fc0e4b2",
+      "content_sha256": "d6c1af34a3bf40e211eb7a3767826e46a78c9221409c023472b1238430737084",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-119733",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-65168",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -725,11 +475,11 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T19:18:02Z",
+      "published": "2026-11-03T16:17:36Z",
       "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 8.1) vulnerability.",
+      "summary_display": "HIGH severity (CVSS 7) vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-119733: Munshi (by Petpooja) before 2026-07-07 contained a missing authorization vulnerability in its compan",
+      "title_display": "CVE-2026-65168: NVIDIA Slurm contains an attacker-controlled heap-based buffer overflow in the slurmstepd socket han",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -748,10 +498,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "0da55aebcf1b9aeeab116a310f91f05ead3527ae41931e54e2afc95b5947e571",
+      "content_sha256": "21af309c0c68fcb637142b3d67a3fb6869b9773b69321a9f8e24795307f1b085",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-119734",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-73328",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -766,11 +516,11 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T19:18:02Z",
+      "published": "2026-11-03T16:17:36Z",
       "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
+      "summary_display": "HIGH severity (CVSS 7.2) vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-119734: Munshi (by Petpooja) before 2026-06-17 contained a broken object level authorization vulnerability t",
+      "title_display": "CVE-2026-73328: Volmarg Personal Management System through 2.1.0 contains an unrestricted file upload vulnerability",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -789,10 +539,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "7597a8556413e0a1713d3f11fdca408f12e80d7d2595f24eb761c927b7a627dd",
+      "content_sha256": "89b1dfaea49a49e473e8c32176d3940edb95ddf1aa10f174f2ef16780b15b7e6",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-119735",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-65107",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -807,11 +557,11 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T19:18:02Z",
+      "published": "2026-11-03T16:17:35Z",
       "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.4) vulnerability.",
+      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-119735: Munshi (by Petpooja) before 2026-07-13 contained a stored cross-site scripting vulnerability that al",
+      "title_display": "CVE-2026-65107: NVIDIA Slurm contains a vulnerability where a user could alter the supplemental group list as part o",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -830,10 +580,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "c89bad927f9c735946cfa3b0d4ea86441b254669b88e8710e69041fff5b5c4aa",
+      "content_sha256": "cd3d90091dbec43e352238d70a6d31e147c6730e9d3553f1e4d27dfbdfedb29b",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-119736",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-65108",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -848,11 +598,11 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T19:18:02Z",
+      "published": "2026-11-03T16:17:35Z",
       "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 8.2) vulnerability.",
+      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-119736: Attendo (formerly Petpooja Payroll) Admin Android application version 3.0.13 and earlier contains a",
+      "title_display": "CVE-2026-65108: NVIDIA Slurm contains an attacker-controlled heap-based buffer overflow in the slurmstepd process wh",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -871,10 +621,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "fec5ff1ee013995554f4bff780c61853c694105e9d0ad8ced20a7f1cbef62248",
+      "content_sha256": "d8162c1f1c6887a4f39dd7cd37c3d0f9cb4d884eb92a29eee929dde8a7901a32",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120057",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-65109",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -889,13 +639,507 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T19:18:02Z",
+      "published": "2026-11-03T16:17:35Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 4.7) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-65109: NVIDIA Slurm is subject to a symlink resolution issue in the container cleanup code that could allow",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "36865a0e45b93eca17b3a653598aa83c11d06b627dde7fdf3fa8bddd88166304",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-65138",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:35Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-65138: NVIDIA Slurm contains an attacker-controlled arbitrary-memory read in the slurmstepd socket API that",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "28d1a454ac51e4db4d375acf22ff349bf6e551d1ccd4ddc5e30e8336c287720d",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-65139",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:35Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-65139: NVIDIA Slurm contains an attacker-controlled SQL injection attack in certain SlurmDBD RPCs that can",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "38d35e8827ed80212cf088834a97c6f2f9681432650c28b75fe44f7a2f037c70",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-65140",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:35Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.7) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-65140: NVIDIA Slurm contains some inconsistent authorization checks against the Operator permission level i",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "b18e910600763ef91ffa288319755715b398a7e19d2471fbb203b93fdfd1a523",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-121562",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:29Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-121562: CTFd 3.1.0 before 3.8.7 contains an information disclosure vulnerability in the /api/v1/teams list e",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "c12d4f386879a869bdeb6f2289f383cf79d93a7d5ceb5a5aa7bf39da508e1c87",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-121564",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:29Z",
+      "publisher": "Ervik",
+      "summary_display": "NONE severity vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-121564: Incomplete Comparison with Missing Factors (CWE-1023) in merge_chats() (whatstk/utils/chat_merge.py)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "dd1cce0228eeee6032c2fd1886d4ba61868b99ea76ffc908aa62f31728a6f8fb",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-121578",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:29Z",
+      "publisher": "Ervik",
+      "summary_display": "NONE severity vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-121578: Tactical RMM contains a stored XSS vulnerability caused by improperly validated input or encode outp",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "a70dd804880a96f63637c91a42031bdff29fcd2e6c999f37a924f5f534bef248",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-121557",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:28Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.9) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-121557: WPPConnect Server through 2.10.74 contains a missing authentication vulnerability that allows unauth",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "e83b80acc9b7a5049e1212bb4710ffd330c015498170b3f377cecb4407d767d0",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-121558",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:28Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 4.3) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-121558: AuditPilot before commit 4669c93 contains an authorization bypass vulnerability in _metadata_allowed",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "178fb138fffbe4a85fe90d1d390b06db1717f150aabd1cd7a6e8b62a35f693ee",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-121559",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:28Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.2) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-121559: GLPI 10.0.0 before 10.0.28 and 11.0.0 before 11.0.10 contains a privilege escalation vulnerability t",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "2ac1820d7d3910ed689d634102d1b3f0a46771b0be908d67f84a3e159f72acd0",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-121560",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:28Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.1) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-121560: LogChimp 0.9.0-alpha.1 before 0.9.3 contains an authorization bypass vulnerability that allows authe",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "5dea6dd934aacdf7d7f6783e4f0cf2f5d5c8015572dc62a03ae32228b156ff94",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-121561",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:28Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.7) vulnerability.",
+      "tier": "news",
+      "title_display": "CVE-2026-121561: Label Studio before 1.23.2 (label-studio-sdk before 2.1.2) contains a server-side request forgery vu",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "5e33d19c6387e954af8b773a5809f8683ffe63ae754ce4f775814d1e4d447b63",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-121555",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T16:17:27Z",
       "publisher": "Ervik",
       "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-120057: psqlODBC copies the reply to a large-object read (loread) into the application's buffer using the le",
+      "title_display": "CVE-2026-121555: Foxel through 2.4.0 contains a missing authentication vulnerability that allows unauthenticated atta",
       "topics": [
         "cybersecurity",
+        "cybersecurity/identity",
         "cybersecurity/incidents",
         "cybersecurity/ransomware",
         "cybersecurity/vulnerabilities"
@@ -912,10 +1156,10 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "aeaa1d03f408c5d8a6a2ddc6fa13c7f9c80a9f06f3dda36a2cc83b7f0e6d1ce4",
+      "content_sha256": "b2b0693ac923642fd71392ea9075b084bb0b87a5d35fde783315684da376a810",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120058",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/cves/CVE-2026-121556",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -930,93 +1174,11 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T19:18:02Z",
+      "published": "2026-11-03T16:17:27Z",
       "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
+      "summary_display": "HIGH severity (CVSS 8.3) vulnerability.",
       "tier": "news",
-      "title_display": "CVE-2026-120058: psqlODBC sizes its row cache from the column count of a cursor's first result, but recomputes the co",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "8866314ae02c713e6cec016237271d09fe6d9eb010d9975e326c4d6daf38a28d",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-120059",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:02Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.8) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-120059: For an updatable cursor over a table without OIDs that has an auto-increment int4 column, psqlODBC p",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "8bc9502974c81c074ac6870aef9cec0ee9063f135d47de6a728abce87dc15ad4",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/cves/CVE-2026-119732",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-02T19:18:01Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tier": "news",
-      "title_display": "CVE-2026-119732: Munshi (by Petpooja) before 2026-07-28 contained a broken object level authorization vulnerability t",
+      "title_display": "CVE-2026-121556: FastBee through 2.1.0 contains an insecure direct object reference vulnerability in ProductControlle",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -1026,8 +1188,133 @@
     },
     {
       "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "regulatory/federal-rules",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "regulatory/federal-rules"
+      },
+      "content_sha256": "c05eff7daecf2498a7f8bea55eca5fdbd1d73a550023a55641ae2a2e51182e21",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-11-03",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T06:53:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.211, November 3, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "regulatory/federal-rules",
+        "content_basis": {
+          "category": "source",
+          "subcategory": "source"
+        },
+        "source": "regulatory/federal-rules"
+      },
+      "content_sha256": "9d235245692c3e160f3c8c80613f0642aec5cbcbb2d48f224ff92edc94a77911",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-03.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T06:53:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tier": "canonical",
+      "title_display": "FR-2026-11-03",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/threat-research",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "f77ee7508d2f7f2ff534302af6f437172a9e58c805c74c9120fd38867eed90e6",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.ervik.as/news/rosstat-wipe-claim-european-fridge-attacks-workos-artex-chainalysis-agentic-xcpe-botnet-2026-11-03",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T06:30:00Z",
+      "publisher": "Ervik",
+      "summary_display": "A look at the last 24 hours in cybersecurity: Cyber Partisans and Silent Crow say they wiped Rosstat while the agency denies a leak, a second wave of remote defrost attacks hits supermarkets in Belgium, Sweden, Ireland and Luxembourg, WorkOS and Chainalysis disclose breaches involving AI-driven a...",
+      "tier": "news",
+      "title_display": "Hackers Claim a Wipe of Russia's Statistics Agency, Supermarket Freezers Are Defrosted Across Europe Again, and WorkOS Blames an AI Attack Framework",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities",
+        "technology",
+        "technology/ai"
+      ]
+    },
+    {
+      "authority": "primary",
       "authors": [
-        "Katie Rapp"
+        "Crissy Kessell"
       ],
       "categories": {
         "content": "standards/measurement",
@@ -1037,10 +1324,10 @@
         },
         "source": "standards/measurement"
       },
-      "content_sha256": "b29a5291cc4c638e015195018e0e14ab592948bda04b89fc9eaa9d86f069677f",
+      "content_sha256": "621de8126610f9ed18370fe249130ff422c9d83f803cffce65de13991e1086c3",
       "feed_id": "nist-standards",
-      "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.nist.gov/news-events/news/2026/11/china-standardization-news-and-activities-october-29-2026",
+      "first_seen": "2026-10-26T13:25:57Z",
+      "link": "https://www.nist.gov/news-events/events/2026/11/2026-nist-photometry-short-course",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1055,34 +1342,31 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T12:00:00Z",
+      "published": "2026-11-03T05:00:00Z",
       "publisher": "National Institute of Standards and Technology",
-      "summary_display": "China Standardization News and Activities - October 29, 2026 In this issue: Preliminary work items Selected new preliminary work items No U.S. participation ISO work items With U.S. participation ISO work items IEC work items ISO/IEC work items News",
+      "summary_display": "The NIST Photometry Short Course is a 4-day course held at NIST Gaithersburg, Maryland. The course consists of lectures given by NIST scientists and hands-on laboratory experience measuring illuminance, total luminous flux, colorimetry, and luminous",
       "tier": "canonical",
-      "title_display": "China Standardization News and Activities - October 29, 2026",
+      "title_display": "2026 NIST Photometry Short Course",
       "topics": [
         "standards",
-        "standards/iso",
         "standards/nist"
       ]
     },
     {
       "authority": "primary",
-      "authors": [
-        "Sarah Henderson"
-      ],
+      "authors": [],
       "categories": {
-        "content": "technology/science",
+        "content": "vulnerabilities/detections",
         "content_basis": {
           "category": "source",
           "subcategory": "source"
         },
-        "source": "technology/science"
+        "source": "vulnerabilities/detections"
       },
-      "content_sha256": "0c0b1cc2bcfebf0cd891c8db318b174d6b6dafe21293eb8e76b2a4d6cdf64e4b",
-      "feed_id": "nist-news",
+      "content_sha256": "ca8451383872e62b746c195edcd4b266523811a785fbdf9b37f936e6ee567c39",
+      "feed_id": "fortiguard-ot-ips",
       "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.nist.gov/news-events/news/2026/11/self-employed-solopreneur-nist-has-cybersecurity-guide-just-you",
+      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.32400",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1097,34 +1381,32 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T12:00:00Z",
-      "publisher": "National Institute of Standards and Technology",
-      "summary_display": "The guide is designed to help solopreneurs prioritize and implement a selection of actions from the NIST Cybersecurity Framework that would best help their businesses.",
-      "tier": "canonical",
-      "title_display": "Self-Employed? Solopreneur? NIST Has a Cybersecurity Guide Just for You",
+      "published": "2026-11-03T00:36:31Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (1) DrayTek.VigorSwitch.Devices.sysreboot.Buffer.Overflow. Modified (1) Node.js.Brotli.Remote.Code.Execution.",
+      "tier": "vendor",
+      "title_display": "37.32400",
       "topics": [
         "cybersecurity",
-        "cybersecurity/frameworks",
-        "standards",
-        "standards/nist",
-        "technology"
+        "cybersecurity/ot-ics",
+        "cybersecurity/vulnerabilities"
       ]
     },
     {
       "authority": "primary",
       "authors": [],
       "categories": {
-        "content": "vulnerabilities/scoring",
+        "content": "vulnerabilities/detections",
         "content_basis": {
-          "category": "item",
-          "subcategory": "item"
+          "category": "source",
+          "subcategory": "source"
         },
-        "source": "vulnerabilities/vendor-advisories"
+        "source": "vulnerabilities/detections"
       },
-      "content_sha256": "a23899dafa4d1ce632f89054b8e55f60457fc9ce0493609b532146cd869a94b5",
-      "feed_id": "fortiguard-psirt",
+      "content_sha256": "42216717b7e32624e66de5b0c0d4ed120d7972fecd7832c4ca544e1f8e57c9d4",
+      "feed_id": "fortiguard-virtual-patching",
       "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-188",
+      "link": "https://fortiguard.fortinet.com/updates/virtual-patching?version=26.11100",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1139,31 +1421,31 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T08:00:00Z",
+      "published": "2026-11-03T00:33:59Z",
       "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "CVSSv3 Score: 9.8 CVE-2026-98432:ipv4: free inet_opt and ireq_opt after an RCU grace period tcp_v4_syn_recv_sock() transfers ownership of ireq->ireq_opt to the child socket (newinet->inet_opt) without copying it. Another cpu can concurrently process a retransmitted SYN for the same request socket...",
+      "summary_display": "Removed (1) Node.js.Brotli.Remote.Code.Execution.",
       "tier": "vendor",
-      "title_display": "Linux kernel RCE CVE-2026-98432",
+      "title_display": "26.11100",
       "topics": [
         "cybersecurity",
         "cybersecurity/vulnerabilities"
       ]
     },
     {
-      "authority": "secondary",
+      "authority": "primary",
       "authors": [],
       "categories": {
-        "content": "attacks/threat-research",
+        "content": "vulnerabilities/detections",
         "content_basis": {
-          "category": "source",
+          "category": "item",
           "subcategory": "source"
         },
-        "source": "attacks/threat-research"
+        "source": "vulnerabilities/detections"
       },
-      "content_sha256": "97c8445551161435b293c227714fd5b083bf5fe1818cca8c895ce4646057a0eb",
-      "feed_id": "ervik-threat-feed",
+      "content_sha256": "e0f6feae2de963c5dcdca5af3fdf12059f63359b7dd359972b63456cf376ffb7",
+      "feed_id": "fortiguard-ips",
       "first_seen": "2026-11-02T20:46:46Z",
-      "link": "https://www.ervik.as/news/fbi-tradertraitor-binance-volta-infostealer-llm-russia-ukraine-fake-nuclear-alerts-ws-audiology-2026-11-02",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.324",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1178,16 +1460,100 @@
           "raw": 0
         }
       },
-      "published": "2026-11-02T06:30:00Z",
-      "publisher": "Ervik",
-      "summary_display": "A look at the last 24 hours in cybersecurity: the FBI attributes the Binance theft to North Korea's TraderTraitor and says the money is turning into Ethereum, fake nuclear alerts hit Russia's emergency app and Ukraine's air-raid app, Cisco Talos details VOLTA, a stealer that asks Claude, Kimi and...",
-      "tier": "news",
-      "title_display": "FBI Names TraderTraitor for the Binance Theft, VOLTA Infostealer Asks Claude What Its Victims Are Worth, and Fake Nuclear Alerts Hit Russia's Emergency App",
+      "published": "2026-11-03T00:33:53Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Modified (19) MS.Exchange.Server.CVE-2026-70571.Remote.Code.Execution (Critical) MS.Windows.CVE-2026-70176.Privilege.Elevation (High) MS.Windows.CVE-2026-70237.Privilege.Elevation (High) MS.Windows.CVE-2026-70245.Privilege.Elevation (High) Gotenberg.Write.Metadata.Remote.Code.Execution (Critical)...",
+      "tier": "vendor",
+      "title_display": "37.324",
       "topics": [
         "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
+        "cybersecurity/identity",
         "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "standards/security",
+        "content_basis": {
+          "category": "source",
+          "subcategory": "source"
+        },
+        "source": "standards/security"
+      },
+      "content_sha256": "3c29bbbe2ade2c84e5b7847782855b225f2513d2c47ce1b1bd23939e9f9f8ccb",
+      "feed_id": "pci-ssc-blog",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://blog.pcisecuritystandards.org/the-ai-exchange-innovators-in-payment-security-featuring-shopify",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-03T00:00:00Z",
+      "publisher": "PCI Security Standards Council",
+      "summary_display": "Welcome to the PCI Security Standards Council’s blog series, The AI Exchange: Innovators in Payment Security. This special, ongoing feature of our PCI Perspectives blog offers a resource for payment security industry stakeholders to exchange information about how they are adopting and implementin...",
+      "tier": "canonical",
+      "title_display": "The AI Exchange: Innovators in Payment Security Featuring Shopify",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/frameworks",
+        "standards",
+        "technology",
+        "technology/ai"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "standards/compliance",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "source": "standards/compliance"
+      },
+      "content_sha256": "885cd0d196639f9a9ce5276977f2ddd14371fa39100157b4eadcc0892b392eff",
+      "feed_id": "fedramp-changelog",
+      "first_seen": "2026-11-03T18:27:24Z",
+      "link": "https://www.fedramp.gov/2026-11-02-memo-to-milestone/",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-02T00:00:00Z",
+      "publisher": "US General Services Administration FedRAMP",
+      "summary_display": "",
+      "tier": "canonical",
+      "title_display": "2026-11-02 Published a new blog post celebrating the first full FedRAMP 20x Class C Certification and the true beginning of FedRAMP 20x. (See Memo to Milestone: FedRAMP Grants the First Full FedRAMP 20x Class C Certification )",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/cloud",
+        "government",
+        "government/federal",
+        "standards",
+        "standards/fedramp"
       ]
     }
   ],
