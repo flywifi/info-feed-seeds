@@ -172,6 +172,14 @@ class BodyTests(unittest.TestCase):
         self.assertEqual((len(body), truncated), (1024 * 1024, True))
         out, cut = fetchkit.inflate_capped(bomb, 16 + zlib.MAX_WBITS, 1000)
         self.assertEqual((len(out), cut), (1000, True))
+        import tracemalloc
+        tracemalloc.start()
+        try:
+            fetchkit.read_body(FakeResp(200, {"Content-Encoding": "gzip"}, bomb), 1024 * 1024)
+            peak = tracemalloc.get_traced_memory()[1]
+        finally:
+            tracemalloc.stop()
+        self.assertLess(peak, 16 * 1024 * 1024, "the bomb is never inflated in full")
 
     def test_gzip_and_mislabelled_encoding(self):
         payload = gzip.compress(b"hello gzip")

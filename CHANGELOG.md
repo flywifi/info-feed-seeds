@@ -9,10 +9,13 @@ All notable changes to this repository are recorded here. The format follows
 ### Fixed
 
 - Items one source gives the same link (Ervik's ransomware victim posts all link to /ransomware)
-  are keyed by their own hash, so each reaches the digest; before, only the first was ever shown.
+  are keyed by their own hash when two or more distinct guids share the link, so each reaches the
+  digest (before, only the first was ever shown); a retitled item keeps its guid and stays one story.
 - Compressed bodies are inflated with a hard output cap (the 5 MiB body cap) in the fetcher and in
   the gzip sitemap reader, which refuses a body that expands past it; a small compression bomb no
-  longer exhausts memory. The XML entity check reads the whole body, not its first 64 KiB.
+  longer exhausts memory, and a gzip body of several members is read member by member. XML
+  documents with a DOCTYPE or an entity declaration are refused inside the parser, on the decoded
+  text, so a long leading comment or a UTF-16 body cannot hide one.
 
 ### Added
 
@@ -266,7 +269,6 @@ All notable changes to this repository are recorded here. The format follows
   says consumers must escape text fields before rendering them.
 
 ### Fixed
-
 
 - Digest Markdown escapes the Markdown metacharacters in feed text, so a feed title written as a
   link or image renders as plain text instead of a live link or a remote image load.

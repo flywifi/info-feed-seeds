@@ -146,9 +146,17 @@ def default_opener(req: urllib.request.Request, timeout: float):
 
 def inflate_capped(data: bytes, wbits: int, cap: int) -> tuple[bytes, bool]:
     """Decompress at most `cap` bytes of output. Returns (bytes, truncated); a body that would expand past
-    the cap is cut there, never inflated in full. Raises zlib.error for data that is not compressed."""
-    out = zlib.decompressobj(wbits).decompress(data, cap + 1)
-    return (out[:cap], True) if len(out) > cap else (out, False)
+    the cap is cut there, never inflated in full. A gzip body of several members (files joined end to
+    end) is read member by member. Raises zlib.error for data that is not compressed."""
+    out, rest = b"", data
+    while True:
+        d = zlib.decompressobj(wbits)
+        out += d.decompress(rest, cap + 1 - len(out))
+        if len(out) > cap:
+            return out[:cap], True
+        rest = d.unused_data if d.eof else b""
+        if not rest[:2] == b"\x1f\x8b":   # no further gzip member (or a stream cut short)
+            return out, False
 
 
 def read_body(resp, cap: int) -> tuple[bytes, bool]:

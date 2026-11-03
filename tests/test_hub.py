@@ -459,6 +459,22 @@ class PollTests(HubTestCase):
         self.assertIn("Alpha Ltd", md)
         self.assertIn("Beta Ltd", md, "a shared listing link does not merge two posts")
 
+    def test_a_retitled_story_is_published_once(self):
+        def feed(title):
+            return (f'<?xml version="1.0"?><rss version="2.0"><channel><title>R</title><link>https://example.gov/</link>'
+                    f"<description>d</description><item><title>{title}</title><link>https://example.gov/story</link>"
+                    f"<guid>story-1</guid><pubDate>Mon, 19 Oct 2026 01:00:00 GMT</pubDate><description>cybersecurity</description>"
+                    f"</item></channel></rss>").encode()
+
+        self.add_source("rho", "https://example.gov/s.xml", ["cybersecurity"])
+        self.script["https://example.gov/s.xml"] = feed("Cybersecurity breach at an agency")
+        self.assertEqual(self.poll("--only", "rho"), 0)
+        self.script["https://example.gov/s.xml"] = feed("Cybersecurity breach at an agency (corrected)")
+        self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", "2026-10-21", "--state-dir", str(self.state),
+                                      "--out-dir", str(self.out), "--only", "rho"), 0)
+        self.assertNotIn("(corrected)", (self.out / "tr" / "2026-10-21.md").read_text(encoding="utf-8"),
+                         "the same guid under the same link is one story")
+
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
             records = []

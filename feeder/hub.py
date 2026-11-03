@@ -177,10 +177,12 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
     rows = store.items_for_feeds(sorted(chosen))
     # A link one source gives to several distinct items (a shared listing page) does not identify an
     # item, so those items are keyed by their own hash instead of being merged as one story.
-    per_source: dict[tuple[str, str], int] = {}
+    # A link counts as shared when two or more distinct guids carry it; a retitled item keeps its guid
+    # and stays one story.
+    per_source: dict[tuple[str, str], set] = {}
     for row in rows:
-        if row["link_key"]:
-            per_source[(row["feed_id"], row["link_key"])] = per_source.get((row["feed_id"], row["link_key"]), 0) + 1
+        if row["link_key"] and row["guid"]:
+            per_source.setdefault((row["feed_id"], row["link_key"]), set()).add(row["guid"])
     groups: dict[str, list[tuple[dict, list[str]]]] = {}
     for row in rows:
         if row["content_sha256"] in taken:
@@ -191,7 +193,7 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
         if not accepts(profile, row):
             continue
         tags, _ = item_tags(profile, chosen[row["feed_id"]], row)
-        shared = per_source.get((row["feed_id"], row["link_key"]), 0) > 1
+        shared = len(per_source.get((row["feed_id"], row["link_key"]), ())) > 1
         key = row["content_sha256"] if shared or not row["link_key"] else row["link_key"]
         groups.setdefault(key, []).append((row, tags))
 

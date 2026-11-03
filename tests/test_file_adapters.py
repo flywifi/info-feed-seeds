@@ -48,8 +48,20 @@ class XmlSafetyTests(unittest.TestCase):
 
     def test_an_entity_declaration_after_a_long_comment_is_refused(self):
         body = b"<!--" + b"x" * 70000 + b'--><!DOCTYPE u [<!ENTITY a "b">]><urlset/>'
-        with self.assertRaisesRegex(adapters.AdapterError, "entities"):
+        with self.assertRaisesRegex(adapters.AdapterError, "DTD or entities"):
             call("sitemap", body)
+
+
+class XmlEncodingTests(unittest.TestCase):
+    def test_a_utf16_document_with_an_entity_is_refused(self):
+        body = '<?xml version="1.0" encoding="UTF-16"?><!DOCTYPE u [<!ENTITY a "b">]><urlset/>'.encode("utf-16")
+        with self.assertRaisesRegex(adapters.AdapterError, "DTD or entities"):
+            call("sitemap", body)
+
+    def test_a_gzip_sitemap_of_several_members_is_read_whole(self):
+        half = len(URLSET) // 2
+        items = call("sitemap", gzip.compress(URLSET[:half]) + gzip.compress(URLSET[half:]))["items"]
+        self.assertEqual(len(items), 3)
 
 
 class UrlListTests(unittest.TestCase):
