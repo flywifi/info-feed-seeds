@@ -115,10 +115,13 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
         queue = [] if _nothing_new(store, source.id, route, parsed["items"]) else list(parsed.get("follow") or [])
         budget = adapters.follow_limit(route)
         seen = {url}
-        follow_failed = 0
+        follow_failed = follow_refused = 0
         while queue and budget > 0:
             next_url = adapters.follow_url(url, queue.pop(0))
-            if next_url is None or next_url in seen:
+            if next_url is None:
+                follow_refused += 1   # another host, port or scheme: never fetched, but counted
+                continue
+            if next_url in seen:
                 continue
             seen.add(next_url)
             budget -= 1
@@ -155,7 +158,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
                            content_subcategory_basis=placed["subcategory_basis"])
             if store.upsert_item(rec, first_seen=now):
                 new += 1
-        error = ",".join(flag for flag, on in (("truncated", truncated), ("follow-partial", follow_failed)) if on) or None
+        flags = (("truncated", truncated), ("follow-partial", follow_failed), ("follow-refused", follow_refused))
+        error = ",".join(flag for flag, on in flags if on) or None
         record.update(status="ok" if raws else "empty", items=len(raws), error=error, new=new)
         return record
     return record

@@ -11,7 +11,7 @@ private notes or anything that identifies a client or a campaign.
 ## Layout
 
 - `feeder/`: the hub CLI (`hub.py`) and its modules: fetching (`fetchkit.py`), feed parsing
-  (`adapters/`, with `feed.py` and `page.py` today), items, the injection guard, the SQLite store (`store.py`), digest outputs
+  (`adapters/`: `feed.py`, `page.py`, and `files.py` with the sitemap, URL list, XML, JSON API and artifact adapters), items, the injection guard, the SQLite store (`store.py`), digest outputs
   (`outputs.py`), configuration and lint (`config.py`), the category registry loader and placement
   suggester (`categories.py`), and the single file writer (`jsonio.py`).
 - `sources/<id>/`: one folder per source. `source.json` lists every known route (feed, page,
@@ -21,9 +21,8 @@ private notes or anything that identifies a client or a campaign.
   backfill, outputs and the guard hold level.
 - `schema/`: JSON Schemas for sources, methods, profiles and items, plus `topics.json`, the
   two-level topic registry, and `categories.json`, the reader-category registry. A source carries a
-  source category and source subcategory (where the feed sits as a whole); `hub categorize` reports
-  each item's own content category and content subcategory from its text (storing them on each
-  polled item is planned). A profile polls the source categories its
+  source category and source subcategory (where the feed sits as a whole); each polled item
+  stores its own content category and content subcategory from its text, published in `latest.json`. A profile polls the source categories its
   `source_categories` list names, or every category but machine data when it has no list.
 - `guard/releases.json`: items held by the injection guard that a person has released.
 - `seeds/`: dated seed files. These are imports; `sources/` is the truth.

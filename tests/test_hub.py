@@ -349,7 +349,7 @@ class PollTests(HubTestCase):
         self.assertEqual(self.fetcher.calls, ["https://example.gov/p", "https://example.gov/p?page=2", "https://example.gov/p?page=3"],
                          "fragment dropped, other schemes and hosts never fetched, the bound of 2 follow fetches kept")
         md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
-        self.assertIn("- eta: ok, HTTP 200, 2 items, follow-partial", md)
+        self.assertIn("- eta: ok, HTTP 200, 2 items, follow-partial,follow-refused", md)
 
     def test_a_truncated_page_with_failed_follow_pages_reports_both(self):
         def stub(body, url, params):
@@ -422,13 +422,25 @@ class PollTests(HubTestCase):
         self.add_source("xi", "https://example.gov/xi.xml", ["cybersecurity"], enabled=False, verified=None)
         folder = self.root / "sources" / "xi"
         methods = jsonio.load_json(folder / "methods.json")
-        methods["routes"][0]["attempts"] = [{"capture_url": None, "http_status": 403, "media": [], "method": "conditional-get",
+        methods["routes"][0]["attempts"] = attempts = [{"capture_url": None, "http_status": 403, "media": [], "method": "conditional-get",
                                              "note": "bot wall", "result": "refused", "source_label": "live",
                                              "tried_at": "2026-10-26T00:00:00Z"}]
         methods["routes"][0]["last_success"] = None
         jsonio.dump_json(folder / "methods.json", methods)
         self.assertEqual(self.run_hub("lint"), 0, self.output)
         manifest = jsonio.load_json(folder / "source.json")
+        manifest["verified"] = "2026-10-26"
+        jsonio.dump_json(folder / "source.json", manifest)
+        self.assertEqual(self.run_hub("lint"), 1, "an unproven source never carries a verified date")
+        self.assertIn("verified is set but no route has a live proof", self.output)
+        manifest["verified"] = None
+        jsonio.dump_json(folder / "source.json", manifest)
+        methods["routes"][0]["attempts"] = []
+        jsonio.dump_json(folder / "methods.json", methods)
+        self.assertEqual(self.run_hub("lint"), 1, "an unproven source records its attempts")
+        self.assertIn("an unproven source records at least one attempt", self.output)
+        methods["routes"][0]["attempts"] = attempts
+        jsonio.dump_json(folder / "methods.json", methods)
         manifest["enabled"] = True
         jsonio.dump_json(folder / "source.json", manifest)
         self.assertEqual(self.run_hub("lint"), 1, "enabling it needs a live proof")

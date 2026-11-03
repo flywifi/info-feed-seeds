@@ -1150,8 +1150,14 @@ def check_sources(rng: str, cwd: Path | None = None) -> list[str]:
             if (last.get("source_label") == "live" and last.get("http_status") == 200
                     and last.get("result") == "ok" and last.get("tried_at") and last.get("sample")):
                 proven = True
-        if not manifest.get("enabled", True):
-            continue   # stored for later, never polled: it may wait for its first live proof
+        if not manifest.get("enabled", True) and not proven:
+            # Stored for later and never polled: it may wait for its first live proof, with verified
+            # null and its failed attempts recorded.
+            if manifest.get("verified"):
+                findings.append(f"sources/{sid}: verified is set but no route has a live proof")
+            if not any(r.get("attempts") for r in methods.get("routes", [])):
+                findings.append(f"sources/{sid}: an unproven source records at least one attempt")
+            continue
         if not proven:
             findings.append(f"sources/{sid}: no route whose latest attempt is a live 200 with a sample item")
         if not manifest.get("verified"):
