@@ -1,8 +1,9 @@
 """outputs: escaping, link safety, guard band states and the latest.json shape."""
 import unittest
 
-from feeder import guard, outputs
+from feeder import categories, guard, outputs
 from feeder.config import Source
+from tests.helpers import ROOT
 
 PROFILE = {"name": "p", "guard": {"hold_at": "QUARANTINE"}, "outputs": ["md", "json"]}
 SOURCE = Source(id="src", manifest={"publisher": "Pub <Inc>", "authority": "primary", "tier": "canonical"},
@@ -117,6 +118,56 @@ class LatestJsonShapeTests(unittest.TestCase):
     def test_authors_are_sanitised_and_emails_redacted(self):
         view = outputs.item_view(row("T", authors=["<b>Jane</b> jane@example.gov", ""]), SOURCE, PROFILE, set())
         self.assertEqual(view["authors"], ["Jane [email redacted]"])
+
+
+REG = categories.load_categories(ROOT / "schema" / "categories.json")
+CAT_SOURCE = Source(id="src", manifest={"source_category": "vulnerabilities", "source_subcategory": "vendor-advisories"},
+                    methods=None, folder=None)
+
+
+def placed(title, content=None, sub=None, basis=None, **extra):
+    r = row(title, sha=extra.pop("sha", "0" * 64))
+    cat_basis, sub_basis = basis if isinstance(basis, tuple) else (basis, basis)
+    r.update(content_category=content, content_subcategory=sub, content_category_basis=cat_basis,
+             content_subcategory_basis=sub_basis, **extra)
+    return outputs.item_view(r, CAT_SOURCE, PROFILE, set(), REG)
+
+
+class ClassificationTests(unittest.TestCase):
+    def test_counts_leave_out_held_and_blocked_items_and_count_one_without_a_category(self):
+        scam = placed("Phishing scam wave", "attacks", "scams", "item", sha="1" * 64)
+        held = placed("Phishing scam again", "attacks", "scams", "item", sha="2" * 64)
+        blocked = placed("Phishing scam once more", "attacks", "scams", "item", sha="3" * 64)
+        held["state"], blocked["state"] = "held", "blocked"
+        old = placed("Quarterly newsletter", sha="4" * 64)
+        mixed = placed("Summary only", "vulnerabilities", "vendor-advisories", ("item", "source"), sha="5" * 64,
+                       summary="An advisory with a CVSS score")
+        got = outputs.classification_of([scam, held, blocked, old, mixed])
+        self.assertEqual(got["items"], 3)
+        self.assertEqual(got["content"], {"attacks/scams": 1, "none": 1, "vulnerabilities/vendor-advisories": 1})
+        self.assertEqual(got["by_source"], {"vulnerabilities/vendor-advisories": {
+            "attacks/scams": 1, "none": 1, "vulnerabilities/vendor-advisories": 1}})
+        self.assertEqual(got["basis"], {"category": {"item": 2, "none": 1},
+                                        "subcategory": {"item": 1, "none": 1, "source": 1}},
+                         "each level counts its own basis")
+        self.assertEqual(got["without_content_category"], 1)
+        self.assertEqual(got["moved_out_of_source_category"], 1, "the scam item left its source category")
+        self.assertEqual(old["categories"]["reread"]["content"], "vulnerabilities/vendor-advisories")
+        self.assertEqual(got["rules_now_differ"], 1, "the item without a category would now get one")
+
+    def test_without_the_registry_nothing_is_reread(self):
+        view = outputs.item_view(row("Phishing scam wave"), CAT_SOURCE, PROFILE, set())
+        self.assertIsNone(view["categories"]["reread"])
+        self.assertEqual(outputs.classification_of([view])["rules_now_differ"], 0)
+
+    def test_the_reread_uses_the_source_pair_stored_at_ingest(self):
+        view = placed("Quarterly newsletter", "attacks", "breaches", "source",
+                      source_category="attacks", source_subcategory="breaches")
+        self.assertEqual(view["categories"]["reread"], {
+            "content": "attacks/breaches",
+            "reasons": ["no signal in the item text; the source category and source subcategory"]},
+            "not the manifest's current pair")
+        self.assertEqual(outputs.classification_of([view])["rules_now_differ"], 0)
 
 
 if __name__ == "__main__":

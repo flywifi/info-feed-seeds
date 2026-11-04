@@ -930,6 +930,34 @@ class PollTests(HubTestCase):
             self.assertFalse(hub.content_routed({"content_categories": [ref]}, src, scam), ref)
             self.assertTrue(hub.content_routed({"exclude_content_categories": [ref]}, src, scam), ref)
 
+    def test_the_report_counts_how_the_items_were_classified(self):
+        self.assertEqual(self.routed_titles(), sorted(self.ROUTED))
+        self.assertEqual(jsonio.load_json(self.out / "tr" / "report.json")["classification"], {
+            "items": 3, "content": {"attacks/scams": 1, "vulnerabilities/vendor-advisories": 2},
+            "by_source": {"vulnerabilities/vendor-advisories": {"attacks/scams": 1, "vulnerabilities/vendor-advisories": 2}},
+            "basis": {"category": {"item": 2, "source": 1}, "subcategory": {"item": 2, "source": 1}},
+            "moved_out_of_source_category": 1, "without_content_category": 0, "rules_now_differ": 0})
+        reread = {i["title_display"]: i["categories"]["reread"]
+                  for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]}
+        self.assertEqual(reread["Phishing scam wave targets banks"],
+                         {"content": "attacks/scams", "reasons": ["title has 'scam'", "title has 'phishing'"]})
+        self.assertEqual(reread["Quarterly newsletter"]["reasons"],
+                         ["no signal in the item text; the source category and source subcategory"])
+
+    def test_the_report_shows_items_the_current_rules_would_place_elsewhere(self):
+        self.routed_titles()
+        path = self.root / "schema" / "categories.json"
+        reg = jsonio.load_json(path)
+        reg["categories"]["guidance"]["subcategories"]["explainers"]["keywords"].append("newsletter")
+        jsonio.dump_json(path, reg)
+        self.script["https://example.gov/alpha.xml"] = "not-modified"   # nothing is read again; the stored rows stay
+        self.assertEqual(self.poll(), 0)
+        self.assertEqual(jsonio.load_json(self.out / "tr" / "report.json")["classification"]["rules_now_differ"], 1)
+        cats = {i["title_display"]: i["categories"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]}
+        self.assertEqual(cats["Quarterly newsletter"]["content"], "vulnerabilities/vendor-advisories", "kept from ingest")
+        self.assertEqual(cats["Quarterly newsletter"]["reread"],
+                         {"content": "guidance/explainers", "reasons": ["title has 'newsletter'"]})
+
     def test_items_routed_out_take_no_slot_under_the_daily_cap(self):
         self.profile["daily_cap"] = 1
         self.assertEqual(self.routed_titles(content_categories=["attacks"]), ["Phishing scam wave targets banks"])
