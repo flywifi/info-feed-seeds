@@ -144,6 +144,37 @@ def default_opener(req: urllib.request.Request, timeout: float):
 
 # --------------------------------------------------------------------------- bodies
 
+MAX_GZIP_MEMBERS = 1000
+_INFLATE_STEP = 64 * 1024
+
+
+def inflate_capped(data: bytes, wbits: int, cap: int, *, strict: bool = False) -> tuple[bytes, bool]:
+    """Decompress at most `cap` bytes of output. Returns (bytes, truncated); a body that would expand past
+    the cap is cut there, never inflated in full. A gzip body of several members (files joined end to
+    end) is read member by member, at most MAX_GZIP_MEMBERS, in bounded steps so the time is linear in
+    the input. Raises zlib.error for data that is not compressed, for too many members, and (with
+    strict) for a stream cut short; without strict a cut stream returns what it held."""
+    view, pos, members, out = memoryview(data), 0, 0, bytearray()
+    while pos < len(data):
+        if members and (wbits < 16 or bytes(view[pos:pos + 2]) != b"\x1f\x8b"):
+            break   # trailing bytes that are not another gzip member
+        members += 1
+        if members > MAX_GZIP_MEMBERS:
+            raise zlib.error(f"more than {MAX_GZIP_MEMBERS} gzip members")
+        d = zlib.decompressobj(wbits)
+        while not d.eof and pos < len(data):
+            chunk = view[pos:pos + _INFLATE_STEP]
+            out += d.decompress(chunk, cap + 1 - len(out))
+            if len(out) > cap:
+                return bytes(out[:cap]), True
+            pos += len(chunk) - len(d.unused_data) - len(d.unconsumed_tail)
+        if not d.eof:
+            if strict:
+                raise zlib.error("compressed stream cut short")
+            break
+    return bytes(out), False
+
+
 def read_body(resp, cap: int) -> tuple[bytes, bool]:
     """Stream the body up to `cap` bytes. Returns (bytes, truncated). Handles gzip and deflate
     transparently, including a truncated gzip stream, and never raises on a mislabelled encoding."""
@@ -164,16 +195,14 @@ def read_body(resp, cap: int) -> tuple[bytes, bool]:
     encoding = (headers.get("Content-Encoding") or "").lower()
     if encoding in ("gzip", "x-gzip", "deflate"):
         wbits = 16 + zlib.MAX_WBITS if encoding != "deflate" else zlib.MAX_WBITS
-        try:
-            body = zlib.decompressobj(wbits).decompress(body)
-        except zlib.error:
+        for bits in (wbits, -zlib.MAX_WBITS):
             try:
-                body = zlib.decompressobj(-zlib.MAX_WBITS).decompress(body)
+                body, cut = inflate_capped(body, bits, cap)
             except zlib.error:
-                pass  # mislabelled encoding: keep the raw bytes
-        if len(body) > cap:
-            body = body[:cap]
-            truncated = True
+                continue
+            truncated = truncated or cut
+            break
+        # neither worked: a mislabelled encoding, so the raw bytes are kept
     return body, truncated
 
 

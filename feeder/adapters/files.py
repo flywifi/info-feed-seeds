@@ -13,18 +13,19 @@ and `params` and returns the shared {"kind", "items", "follow"} shape (see feede
 - artifact: one item per distinct file content, keyed by its sha256, so the store adds a new item only
   when the file changes. Param: label.
 
-Documents that declare XML entities are refused. Dates go through items.to_utc_z; one that does not
+Documents with a DOCTYPE or an entity declaration are refused, checked inside the XML parser. Dates go through items.to_utc_z; one that does not
 parse stays null."""
 from __future__ import annotations
 
-import gzip
 import hashlib
 import json
 import re
 import xml.etree.ElementTree as ET
+import zlib
 
+from ..fetchkit import DEFAULT_BODY_CAP, inflate_capped
 from ..items import RawItem, to_utc_z
-from .base import AdapterError
+from .base import AdapterError, refuse_dtd
 
 SM = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 ITEM_FIELDS = ("title", "link", "guid", "summary", "published")
@@ -33,11 +34,12 @@ ITEM_FIELDS = ("title", "link", "guid", "summary", "published")
 def _xml_root(data: bytes) -> ET.Element:
     if data[:2] == b"\x1f\x8b":
         try:
-            data = gzip.decompress(data)
-        except (OSError, EOFError) as exc:
+            data, cut = inflate_capped(data, 16 + zlib.MAX_WBITS, DEFAULT_BODY_CAP, strict=True)
+        except zlib.error as exc:
             raise AdapterError(f"bad gzip body: {exc}") from None
-    if re.search(rb"<!ENTITY", data[:65536], re.I):
-        raise AdapterError("document declares entities")
+        if cut:
+            raise AdapterError(f"gzip body expands past {DEFAULT_BODY_CAP} bytes; refused")
+    refuse_dtd(data, any_doctype=True)
     try:
         return ET.fromstring(data)
     except ET.ParseError as exc:
