@@ -32,8 +32,8 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from feeder import ROOT, adapters, categories, extract, guard, items, jsonio, outputs  # noqa: E402
-from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, item_tags,  # noqa: E402
-                           json_files, lint, selected_sources)
+from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, content_routed,  # noqa: E402
+                           item_tags, json_files, lint, selected_sources)
 from feeder.schema_validate import validate  # noqa: E402
 from feeder.store import DB_NAME, Store, StoreError  # noqa: E402
 
@@ -238,7 +238,7 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
         ref = (row["published"] or row["first_seen"])[:10]
         if not earliest <= ref <= day:
             continue
-        if not accepts(profile, row):
+        if not accepts(profile, row) or not content_routed(profile, chosen[row["feed_id"]], row):
             continue
         tags, _ = item_tags(profile, chosen[row["feed_id"]], row)
         shared = len(per_source.get((row["feed_id"], row["link_key"]), ())) > 1

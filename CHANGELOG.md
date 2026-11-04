@@ -48,6 +48,12 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Routing by content category: a profile's `content_categories` list (category or
+  category/subcategory) routes into its digest only the items whose own content category it names,
+  and `exclude_content_categories` keeps items out, winning over an inclusion. An item stored before
+  content categories were read is routed by its source category. Without either list every item of a
+  polled source goes in, as before, and machine data still comes only from a source the profile
+  polls. Lint reports an unknown or repeated reference and one both routed in and excluded.
 - Tags read from each item's own text at ingest (`feeder/extract.py`): CVE ids; severity, from a
   severity word in a severity context or a CVSS score (v3 and v4 bands), with its rank 0 to 4;
   exploited in the wild; vendors, from the new `schema/vendors.json` registry (names and product names

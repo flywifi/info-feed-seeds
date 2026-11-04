@@ -874,6 +874,59 @@ class PollTests(HubTestCase):
         self.assertEqual(self.poll(), 0)
         self.assertIn("https://example.gov/mach.xml", self.fetcher.calls)
 
+    ROUTED = ("Phishing scam wave targets banks", "Security update advisory for routers", "Quarterly newsletter")
+
+    def routed_titles(self, **lists):
+        """Poll a fresh state with the profile's routing lists set, and return the digest's titles."""
+        self.script["https://example.gov/alpha.xml"] = rss_with(*self.ROUTED)
+        for key in ("source_categories", "content_categories", "exclude_content_categories"):
+            self.profile.pop(key, None)
+        self.profile.update(lists)
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.runs = getattr(self, "runs", 0) + 1
+        self.state, self.out = self.tmp / f"state{self.runs}", self.tmp / f"out{self.runs}"
+        self.assertEqual(self.poll(), 0)
+        return sorted(i["title_display"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"])
+
+    def test_items_carry_the_content_categories_routing_reads(self):
+        self.assertEqual(self.routed_titles(), sorted(self.ROUTED), "without a list every item of a polled source goes in")
+        cats = {i["title_display"]: i["categories"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]}
+        self.assertEqual([cats[t]["content"] for t in self.ROUTED],
+                         ["attacks/scams", "vulnerabilities/vendor-advisories", "vulnerabilities/vendor-advisories"])
+        self.assertEqual([cats[t]["content_basis"]["category"] for t in self.ROUTED], ["item", "item", "source"])
+
+    def test_content_categories_route_only_the_items_they_name(self):
+        self.assertEqual(self.routed_titles(content_categories=["attacks"]), ["Phishing scam wave targets banks"])
+        self.assertEqual(self.routed_titles(content_categories=["vulnerabilities/vendor-advisories"]),
+                         ["Quarterly newsletter", "Security update advisory for routers"],
+                         "an item whose text decided nothing goes with its source category")
+        self.assertEqual(self.routed_titles(content_categories=["attacks/breaches"]), [], "a sibling subcategory is not routed")
+
+    def test_an_exclusion_keeps_items_out_and_wins_over_an_inclusion(self):
+        self.assertEqual(self.routed_titles(exclude_content_categories=["attacks"]),
+                         ["Quarterly newsletter", "Security update advisory for routers"])
+        self.assertEqual(self.routed_titles(content_categories=["attacks", "vulnerabilities"],
+                                            exclude_content_categories=["vulnerabilities/vendor-advisories"]),
+                         ["Phishing scam wave targets banks"])
+
+    def test_an_item_stored_without_a_content_category_is_routed_by_its_source_category(self):
+        src = hub.Repo(root=self.root).load_sources()["alpha"]
+        row = {"content_category": None, "content_subcategory": None}
+        self.assertTrue(hub.content_routed({"content_categories": ["vulnerabilities/vendor-advisories"]}, src, row))
+        self.assertFalse(hub.content_routed({"content_categories": ["attacks"]}, src, row))
+        self.assertFalse(hub.content_routed({"exclude_content_categories": ["vulnerabilities"]}, src, row))
+        bare = hub.Repo(root=self.root).load_sources()["alpha"]
+        bare.manifest.pop("source_category")
+        self.assertFalse(hub.content_routed({"content_categories": ["attacks"]}, bare, row), "no category is never named")
+        self.assertTrue(hub.content_routed({"exclude_content_categories": ["attacks"]}, bare, row))
+
+    def test_machine_data_named_only_as_content_polls_no_machine_source(self):
+        self.add_machine_source()
+        self.assertEqual(self.routed_titles(content_categories=["machine-data"]), [])
+        self.assertNotIn("https://example.gov/mach.xml", self.fetcher.calls)
+        self.assertEqual(self.routed_titles(source_categories=["machine-data"], content_categories=["machine-data"]),
+                         ["Machine line"])
+
     def test_not_modified_counts_as_a_response(self):
         self.poll()
         self.script = {"https://example.gov/alpha.xml": "not-modified", "https://example.gov/beta.xml": "not-modified"}
@@ -1065,6 +1118,14 @@ class LintFmtCatTests(HubTestCase):
         self.profile["source_categories"] = ["attacks", "attacks"]
         out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
         self.assertIn("source category 'attacks' is listed twice", out)
+        self.profile.pop("source_categories")
+        self.profile.update(content_categories=["attacks/science", "attacks", "attacks"],
+                            exclude_content_categories=["regulatory/pets", "attacks"])
+        out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
+        self.assertIn("content category 'attacks/science' is not in schema/categories.json", out)
+        self.assertIn("content category 'attacks' is listed twice", out)
+        self.assertIn("excluded content category 'regulatory/pets' is not in schema/categories.json", out)
+        self.assertIn("content category 'attacks' is both routed in and excluded", out)
 
     def test_lint_reports_registry_defects(self):
         path = self.root / "schema" / "categories.json"

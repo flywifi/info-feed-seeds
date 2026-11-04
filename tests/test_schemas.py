@@ -155,6 +155,11 @@ class SchemaFixtureTests(unittest.TestCase):
         self.assertTrue(validate(dict(base, source_categories=[]), schema), "an empty list would select nothing")
         self.assertTrue(validate(dict(base, source_categories=["Attacks"]), schema))
         self.assertTrue(validate(dict(base, categories=["regulatory"]), schema), "the key names the source category")
+        for key in ("content_categories", "exclude_content_categories"):
+            with self.subTest(key=key):
+                self.assertEqual(validate(dict(base, **{key: ["attacks", "vulnerabilities/scoring"]}), schema), [])
+                self.assertTrue(validate(dict(base, **{key: []}), schema), "an empty list is refused")
+                self.assertTrue(validate(dict(base, **{key: ["Attacks"]}), schema))
 
     def test_profile_example_validates(self):
         self.assertEqual(validate(load_fixture("profile_example.json"), load_schema("profile.schema.json")), [])

@@ -23,7 +23,9 @@ private notes or anything that identifies a client or a campaign.
   two-level topic registry, and `categories.json`, the reader-category registry. A source carries a
   source category and source subcategory (where the feed sits as a whole); each polled item
   stores its own content category and content subcategory from its text, published in `latest.json`. A profile polls the source categories its
-  `source_categories` list names, or every category but machine data when it has no list.
+  `source_categories` list names, or every category but machine data when it has no list. Its
+  `content_categories` list routes into the digest only the items whose content category it names,
+  and `exclude_content_categories` keeps items out; without either, every polled item goes in.
 - `guard/releases.json`: items held by the injection guard that a person has released.
 - `seeds/`: dated seed files. These are imports; `sources/` is the truth.
 - `tools/`: the commit checker, its hooks, its exemptions list, the acknowledged-commit list and the
