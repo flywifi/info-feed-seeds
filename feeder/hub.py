@@ -24,7 +24,7 @@ import argparse
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import urldefrag, urlsplit
 
 if __package__ in (None, ""):
     # Run as a script (`py -3 -I feeder\hub.py`): isolated mode puts neither this folder nor the
@@ -78,14 +78,18 @@ def _nothing_new(store: Store, source_id: str, route: dict, raws: list) -> bool:
     return all(store.item(items.content_sha256(source_id, r.guid, r.link, r.title)) for r in raws)
 
 
-def _page_base(route_url: str, final_url: str | None) -> str:
-    """The address a fetched page's relative links resolve against: the URL that answered when it is the
-    route's own host or that host with or without a leading www., else the route URL. A redirect to
-    any other host never widens what the poller may follow."""
-    if not final_url:
-        return route_url
-    bare = [(urlsplit(u).hostname or "").lower().removeprefix("www.") for u in (route_url, final_url)]
-    return final_url if bare[0] and bare[0] == bare[1] else route_url
+def _same_site(route_url: str, final_url: str | None) -> bool:
+    """True when the URL that answered is the route's own site: the same host with or without a leading
+    www., the same port, and the same scheme or http moved up to https. An answering URL that carries
+    a user name or password is never the same site."""
+    parts = urlsplit(final_url or "")
+    if parts.username is not None or parts.password is not None:
+        return False
+    a, b = adapters._origin(route_url), adapters._origin(final_url or "")
+    if a is None or b is None or not a[1]:
+        return False
+    same_scheme = a[0] == b[0] or (a[0], b[0]) == ("http", "https")
+    return same_scheme and a[1].removeprefix("www.") == b[1].removeprefix("www.") and a[2] == b[2]
 
 
 def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | None = None,
@@ -111,7 +115,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             record.update(status="not-modified", error=None, items=None)
             return record
         try:
-            base = _page_base(url, result.final_url)
+            # Relative links resolve against the address that answered, so items cite the right host.
+            base = urldefrag(result.final_url or url)[0]
             parsed = adapters.check_result(parse(result.body, url=base, params=params))
         except adapters.AdapterError as exc:
             # A 200 that the adapter cannot read (a bot wall, an error page) is a failure, not a response.
@@ -123,17 +128,22 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             record.update(status="adapter-crash", error=type(exc).__name__, items=None)
             continue
         # Every item remembers the page that held it and that fetch's time, so a digest line cites its capture.
-        raws = [(raw, url, result.retrieved_at) for raw in parsed["items"]]
+        raws = [(raw, base, result.retrieved_at) for raw in parsed["items"]]
         truncated = result.truncated
         queue = [] if _nothing_new(store, source.id, route, parsed["items"]) else list(parsed.get("follow") or [])
         budget = adapters.follow_limit(route)
-        seen = {url}
+        seen = {url, base}
         follow_failed = follow_refused = 0
+        site = base == url or _same_site(url, base)
+        if not site:
+            # The route redirected to another site: none of that page's links are followed (and none are
+            # counted when following is off for the route).
+            follow_refused, queue = (len(queue) if budget > 0 else 0), []
         while queue and budget > 0:
             candidate = queue.pop(0)
-            # The route's own address or, after a redirect to the same host with or without www., the
+            # The route's own address or, after a redirect within its site (www. or not, same port), the
             # address that answered; any other host is refused and counted.
-            next_url = adapters.follow_url(url, candidate) or adapters.follow_url(base, candidate)
+            next_url = adapters.follow_url(url, candidate) or (adapters.follow_url(base, candidate) if site else None)
             if next_url is None:
                 follow_refused += 1   # another host, port or scheme: never fetched, but counted
                 continue
@@ -146,7 +156,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             if more.error is not None or more.body is None:
                 follow_failed += 1
                 continue
-            if adapters.follow_url(url, more.final_url) is None and adapters.follow_url(base, more.final_url) is None:
+            if adapters.follow_url(url, more.final_url) is None and (not site or adapters.follow_url(base, more.final_url) is None):
                 follow_failed += 1
                 continue
             try:
@@ -202,9 +212,8 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
 
     rows = store.items_for_feeds(sorted(chosen))
     # A link one source gives to several distinct items (a shared listing page) does not identify an
-    # item, so those items are keyed by their own hash instead of being merged as one story.
-    # A link counts as shared when two or more distinct guids carry it; a retitled item keeps its guid
-    # and stays one story.
+    # item. It counts as shared when two or more distinct guids carry it: each post on it is then keyed
+    # by its guid (or, without one, by its own hash), so a retitled post keeps its guid and stays one story.
     per_source: dict[tuple[str, str], set] = {}
     for row in rows:
         if row["link_key"] and row["guid"]:
@@ -223,7 +232,7 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
         tags, _ = item_tags(profile, chosen[row["feed_id"]], row)
         shared = len(per_source.get((row["feed_id"], row["link_key"]), ())) > 1
         if shared:
-            key = _guid_key(row)   # each post on a shared link is its own story, retitled or not
+            key = _guid_key(row) if row["guid"] else row["content_sha256"]
         else:
             key = row["link_key"] or row["content_sha256"]
         groups.setdefault(key, []).append((row, tags))
