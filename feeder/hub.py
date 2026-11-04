@@ -24,7 +24,7 @@ import argparse
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import urldefrag, urlsplit
+from urllib.parse import urldefrag, urlsplit, urlunsplit
 
 if __package__ in (None, ""):
     # Run as a script (`py -3 -I feeder\hub.py`): isolated mode puts neither this folder nor the
@@ -92,6 +92,15 @@ def _same_site(route_url: str, final_url: str | None) -> bool:
     return same_scheme and a[1].removeprefix("www.") == b[1].removeprefix("www.") and a[2] == b[2]
 
 
+def _without_userinfo(address: str) -> str:
+    """The address with any user name or password removed, so links resolved against it carry none."""
+    parts = urlsplit(address)
+    host = parts.netloc.rpartition("@")[2]
+    if (parts.username is None and parts.password is None) or not host:
+        return address   # nothing to drop, or no host would be left (its links then stay unpublishable)
+    return urlunsplit(parts._replace(netloc=host))
+
+
 def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | None = None,
                 vendor_names: dict | None = None) -> dict:
     """Fetch the source's configured routes in order until one answers, dispatching each body to
@@ -115,8 +124,10 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             record.update(status="not-modified", error=None, items=None)
             return record
         try:
-            # Relative links resolve against the address that answered, so items cite the right host.
-            base = urldefrag(result.final_url or url)[0]
+            # Relative links resolve against the address that answered, so items cite the right host. A user
+            # name or password in that address is dropped first, so the links stay publishable.
+            answered = urldefrag(result.final_url or url)[0]
+            base = _without_userinfo(answered)
             parsed = adapters.check_result(parse(result.body, url=base, params=params))
         except adapters.AdapterError as exc:
             # A 200 that the adapter cannot read (a bot wall, an error page) is a failure, not a response.
@@ -134,7 +145,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
         budget = adapters.follow_limit(route)
         seen = {url, base}
         follow_failed = follow_refused = 0
-        site = base == url or _same_site(url, base)
+        site = (answered == url and _without_userinfo(url) == url) or _same_site(url, answered)
         if not site:
             # The route redirected to another site: none of that page's links are followed (and none are
             # counted when following is off for the route).

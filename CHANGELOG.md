@@ -18,6 +18,10 @@ All notable changes to this repository are recorded here. The format follows
   port, the same scheme or http to https), follow URLs on that address are fetched and the
   answering page is not fetched again; after a redirect to any other site, none of the page's links
   are followed, and they are counted as refused.
+- An answering address that carries a user name or password, the route's own or one it redirected
+  to, counts as another site, so none of its page's links are followed; the user name and password
+  are dropped before its relative links are resolved, so its items keep publishable links and cite
+  the page without them.
 - The poll workflow saves the database after any successful publish, even when the run is then
   cancelled.
 - `tools/preflight.py` hands the ignored local name list to the base branch's checker through

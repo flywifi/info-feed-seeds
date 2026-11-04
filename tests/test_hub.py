@@ -735,6 +735,36 @@ class PollTests(HubTestCase):
         self.assertEqual(self._poll_one("he", fetcher), 0)
         self.assertEqual(fetcher.calls, ["https://example.gov/o"])
 
+    def test_an_answering_address_with_userinfo_keeps_item_links_and_follows_nothing(self):
+        for sid, route, final, link in (
+                ("ui", "https://example.gov/u", "https://user:pass@example.gov/u", "https://example.gov/p/1"),
+                ("uj", "https://example.gov/u", "https://evil.net@other.example/u", "https://other.example/p/1"),
+                ("uk", "https://user@example.gov/w", "https://user@example.gov/w", "https://example.gov/p/1")):
+            with self.subTest(final=final):
+                self.add_source(sid, route, ["cybersecurity"],
+                                routes=[{"kind": "page", "adapter": "page", "url": route,
+                                         "params": {"item_selector": "li", "next_selector": "a.next@href"}}])
+                self.script.update({route: b"<ul><li><a href='/p/1'>Cybersecurity notice</a></li></ul>"
+                                           b"<a class='next' href='/u/2'>Older</a>"})
+                fetcher = self._redirecting(route, final)
+                self.assertEqual(self._poll_one(sid, fetcher), 0)
+                self.assertEqual(fetcher.calls, [route], "no link of that page is followed")
+                latest = jsonio.load_json(self.out / "tr" / "latest.json")
+                self.assertIn(link, [i["link"] for i in latest["items"]], "the item keeps a link, without the user name")
+                self.assertIn(f"- {sid}: ok, HTTP 200, 1 items, follow-refused",
+                              (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8"))
+
+    def test_userinfo_is_dropped_from_an_answering_address(self):
+        for address, want in (("https://user:pass@example.gov/c?q=1", "https://example.gov/c?q=1"),
+                              ("https://evil.net@example.gov:8443/c", "https://example.gov:8443/c"),
+                              ("https://a@b@example.gov/c", "https://example.gov/c"),
+                              ("https://@example.gov/c", "https://example.gov/c"),
+                              ("https://user@/c", "https://user@/c"),
+                              ("https://example.gov/a@b?x=c@d", "https://example.gov/a@b?x=c@d"),
+                              ("https://example.gov/c", "https://example.gov/c")):
+            with self.subTest(address=address):
+                self.assertEqual(hub._without_userinfo(address), want)
+
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
             records = []
