@@ -13,8 +13,10 @@ All notable changes to this repository are recorded here. The format follows
 - An unproven disabled source must keep `verified` null and record at least one attempt (lint and
   the commit checker).
 - Refused follow URLs (another host, port or scheme) are counted and reported as `follow-refused`.
-- Follow URLs on the address a route redirected to (example.gov to www.example.gov) are fetched,
-  not refused.
+- When a route redirects to its own host with or without a leading www. (example.gov to
+  www.example.gov), the page's relative links resolve against the address that answered and its
+  follow URLs there are fetched; a redirect to any other host widens nothing, and its links are
+  refused and counted.
 - The poll workflow saves the database after any successful publish, even when the run is then
   cancelled.
 - `tools/preflight.py` hands the ignored local name list to the base branch's checker through

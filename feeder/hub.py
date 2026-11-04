@@ -24,6 +24,7 @@ import argparse
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 
 if __package__ in (None, ""):
     # Run as a script (`py -3 -I feeder\hub.py`): isolated mode puts neither this folder nor the
@@ -77,6 +78,16 @@ def _nothing_new(store: Store, source_id: str, route: dict, raws: list) -> bool:
     return all(store.item(items.content_sha256(source_id, r.guid, r.link, r.title)) for r in raws)
 
 
+def _page_base(route_url: str, final_url: str | None) -> str:
+    """The address a fetched page's relative links resolve against: the URL that answered when it is the
+    route's own host or that host with or without a leading www., else the route URL. A redirect to
+    any other host never widens what the poller may follow."""
+    if not final_url:
+        return route_url
+    bare = [(urlsplit(u).hostname or "").lower().removeprefix("www.") for u in (route_url, final_url)]
+    return final_url if bare[0] and bare[0] == bare[1] else route_url
+
+
 def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | None = None) -> dict:
     """Fetch the source's configured routes in order until one answers, dispatching each body to
     its adapter and following the adapter's `follow` URLs up to the route's bound. A 304 ends the
@@ -99,7 +110,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             record.update(status="not-modified", error=None, items=None)
             return record
         try:
-            parsed = adapters.check_result(parse(result.body, url=url, params=params))
+            base = _page_base(url, result.final_url)
+            parsed = adapters.check_result(parse(result.body, url=base, params=params))
         except adapters.AdapterError as exc:
             # A 200 that the adapter cannot read (a bot wall, an error page) is a failure, not a response.
             record["failed"] += 1
@@ -116,11 +128,10 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
         budget = adapters.follow_limit(route)
         seen = {url}
         follow_failed = follow_refused = 0
-        base = result.final_url or url
         while queue and budget > 0:
             candidate = queue.pop(0)
-            # The route's own address or, after a redirect, the address that answered (example.gov to
-            # www.example.gov): links on either are the same site.
+            # The route's own address or, after a redirect to the same host with or without www., the
+            # address that answered; any other host is refused and counted.
             next_url = adapters.follow_url(url, candidate) or adapters.follow_url(base, candidate)
             if next_url is None:
                 follow_refused += 1   # another host, port or scheme: never fetched, but counted
