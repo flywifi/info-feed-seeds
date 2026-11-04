@@ -26,8 +26,10 @@ All notable changes to this repository are recorded here. The format follows
 - Store columns: the source and content category pairs and their basis are filled at ingest; publisher,
   industries, standards, editions, change types, CVEs, vendors, link hosts, severity and its rank,
   exploited, language, deadline and updated stay empty until tag extraction lands.
-- On a shared link, a post without a guid is keyed by its own hash, so several guidless posts each
-  reach the digest.
+- On a link that two or more distinct guids share, a post without a guid is keyed by its own hash,
+  so each guidless post there reaches the digest; a link that carries fewer than two guids still
+  shows one post. A retitled post without a guid on a shared link is shown again. A page route whose
+  answering host changes shows its current posts once more.
 - Posts one source gives the same link (Ervik's ransomware victim posts all link to /ransomware)
   each reach the digest when two or more distinct guids share that link; before, only the first was
   ever shown. Each such post is keyed by its guid, and a guid already shown stays shown, so a

@@ -659,6 +659,60 @@ class PollTests(HubTestCase):
         for name in ("Alpha", "Beta", "Gamma", "Delta"):
             self.assertIn(f"{name} Ltd", md)
 
+    def test_an_http_route_moved_up_to_https_www_follows_its_relative_next_link(self):
+        self.add_source("gimel", "http://example.gov/blog", ["cybersecurity"],
+                        routes=[{"kind": "page", "adapter": "page", "url": "http://example.gov/blog",
+                                 "params": {"item_selector": "li", "next_selector": "a.next@href"}}])
+        self.script.update({"http://example.gov/blog": b"<ul><li><a href='/p/1'>One</a></li></ul><a class='next' href='/blog/2'>Older</a>",
+                            "https://www.example.gov/blog/2": b"<ul><li><a href='/p/2'>Two</a></li></ul>"})
+        fetcher = self._redirecting("http://example.gov/blog", "https://www.example.gov/blog")
+        self.assertEqual(self._poll_one("gimel", fetcher), 0)
+        self.assertEqual(fetcher.calls, ["http://example.gov/blog", "https://www.example.gov/blog/2"])
+        self.assertIn("- gimel: ok, HTTP 200, 2 items", (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8"))
+
+    def test_same_site_table(self):
+        cases = [
+            ("https://example.gov/a", "https://example.gov:443/a", True),
+            ("https://example.gov:443/a", "https://www.example.gov/a", True),
+            ("http://example.gov/a", "http://example.gov:80/a", True),
+            ("http://example.gov/a", "https://example.gov/a", True),
+            ("https://example.gov/a", "https://www.example.gov/a", True),
+            ("https://www.example.gov/a", "https://example.gov/a", True),
+            ("https://example.gov/a", "https://www.www.example.gov/a", False),
+            ("https://example.gov/a", "https://wwwexample.gov/a", False),
+            ("https://example.gov/a", "https://evil-example.gov/a", False),
+            ("https://example.gov/a", "https://example.gov.evil.net/a", False),
+            ("https://example.gov/a", "http://example.gov/a", False),
+            ("http://example.gov/a", "https://example.gov:80/a", False),
+            ("https://example.gov/a", "https://example.gov:8443/a", False),
+            ("https://example.gov/c", "https://evil.net@example.gov/c", False),
+            ("https://example.gov/c", "https://user:pass@example.gov/c", False),
+        ]
+        for route, final, expected in cases:
+            with self.subTest(route=route, final=final):
+                self.assertIs(hub._same_site(route, final), expected)
+
+    def test_an_off_site_redirect_with_following_off_reports_no_refusals(self):
+        self.add_source("dalet", "https://example.gov/d", ["cybersecurity"],
+                        routes=[{"kind": "page", "adapter": "page", "url": "https://example.gov/d",
+                                 "params": {"item_selector": "li", "next_selector": "a.next@href", "max_pages": 0}}])
+        self.script.update({"https://example.gov/d": b"<ul><li><a href='/p/1'>One</a></li></ul><a class='next' href='/d/2'>Older</a>"})
+        fetcher = self._redirecting("https://example.gov/d", "https://other.example/d")
+        self.assertEqual(self._poll_one("dalet", fetcher), 0)
+        md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
+        self.assertIn("- dalet: ok, HTTP 200, 1 items", md)
+        self.assertNotIn("follow-refused", md)
+
+    def test_a_fragment_on_the_answering_address_does_not_refetch_the_page(self):
+        self.add_source("he", "https://example.gov/o", ["cybersecurity"],
+                        routes=[{"kind": "page", "adapter": "page", "url": "https://example.gov/o",
+                                 "params": {"item_selector": "li", "next_selector": "a.next@href"}}])
+        self.script.update({"https://example.gov/o": b"<ul><li><a href='/p/1'>One</a></li></ul>"
+                                                     b"<a class='next' href='https://www.example.gov/o'>Same page</a>"})
+        fetcher = self._redirecting("https://example.gov/o", "https://www.example.gov/o#main")
+        self.assertEqual(self._poll_one("he", fetcher), 0)
+        self.assertEqual(fetcher.calls, ["https://example.gov/o"])
+
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
             records = []

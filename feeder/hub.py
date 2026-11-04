@@ -24,7 +24,7 @@ import argparse
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import urldefrag, urlsplit
 
 if __package__ in (None, ""):
     # Run as a script (`py -3 -I feeder\hub.py`): isolated mode puts neither this folder nor the
@@ -80,7 +80,11 @@ def _nothing_new(store: Store, source_id: str, route: dict, raws: list) -> bool:
 
 def _same_site(route_url: str, final_url: str | None) -> bool:
     """True when the URL that answered is the route's own site: the same host with or without a leading
-    www., the same port, and the same scheme or http moved up to https."""
+    www., the same port, and the same scheme or http moved up to https. An answering URL that carries
+    a user name or password is never the same site."""
+    parts = urlsplit(final_url or "")
+    if parts.username is not None or parts.password is not None:
+        return False
     a, b = adapters._origin(route_url), adapters._origin(final_url or "")
     if a is None or b is None or not a[1]:
         return False
@@ -111,7 +115,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             return record
         try:
             # Relative links resolve against the address that answered, so items cite the right host.
-            base = result.final_url or url
+            base = urldefrag(result.final_url or url)[0]
             parsed = adapters.check_result(parse(result.body, url=base, params=params))
         except adapters.AdapterError as exc:
             # A 200 that the adapter cannot read (a bot wall, an error page) is a failure, not a response.
@@ -123,20 +127,22 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             record.update(status="adapter-crash", error=type(exc).__name__, items=None)
             continue
         # Every item remembers the page that held it and that fetch's time, so a digest line cites its capture.
-        raws = [(raw, url, result.retrieved_at) for raw in parsed["items"]]
+        raws = [(raw, base, result.retrieved_at) for raw in parsed["items"]]
         truncated = result.truncated
         queue = [] if _nothing_new(store, source.id, route, parsed["items"]) else list(parsed.get("follow") or [])
         budget = adapters.follow_limit(route)
         seen = {url, base}
         follow_failed = follow_refused = 0
-        if not _same_site(url, base) and base != url:
-            # The route redirected to another site: none of that page's links are followed.
-            follow_refused, queue = len(queue), []
+        site = base == url or _same_site(url, base)
+        if not site:
+            # The route redirected to another site: none of that page's links are followed (and none are
+            # counted when following is off for the route).
+            follow_refused, queue = (len(queue) if budget > 0 else 0), []
         while queue and budget > 0:
             candidate = queue.pop(0)
             # The route's own address or, after a redirect within its site (www. or not, same port), the
             # address that answered; any other host is refused and counted.
-            next_url = adapters.follow_url(url, candidate) or adapters.follow_url(base, candidate)
+            next_url = adapters.follow_url(url, candidate) or (adapters.follow_url(base, candidate) if site else None)
             if next_url is None:
                 follow_refused += 1   # another host, port or scheme: never fetched, but counted
                 continue
@@ -149,7 +155,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             if more.error is not None or more.body is None:
                 follow_failed += 1
                 continue
-            if adapters.follow_url(url, more.final_url) is None and adapters.follow_url(base, more.final_url) is None:
+            if adapters.follow_url(url, more.final_url) is None and (not site or adapters.follow_url(base, more.final_url) is None):
                 follow_failed += 1
                 continue
             try:
