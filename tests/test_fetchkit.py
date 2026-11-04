@@ -181,6 +181,17 @@ class BodyTests(unittest.TestCase):
             tracemalloc.stop()
         self.assertLess(peak, 16 * 1024 * 1024, "the bomb is never inflated in full")
 
+    def test_many_gzip_members_are_refused_quickly(self):
+        import time
+        body = gzip.compress(b"x") * 80000
+        start = time.perf_counter()
+        with self.assertRaises(zlib.error):
+            fetchkit.inflate_capped(body, 16 + zlib.MAX_WBITS, 5 * 1024 * 1024)
+        fetchkit.read_body(FakeResp(200, {"Content-Encoding": "gzip"}, body), 5 * 1024 * 1024)
+        self.assertLess(time.perf_counter() - start, 1.0)
+        out, cut = fetchkit.inflate_capped(gzip.compress(b"x") * 1000, 16 + zlib.MAX_WBITS, 5000)
+        self.assertEqual((out, cut), (b"x" * 1000, False), "up to the member cap is read")
+
     def test_gzip_and_mislabelled_encoding(self):
         payload = gzip.compress(b"hello gzip")
         body, truncated = fetchkit.read_body(FakeResp(200, {"Content-Encoding": "gzip"}, payload), 1000)

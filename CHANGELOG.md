@@ -8,14 +8,17 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Fixed
 
-- Items one source gives the same link (Ervik's ransomware victim posts all link to /ransomware)
-  are keyed by their own hash when two or more distinct guids share the link, so each reaches the
-  digest (before, only the first was ever shown); a retitled item keeps its guid and stays one story.
+- Posts one source gives the same link (Ervik's ransomware victim posts all link to /ransomware)
+  each reach the digest when two or more distinct guids share that link; before, only the first was
+  ever shown. Each such post is keyed by its guid, and a guid already shown stays shown, so a
+  retitled post is not published again.
 - Compressed bodies are inflated with a hard output cap (the 5 MiB body cap) in the fetcher and in
-  the gzip sitemap reader, which refuses a body that expands past it; a small compression bomb no
-  longer exhausts memory, and a gzip body of several members is read member by member. XML
-  documents with a DOCTYPE or an entity declaration are refused inside the parser, on the decoded
-  text, so a long leading comment or a UTF-16 body cannot hide one.
+  the gzip sitemap reader, which refuses a body that expands past it or is cut short; a small
+  compression bomb no longer exhausts memory. A gzip body of several members is read member by
+  member in bounded steps, at most 1,000 members. Sitemap and XML routes refuse any DOCTYPE or
+  entity declaration, and feeds refuse an entity declaration or a DOCTYPE with declarations, checked
+  inside the XML parser on the decoded text, so a long leading comment or a UTF-16 body cannot hide
+  one.
 
 ### Added
 

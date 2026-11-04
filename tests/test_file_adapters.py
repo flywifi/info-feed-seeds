@@ -58,10 +58,33 @@ class XmlEncodingTests(unittest.TestCase):
         with self.assertRaisesRegex(adapters.AdapterError, "DTD or entities"):
             call("sitemap", body)
 
+    def test_a_bare_doctype_is_refused(self):
+        with self.assertRaisesRegex(adapters.AdapterError, "DTD or entities"):
+            call("sitemap", b"<!DOCTYPE urlset>" + URLSET.split(b"?>", 1)[1])
+
+    def test_a_cut_gzip_sitemap_is_a_bad_gzip_body(self):
+        with self.assertRaisesRegex(adapters.AdapterError, "bad gzip body"):
+            call("sitemap", gzip.compress(URLSET)[:-12])
+
     def test_a_gzip_sitemap_of_several_members_is_read_whole(self):
         half = len(URLSET) // 2
         items = call("sitemap", gzip.compress(URLSET[:half]) + gzip.compress(URLSET[half:]))["items"]
         self.assertEqual(len(items), 3)
+
+
+class FeedDtdTests(unittest.TestCase):
+    def test_a_utf16_feed_with_an_entity_is_refused(self):
+        from feeder.adapters import feed
+        body = ('<?xml version="1.0" encoding="UTF-16"?><!DOCTYPE rss [<!ENTITY e "EXP">]>'
+                '<rss version="2.0"><channel><title>T</title><item><title>&e;&e;</title></item></channel></rss>').encode("utf-16")
+        with self.assertRaises(feed.FeedRefused):
+            feed.parse(body, url="https://example.gov/f.xml", params={})
+
+    def test_a_bot_wall_page_is_still_not_a_feed(self):
+        from feeder.adapters import feed
+        with self.assertRaises(feed.FeedParseError) as caught:
+            feed.parse(b"<!DOCTYPE html><html><body>Just a moment</body></html>", url="https://example.gov/f.xml", params={})
+        self.assertNotIsInstance(caught.exception, feed.FeedRefused)
 
 
 class UrlListTests(unittest.TestCase):
