@@ -1,6 +1,7 @@
 """Offline tests for feeder/fetchkit.py: injected opener, fake clock, no network, no persisted state
 unless the test creates a temporary directory for it."""
 import gzip
+import zlib
 import json
 import socket
 import tempfile
@@ -164,6 +165,32 @@ class BodyTests(unittest.TestCase):
         self.assertTrue(truncated)
         body, truncated = fetchkit.read_body(FakeResp(200, {}, b"short"), 100)
         self.assertEqual((body, truncated), (b"short", False))
+
+    def test_a_compression_bomb_is_cut_at_the_cap_without_inflating_it(self):
+        bomb = gzip.compress(b"\0" * (64 * 1024 * 1024))   # 64 MiB of zeros, about 64 KiB compressed
+        body, truncated = fetchkit.read_body(FakeResp(200, {"Content-Encoding": "gzip"}, bomb), 1024 * 1024)
+        self.assertEqual((len(body), truncated), (1024 * 1024, True))
+        out, cut = fetchkit.inflate_capped(bomb, 16 + zlib.MAX_WBITS, 1000)
+        self.assertEqual((len(out), cut), (1000, True))
+        import tracemalloc
+        tracemalloc.start()
+        try:
+            fetchkit.read_body(FakeResp(200, {"Content-Encoding": "gzip"}, bomb), 1024 * 1024)
+            peak = tracemalloc.get_traced_memory()[1]
+        finally:
+            tracemalloc.stop()
+        self.assertLess(peak, 16 * 1024 * 1024, "the bomb is never inflated in full")
+
+    def test_many_gzip_members_are_refused_quickly(self):
+        import time
+        body = gzip.compress(b"x") * 80000
+        start = time.perf_counter()
+        with self.assertRaises(zlib.error):
+            fetchkit.inflate_capped(body, 16 + zlib.MAX_WBITS, 5 * 1024 * 1024)
+        fetchkit.read_body(FakeResp(200, {"Content-Encoding": "gzip"}, body), 5 * 1024 * 1024)
+        self.assertLess(time.perf_counter() - start, 1.0)
+        out, cut = fetchkit.inflate_capped(gzip.compress(b"x") * 1000, 16 + zlib.MAX_WBITS, 5000)
+        self.assertEqual((out, cut), (b"x" * 1000, False), "up to the member cap is read")
 
     def test_gzip_and_mislabelled_encoding(self):
         payload = gzip.compress(b"hello gzip")

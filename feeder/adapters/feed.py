@@ -12,7 +12,7 @@ import re
 import xml.etree.ElementTree as ET
 
 from ..items import RawItem, to_utc_z
-from .base import AdapterError
+from .base import AdapterError, DocumentRefused, refuse_dtd
 
 NS = {
     "atom": "http://www.w3.org/2005/Atom",
@@ -295,11 +295,15 @@ def parse_feed(data: bytes | str) -> dict:
     Raises FeedRefused for documents declaring entities and FeedParseError for anything that is
     not a readable feed."""
     raw = _detect_bytes(data)
-    if _ENTITY_RE.search(raw):
-        raise FeedRefused("document declares an entity (<!ENTITY); refused")
     kind = detect_kind(raw)
     if kind == "jsonfeed":
         return _parse_jsonfeed(raw)
+    if _ENTITY_RE.search(raw):
+        raise FeedRefused("document declares an entity (<!ENTITY); refused")
+    try:
+        refuse_dtd(raw, any_doctype=False)   # also catches declarations a UTF-16 body hides from the byte check
+    except DocumentRefused as exc:
+        raise FeedRefused(str(exc)) from None
     try:
         root = ET.fromstring(raw)
     except ET.ParseError as exc:

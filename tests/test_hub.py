@@ -444,6 +444,59 @@ class PollTests(HubTestCase):
             self.assertRegex(c["content"], r"^[a-z-]+/[a-z-]+$", "every polled item has a content category")
             self.assertIn(c["content_basis"]["category"], ("item", "source"))
 
+    def test_items_sharing_one_link_in_a_source_each_reach_the_digest(self):
+        def feed(*titles):
+            entries = "".join(f"<item><title>{t}</title><link>https://example.gov/victims</link><guid>{t}</guid>"
+                              f"<pubDate>Mon, 19 Oct 2026 0{i}:00:00 GMT</pubDate><description>cybersecurity</description></item>"
+                              for i, t in enumerate(titles))
+            return (f'<?xml version="1.0"?><rss version="2.0"><channel><title>V</title><link>https://example.gov/</link>'
+                    f"<description>d</description>{entries}</channel></rss>").encode()
+
+        self.add_source("omicron", "https://example.gov/v.xml", ["cybersecurity"])
+        self.script["https://example.gov/v.xml"] = feed("Ransomware: Alpha Ltd", "Ransomware: Beta Ltd")
+        self.assertEqual(self.poll("--only", "omicron"), 0)
+        md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
+        self.assertIn("Alpha Ltd", md)
+        self.assertIn("Beta Ltd", md, "a shared listing link does not merge two posts")
+
+    def test_a_retitled_story_is_published_once(self):
+        def feed(title):
+            return (f'<?xml version="1.0"?><rss version="2.0"><channel><title>R</title><link>https://example.gov/</link>'
+                    f"<description>d</description><item><title>{title}</title><link>https://example.gov/story</link>"
+                    f"<guid>story-1</guid><pubDate>Mon, 19 Oct 2026 01:00:00 GMT</pubDate><description>cybersecurity</description>"
+                    f"</item></channel></rss>").encode()
+
+        self.add_source("rho", "https://example.gov/s.xml", ["cybersecurity"])
+        self.script["https://example.gov/s.xml"] = feed("Cybersecurity breach at an agency")
+        self.assertEqual(self.poll("--only", "rho"), 0)
+        self.script["https://example.gov/s.xml"] = feed("Cybersecurity breach at an agency (corrected)")
+        self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", "2026-10-21", "--state-dir", str(self.state),
+                                      "--out-dir", str(self.out), "--only", "rho"), 0)
+        self.assertNotIn("corrected", (self.out / "tr" / "2026-10-21.md").read_text(encoding="utf-8"),
+                         "the same guid under the same link is one story")
+
+    def test_a_retitled_post_on_a_shared_link_is_published_once(self):
+        def feed(*posts):
+            entries = "".join(f"<item><title>{t}</title><link>https://example.gov/victims</link><guid>{g}</guid>"
+                              f"<pubDate>Mon, 19 Oct 2026 0{i}:00:00 GMT</pubDate><description>cybersecurity</description></item>"
+                              for i, (g, t) in enumerate(posts))
+            return (f'<?xml version="1.0"?><rss version="2.0"><channel><title>V</title><link>https://example.gov/</link>'
+                    f"<description>d</description>{entries}</channel></rss>").encode()
+
+        self.add_source("sigma", "https://example.gov/sv.xml", ["cybersecurity"])
+        self.script["https://example.gov/sv.xml"] = feed(("g1", "Ransomware: Alpha Ltd"), ("g2", "Ransomware: Beta Ltd"))
+        self.assertEqual(self.poll("--only", "sigma"), 0)
+        first = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
+        self.script["https://example.gov/sv.xml"] = feed(("g1", "Ransomware: Alpha Ltd renamed"), ("g2", "Ransomware: Beta Ltd"),
+                                                         ("g3", "Ransomware: Gamma Ltd"))
+        self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", "2026-10-21", "--state-dir", str(self.state),
+                                      "--out-dir", str(self.out), "--only", "sigma"), 0)
+        second = (self.out / "tr" / "2026-10-21.md").read_text(encoding="utf-8")
+        self.assertIn("Alpha Ltd", first)
+        self.assertIn("Beta Ltd", first)
+        self.assertIn("Gamma Ltd", second, "a new post on the shared link is published")
+        self.assertNotIn("renamed", second, "the retitled post keeps its guid and is not published again")
+
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:
             records = []

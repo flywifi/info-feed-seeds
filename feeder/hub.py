@@ -163,6 +163,10 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
 
 # --------------------------------------------------------------------------- selection
 
+def _guid_key(row: dict) -> str:
+    return f"guid:{row['feed_id']}:{row['guid']}"
+
+
 def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
     """Give new eligible items a hit on `day`, up to the daily cap. Returns the hits added."""
     name = profile["name"]
@@ -174,8 +178,19 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
     day_dt = date.fromisoformat(day)
     earliest = (day_dt - timedelta(days=int(profile["window_days"]))).isoformat()
 
+    rows = store.items_for_feeds(sorted(chosen))
+    # A link one source gives to several distinct items (a shared listing page) does not identify an
+    # item, so those items are keyed by their own hash instead of being merged as one story.
+    # A link counts as shared when two or more distinct guids carry it; a retitled item keeps its guid
+    # and stays one story.
+    per_source: dict[tuple[str, str], set] = {}
+    for row in rows:
+        if row["link_key"] and row["guid"]:
+            per_source.setdefault((row["feed_id"], row["link_key"]), set()).add(row["guid"])
+    # A guid already shown stays shown, so a retitled post on a shared link is not published again.
+    taken_keys |= {_guid_key(row) for row in rows if row["content_sha256"] in taken and row["guid"]}
     groups: dict[str, list[tuple[dict, list[str]]]] = {}
-    for row in store.items_for_feeds(sorted(chosen)):
+    for row in rows:
         if row["content_sha256"] in taken:
             continue
         ref = (row["published"] or row["first_seen"])[:10]
@@ -184,7 +199,11 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
         if not accepts(profile, row):
             continue
         tags, _ = item_tags(profile, chosen[row["feed_id"]], row)
-        key = row["link_key"] or row["content_sha256"]
+        shared = len(per_source.get((row["feed_id"], row["link_key"]), ())) > 1
+        if shared:
+            key = _guid_key(row)   # each post on a shared link is its own story, retitled or not
+        else:
+            key = row["link_key"] or row["content_sha256"]
         groups.setdefault(key, []).append((row, tags))
 
     ordered = []

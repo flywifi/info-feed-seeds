@@ -40,6 +40,53 @@ class SitemapTests(unittest.TestCase):
                 call("sitemap", body)
 
 
+class XmlSafetyTests(unittest.TestCase):
+    def test_a_gzip_sitemap_that_expands_past_the_body_cap_is_refused(self):
+        bomb = gzip.compress(b"<urlset>" + b" " * (6 * 1024 * 1024) + b"</urlset>")
+        with self.assertRaisesRegex(adapters.AdapterError, "expands past"):
+            call("sitemap", bomb)
+
+    def test_an_entity_declaration_after_a_long_comment_is_refused(self):
+        body = b"<!--" + b"x" * 70000 + b'--><!DOCTYPE u [<!ENTITY a "b">]><urlset/>'
+        with self.assertRaisesRegex(adapters.AdapterError, "DTD or entities"):
+            call("sitemap", body)
+
+
+class XmlEncodingTests(unittest.TestCase):
+    def test_a_utf16_document_with_an_entity_is_refused(self):
+        body = '<?xml version="1.0" encoding="UTF-16"?><!DOCTYPE u [<!ENTITY a "b">]><urlset/>'.encode("utf-16")
+        with self.assertRaisesRegex(adapters.AdapterError, "DTD or entities"):
+            call("sitemap", body)
+
+    def test_a_bare_doctype_is_refused(self):
+        with self.assertRaisesRegex(adapters.AdapterError, "DTD or entities"):
+            call("sitemap", b"<!DOCTYPE urlset>" + URLSET.split(b"?>", 1)[1])
+
+    def test_a_cut_gzip_sitemap_is_a_bad_gzip_body(self):
+        with self.assertRaisesRegex(adapters.AdapterError, "bad gzip body"):
+            call("sitemap", gzip.compress(URLSET)[:-12])
+
+    def test_a_gzip_sitemap_of_several_members_is_read_whole(self):
+        half = len(URLSET) // 2
+        items = call("sitemap", gzip.compress(URLSET[:half]) + gzip.compress(URLSET[half:]))["items"]
+        self.assertEqual(len(items), 3)
+
+
+class FeedDtdTests(unittest.TestCase):
+    def test_a_utf16_feed_with_an_entity_is_refused(self):
+        from feeder.adapters import feed
+        body = ('<?xml version="1.0" encoding="UTF-16"?><!DOCTYPE rss [<!ENTITY e "EXP">]>'
+                '<rss version="2.0"><channel><title>T</title><item><title>&e;&e;</title></item></channel></rss>').encode("utf-16")
+        with self.assertRaises(feed.FeedRefused):
+            feed.parse(body, url="https://example.gov/f.xml", params={})
+
+    def test_a_bot_wall_page_is_still_not_a_feed(self):
+        from feeder.adapters import feed
+        with self.assertRaises(feed.FeedParseError) as caught:
+            feed.parse(b"<!DOCTYPE html><html><body>Just a moment</body></html>", url="https://example.gov/f.xml", params={})
+        self.assertNotIsInstance(caught.exception, feed.FeedRefused)
+
+
 class UrlListTests(unittest.TestCase):
     def test_comments_non_http_and_duplicates_are_dropped(self):
         body = b"\xef\xbb\xbfhttps://example.gov/a\r\n# note\nftp://example.gov/f\nhttps://example.gov/b # why\nhttps://example.gov/a\n\n"
