@@ -54,9 +54,12 @@ All notable changes to this repository are recorded here. The format follows
   under `tags`, and its coverage counts how many items each reader filled and how many content
   categories came from the item's own text.
 - Known limits of the tag readers: an exploitation phrase after a negation or hedge in the same clause
-  ("not", "no", "could", "might") stays empty; "Deadline extended from X to Y" gives the old date; a CVSS
-  v2 score and a bare CVSS version or vector are not read as a severity. Items stored before tags were
-  read carry none until they are fetched again.
+  ("not", "never", "could", "may be", "would") stays empty, and so does "could allow remote code
+  execution and has been actively exploited"; "possibly exploited", "If the flaw is exploited in the
+  wild" and a negation more than 80 characters before the phrase still read as exploited. "Deadline
+  extended from X to Y" gives the old date, and "The deadline, which was set in 2026, is March 31, 2027."
+  gives none. A CVSS v2 score and a bare CVSS version or vector are not read as a severity. Items stored
+  before tags were read carry none until they are fetched again.
 
 - A profile no longer selects a disabled source by topic (a source listed by id still is), so stored,
   unproven sources stay out of the digest and its Source health section.

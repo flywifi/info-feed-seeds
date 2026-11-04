@@ -58,6 +58,14 @@ class SeverityTests(unittest.TestCase):
             with self.subTest(text=text):
                 self.assertIsNone(extract.severity(text))
 
+    def test_a_colon_written_version_before_a_score(self):
+        cases = {"This vulnerability has a CVSS: 3.1 9.8 / 8.5": "critical", "CVSS:3.1 9.8 / 8.5": "critical",
+                 "CVSS:3.1 Base Score: 9.8": "critical", "CVSS:4.0 9.3": "critical", "CVSS:3.1": None, "CVSS: 2.0 7.5": None,
+                 "CVSS: 4.0": "medium", "CVSS: 7.5": "high", "CVSS:3.1/AV:N/AC:L": None, "CVSS: 3.1/AV:N": None}
+        for text, expected in cases.items():
+            with self.subTest(text=text):
+                self.assertEqual(extract.severity(text), expected)
+
     def test_ordinary_words_are_not_a_severity(self):
         for text in ("critical infrastructure operators", "high availability clusters", "a low-cost device", ""):
             self.assertIsNone(extract.severity(text), text)
@@ -78,12 +86,30 @@ class ExploitedTests(unittest.TestCase):
             with self.subTest(text=text):
                 self.assertTrue(extract.exploited(text))
 
+    def test_a_negation_about_something_else_does_not_switch_exploitation_off(self):
+        for text in ("CVE-2026-1234, which requires no user interaction, is actively exploited",
+                     "The vulnerability can be exploited remotely without authentication and has been actively exploited in the wild",
+                     "The bug, which can be triggered without user interaction, is being actively exploited in the wild",
+                     "No patch is available, and the flaw is actively exploited",
+                     "The flaw is not only easy to trigger but also actively exploited",
+                     "Attackers no longer need credentials, and the bug is actively exploited"):
+            with self.subTest(text=text):
+                self.assertTrue(extract.exploited(text))
+        self.assertTrue(extract.tags("No fix yet for Ivanti VPN flaw", "Ivanti says Connect Secure is actively exploited", NAMES)["exploited"],
+                        "a negation in the title does not reach the summary")
+        for text in ("This is not a drill. The flaw is actively exploited.", "Not every customer is affected; the bug is actively exploited",
+                     "Updates are not automatic, but the flaw is actively exploited"):
+            with self.subTest(text=text):
+                self.assertTrue(extract.exploited(text), "a negation in an earlier clause does not reach the phrase")
+        self.assertTrue(extract.tags("Patch not yet available", "The flaw is actively exploited", NAMES)["exploited"])
+
     def test_negated_or_hedged_exploitation_is_not_exploitation(self):
         for text in ("a proof of concept was published", "has not been exploited in the wild",
                      "is not aware of this vulnerability being exploited in the wild",
                      "There is no evidence it was exploited in the wild", "no exploitation has been observed",
                      "could be actively exploited", "not listed in the Known Exploited Vulnerabilities catalog",
-                     "Microsoft is not aware of active exploitation"):
+                     "Microsoft is not aware of active exploitation", "may be actively exploited",
+                     "would be actively exploited if left unpatched"):
             with self.subTest(text=text):
                 self.assertFalse(extract.exploited(text))
 
@@ -114,6 +140,8 @@ class VendorTests(unittest.TestCase):
             self.assertEqual(len(problems), 10, problems)
             self.assertEqual(sorted(extract.load_vendors(bad)), ["Bad Id", "b", "c", "f", "g", "trailing\n"],
                              "the poll reads only usable entries and never crashes")
+            jsonio.dump_json(bad, {"vendors": {"acme": {"aliases": ["Acme"]}, "beta": {"aliases": ["Acme Cloud"]}}})
+            self.assertEqual(extract.vendor_problems(bad), ["alias 'Acme' (acme) is inside alias 'Acme Cloud' (beta) and is hidden by it"])
             bad.write_text("{not json", encoding="utf-8")
             self.assertEqual(len(extract.vendor_problems(bad)), 1)
             self.assertEqual(extract.load_vendors(bad), {})
@@ -142,6 +170,26 @@ class DeadlineTests(unittest.TestCase):
         for text, expected in cases.items():
             with self.subTest(text=text):
                 self.assertEqual(extract.deadlines(text), expected)
+
+    def test_deadlines_with_a_time_a_weekday_or_an_order(self):
+        cases = {
+            "Comments must be received on or before 11:59 p.m. Eastern Time on December 5, 2026.": ["2026-12-05"],
+            "Comments must be received on or before Monday, January 5, 2027.": ["2027-01-05"],
+            "Deadline: Friday, December 5, 2026": ["2026-12-05"],
+            "Federal Civilian Executive Branch agencies must remediate by November 24, 2026.": ["2026-11-24"],
+            "CISA requires federal agencies to apply mitigations by November 24, 2026.": ["2026-11-24"],
+            "The effective date of this rule is January 1, 2027.": ["2027-01-01"],
+            "Due date 2026-11-24T00:00:00Z": ["2026-11-24"],
+        }
+        for text, expected in cases.items():
+            with self.subTest(text=text):
+                self.assertEqual(extract.deadlines(text), expected)
+
+    def test_a_publication_date_is_not_the_deadline(self):
+        for text in ("The rule takes effect 30 days after publication on November 4, 2026.",
+                     "The rule takes effect 60 days following its publication on November 4, 2026."):
+            with self.subTest(text=text):
+                self.assertEqual(extract.deadlines(text), [])
 
     def test_dates_that_are_not_deadlines(self):
         for text in ("A cost-effective fix released March 3, 2026.", "highly effective since 1 June 2026.",

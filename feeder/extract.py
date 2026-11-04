@@ -21,7 +21,7 @@ SEVERITY_RANK = {w: i for i, w in enumerate(SEVERITY_WORDS)}
 _WORD = r"(critical|high|medium|low)"
 SEVERITY_RE = re.compile(rf"\({_WORD}\)|\b{_WORD}[ -]severity\b|\bseverity(?: level| rating)?\s?[:=]?\s?{_WORD}\b"
                          rf"|\brated {_WORD}(?![\w-])", re.I | re.A)
-CVSS_RE = re.compile(r"\bCVSS(?P<ver>\s?v?[234](?:\.\d)?)?(?P<kw>(?:\s?base)?(?:\s?score)?(?:\s?of)?\s?[:=]?)\s?"
+CVSS_RE = re.compile(r"\bCVSS(?P<ver>(?::\s?|\s?v?)[234](?:\.\d)?)?(?P<kw>(?:\s?base)?(?:\s?score)?(?:\s?of)?\s?[:=]?)\s?"
                      r"(?P<score>\d{1,2}(?:\.\d)?)(?!\.?\d|/)", re.I | re.A)
 _CVSS_VERSIONS = {"2.0", "3.0", "3.1", "4.0"}
 EXPLOITED_RE = re.compile(r"\b(actively exploited|exploited in the wild|known exploited|under active exploitation|"
@@ -31,22 +31,29 @@ EXPLOITED_RE = re.compile(r"\b(actively exploited|exploited in the wild|known ex
                           re.I | re.A)
 # A negation or hedge earlier in the same clause: "has not been exploited in the wild", "could be
 # actively exploited". An exploitation phrase after one stays empty.
-_NEGATED = re.compile(r"\b(?:not|no|never|nor|without|could|might|can|cannot|unlikely)\b[^.;:!?]{0,80}$", re.I | re.A)
+_CLAUSE_END = re.compile(r"[.;:!?\n]|,\s(?:and|but|yet|while|whereas)\b|\bbut\b", re.I | re.A)
+_NEGATED = re.compile(r"\b(?:not(?!\sonly\b)|no(?!\s(?:longer|user\sinteraction|authentication|credentials|privileges|patch|fix|"
+                      r"workaround)\b)|never|nor|cannot|unlikely|could|might|may(?!\shave\sbeen)|would)\b", re.I | re.A)
 MONTHS = {m: i for i, m in enumerate(("january", "february", "march", "april", "may", "june", "july", "august",
                                       "september", "october", "november", "december"), 1)}
 _MONTH_TOKENS = {**MONTHS, **{m[:3]: i for m, i in MONTHS.items()}, "sept": 9}
 _MON = (r"(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|"
         r"oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)")
-_DATE = (rf"(\d{{1,2}}(?:st|nd|rd|th)?\s{_MON}\.?,?\s20\d{{2}}|{_MON}\.?\s\d{{1,2}}(?:st|nd|rd|th)?,?\s20\d{{2}}"
-         r"|20\d{2}-\d{2}-\d{2})(?![\w-])")
+# A date: "5 December 2026", "Dec. 5th, 2026", or an ISO date, which may run on into a time (2026-11-24T00:00Z).
+_DATE = (rf"(\d{{1,2}}(?:st|nd|rd|th)?\s{_MON}\.?,?\s20\d{{2}}(?![\w-])|{_MON}\.?\s\d{{1,2}}(?:st|nd|rd|th)?,?\s20\d{{2}}(?![\w-])"
+         r"|20\d{2}-\d{2}-\d{2}(?:(?=T\d)|(?![\w-])))")
 # Between the deadline words and the date: no sentence end, and a comma only before a number
 # ("version 2, 2027 builds"), so "The deadline, announced on October 1" never takes that date.
-_GAP = r"(?:[^.,\n]|,(?=\s?\d)){0,40}?"
+# A gap never crosses "after" or "following", so "takes effect 30 days after publication on <date>" is not
+# read as a deadline on the publication date; "11:59 p.m." may sit in it.
+_GAP = r"(?:(?!(?<![\w-])(?:after|following)(?![\w-]))(?:[ap]\.m\.|[^.,\n]|,(?=\s?\d))){0,40}?"
+_WEEKDAY = r"(?:(?:mon|tues|wednes|thurs|fri|satur|sun)day,?\s)?"
 DEADLINE_RE = re.compile(r"(?<![\w-])(?:comments?\s(?:are\s)?due|comments?\smust\sbe\s(?:received|submitted)|submit\scomments|"
-                         r"comment\speriod\s(?:ends|closes)|deadline|due\sdate|no\slater\sthan|takes?\seffect|"
-                         r"must\sbe\s(?:applied|implemented|remediated)|required\sto\s(?:remediate|patch|apply))\b"
-                         + _GAP + r"(?<![\w-])" + _DATE, re.I | re.A)
-EFFECTIVE_RE = re.compile(r"(?<![\w-])effective(?:\sdate)?(?:\s?:|\s(?:on|as\sof|from))?\s" + _DATE, re.I | re.A)
+                         r"comment\speriod\s(?:ends|closes)|deadline|due\sdate|no\slater\sthan|takes?\seffect|effective\sdate|"
+                         r"must\sbe\s(?:applied|implemented|remediated)|must\s(?:remediate|patch|apply)|"
+                         r"(?:required|requires|ordered|directs?)\s(?:[a-z-]+\s){0,4}?to\s(?:remediate|patch|apply))\b"
+                         + _GAP + r"(?<![\w-])" + _WEEKDAY + _DATE, re.I | re.A)
+EFFECTIVE_RE = re.compile(r"(?<![\w-])effective(?:\sdate)?(?:\s?:|\s(?:on|as\sof|from))?\s" + _WEEKDAY + _DATE, re.I | re.A)
 ID_RE = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*", re.A)
 
 
@@ -69,8 +76,9 @@ def _cvss_words(text: str) -> list[str]:
     number ("CVSS 3.1", "CVSS:4.0/AV:N") is not a score."""
     out = []
     for m in CVSS_RE.finditer(text):
-        ver = (m.group("ver") or "").strip().lstrip("vV")
-        if ver.startswith("2") or (not ver and not m.group("kw").strip() and m.group("score") in _CVSS_VERSIONS):
+        ver, kw = re.sub(r"[^\d.]", "", m.group("ver") or ""), m.group("kw").strip()
+        if ver.startswith("2") or (not ver and m.group("score") in _CVSS_VERSIONS
+                                   and (not kw or (kw in ":=" and not re.search(r"\s", m.group(0))))):
             continue
         word = severity_from_score(float(m.group("score")))
         if word:
@@ -92,7 +100,12 @@ def severity(text: str) -> str | None:
 def exploited(text: str) -> bool:
     """True when the text states exploitation and no negation or hedge in the same clause qualifies it."""
     text = text or ""
-    return any(not _NEGATED.search(text[max(0, m.start() - 80):m.start()]) for m in EXPLOITED_RE.finditer(text))
+    for m in EXPLOITED_RE.finditer(text):
+        window = text[max(0, m.start() - 80):m.start()]
+        clause = window[max((b.end() for b in _CLAUSE_END.finditer(window)), default=0):]
+        if not _NEGATED.search(clause):
+            return True
+    return False
 
 
 def _long_date(value: str) -> str | None:
@@ -132,8 +145,9 @@ def _vendor_entries(path: Path):
 
 
 def load_vendors(path: Path) -> dict[str, list[str]]:
-    """{vendor id: [aliases]} from the vendor registry, sorted by vendor id; entries lint would refuse are
-    left out, and a missing or unreadable file gives none."""
+    """{vendor id: [aliases]} from the vendor registry, sorted by vendor id. Entries and aliases the matcher
+    cannot use (not an object, aliases not a list of strings, short or padded aliases) are skipped, and a
+    missing or unreadable file gives none."""
     _, entries = _vendor_entries(path)
     out = {}
     for vid, entry in sorted(entries.items()):
@@ -148,7 +162,8 @@ def load_vendors(path: Path) -> dict[str, list[str]]:
 def vendor_problems(path: Path) -> list[str]:
     """Registry defects lint reports: invalid JSON, a bad id, an entry that is not an object, aliases that
     are not a list of strings, a vendor without aliases, an alias shorter than 2 characters or padded with
-    spaces, an alias listed twice, or one alias claimed by two vendors."""
+    spaces, an alias listed twice, one alias claimed by two vendors, or an alias that sits inside another
+    vendor's longer alias and is hidden by it."""
     problems, entries = _vendor_entries(path)
     owner: dict[str, str] = {}
     for vid, entry in entries.items():
@@ -175,6 +190,10 @@ def vendor_problems(path: Path) -> list[str]:
                 problems.append(f"alias {alias!r} is claimed by {owner[alias]!r} and {vid!r}")
             seen.add(alias)
             owner.setdefault(alias, vid)
+    for a, va in owner.items():
+        for b, vb in owner.items():
+            if va != vb and a != b and re.search(r"(?<![\w-])" + re.escape(b) + r"(?![\w-])", a):
+                problems.append(f"alias {b!r} ({vb}) is inside alias {a!r} ({va}) and is hidden by it")
     return problems
 
 
@@ -184,7 +203,7 @@ def vendors(text: str, names: dict[str, list[str]]) -> list[str]:
     if not owner or not text:
         return []
     pattern = r"(?<![\w-])(?:" + "|".join(re.escape(a) for a in sorted(owner, key=len, reverse=True)) + r")(?![\w-])"
-    found = {owner[m.group(0)] for m in re.finditer(pattern, text)}
+    found = {owner[m.group(0)] for m in re.finditer(pattern, text, re.A)}
     return [vid for vid in names if vid in found]
 
 
