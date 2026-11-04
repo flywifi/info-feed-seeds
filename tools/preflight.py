@@ -27,6 +27,7 @@ from __future__ import annotations
 import os
 import re
 import shutil
+import json
 import subprocess
 import sys
 import tempfile
@@ -45,9 +46,8 @@ DECLARED = {
 }
 # Variables a run block may read: set by the job env or by the rehearsal.
 # IFS_PERSON_FINGERPRINTS is a repository secret in CI; the rehearsal passes the local environment's value
-# through when there is one. Without it the base-branch copy of the checker in RUNNER_TEMP reads only the
-# test token, as a CI run without the secret would; the branch's own checker beside the ignored local file
-# still reads that file.
+# through when there is one, and otherwise the digests of the ignored local list, so the base-branch copy
+# of the checker in RUNNER_TEMP reads the same names as the branch's own checker beside that file.
 KNOWN_VARS = {"BASE_REF", "PR_NUMBER", "RUNNER_TEMP", "GITHUB_WORKSPACE", "GITHUB_REF", "IFS_PERSON_FINGERPRINTS"}
 STEP_KEYS = {"name", "uses", "with", "if", "run"}
 ALWAYS = "${{ !cancelled() }}"
@@ -182,6 +182,20 @@ def git_local_env_names() -> set[str]:
                     "GIT_PREFIX"}
 
 
+LOCAL_FINGERPRINTS = Path(__file__).with_name("person_fingerprints.local.json")
+
+
+def local_fingerprints(path: Path | None = None) -> list[str]:
+    """The digests in the ignored local list, or none. They are passed on, never printed."""
+    path = path or LOCAL_FINGERPRINTS
+    try:
+        data = json.loads(path.read_text(encoding="utf-8-sig"))
+        values = [str(x).strip().lower() for x in data["fingerprints"]]
+    except (OSError, ValueError, LookupError, TypeError):
+        return []
+    return [x for x in values if re.fullmatch(r"[0-9a-f]{64}", x)]
+
+
 def job_env(env: dict, runner_temp: str) -> dict:
     out = dict(os.environ)
     branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=ROOT, capture_output=True,
@@ -197,6 +211,12 @@ def job_env(env: dict, runner_temp: str) -> dict:
     # their working directory instead, and the scratch repositories they build cannot reach this one.
     for name in git_local_env_names():
         out.pop(name, None)
+    # The base branch's checker runs from RUNNER_TEMP, away from the ignored local list beside this
+    # checker, so it gets the same digests through the variable CI fills from its secret.
+    if not out.get("IFS_PERSON_FINGERPRINTS"):
+        digests = local_fingerprints()
+        if digests:
+            out["IFS_PERSON_FINGERPRINTS"] = ",".join(digests)
     shim = Path(runner_temp) / "bin"
     shim.mkdir()
     exe = Path(sys.executable).as_posix()

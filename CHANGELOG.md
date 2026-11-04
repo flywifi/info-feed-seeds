@@ -8,6 +8,23 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Fixed
 
+- The poll workflow saves the item database only after the digests reach the data branch, so a
+  failed push never marks items as shown in a digest that was not published.
+- An unproven disabled source must keep `verified` null and record at least one attempt (lint and
+  the commit checker).
+- Refused follow URLs (another host, port or scheme) are counted and reported as `follow-refused`.
+- When a route redirects to its own host with or without a leading www. (example.gov to
+  www.example.gov), the page's relative links resolve against the address that answered and its
+  follow URLs there are fetched; a redirect to any other host widens nothing, and its links are
+  refused and counted.
+- The poll workflow saves the database after any successful publish, even when the run is then
+  cancelled.
+- `tools/preflight.py` hands the ignored local name list to the base branch's checker through
+  `IFS_PERSON_FINGERPRINTS` when that variable is empty, so the rehearsal reads the same names as the
+  hooks.
+- Store columns: the source and content category pairs and their basis are filled at ingest; publisher,
+  industries, standards, editions, change types, CVEs, vendors, link hosts, severity and its rank,
+  exploited, language, deadline and updated stay empty until tag extraction lands.
 - Posts one source gives the same link (Ervik's ransomware victim posts all link to /ransomware)
   each reach the digest when two or more distinct guids share that link; before, only the first was
   ever shown. Each such post is keyed by its guid, and a guid already shown stays shown, so a
@@ -87,8 +104,8 @@ All notable changes to this repository are recorded here. The format follows
   item by its own title and summary: `content_category()` decides the content category and the
   content subcategory separately and records for each whether the item text or the source decided
   it; an item of a reader source never lands in machine data, so a version-number or record-id title
-  there falls back to the source. `hub categorize` reports the content categories; polled items do
-  not store them yet. A profile's optional `source_categories` list names the source
+  there falls back to the source. `hub categorize` reports the content categories, and polled items
+  store them (see the ingest labelling entry above). A profile's optional `source_categories` list names the source
   categories it polls; without it a profile polls every category whose `digest_default` is true, so
   machine data is polled only by a profile that names it, and a source listed by id is always
   selected. The technology-regulation profile names none: it selects 18 sources instead of 31 (the

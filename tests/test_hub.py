@@ -349,7 +349,7 @@ class PollTests(HubTestCase):
         self.assertEqual(self.fetcher.calls, ["https://example.gov/p", "https://example.gov/p?page=2", "https://example.gov/p?page=3"],
                          "fragment dropped, other schemes and hosts never fetched, the bound of 2 follow fetches kept")
         md = (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8")
-        self.assertIn("- eta: ok, HTTP 200, 2 items, follow-partial", md)
+        self.assertIn("- eta: ok, HTTP 200, 2 items, follow-partial,follow-refused", md)
 
     def test_a_truncated_page_with_failed_follow_pages_reports_both(self):
         def stub(body, url, params):
@@ -422,13 +422,25 @@ class PollTests(HubTestCase):
         self.add_source("xi", "https://example.gov/xi.xml", ["cybersecurity"], enabled=False, verified=None)
         folder = self.root / "sources" / "xi"
         methods = jsonio.load_json(folder / "methods.json")
-        methods["routes"][0]["attempts"] = [{"capture_url": None, "http_status": 403, "media": [], "method": "conditional-get",
+        methods["routes"][0]["attempts"] = attempts = [{"capture_url": None, "http_status": 403, "media": [], "method": "conditional-get",
                                              "note": "bot wall", "result": "refused", "source_label": "live",
                                              "tried_at": "2026-10-26T00:00:00Z"}]
         methods["routes"][0]["last_success"] = None
         jsonio.dump_json(folder / "methods.json", methods)
         self.assertEqual(self.run_hub("lint"), 0, self.output)
         manifest = jsonio.load_json(folder / "source.json")
+        manifest["verified"] = "2026-10-26"
+        jsonio.dump_json(folder / "source.json", manifest)
+        self.assertEqual(self.run_hub("lint"), 1, "an unproven source never carries a verified date")
+        self.assertIn("verified is set but no route has a live proof", self.output)
+        manifest["verified"] = None
+        jsonio.dump_json(folder / "source.json", manifest)
+        methods["routes"][0]["attempts"] = []
+        jsonio.dump_json(folder / "methods.json", methods)
+        self.assertEqual(self.run_hub("lint"), 1, "an unproven source records its attempts")
+        self.assertIn("an unproven source records at least one attempt", self.output)
+        methods["routes"][0]["attempts"] = attempts
+        jsonio.dump_json(folder / "methods.json", methods)
         manifest["enabled"] = True
         jsonio.dump_json(folder / "source.json", manifest)
         self.assertEqual(self.run_hub("lint"), 1, "enabling it needs a live proof")
@@ -443,6 +455,92 @@ class PollTests(HubTestCase):
             self.assertRegex(c["source"], r"^[a-z-]+/[a-z-]+$")
             self.assertRegex(c["content"], r"^[a-z-]+/[a-z-]+$", "every polled item has a content category")
             self.assertIn(c["content_basis"]["category"], ("item", "source"))
+
+    def test_follow_links_on_the_address_the_route_redirected_to_are_fetched(self):
+        def stub(body, url, params):
+            return {"kind": "json-api", "items": [RawItem(guid=url, link=url, title=url, summary="s")],
+                    "follow": ["https://www.example.gov/r?page=2"] if body == b"root" else []}
+
+        class Redirecting(FakeFetcher):
+            def get(self, url, conditional=True, **kw):
+                result = super().get(url, conditional, **kw)
+                if url == "https://example.gov/r":
+                    result.final_url = "https://www.example.gov/r"
+                return result
+
+        self.add_source("pi", "https://example.gov/r", ["cybersecurity"],
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": "https://example.gov/r",
+                                 "params": {"items_path": "results[]", "fields": {"title": "t"}}}])
+        self.script.update({"https://example.gov/r": b"root", "https://www.example.gov/r?page=2": b"two"})
+        fetcher = Redirecting(self.script)
+        with mock.patch.dict(adapters.ADAPTERS, {"json-api": stub}):
+            self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", DAY, "--state-dir", str(self.state),
+                                          "--out-dir", str(self.out), "--only", "pi", fetcher=fetcher), 0)
+        self.assertEqual(fetcher.calls, ["https://example.gov/r", "https://www.example.gov/r?page=2"])
+
+    def test_a_relative_next_link_after_a_www_redirect_is_followed(self):
+        class Redirecting(FakeFetcher):
+            def get(self, url, conditional=True, **kw):
+                result = super().get(url, conditional, **kw)
+                if url == "https://example.gov/blog":
+                    result.final_url = "https://www.example.gov/blog"
+                return result
+
+        self.add_source("tau", "https://example.gov/blog", ["cybersecurity"],
+                        routes=[{"kind": "page", "adapter": "page", "url": "https://example.gov/blog",
+                                 "params": {"item_selector": "li", "next_selector": "a.next@href"}}])
+        self.script.update({"https://example.gov/blog": b"<ul><li><a href='/p/1'>One</a></li></ul><a class='next' href='/blog/2'>Older</a>",
+                            "https://www.example.gov/blog/2": b"<ul><li><a href='/p/2'>Two</a></li></ul>"})
+        fetcher = Redirecting(self.script)
+        self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", DAY, "--state-dir", str(self.state),
+                                      "--out-dir", str(self.out), "--only", "tau", fetcher=fetcher), 0)
+        self.assertEqual(fetcher.calls, ["https://example.gov/blog", "https://www.example.gov/blog/2"],
+                         "the relative link resolves against the address that answered")
+
+    def test_links_on_an_unrelated_redirect_host_are_refused(self):
+        def stub(body, url, params):
+            return {"kind": "json-api", "items": [RawItem(guid=url, link=url, title=url, summary="s")],
+                    "follow": ["https://other.example/r?page=2"] if body == b"root" else []}
+
+        class Redirecting(FakeFetcher):
+            def get(self, url, conditional=True, **kw):
+                result = super().get(url, conditional, **kw)
+                if url == "https://example.gov/u":
+                    result.final_url = "https://other.example/r"
+                return result
+
+        self.add_source("upsilon", "https://example.gov/u", ["cybersecurity"],
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": "https://example.gov/u",
+                                 "params": {"items_path": "results[]", "fields": {"title": "t"}}}])
+        self.script.update({"https://example.gov/u": b"root", "https://other.example/r?page=2": b"two"})
+        fetcher = Redirecting(self.script)
+        with mock.patch.dict(adapters.ADAPTERS, {"json-api": stub}):
+            self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", DAY, "--state-dir", str(self.state),
+                                          "--out-dir", str(self.out), "--only", "upsilon", fetcher=fetcher), 0)
+        self.assertEqual(fetcher.calls, ["https://example.gov/u"], "a redirect to another host widens nothing")
+        self.assertIn("- upsilon: ok, HTTP 200, 1 items, follow-refused", (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8"))
+
+    def test_a_follow_page_that_lands_on_another_host_is_dropped(self):
+        def stub(body, url, params):
+            return {"kind": "json-api", "items": [RawItem(guid=url, link=url, title=url, summary="s")],
+                    "follow": ["https://example.gov/w?page=2"] if body == b"root" else []}
+
+        class Landing(FakeFetcher):
+            def get(self, url, conditional=True, **kw):
+                result = super().get(url, conditional, **kw)
+                if url == "https://example.gov/w?page=2":
+                    result.final_url = "https://evil.example/landed"
+                return result
+
+        self.add_source("phi", "https://example.gov/w", ["cybersecurity"],
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": "https://example.gov/w",
+                                 "params": {"items_path": "results[]", "fields": {"title": "t"}}}])
+        self.script.update({"https://example.gov/w": b"root", "https://example.gov/w?page=2": b"two"})
+        with mock.patch.dict(adapters.ADAPTERS, {"json-api": stub}):
+            self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", DAY, "--state-dir", str(self.state),
+                                          "--out-dir", str(self.out), "--only", "phi", fetcher=Landing(self.script)), 0)
+        self.assertIn("- phi: ok, HTTP 200, 1 items, follow-partial", (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8"),
+                      "the page from another host is not read")
 
     def test_items_sharing_one_link_in_a_source_each_reach_the_digest(self):
         def feed(*titles):

@@ -24,6 +24,7 @@ import argparse
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 
 if __package__ in (None, ""):
     # Run as a script (`py -3 -I feeder\hub.py`): isolated mode puts neither this folder nor the
@@ -77,6 +78,16 @@ def _nothing_new(store: Store, source_id: str, route: dict, raws: list) -> bool:
     return all(store.item(items.content_sha256(source_id, r.guid, r.link, r.title)) for r in raws)
 
 
+def _page_base(route_url: str, final_url: str | None) -> str:
+    """The address a fetched page's relative links resolve against: the URL that answered when it is the
+    route's own host or that host with or without a leading www., else the route URL. A redirect to
+    any other host never widens what the poller may follow."""
+    if not final_url:
+        return route_url
+    bare = [(urlsplit(u).hostname or "").lower().removeprefix("www.") for u in (route_url, final_url)]
+    return final_url if bare[0] and bare[0] == bare[1] else route_url
+
+
 def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | None = None) -> dict:
     """Fetch the source's configured routes in order until one answers, dispatching each body to
     its adapter and following the adapter's `follow` URLs up to the route's bound. A 304 ends the
@@ -99,7 +110,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             record.update(status="not-modified", error=None, items=None)
             return record
         try:
-            parsed = adapters.check_result(parse(result.body, url=url, params=params))
+            base = _page_base(url, result.final_url)
+            parsed = adapters.check_result(parse(result.body, url=base, params=params))
         except adapters.AdapterError as exc:
             # A 200 that the adapter cannot read (a bot wall, an error page) is a failure, not a response.
             record["failed"] += 1
@@ -115,10 +127,16 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
         queue = [] if _nothing_new(store, source.id, route, parsed["items"]) else list(parsed.get("follow") or [])
         budget = adapters.follow_limit(route)
         seen = {url}
-        follow_failed = 0
+        follow_failed = follow_refused = 0
         while queue and budget > 0:
-            next_url = adapters.follow_url(url, queue.pop(0))
-            if next_url is None or next_url in seen:
+            candidate = queue.pop(0)
+            # The route's own address or, after a redirect to the same host with or without www., the
+            # address that answered; any other host is refused and counted.
+            next_url = adapters.follow_url(url, candidate) or adapters.follow_url(base, candidate)
+            if next_url is None:
+                follow_refused += 1   # another host, port or scheme: never fetched, but counted
+                continue
+            if next_url in seen:
                 continue
             seen.add(next_url)
             budget -= 1
@@ -127,7 +145,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             if more.error is not None or more.body is None:
                 follow_failed += 1
                 continue
-            if adapters.follow_url(url, more.final_url) is None:
+            if adapters.follow_url(url, more.final_url) is None and adapters.follow_url(base, more.final_url) is None:
                 follow_failed += 1
                 continue
             try:
@@ -155,7 +173,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
                            content_subcategory_basis=placed["subcategory_basis"])
             if store.upsert_item(rec, first_seen=now):
                 new += 1
-        error = ",".join(flag for flag, on in (("truncated", truncated), ("follow-partial", follow_failed)) if on) or None
+        flags = (("truncated", truncated), ("follow-partial", follow_failed), ("follow-refused", follow_refused))
+        error = ",".join(flag for flag, on in flags if on) or None
         record.update(status="ok" if raws else "empty", items=len(raws), error=error, new=new)
         return record
     return record

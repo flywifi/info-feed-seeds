@@ -7,7 +7,7 @@ person reads the lines (readable, an enabled source) or a program does (machine,
 `enabled: false`). "Source category" is the feed's source category and source subcategory in
 `schema/categories.json`, as its manifest carries them; machine-data sources are polled only by a profile
 that names that category. `hub categorize` also reports each item's own content category and content subcategory from its
-text, which can differ from the source's; storing them on each polled item is planned.
+text, which can differ from the source's; each polled item stores them.
 
 robots.txt: www.fortiguard.com and fortiguard.fortinet.com both answer 200 with `User-agent: *`,
 `Crawl-delay: 2`, `Disallow: /*?*` and `Disallow: /threat-research/data`; filestore.fortinet.com and

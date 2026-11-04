@@ -357,10 +357,15 @@ def lint(repo: Repo) -> list[str]:
             problems.append(f"{rel}: no methods.json")
         else:
             # A disabled source may wait for its first live proof; enabling it needs one.
-            if (src.manifest.get("enabled", True) and src.poll_routes()
-                    and not any(adapters.live_proof(a) for a in src.proof_records())):
+            proven = any(adapters.live_proof(a) for a in src.proof_records())
+            if src.manifest.get("enabled", True) and src.poll_routes() and not proven:
                 problems.append(f"{rel}/methods.json: no configured route whose latest attempt is a live 200 "
                                 "with a sample item")
+            elif not proven and not src.manifest.get("enabled", True):
+                if src.manifest.get("verified"):
+                    problems.append(f"{rel}/{name}: verified is set but no route has a live proof")
+                if not any(r.get("attempts") for r in src.methods.get("routes", [])):
+                    problems.append(f"{rel}/methods.json: an unproven source records at least one attempt")
             problems += [f"{rel}/methods.json: {e}" for e in validate(src.methods, methods_schema)]
             if src.methods.get("id") != folder.name:
                 problems.append(f"{rel}/methods.json: id does not equal the folder name")

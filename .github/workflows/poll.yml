@@ -3,7 +3,7 @@
 #   https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/<profile>/latest.md
 # The data branch holds machine output only (digests/). It starts as an orphan branch on the first run.
 # The item database (.cache/feeder.db and the fetch validators) persists between runs in the Actions
-# cache; it is never committed. CI (ci.yml) ignores pushes to data.
+# cache, saved only after a successful publish; it is never committed. CI (ci.yml) ignores pushes to data.
 name: poll
 
 on:
@@ -62,14 +62,8 @@ jobs:
           # 3 means every fetch failed; the digest still records that in Source health, so it is published.
           [ "$code" = 0 ] || [ "$code" = 3 ]
 
-      - name: Save the item database
-        if: always() && steps.poll.outcome != 'skipped'
-        uses: actions/cache/save@v4
-        with:
-          path: .cache
-          key: feeder-state-${{ github.run_id }}
-
       - name: Publish the digests
+        id: publish
         run: |
           cd data-out
           git add -A digests
@@ -79,6 +73,17 @@ jobs:
           fi
           git commit -q -F "$RUNNER_TEMP/commit.txt"
           git push origin HEAD:data
+
+      # Saved only after the digests reached the data branch, so an item is never marked shown in a
+      # digest that was not published; a failed push leaves the previous database for the next run.
+      # Once the push succeeded the save runs even if the run is then cancelled. If the save itself
+      # fails, the next run starts from the older database and may show that day's items again.
+      - name: Save the item database
+        if: always() && steps.publish.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: .cache
+          key: feeder-state-${{ github.run_id }}
 
       - name: Fail when every fetch failed
         if: steps.poll.outputs.code == '3'

@@ -33,8 +33,8 @@ lives in the tool's own folder and is tracked.
 
 - `main`: code, sources, profiles, schemas, docs. Changes arrive only through pull requests that the maintainer merges.
   Never push to main directly, never force-push, never rewrite history.
-- `data`: machine output only (`digests/`, `state/`, `ledger/`). Written only by the poll workflow
-  (`.github/workflows/poll.yml`, daily; the branch appears with its first run). Never edit it by hand or in a pull request.
+- `data`: machine output only (`digests/` today; `state/` and `ledger/` planned). Written only by the poll workflow
+  (`.github/workflows/poll.yml`, daily). Never edit it by hand or in a pull request.
 - `job/<name>`: one branch per job for your work. Push it with `git push -u origin <branch>` (retry network
   failures with backoff) and open one pull request into main per job. Use the REST API
   (`gh api repos/flywifi/info-feed-seeds/pulls`) when `gh pr` cannot reach GitHub through the session's
@@ -147,8 +147,8 @@ lives in the tool's own folder and is tracked.
 - Tool configuration folders (a dot-folder named after the tool) hold settings that enforce rules written
   here, never rules of their own.
 - Never tracked: `.cache/`, `local/`, `logs/`, `.venv-crawl/`, `*.local.json`, `.secrets.local.json`.
-- On the `data` branch only: `digests/<profile>/`, `state/health.json`, `state/membership.json`,
-  `ledger/changes.jsonl`.
+- On the `data` branch only: `digests/<profile>/` (today); `state/health.json`, `state/membership.json` and
+  `ledger/changes.jsonl` (planned).
 
 ## Adding a source
 
