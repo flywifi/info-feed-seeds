@@ -919,6 +919,22 @@ class PollTests(HubTestCase):
         bare.manifest.pop("source_category")
         self.assertFalse(hub.content_routed({"content_categories": ["attacks"]}, bare, row), "no category is never named")
         self.assertTrue(hub.content_routed({"exclude_content_categories": ["attacks"]}, bare, row))
+        self.assertTrue(hub.content_routed({"exclude_content_categories": None}, src, row), "a null list excludes nothing")
+        bare.manifest["source_category"] = "vulnerabilities"
+        bare.manifest.pop("source_subcategory")
+        self.assertFalse(hub.content_routed({"content_categories": ["vulnerabilities/None"]}, bare, row),
+                         "a source without a subcategory names only its category")
+        self.assertTrue(hub.content_routed({"content_categories": ["vulnerabilities"]}, bare, row))
+        scam = {"content_category": "attacks", "content_subcategory": "scams"}
+        for ref in ("attack", "attacks/scam"):
+            self.assertFalse(hub.content_routed({"content_categories": [ref]}, src, scam), ref)
+            self.assertTrue(hub.content_routed({"exclude_content_categories": [ref]}, src, scam), ref)
+
+    def test_items_routed_out_take_no_slot_under_the_daily_cap(self):
+        self.profile["daily_cap"] = 1
+        self.assertEqual(self.routed_titles(content_categories=["attacks"]), ["Phishing scam wave targets banks"])
+        self.assertEqual(self.routed_titles(exclude_content_categories=["vulnerabilities"]),
+                         ["Phishing scam wave targets banks"])
 
     def test_machine_data_named_only_as_content_polls_no_machine_source(self):
         self.add_machine_source()
@@ -926,6 +942,13 @@ class PollTests(HubTestCase):
         self.assertNotIn("https://example.gov/mach.xml", self.fetcher.calls)
         self.assertEqual(self.routed_titles(source_categories=["machine-data"], content_categories=["machine-data"]),
                          ["Machine line"])
+        # A machine data item whose text decides another category comes only from a polled machine data source.
+        self.script["https://example.gov/mach.xml"] = rss_with("Fraud warning for card holders").replace(
+            b"https://example.gov/g0", b"https://example.gov/m0")
+        self.assertEqual(self.routed_titles(content_categories=["attacks"]), ["Phishing scam wave targets banks"])
+        self.assertNotIn("https://example.gov/mach.xml", self.fetcher.calls)
+        self.assertEqual(self.routed_titles(source_categories=["machine-data"], content_categories=["attacks"]),
+                         ["Fraud warning for card holders"])
 
     def test_not_modified_counts_as_a_response(self):
         self.poll()
@@ -1126,6 +1149,33 @@ class LintFmtCatTests(HubTestCase):
         self.assertIn("content category 'attacks' is listed twice", out)
         self.assertIn("excluded content category 'regulatory/pets' is not in schema/categories.json", out)
         self.assertIn("content category 'attacks' is both routed in and excluded", out)
+
+    def test_lint_reports_a_content_route_that_can_never_fire(self):
+        self.profile.update(content_categories=["attacks/scams", "machine-data"], exclude_content_categories=["attacks"])
+        out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
+        self.assertIn("content category 'attacks/scams' is routed in but its category 'attacks' is excluded", out)
+        self.assertIn("content category 'machine-data' comes only from sources this profile does not poll", out)
+        self.profile.update(source_categories=["machine-data"], content_categories=None)
+        out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
+        self.assertIn("content_categories: expected type array", out)
+        self.assertNotIn("comes only from sources", out)
+        self.add_source("mach", "https://example.gov/mach.xml", ["cybersecurity"],
+                        source_category="machine-data", source_subcategory="signature-versions")
+        for polls in ({"source_categories": ["machine-data/signature-versions"]}, {"sources": ["mach"]}):
+            with self.subTest(polls=polls):
+                profile = {k: v for k, v in self.profile.items() if k != "source_categories"}
+                profile.update(content_categories=["machine-data"], exclude_content_categories=["attacks"], **polls)
+                jsonio.dump_json(self.root / "profiles" / "tr.json", profile)
+                self.assertEqual(self.run_hub("lint"), 0, self.output)
+
+    def test_lint_reports_a_routing_list_of_the_wrong_shape_without_a_traceback(self):
+        for key in ("source_categories", "content_categories", "exclude_content_categories"):
+            for value in (None, {"attacks": 1}, "attacks"):
+                with self.subTest(key=key, value=value):
+                    profile = dict(self.profile, **{key: value})
+                    out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", profile))
+                    self.assertIn(f"{key}: expected type array", out)
+                    self.assertNotIn("is not in schema/categories.json", out, "one schema message, not one per character")
 
     def test_lint_reports_registry_defects(self):
         path = self.root / "schema" / "categories.json"

@@ -26,6 +26,9 @@ private notes or anything that identifies a client or a campaign.
   `source_categories` list names, or every category but machine data when it has no list. Its
   `content_categories` list routes into the digest only the items whose content category it names,
   and `exclude_content_categories` keeps items out; without either, every polled item goes in.
+  Routing applies when items are selected; items already in a day's digest stay there. An item keeps
+  the content category it was given at ingest; one stored before content categories is matched by
+  the source's current category.
 - `guard/releases.json`: items held by the injection guard that a person has released.
 - `seeds/`: dated seed files. These are imports; `sources/` is the truth.
 - `tools/`: the commit checker, its hooks, its exemptions list, the acknowledged-commit list and the
