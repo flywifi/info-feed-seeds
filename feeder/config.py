@@ -9,7 +9,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import ROOT, adapters, categories, guard, items, jsonio, topics
+from . import ROOT, adapters, categories, extract, guard, items, jsonio, topics
 from .schema_validate import validate
 
 SHA_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -315,6 +315,7 @@ def lint(repo: Repo) -> list[str]:
             problems += [f"schema/categories.json: {p}" for p in categories.registry_problems(reg, tags)]
         problems += [f"schema/categories.json: key {k!r} appears twice in one object"
                      for k in categories.duplicate_keys(repo.categories_file)]
+    problems += [f"schema/vendors.json: {p}" for p in extract.vendor_problems(repo.schema_dir / "vendors.json")]
     refs = categories.all_refs(reg) if reg is not None and not problems else None
     source_schema = repo.schema("source.schema.json")
     methods_schema = repo.schema("methods.schema.json")

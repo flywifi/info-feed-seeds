@@ -31,7 +31,7 @@ if __package__ in (None, ""):
     # repository on sys.path, so add the repository root for the `feeder` package.
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from feeder import ROOT, adapters, categories, guard, items, jsonio, outputs  # noqa: E402
+from feeder import ROOT, adapters, categories, extract, guard, items, jsonio, outputs  # noqa: E402
 from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, item_tags,  # noqa: E402
                            json_files, lint, selected_sources)
 from feeder.schema_validate import validate  # noqa: E402
@@ -88,7 +88,8 @@ def _page_base(route_url: str, final_url: str | None) -> str:
     return final_url if bare[0] and bare[0] == bare[1] else route_url
 
 
-def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | None = None) -> dict:
+def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | None = None,
+                vendor_names: dict | None = None) -> dict:
     """Fetch the source's configured routes in order until one answers, dispatching each body to
     its adapter and following the adapter's `follow` URLs up to the route's bound. A 304 ends the
     source's poll as not-modified: its items were stored at the earlier fetch, so later routes and
@@ -171,6 +172,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
                            content_category=placed["category"], content_subcategory=placed["subcategory"],
                            content_category_basis=placed["category_basis"],
                            content_subcategory_basis=placed["subcategory_basis"])
+            # Tags the item's own text states: CVE ids, severity, exploitation, vendors and a deadline.
+            rec.update(extract.tags(items.sanitize(raw.title), items.sanitize(raw.summary), vendor_names or {}))
             if store.upsert_item(rec, first_seen=now):
                 new += 1
         flags = (("truncated", truncated), ("follow-partial", follow_failed), ("follow-refused", follow_refused))
@@ -331,6 +334,7 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
         say(f"poll {day}: offline, no fetches; rendering from {state_dir.as_posix()}")
     else:
         fetcher = None
+        vendor_names = extract.load_vendors(repo.schema_dir / "vendors.json")
         for sid in sorted(wanted):
             src = wanted[sid]
             runs_on = src.manifest.get("runs_on") or ["actions", "local"]
@@ -348,7 +352,7 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
                 continue
             if fetcher is None:
                 fetcher = fetcher_factory(state_dir)
-            rec = poll_source(fetcher, src, store, day, now_z, reg=repo.categories())
+            rec = poll_source(fetcher, src, store, day, now_z, reg=repo.categories(), vendor_names=vendor_names)
             attempted += rec["attempted"]
             failed += rec["failed"]
             new_items += rec["new"]

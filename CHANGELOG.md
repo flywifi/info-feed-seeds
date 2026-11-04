@@ -39,6 +39,16 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Tags read from each item's own text at ingest (`feeder/extract.py`): CVE ids; severity, from a
+  severity word in a severity context or a CVSS score (v3 and v4 bands), with its rank 0 to 4;
+  exploited in the wild; vendors, from the new `schema/vendors.json` registry (names and product names
+  matched as whole words with their exact capitalisation, checked by lint); and the first deadline,
+  comment due date or effective date the text ties to a date. They fill the store's cves, severity,
+  severity_rank, exploited, vendors and deadline columns; publisher, industries, standards, editions,
+  change types, link hosts, language and updated stay empty for now. `latest.json` items carry them
+  under `tags`, and its coverage counts how many items each reader filled and how many content
+  categories came from the item's own text.
+
 - A profile no longer selects a disabled source by topic (a source listed by id still is), so stored,
   unproven sources stay out of the digest and its Source health section.
 - Five sources stored with `enabled: false` until a live proof: `pulse-kalir` (valid feed, no items

@@ -316,6 +316,10 @@ is escaped so a link or image written into a feed title stays plain text. Text f
 forward when nothing else changed. Items earn a digest day once and are never repeated. The guard
 holds BLOCK items from every output. Items at or above the profile's hold level stay out of
 `latest.json` until released; REVIEW items are marked.
+Each `latest.json` item carries `categories` (its source category, its content category and what
+decided it) and `tags` read from its own text: `cves`, `severity` and `severity_rank` (0 none to 4
+critical, from a severity word or a CVSS score), `exploited`, `vendors` (ids from
+`schema/vendors.json`) and `deadline`. A tag the text does not state stays empty.
 
 Once the poll workflow publishes the `data` branch, digests are served at:
 
