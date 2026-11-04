@@ -218,6 +218,29 @@ def category_allowed(profile: dict, source: Source) -> bool:
     return source.source_category in names or f"{source.source_category}/{source.source_subcategory}" in names
 
 
+def content_routed(profile: dict, source: Source, item: dict) -> bool:
+    """Whether an item of a polled source goes to this profile, by the content category read from its
+    own text at ingest (category or category/subcategory references). An item stored before content
+    categories were read is routed by its source category. A reference in `exclude_content_categories`
+    keeps the item out; when `content_categories` is set, only an item it names goes in. Without either
+    list every item of a polled source goes in, and machine data still comes only from a source the
+    profile polls (an item lands in machine data only when its source is there)."""
+    cid = item.get("content_category")
+    sid = item.get("content_subcategory") if cid else source.source_subcategory
+    cid = cid or source.source_category
+    refs = ({cid} | ({f"{cid}/{sid}"} if sid else set())) if cid else set()
+    if refs & set(profile.get("exclude_content_categories") or []):
+        return False
+    wanted = profile.get("content_categories")
+    return wanted is None or bool(refs & set(wanted))
+
+
+def _ref_list(profile: dict, key: str) -> list:
+    """A profile list of references, or [] when the value is not a list (the schema reports the shape)."""
+    value = profile.get(key)
+    return [r for r in value if isinstance(r, str)] if isinstance(value, list) else []
+
+
 def profile_selects(profile: dict, source: Source) -> bool:
     """A source listed by id is selected; otherwise it must be enabled, one of its topics must match and its
     category must be allowed. A disabled source waiting for a live proof is never picked up by topic."""
@@ -320,6 +343,7 @@ def lint(repo: Repo) -> list[str]:
     source_schema = repo.schema("source.schema.json")
     methods_schema = repo.schema("methods.schema.json")
     known_ids: set[str] = set()
+    cat_of: dict[str, str | None] = {}
 
     for folder in repo.source_folders():
         rel = _rel(folder, repo.root)
@@ -329,6 +353,7 @@ def lint(repo: Repo) -> list[str]:
             problems.append(str(exc))
             continue
         known_ids.add(src.id)
+        cat_of[src.id] = src.source_category
         name = "source.local.json" if src.local else "source.json"
         problems += [f"{rel}/{name}: {e}" for e in validate(src.manifest, source_schema)]
         if src.manifest.get("id") != folder.name:
@@ -394,12 +419,26 @@ def lint(repo: Repo) -> list[str]:
         for sid in profile.get("sources", []):
             if sid not in known_ids:
                 problems.append(f"{rel}: source {sid!r} has no folder under sources/")
-        named = profile.get("source_categories", [])
-        for ref in sorted({r for r in named if named.count(r) > 1}):
-            problems.append(f"{rel}: source category {ref!r} is listed twice")
-        for ref in named:
-            if refs is not None and ref not in refs:
-                problems.append(f"{rel}: source category {ref!r} is not in schema/categories.json")
+        for key, what in (("source_categories", "source category"), ("content_categories", "content category"),
+                          ("exclude_content_categories", "excluded content category")):
+            named = _ref_list(profile, key)
+            for ref in sorted({r for r in named if named.count(r) > 1}):
+                problems.append(f"{rel}: {what} {ref!r} is listed twice")
+            for ref in named:
+                if refs is not None and ref not in refs:
+                    problems.append(f"{rel}: {what} {ref!r} is not in schema/categories.json")
+        excluded = set(_ref_list(profile, "exclude_content_categories"))
+        polled = {r.split("/", 1)[0] for r in _ref_list(profile, "source_categories")}
+        polled |= {cat_of.get(s) for s in _ref_list(profile, "sources")}
+        for ref in sorted(set(_ref_list(profile, "content_categories"))):
+            cid = ref.split("/", 1)[0]
+            if ref in excluded:
+                problems.append(f"{rel}: content category {ref!r} is both routed in and excluded")
+            elif cid in excluded:
+                problems.append(f"{rel}: content category {ref!r} is routed in but its category {cid!r} is excluded")
+            if refs is not None and not categories.digest_default(reg, cid) and cid not in polled:
+                problems.append(f"{rel}: content category {ref!r} comes only from sources this profile does not poll; "
+                                "name it in source_categories")
 
     if repo.releases_file.exists():
         try:
@@ -420,7 +459,8 @@ def lint(repo: Repo) -> list[str]:
 
 
 __all__ = [
-    "ConfigError", "GUARD_RANK", "RELEASES_COMMENT", "Repo", "Source", "accepts", "category_allowed", "is_held",
+    "ConfigError", "GUARD_RANK", "RELEASES_COMMENT", "Repo", "Source", "accepts", "category_allowed", "content_routed",
+    "is_held",
     "item_tags", "json_files", "keyword_tags", "lint", "profile_selects", "release_problems",
     "selected_sources", "with_defaults",
 ]
