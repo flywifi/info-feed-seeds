@@ -249,8 +249,10 @@ def coverage_of(views: list[dict], health: list[dict]) -> dict:
         "items_in_json": sum(1 for v in views if v["state"] not in ("blocked", "held")),
         "held_by_guard": sum(1 for v in views if v["state"] in ("blocked", "held")),
         # How many items each tag reader filled, so a reader that stops matching shows as a drop.
-        "tagged": {name: sum(1 for v in views if v["tags"][name]) for name in ("cves", "severity", "exploited", "vendors", "deadline")},
-        "content_category_from_item_text": sum(1 for v in views if v["categories"]["content_basis"]["category"] == "item"),
+        "tagged": {name: sum(1 for v in views if v["state"] not in ("blocked", "held") and v["tags"][name])
+                   for name in ("cves", "severity", "exploited", "vendors", "deadline")},
+        "content_category_from_item_text": sum(1 for v in views if v["state"] not in ("blocked", "held")
+                                               and v["categories"]["content_basis"]["category"] == "item"),
     }
 
 

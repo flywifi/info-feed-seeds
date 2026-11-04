@@ -600,17 +600,22 @@ class PollTests(HubTestCase):
                 b"<description>d</description><item><title>FortiOS cybersecurity advisory (Critical)</title>"
                 b"<link>https://example.gov/adv/1</link><guid>adv-1</guid><pubDate>Mon, 19 Oct 2026 01:00:00 GMT</pubDate>"
                 b"<description>CVE-2026-24858 is actively exploited. Patches must be applied by November 10, 2026."
-                b"</description></item></channel></rss>")
+                b"</description></item><item><title>Cybersecurity notes for the week</title><link>https://example.gov/adv/2</link>"
+                b"<guid>adv-2</guid><pubDate>Mon, 19 Oct 2026 02:00:00 GMT</pubDate><description>cybersecurity</description>"
+                b"</item></channel></rss>")
         self.add_source("beth", "https://example.gov/adv.xml", ["cybersecurity"])
         self.script["https://example.gov/adv.xml"] = body
         self.assertEqual(self.poll("--only", "beth"), 0)
         latest = jsonio.load_json(self.out / "tr" / "latest.json")
-        item = next(i for i in latest["items"] if i["feed_id"] == "beth")
+        item = next(i for i in latest["items"] if i["link"] == "https://example.gov/adv/1")
         self.assertEqual(item["tags"], {"cves": ["CVE-2026-24858"], "severity": "critical", "severity_rank": 4,
                                         "exploited": True, "vendors": ["fortinet"], "deadline": "2026-11-10"})
         tagged = latest["coverage"]["tagged"]
         self.assertEqual({k: tagged[k] for k in ("cves", "severity", "exploited", "vendors", "deadline")},
                          {"cves": 1, "severity": 1, "exploited": 1, "vendors": 1, "deadline": 1})
+        bases = {i["link"]: i["categories"]["content_basis"]["category"] for i in latest["items"] if i["feed_id"] == "beth"}
+        self.assertEqual(bases, {"https://example.gov/adv/1": "item", "https://example.gov/adv/2": "source"})
+        self.assertEqual(latest["coverage"]["content_category_from_item_text"], 1)
 
     def test_follow_items_cite_their_own_page_and_fetch_time(self):
         class Capture:

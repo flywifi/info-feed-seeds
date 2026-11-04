@@ -319,7 +319,9 @@ holds BLOCK items from every output. Items at or above the profile's hold level 
 Each `latest.json` item carries `categories` (its source category, its content category and what
 decided it) and `tags` read from its own text: `cves`, `severity` and `severity_rank` (0 none to 4
 critical, from a severity word or a CVSS score), `exploited`, `vendors` (ids from
-`schema/vendors.json`) and `deadline`. A tag the text does not state stays empty.
+`schema/vendors.json`) and `deadline`. A tag the text does not state stays empty. The `coverage` block counts,
+over the items in `latest.json`, how many each tag reader filled (`tagged`) and how many content categories
+came from the item's own text rather than its source (`content_category_from_item_text`).
 
 Once the poll workflow publishes the `data` branch, digests are served at:
 

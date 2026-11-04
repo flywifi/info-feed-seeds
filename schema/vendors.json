@@ -1,5 +1,5 @@
 {
-  "description": "Vendors the feed tags on each item, matched as whole words with their exact capitalisation: the vendor's name and its product names. Platform names that only say where software runs (Windows, Android) are left out. Add a vendor or an alias here; lint refuses an alias claimed by two vendors.",
+  "description": "Vendors the feed tags on each item, matched as whole words with their exact capitalisation: the vendor's name and its product names. Platform names that only say where software runs (Windows, Android) and research teams that report on other vendors (FortiGuard Labs) are left out. Add a vendor or an alias here; lint refuses an alias claimed by two vendors.",
   "schema_version": 1,
   "vendors": {
     "apple": {
@@ -51,7 +51,6 @@
         "Fortinet",
         "FortiGate",
         "FortiOS",
-        "FortiGuard",
         "FortiWeb",
         "FortiManager",
         "FortiAnalyzer",

@@ -315,8 +315,8 @@ def lint(repo: Repo) -> list[str]:
             problems += [f"schema/categories.json: {p}" for p in categories.registry_problems(reg, tags)]
         problems += [f"schema/categories.json: key {k!r} appears twice in one object"
                      for k in categories.duplicate_keys(repo.categories_file)]
-    problems += [f"schema/vendors.json: {p}" for p in extract.vendor_problems(repo.schema_dir / "vendors.json")]
     refs = categories.all_refs(reg) if reg is not None and not problems else None
+    problems += [f"schema/vendors.json: {p}" for p in extract.vendor_problems(repo.schema_dir / "vendors.json")]
     source_schema = repo.schema("source.schema.json")
     methods_schema = repo.schema("methods.schema.json")
     known_ids: set[str] = set()

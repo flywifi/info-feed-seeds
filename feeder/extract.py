@@ -1,46 +1,58 @@
 """Tags read from an item's own text at ingest: CVE ids, severity, exploitation, vendors and deadlines.
 
 Every reader takes the sanitized title and summary (HTML stripped, dashes folded) and returns only
-what the text states: a severity is a severity word in a severity context or a CVSS score, never a
-guess, and a field the text does not support stays empty. Vendors come from `schema/vendors.json`,
-matched as whole words with their exact capitalisation, so "IOS" (Cisco) and "iOS" (Apple) stay
-apart."""
+what the text states: a severity is a severity word in a severity context or a CVSS score (never a
+CVSS version or vector), exploitation is a stated exploitation phrase that no negation or hedge in
+the same clause qualifies, and a field the text does not support stays empty. Vendors come from
+`schema/vendors.json`, matched as whole words with their exact capitalisation, so "IOS" (Cisco) and
+"iOS" (Apple) stay apart. Every pattern is ASCII-only and linear in the text."""
 from __future__ import annotations
 
 import datetime
+import json
 import re
 from pathlib import Path
 
 from . import jsonio
 
-CVE_RE = re.compile(r"\bCVE-\d{4}-\d{4,19}\b", re.I)
+CVE_RE = re.compile(r"\bCVE-\d{4}-(?:\d{4}|[1-9]\d{4,18})\b", re.I | re.A)
 SEVERITY_WORDS = ("none", "low", "medium", "high", "critical")
 SEVERITY_RANK = {w: i for i, w in enumerate(SEVERITY_WORDS)}
 _WORD = r"(critical|high|medium|low)"
-SEVERITY_RE = re.compile(rf"\({_WORD}\)|\b{_WORD}[ -]severity\b|\bseverity(?: level| rating)?\s*[:=]?\s*{_WORD}\b"
-                         rf"|\brated {_WORD}\b", re.I)
-CVSS_RE = re.compile(r"\bCVSS(?:\s*v?[234](?:\.\d)?)?(?:\s*base)?(?:\s*score)?\s*(?:of\s*)?[:=]?\s*(\d{1,2}(?:\.\d)?)(?!\.?\d)",
-                     re.I)
+SEVERITY_RE = re.compile(rf"\({_WORD}\)|\b{_WORD}[ -]severity\b|\bseverity(?: level| rating)?\s?[:=]?\s?{_WORD}\b"
+                         rf"|\brated {_WORD}(?![\w-])", re.I | re.A)
+CVSS_RE = re.compile(r"\bCVSS(?P<ver>\s?v?[234](?:\.\d)?)?(?P<kw>(?:\s?base)?(?:\s?score)?(?:\s?of)?\s?[:=]?)\s?"
+                     r"(?P<score>\d{1,2}(?:\.\d)?)(?!\.?\d|/)", re.I | re.A)
+_CVSS_VERSIONS = {"2.0", "3.0", "3.1", "4.0"}
 EXPLOITED_RE = re.compile(r"\b(actively exploited|exploited in the wild|known exploited|under active exploitation|"
-                          r"exploitation (?:has been )?(?:observed|detected|reported)|active zero[ -]day|"
-                          r"zero[ -]day (?:is |was |being )?exploited)\b", re.I)
-_DATE = r"(\d{1,2}\s+[A-Za-z]+\s+20\d{2}|[A-Za-z]+\s+\d{1,2},\s+20\d{2}|20\d{2}-\d{2}-\d{2})"
-DEADLINE_RE = re.compile(r"\b(?:comments?\s+(?:are\s+)?due|comment\s+period\s+(?:ends|closes)|deadline|due\s+date|"
-                         r"effective(?:\s+date)?|must\s+be\s+(?:applied|implemented|remediated)(?:\s+by)?)\b[^.]{0,80}?\b"
-                         + _DATE, re.I)
+                          r"active exploitation|exploitation (?:has been )?(?:observed|detected|reported)|detected exploitation|"
+                          r"active zero[ -]day|zero[ -]day (?:is |was |being )?exploited|zero[ -]day exploitation|"
+                          r"exploited as a zero[ -]day|exploit (?:for \S+ )?exists in the wild|may have been exploited)\b",
+                          re.I | re.A)
+# A negation or hedge earlier in the same clause: "has not been exploited in the wild", "could be
+# actively exploited". An exploitation phrase after one stays empty.
+_NEGATED = re.compile(r"\b(?:not|no|never|nor|without|could|might|can|cannot|unlikely)\b[^.;:!?]{0,80}$", re.I | re.A)
 MONTHS = {m: i for i, m in enumerate(("january", "february", "march", "april", "may", "june", "july", "august",
                                       "september", "october", "november", "december"), 1)}
-ID_RE = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
+_MONTH_TOKENS = {**MONTHS, **{m[:3]: i for m, i in MONTHS.items()}, "sept": 9}
+_MON = (r"(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|"
+        r"oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)")
+_DATE = (rf"(\d{{1,2}}(?:st|nd|rd|th)?\s{_MON}\.?,?\s20\d{{2}}|{_MON}\.?\s\d{{1,2}}(?:st|nd|rd|th)?,?\s20\d{{2}}"
+         r"|20\d{2}-\d{2}-\d{2})(?![\w-])")
+# Between the deadline words and the date: no sentence end, and a comma only before a number
+# ("version 2, 2027 builds"), so "The deadline, announced on October 1" never takes that date.
+_GAP = r"(?:[^.,\n]|,(?=\s?\d)){0,40}?"
+DEADLINE_RE = re.compile(r"(?<![\w-])(?:comments?\s(?:are\s)?due|comments?\smust\sbe\s(?:received|submitted)|submit\scomments|"
+                         r"comment\speriod\s(?:ends|closes)|deadline|due\sdate|no\slater\sthan|takes?\seffect|"
+                         r"must\sbe\s(?:applied|implemented|remediated)|required\sto\s(?:remediate|patch|apply))\b"
+                         + _GAP + r"(?<![\w-])" + _DATE, re.I | re.A)
+EFFECTIVE_RE = re.compile(r"(?<![\w-])effective(?:\sdate)?(?:\s?:|\s(?:on|as\sof|from))?\s" + _DATE, re.I | re.A)
+ID_RE = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*", re.A)
 
 
 def cve_ids(text: str) -> list[str]:
     """CVE ids in order of first mention, upper case, each once."""
-    out: list[str] = []
-    for m in CVE_RE.finditer(text or ""):
-        value = m.group(0).upper()
-        if value not in out:
-            out.append(value)
-    return out
+    return list(dict.fromkeys(m.group(0).upper() for m in CVE_RE.finditer(text or "")))
 
 
 def severity_from_score(score: float) -> str | None:
@@ -52,11 +64,25 @@ def severity_from_score(score: float) -> str | None:
     return "low" if score < 4 else "medium" if score < 7 else "high" if score < 9 else "critical"
 
 
+def _cvss_words(text: str) -> list[str]:
+    """Severity words from CVSS scores. A v2 score is skipped (its bands differ), and a bare version
+    number ("CVSS 3.1", "CVSS:4.0/AV:N") is not a score."""
+    out = []
+    for m in CVSS_RE.finditer(text):
+        ver = (m.group("ver") or "").strip().lstrip("vV")
+        if ver.startswith("2") or (not ver and not m.group("kw").strip() and m.group("score") in _CVSS_VERSIONS):
+            continue
+        word = severity_from_score(float(m.group("score")))
+        if word:
+            out.append(word)
+    return out
+
+
 def severity(text: str) -> str | None:
     """The highest severity the text states, as a severity word in a severity context or a CVSS score."""
     best = None
     found = [next(g for g in m.groups() if g).lower() for m in SEVERITY_RE.finditer(text or "")]
-    found += [w for w in (severity_from_score(float(m.group(1))) for m in CVSS_RE.finditer(text or "")) if w]
+    found += _cvss_words(text or "")
     for word in found:
         if best is None or SEVERITY_RANK[word] > SEVERITY_RANK[best]:
             best = word
@@ -64,72 +90,102 @@ def severity(text: str) -> str | None:
 
 
 def exploited(text: str) -> bool:
-    return bool(EXPLOITED_RE.search(text or ""))
+    """True when the text states exploitation and no negation or hedge in the same clause qualifies it."""
+    text = text or ""
+    return any(not _NEGATED.search(text[max(0, m.start() - 80):m.start()]) for m in EXPLOITED_RE.finditer(text))
 
 
 def _long_date(value: str) -> str | None:
-    """'March 31, 2027', '1 July 2027' or an ISO date as YYYY-MM-DD; an impossible date or a month name
-    that is not English is None, never a guess."""
-    value = value.strip()
+    """'March 31, 2027', 'Nov. 10, 2026', '1st July 2027' or an ISO date as YYYY-MM-DD; an impossible date
+    or a month name that is not English is None, never a guess."""
+    value = re.sub(r"(?<=\d)(?:st|nd|rd|th)\b|[.,]", "", value.strip(), flags=re.I)
     try:
-        if re.fullmatch(r"20\d{2}-\d{2}-\d{2}", value):
+        if re.fullmatch(r"20\d{2}-\d{2}-\d{2}", value, re.A):
             return datetime.date.fromisoformat(value).isoformat()
-        m = re.fullmatch(r"(\d{1,2})\s+([A-Za-z]+)\s+(20\d{2})", value) or re.fullmatch(r"([A-Za-z]+)\s+(\d{1,2}),\s+(20\d{2})", value)
-        if not m:
-            return None
-        a, b, year = m.groups()
+        a, b, year = value.split()
         day, month = (a, b) if a.isdigit() else (b, a)
-        if month.lower() not in MONTHS:
-            return None
-        return datetime.date(int(year), MONTHS[month.lower()], int(day)).isoformat()
-    except ValueError:
+        return datetime.date(int(year), _MONTH_TOKENS[month.lower()], int(day)).isoformat()
+    except (ValueError, KeyError):
         return None
 
 
 def deadlines(text: str) -> list[str]:
-    """Dates the text ties to a deadline, a comment period or an effective date, in order, each once."""
-    out: list[str] = []
-    for m in DEADLINE_RE.finditer(text or ""):
-        date = _long_date(m.group(1))
-        if date and date not in out:
-            out.append(date)
-    return out
+    """Dates the text ties to a deadline, a comment period, a remediation requirement or an effective
+    date, in order, each once."""
+    text = text or ""
+    matches = sorted([*DEADLINE_RE.finditer(text), *EFFECTIVE_RE.finditer(text)], key=lambda m: m.start())
+    return list(dict.fromkeys(d for d in (_long_date(m.group(1)) for m in matches) if d))
+
+
+def _vendor_entries(path: Path):
+    """(problems, {vendor id: entry}) from the registry file; the file may be missing."""
+    if not path.exists():
+        return [], {}
+    try:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return [f"not valid JSON ({exc})"], {}
+    vendors = doc.get("vendors") if isinstance(doc, dict) else None
+    if not isinstance(vendors, dict):
+        return ["has no \"vendors\" object"], {}
+    return [], vendors
 
 
 def load_vendors(path: Path) -> dict[str, list[str]]:
-    """{vendor id: [aliases]} from the vendor registry, in registry order; empty when the file is missing."""
-    if not path.exists():
-        return {}
-    doc = jsonio.load_json(path)
-    return {vid: list(v.get("aliases") or []) for vid, v in sorted((doc.get("vendors") or {}).items(),
-                                                                       key=lambda kv: kv[0])}
+    """{vendor id: [aliases]} from the vendor registry, sorted by vendor id; entries lint would refuse are
+    left out, and a missing or unreadable file gives none."""
+    _, entries = _vendor_entries(path)
+    out = {}
+    for vid, entry in sorted(entries.items()):
+        aliases = entry.get("aliases") if isinstance(entry, dict) else None
+        if isinstance(aliases, list):
+            kept = [a for a in aliases if isinstance(a, str) and len(a.strip()) >= 2 and a == a.strip()]
+            if kept:
+                out[vid] = kept
+    return out
 
 
 def vendor_problems(path: Path) -> list[str]:
-    """Registry defects lint reports: a bad id, a vendor without aliases, an alias shorter than 2
-    characters, or one alias claimed by two vendors."""
-    if not path.exists():
-        return []
-    problems, owner = [], {}
-    for vid, entry in (jsonio.load_json(path).get("vendors") or {}).items():
-        if not ID_RE.match(vid):
+    """Registry defects lint reports: invalid JSON, a bad id, an entry that is not an object, aliases that
+    are not a list of strings, a vendor without aliases, an alias shorter than 2 characters or padded with
+    spaces, an alias listed twice, or one alias claimed by two vendors."""
+    problems, entries = _vendor_entries(path)
+    owner: dict[str, str] = {}
+    for vid, entry in entries.items():
+        if not ID_RE.fullmatch(vid):
             problems.append(f"vendor id {vid!r} is not lower-case words joined by hyphens")
-        aliases = entry.get("aliases") or []
+        if not isinstance(entry, dict):
+            problems.append(f"vendor {vid!r} is not an object")
+            continue
+        aliases = entry.get("aliases")
+        if not isinstance(aliases, list) or not all(isinstance(a, str) for a in aliases):
+            problems.append(f"vendor {vid!r}: aliases must be a list of strings")
+            continue
         if not aliases:
             problems.append(f"vendor {vid!r} has no aliases")
+        seen: set[str] = set()
         for alias in aliases:
-            if len(alias.strip()) < 2:
+            if alias != alias.strip():
+                problems.append(f"vendor {vid!r}: alias {alias!r} has leading or trailing spaces")
+            elif len(alias) < 2:
                 problems.append(f"vendor {vid!r}: alias {alias!r} is too short")
+            elif alias in seen:
+                problems.append(f"vendor {vid!r}: alias {alias!r} is listed twice")
             elif alias in owner and owner[alias] != vid:
                 problems.append(f"alias {alias!r} is claimed by {owner[alias]!r} and {vid!r}")
+            seen.add(alias)
             owner.setdefault(alias, vid)
     return problems
 
 
 def vendors(text: str, names: dict[str, list[str]]) -> list[str]:
-    """Vendor ids whose aliases appear as whole words, with their exact capitalisation."""
-    return [vid for vid, aliases in names.items()
-            if any(re.search(r"(?<![\w-])" + re.escape(a) + r"(?![\w-])", text or "") for a in aliases)]
+    """Vendor ids whose aliases appear as whole words, with their exact capitalisation, in one pass."""
+    owner = {a: vid for vid, aliases in names.items() for a in aliases}
+    if not owner or not text:
+        return []
+    pattern = r"(?<![\w-])(?:" + "|".join(re.escape(a) for a in sorted(owner, key=len, reverse=True)) + r")(?![\w-])"
+    found = {owner[m.group(0)] for m in re.finditer(pattern, text)}
+    return [vid for vid in names if vid in found]
 
 
 def tags(title: str, summary: str, names: dict[str, list[str]]) -> dict:
