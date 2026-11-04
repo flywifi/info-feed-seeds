@@ -11,7 +11,8 @@ Tables
           of each ("item" or "source"); industries, standards, editions, change_types, cves, vendors
           and link_hosts as comma-joined lowercase lists ('' when empty); severity, severity_rank
           (0 none to 4 critical), exploited (1 or NULL), language, deadline and updated. Poll fills
-          the two category pairs and their basis; the other columns stay empty until tag extraction.
+          the two category pairs and their basis, and cves, severity, severity_rank, exploited, vendors
+          and deadline from the item's text; the other columns stay empty for now.
   hits    (profile, content_sha256) PK, day, topics (JSON list). One row per item a profile
           selected; the day is the digest it belongs to. Day D's digest is re-rendered from here.
   health  (feed_id, day) PK, status, http_status, items, error, route_url, source_label,

@@ -23,9 +23,9 @@ All notable changes to this repository are recorded here. The format follows
 - `tools/preflight.py` hands the ignored local name list to the base branch's checker through
   `IFS_PERSON_FINGERPRINTS` when that variable is empty, so the rehearsal reads the same names as the
   hooks.
-- Store columns: the source and content category pairs and their basis are filled at ingest; publisher,
-  industries, standards, editions, change types, CVEs, vendors, link hosts, severity and its rank,
-  exploited, language, deadline and updated stay empty until tag extraction lands.
+- Store columns: the source and content category pairs and their basis, CVEs, vendors, severity and
+  its rank, exploited and deadline are filled at ingest; publisher, industries, standards, editions,
+  change types, link hosts, language and updated stay empty for now.
 - On a link that two or more distinct guids share, a post without a guid is keyed by its own hash,
   so each guidless post there reaches the digest; a link that carries fewer than two guids still
   shows one post. A retitled post without a guid on a shared link is shown again. A page route whose
@@ -43,6 +43,23 @@ All notable changes to this repository are recorded here. The format follows
   one.
 
 ### Added
+
+- Tags read from each item's own text at ingest (`feeder/extract.py`): CVE ids; severity, from a
+  severity word in a severity context or a CVSS score (v3 and v4 bands), with its rank 0 to 4;
+  exploited in the wild; vendors, from the new `schema/vendors.json` registry (names and product names
+  matched as whole words with their exact capitalisation, checked by lint); and the first deadline,
+  comment due date or effective date the text ties to a date. They fill the store's cves, severity,
+  severity_rank, exploited, vendors and deadline columns; publisher, industries, standards, editions,
+  change types, link hosts, language and updated stay empty for now. `latest.json` items carry them
+  under `tags`, and its coverage counts how many items each reader filled and how many content
+  categories came from the item's own text.
+- Known limits of the tag readers: an exploitation phrase after a negation or hedge in the same clause
+  ("not", "never", "could", "may be", "would") stays empty, and so does "could allow remote code
+  execution and has been actively exploited"; "possibly exploited", "If the flaw is exploited in the
+  wild" and a negation more than 80 characters before the phrase still read as exploited. "Deadline
+  extended from X to Y" gives the old date, and "The deadline, which was set in 2026, is March 31, 2027."
+  gives none. A CVSS v2 score and a bare CVSS version or vector are not read as a severity. Items stored
+  before tags were read carry none until they are fetched again.
 
 - A profile no longer selects a disabled source by topic (a source listed by id still is), so stored,
   unproven sources stay out of the digest and its Source health section.

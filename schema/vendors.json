@@ -1,0 +1,155 @@
+{
+  "description": "Vendors the feed tags on each item, matched as whole words with their exact capitalisation: the vendor's name and its product names. Platform names that only say where software runs (Windows, Android) and research teams that report on other vendors (FortiGuard Labs) are left out. Add a vendor or an alias here; lint refuses an alias claimed by two vendors.",
+  "schema_version": 1,
+  "vendors": {
+    "apple": {
+      "aliases": [
+        "Apple",
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "Safari",
+        "WebKit"
+      ],
+      "label": "Apple"
+    },
+    "atlassian": {
+      "aliases": [
+        "Atlassian",
+        "Confluence",
+        "Jira",
+        "Bitbucket"
+      ],
+      "label": "Atlassian"
+    },
+    "cisco": {
+      "aliases": [
+        "Cisco",
+        "IOS XE",
+        "IOS XR",
+        "Webex",
+        "Meraki"
+      ],
+      "label": "Cisco"
+    },
+    "citrix": {
+      "aliases": [
+        "Citrix",
+        "NetScaler"
+      ],
+      "label": "Citrix"
+    },
+    "connectwise": {
+      "aliases": [
+        "ConnectWise",
+        "ScreenConnect"
+      ],
+      "label": "ConnectWise"
+    },
+    "fortinet": {
+      "aliases": [
+        "Fortinet",
+        "FortiGate",
+        "FortiOS",
+        "FortiWeb",
+        "FortiManager",
+        "FortiAnalyzer",
+        "FortiClient",
+        "FortiSIEM",
+        "FortiProxy",
+        "FortiSwitch",
+        "FortiAP"
+      ],
+      "label": "Fortinet"
+    },
+    "gitlab": {
+      "aliases": [
+        "GitLab"
+      ],
+      "label": "GitLab"
+    },
+    "google": {
+      "aliases": [
+        "Google"
+      ],
+      "label": "Google"
+    },
+    "ivanti": {
+      "aliases": [
+        "Ivanti",
+        "Connect Secure",
+        "Policy Secure",
+        "EPMM"
+      ],
+      "label": "Ivanti"
+    },
+    "microsoft": {
+      "aliases": [
+        "Microsoft",
+        "Exchange Server",
+        "SharePoint",
+        "Azure",
+        "Office 365",
+        "Microsoft 365"
+      ],
+      "label": "Microsoft"
+    },
+    "oracle": {
+      "aliases": [
+        "Oracle",
+        "WebLogic"
+      ],
+      "label": "Oracle"
+    },
+    "palo-alto-networks": {
+      "aliases": [
+        "Palo Alto Networks",
+        "PAN-OS",
+        "GlobalProtect",
+        "Cortex XDR"
+      ],
+      "label": "Palo Alto Networks"
+    },
+    "rockwell-automation": {
+      "aliases": [
+        "Rockwell Automation",
+        "Allen-Bradley",
+        "FactoryTalk"
+      ],
+      "label": "Rockwell Automation"
+    },
+    "schneider-electric": {
+      "aliases": [
+        "Schneider Electric",
+        "Modicon",
+        "EcoStruxure"
+      ],
+      "label": "Schneider Electric"
+    },
+    "siemens": {
+      "aliases": [
+        "Siemens",
+        "SIMATIC",
+        "SCALANCE",
+        "SINEC",
+        "SICAM"
+      ],
+      "label": "Siemens"
+    },
+    "sonicwall": {
+      "aliases": [
+        "SonicWall",
+        "SonicOS"
+      ],
+      "label": "SonicWall"
+    },
+    "vmware": {
+      "aliases": [
+        "VMware",
+        "vCenter",
+        "ESXi"
+      ],
+      "label": "VMware"
+    }
+  }
+}

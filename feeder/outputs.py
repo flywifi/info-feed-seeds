@@ -127,6 +127,11 @@ def item_view(row: dict, source, profile: dict, released: set[str]) -> dict:
         "link": safe_link(row.get("link")), "published": row.get("published"),
         "first_seen": row.get("first_seen"), "topics": list(row.get("topics") or []),
         "primary": row.get("primary") or (row.get("topics") or ["uncategorised"])[0],
+        "tags": {
+            "cves": [c.upper() for c in row.get("cves") or []], "severity": row.get("severity"),
+            "severity_rank": row.get("severity_rank"), "exploited": bool(row.get("exploited")),
+            "vendors": list(row.get("vendors") or []), "deadline": row.get("deadline"),
+        },
         "categories": {
             "source": _pair(manifest.get("source_category"), manifest.get("source_subcategory")),
             "content": _pair(row.get("content_category"), row.get("content_subcategory")),
@@ -226,7 +231,7 @@ def latest_json(profile: dict, day: str, views: list[dict], health: list[dict], 
             "title_display": view["title_display"], "authors": view["authors"], "link": view["link"],
             "summary_display": view["summary_display"], "published": view["published"],
             "first_seen": view["first_seen"], "topics": view["topics"], "authority": view["authority"],
-            "tier": view["tier"], "categories": view["categories"], guard.FIELD_NAME: view["scan"],
+            "tier": view["tier"], "categories": view["categories"], "tags": view["tags"], guard.FIELD_NAME: view["scan"],
         })
     return {"_comment": JSON_COMMENT, "version": FORMAT_VERSION, "profile": profile["name"], "date": day,
             "generated": generated, "items": out_items, "health": health, "coverage": coverage}
@@ -243,6 +248,11 @@ def coverage_of(views: list[dict], health: list[dict]) -> dict:
         "items_in_markdown": sum(1 for v in views if v["state"] != "blocked"),
         "items_in_json": sum(1 for v in views if v["state"] not in ("blocked", "held")),
         "held_by_guard": sum(1 for v in views if v["state"] in ("blocked", "held")),
+        # How many items each tag reader filled, so a reader that stops matching shows as a drop.
+        "tagged": {name: sum(1 for v in views if v["state"] not in ("blocked", "held") and v["tags"][name])
+                   for name in ("cves", "severity", "exploited", "vendors", "deadline")},
+        "content_category_from_item_text": sum(1 for v in views if v["state"] not in ("blocked", "held")
+                                               and v["categories"]["content_basis"]["category"] == "item"),
     }
 
 
