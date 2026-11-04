@@ -13,10 +13,11 @@ All notable changes to this repository are recorded here. The format follows
 - An unproven disabled source must keep `verified` null and record at least one attempt (lint and
   the commit checker).
 - Refused follow URLs (another host, port or scheme) are counted and reported as `follow-refused`.
-- When a route redirects to its own host with or without a leading www. (example.gov to
-  www.example.gov), the page's relative links resolve against the address that answered and its
-  follow URLs there are fetched; a redirect to any other host widens nothing, and its links are
-  refused and counted.
+- A page's relative links resolve against the address that answered, so items cite the right host.
+  After a redirect within the route's site (the same host with or without a leading www., the same
+  port, the same scheme or http to https), follow URLs on that address are fetched and the
+  answering page is not fetched again; after a redirect to any other site, none of the page's links
+  are followed, and they are counted as refused.
 - The poll workflow saves the database after any successful publish, even when the run is then
   cancelled.
 - `tools/preflight.py` hands the ignored local name list to the base branch's checker through
@@ -25,6 +26,10 @@ All notable changes to this repository are recorded here. The format follows
 - Store columns: the source and content category pairs and their basis are filled at ingest; publisher,
   industries, standards, editions, change types, CVEs, vendors, link hosts, severity and its rank,
   exploited, language, deadline and updated stay empty until tag extraction lands.
+- On a link that two or more distinct guids share, a post without a guid is keyed by its own hash,
+  so each guidless post there reaches the digest; a link that carries fewer than two guids still
+  shows one post. A retitled post without a guid on a shared link is shown again. A page route whose
+  answering host changes shows its current posts once more.
 - Posts one source gives the same link (Ervik's ransomware victim posts all link to /ransomware)
   each reach the digest when two or more distinct guids share that link; before, only the first was
   ever shown. Each such post is keyed by its guid, and a guid already shown stays shown, so a
