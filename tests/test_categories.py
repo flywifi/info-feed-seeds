@@ -21,13 +21,13 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(categories.registry_problems(REG, TAGS), [])
         self.assertEqual(categories.duplicate_keys(ROOT / "schema" / "categories.json"), [])
 
-    def test_nine_categories_and_forty_six_subcategories_in_order(self):
+    def test_nine_categories_and_forty_seven_subcategories_in_order(self):
         self.assertEqual(len(REG["categories"]), 9)
-        self.assertEqual(sum(len(c["subcategories"]) for c in REG["categories"].values()), 46)
+        self.assertEqual(sum(len(c["subcategories"]) for c in REG["categories"].values()), 47)
         self.assertEqual([cid for cid, _ in categories.ordered(REG)],
                          ["regulatory", "standards", "vulnerabilities", "attacks", "releases", "technology",
                           "guidance", "machine-data", "ai"])
-        self.assertEqual(len(categories.all_refs(REG)), 9 + 46)
+        self.assertEqual(len(categories.all_refs(REG)), 9 + 47)
 
     def test_only_machine_data_is_off_by_default(self):
         off = [cid for cid, c in REG["categories"].items() if not c["digest_default"]]
@@ -50,7 +50,9 @@ class RegistryTests(unittest.TestCase):
         bad["categories"]["attacks"]["subcategories"]["breaches"]["topics"] = ["not-a-topic"]
         bad["categories"]["Bad_Id"] = copy.deepcopy(REG["categories"]["guidance"]) | {"order": 50}
         bad["categories"]["releases"]["subcategories"]["developer"]["order"] = 1
+        bad["categories"]["attacks"]["subcategories"]["scams"]["keywords"].append("Data-Leak")
         found = categories.registry_problems(bad, TAGS)
+        self.assertIn("keyword 'Data-Leak' in attacks/scams repeats 'data leak' in attacks/breaches", found)
         self.assertIn("categories 'ai' and 'regulatory' share order 1", found)
         self.assertIn("category 'guidance' has no subcategories", found)
         self.assertIn("subcategory attacks/breaches: topic hint 'not-a-topic' is not in schema/topics.json", found)
@@ -139,6 +141,77 @@ class ContentCategoryTests(unittest.TestCase):
     def test_a_tie_keeps_the_source(self):
         placed = self.place("Advisory on a phishing campaign", source=("attacks", "scams"))
         self.assertEqual((placed["category"], placed["subcategory"]), ("attacks", "scams"))
+
+    def test_a_keyword_inside_a_longer_one_counts_once(self):
+        once = self.place("Note", "a ransomware victim")
+        self.assertEqual(once["category_basis"], "source", "'victim' inside 'ransomware victim' adds nothing")
+        twice = self.place("Note", "a ransomware victim and another victim")
+        self.assertEqual((twice["category"], twice["category_basis"]), ("attacks", "item"),
+                         "the same keyword elsewhere in the text still counts")
+
+    def test_ransomware_victim_posts_are_claims_not_breaches(self):
+        claim = self.place("Ransomware: Acme Tooling GmbH (qilin)", "New ransomware victim disclosed by qilin.",
+                           ("attacks", "threat-research"))
+        self.assertEqual((claim["category"], claim["subcategory"], claim["subcategory_basis"]),
+                         ("attacks", "ransomware-claims", "item"))
+        self.assertEqual(claim["reasons"], ["summary has 'ransomware victim'", "summary has 'victim disclosed'"])
+        breach = self.place("Retailer confirms data breach affecting customers", "", ("attacks", "threat-research"))
+        self.assertEqual((breach["category"], breach["subcategory"]), ("attacks", "breaches"))
+
+    def test_a_confirmed_victim_with_a_breach_in_the_title_stays_a_breach(self):
+        got = self.place("City confirms breach after it was a ransomware victim", "", ("attacks", "threat-research"))
+        self.assertEqual(got["subcategory"], "breaches", "a tie between breaches and claims keeps registry order")
+
+    def test_a_leak_site_takedown_is_not_a_claim(self):
+        got = self.place("Police seize ransomware gang's leak site", "An international operation took the site offline.",
+                         ("attacks", "threat-research"))
+        self.assertNotEqual(got["subcategory"], "ransomware-claims")
+
+    def test_a_shorter_keyword_of_another_subcategory_does_not_outvote_the_longer_one(self):
+        placed = self.place("Active Zero-Day: CVE-2026-109618",
+                            "PHP Memory Corruption Vulnerability - confirmed actively exploited (CISA KEV).",
+                            ("vulnerabilities", "vendor-advisories"))
+        self.assertEqual((placed["category"], placed["subcategory"]), ("attacks", "exploited-now"),
+                         "'zero-day' inside 'active zero-day' does not also score for disclosures")
+
+    def test_an_actively_exploited_zero_day_is_exploited_now(self):
+        for title in ("Chrome zero-day actively exploited, update now", "Google fixes exploited zero-day in Chrome"):
+            with self.subTest(title=title):
+                got = self.place(title, "Google released a security update for the browser.", ("releases", "browsers-apps"))
+                self.assertEqual((got["category"], got["subcategory"]), ("attacks", "exploited-now"))
+
+    def test_catalogue_additions_are_scoring(self):
+        got = self.place("CISA Adds Three Known Exploited Vulnerabilities to Catalog",
+                         "CISA added three vulnerabilities to its Known Exploited Vulnerabilities (KEV) Catalog, based on "
+                         "evidence of active exploitation.", ("guidance", "security-guidance"))
+        self.assertEqual((got["category"], got["subcategory"]), ("vulnerabilities", "scoring"),
+                         "'exploited' inside 'known exploited' adds nothing")
+
+    def test_a_phrase_counted_in_the_title_is_still_taken_in_the_summary(self):
+        got = self.place("Ransomware victim: Acme Corp (akira)",
+                         "Akira lists Acme Corp as a ransomware victim; a breach is not confirmed.", ("attacks", "threat-research"))
+        self.assertEqual(got["subcategory"], "ransomware-claims")
+
+    def test_a_repeated_phrase_does_not_free_the_shorter_keyword(self):
+        got = self.place("Note", "a ransomware victim; later another ransomware victim", ("guidance", "security-guidance"))
+        self.assertEqual(got["category_basis"], "source")
+
+    def test_keywords_score_only_the_first_match_cap_characters(self):
+        got = self.place("Note", "x " * categories.MATCH_CAP + "ransomware victim disclosed", ("guidance", "security-guidance"))
+        self.assertEqual(got["category_basis"], "source")
+
+    def test_dense_keyword_text_stays_cheap(self):
+        import time
+        words = [kw for _, entry in categories.ordered(REG) for sub in entry["subcategories"].values()
+                 for kw in sub.get("keywords", [])]
+        dense = " ".join(words * (100_000 // len(" ".join(words)) + 1))[:100_000]
+        start = time.perf_counter()
+        self.place(dense[:300], dense)
+        self.assertLess(time.perf_counter() - start, 0.25)
+
+    def test_title_and_summary_spans_are_kept_apart(self):
+        got = self.place("x ransomware victim", "big victim, big breach", ("attacks", "breaches"))
+        self.assertEqual(got["subcategory"], "breaches")
 
 
     def test_keywords_that_decide_only_the_category_are_its_reasons(self):

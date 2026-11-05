@@ -26,6 +26,7 @@ ID_RE = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 # Titles that are only a version number ("37.319") or a record id ("FR-2022-04-07") are written for programs.
 VERSION_TITLE = re.compile(r"^v?\d+(?:\.\d+)+$")
 RECORD_ID_TITLE = re.compile(r"^[A-Z]{2,6}(?:-[A-Z0-9]+)+$")
+MATCH_CAP = 10_000   # characters of the title and of the summary that keywords score; keeps full-text summaries cheap
 MACHINE_SHARE = 0.6
 
 
@@ -107,6 +108,15 @@ def registry_problems(reg: dict, topic_tags: set[str] | None = None) -> list[str
     for iid in reg.get("industries", {}):
         if not ID_RE.match(iid):
             problems.append(f"industry id {iid!r} is not lowercase kebab")
+    owner: dict[str, tuple[str, str]] = {}
+    for cid, entry in sorted(reg["categories"].items()):
+        for sid, sub in sorted(entry["subcategories"].items()):
+            for kw in sub.get("keywords", []):
+                # A keyword in two subcategories would count only once (the longer-keyword-first rule).
+                norm = " ".join(kw.lower().replace("-", " ").split())
+                first_ref, first_kw = owner.setdefault(norm, (f"{cid}/{sid}", kw))
+                if first_ref != f"{cid}/{sid}":
+                    problems.append(f"keyword {kw!r} in {cid}/{sid} repeats {first_kw!r} in {first_ref}")
     return problems
 
 
@@ -150,12 +160,24 @@ def suggest(reg: dict, titles: list[str], source_topics: list[str]) -> list[dict
     return out
 
 
+def _fresh_match(rx: re.Pattern, text: str, taken: bytearray) -> bool:
+    """True when a match is not wholly inside text a longer keyword matched; every match is then taken."""
+    fresh = False
+    for m in rx.finditer(text):
+        start, end = m.span()
+        fresh = fresh or taken.find(0, start, end) != -1
+        taken[start:end] = b"\x01" * (end - start)
+    return fresh
+
+
 def content_category(reg: dict, title: str, summary: str, source_category: str | None,
                      source_subcategory: str | None) -> dict:
     """One item's content category and content subcategory, each decided on its own:
     {"category", "subcategory", "category_basis", "subcategory_basis", "reasons"}. A basis is "item"
     when the item's own text decided that level and "source" when it fell back to the source category
-    or source subcategory. Each keyword scores 2 in the title and 1 in the summary: the category with
+    or source subcategory. Each keyword scores 2 in the title and 1 in the summary (the first MATCH_CAP
+    characters of each), except where each of its matches lies inside text longer keywords matched in
+    the same text: the category with
     the highest total (2 or more) wins, then the subcategory with the highest score inside it (2 or
     more, or any score when the category is not the source category). Ties keep the source category
     and source subcategory. An item lands in a category that no profile shows by default (machine
@@ -168,25 +190,35 @@ def content_category(reg: dict, title: str, summary: str, source_category: str |
             cid, sid = ref.split("/")
             return {"category": cid, "subcategory": sid, "category_basis": "item", "subcategory_basis": "item",
                     "reasons": [f"the title is a {what}"]}
-    low_title, low_summary = text_title.lower(), " ".join((summary or "").split()).lower()
+    low_title, low_summary = text_title[:MATCH_CAP].lower(), " ".join((summary or "").split())[:MATCH_CAP].lower()
+    active = [(cid, sid, sub) for cid, entry in ordered(reg) if entry["digest_default"] or hidden_ok
+              for sid, sub in sorted(entry["subcategories"].items(), key=lambda kv: kv[1]["order"])]
+    # Longer keywords are matched first, across every subcategory, and every match is marked in both
+    # texts. A keyword whose matches all lie inside text a longer keyword matched ("victim" inside
+    # "ransomware victim", "zero-day" inside "active zero-day") adds nothing; a match elsewhere still
+    # counts, and so does a partial overlap ("ransomware victim disclosed" scores both keywords).
+    where: dict[tuple[str, str, str], str] = {}
+    taken = {"title": bytearray(len(low_title)), "summary": bytearray(len(low_summary))}
+    for cid, sid, kw in sorted(((cid, sid, kw) for cid, sid, sub in active for kw in sub.get("keywords", [])),
+                               key=lambda entry: len(entry[2]), reverse=True):
+        first = kw.lower().split()[0] if kw.split() else ""
+        if first not in low_title and first not in low_summary:
+            continue   # the pattern needs its first word verbatim, so it cannot match: skip compiling it
+        rx = _word(kw)
+        hits = [spot for spot, text in (("title", low_title), ("summary", low_summary))
+                if _fresh_match(rx, text, taken[spot])]   # both texts are marked, even when the title counts
+        if hits:
+            where[(cid, sid, kw)] = hits[0]
     scores: dict[str, dict[str, int]] = {}
     reasons: dict[tuple[str, str], list[str]] = {}
-    for cid, entry in ordered(reg):
-        if not entry["digest_default"] and not hidden_ok:
-            continue
-        for sid, sub in sorted(entry["subcategories"].items(), key=lambda kv: kv[1]["order"]):
-            score, why = 0, []
-            for kw in sub.get("keywords", []):
-                first = kw.lower().split()[0] if kw.split() else ""
-                if first not in low_title and first not in low_summary:
-                    continue   # the pattern needs its first word verbatim, so it cannot match: skip compiling it
-                rx = _word(kw)
-                if rx.search(low_title):
-                    score, why = score + 2, why + [f"title has {kw!r}"]
-                elif rx.search(low_summary):
-                    score, why = score + 1, why + [f"summary has {kw!r}"]
-            scores.setdefault(cid, {})[sid] = score
-            reasons[(cid, sid)] = why
+    for cid, sid, sub in active:
+        score, why = 0, []
+        for kw in sub.get("keywords", []):
+            spot = where.get((cid, sid, kw))
+            if spot is not None:
+                score, why = score + (2 if spot == "title" else 1), why + [f"{spot} has {kw!r}"]
+        scores.setdefault(cid, {})[sid] = score
+        reasons[(cid, sid)] = why
 
     def pick(options: dict[str, int], preferred: str | None) -> tuple[str | None, int]:
         best, best_score = None, 0
