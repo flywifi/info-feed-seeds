@@ -58,6 +58,13 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- `hub retag [--state-dir DIR] [--since DAYS] [--dry-run]` reads stored items again with the current
+  category registry and tag readers, from the same inputs the classification report's reread uses,
+  and rewrites only the content category columns (and the source pair of a row placed before content
+  categories) and the tag columns, never the hits, guard columns or hashes, and never fetches. It
+  prints a count per changed column and the most common category moves. `hub poll` runs it after
+  polling and before selecting and rendering, so stored items, including those from feeds that
+  answer not-modified, publish under the current rules.
 - Classification report: `report.json` gains `classification`, counts over the items in
   `latest.json` of each content category, the content categories under each source category, the
   basis of each level, items moved out of their source category, items without a content category

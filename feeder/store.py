@@ -169,6 +169,29 @@ class Store:
             " WHERE content_sha256 = ?", values + tuple(extra.values()) + (rec["content_sha256"],))
         return False
 
+    def rows_since(self, cutoff: str | None) -> list[dict]:
+        """Stored items whose first_seen or published day is on or after `cutoff` (YYYY-MM-DD), or every
+        item when it is None, in sha order. Columns keep their stored form (lists comma-joined)."""
+        where = " WHERE substr(first_seen, 1, 10) >= ? OR substr(COALESCE(published, ''), 1, 10) >= ?" if cutoff else ""
+        rows = self.conn.execute(f"SELECT * FROM items{where} ORDER BY content_sha256", (cutoff, cutoff) if cutoff else ())
+        return [dict(r) for r in rows]
+
+    @staticmethod
+    def stored_form(name: str, value):
+        """A filter column's value as the store keeps it (lists comma-joined and lower case, exploited 1 or NULL)."""
+        return _column_value(name, value)
+
+    def update_columns(self, sha: str, values: dict) -> None:
+        """Write only the named filter columns of one item; every other column, and its hits, stay as they are."""
+        known = {name for name, _ in NEW_COLUMNS}
+        unknown = sorted(set(values) - known)
+        if unknown:
+            raise StoreError(f"not a filter column: {', '.join(unknown)}")
+        if values:
+            sets = ", ".join(f"{name} = ?" for name in values)
+            self.conn.execute(f"UPDATE items SET {sets} WHERE content_sha256 = ?",
+                              tuple(_column_value(n, v) for n, v in values.items()) + (sha,))
+
     def items_for_feeds(self, feed_ids: list[str]) -> list[dict]:
         if not feed_ids:
             return []
