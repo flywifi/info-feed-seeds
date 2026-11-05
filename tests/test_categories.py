@@ -141,6 +141,28 @@ class ContentCategoryTests(unittest.TestCase):
         self.assertEqual((placed["category"], placed["subcategory"]), ("attacks", "scams"))
 
 
+    def test_keywords_that_decide_only_the_category_are_its_reasons(self):
+        got = self.place("Weekly roundup", "a breach and a phishing lure", ("attacks", "threat-research"))
+        self.assertEqual((got["category"], got["subcategory"], got["category_basis"], got["subcategory_basis"]),
+                         ("attacks", "threat-research", "item", "source"))
+        self.assertEqual(sorted(got["reasons"]), ["summary has 'breach'", "summary has 'phishing'"])
+
+    def test_a_keyword_still_matches_across_hyphens_and_spacing(self):
+        for title in ("Ransomware-victim posted", "Ransomware   victim posted", "RANSOMWARE VICTIM posted"):
+            with self.subTest(title=title):
+                self.assertIn("title has 'ransomware victim'", self.place(title, "", ("attacks", "breaches"))["reasons"])
+
+    def test_a_thousand_items_are_placed_in_under_a_second(self):
+        import time
+        words = ["breach", "advisory", "patch", "quarterly", "rule", "firmware", "phishing", "report", "cloud"]
+        texts = [(f"Item {i} {words[i % 9]} notice", " ".join(words[(i + k) % 9] for k in range(40)))
+                 for i in range(1000)]
+        start = time.perf_counter()
+        for title, summary in texts:
+            categories.content_category(REG, title, summary, "vulnerabilities", "vendor-advisories")
+        self.assertLess(time.perf_counter() - start, 1.0)
+
+
 class AddEntryTests(unittest.TestCase):
     def test_add_a_subcategory_to_an_existing_category(self):
         new = categories.add_entry(REG, "technology/robotics", label="Robotics", note="robots and automation",

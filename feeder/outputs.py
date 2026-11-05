@@ -121,9 +121,10 @@ def item_view(row: dict, source, profile: dict, released: set[str], reg: dict | 
     authors = [a for a in (items.sanitize(a, redact_emails=True) for a in row.get("authors") or []) if a]
     reread = None
     if reg is not None:
-        # The source pair the item was placed against at ingest, else the manifest's for an older row.
-        src_cat = row.get("source_category") or manifest.get("source_category")
-        src_sub = row.get("source_subcategory") if row.get("source_category") else manifest.get("source_subcategory")
+        if row.get("content_category_basis") is not None:   # placed at ingest: the pair it was placed against
+            src_cat, src_sub = row.get("source_category"), row.get("source_subcategory")
+        else:                                                # stored before content categories were read
+            src_cat, src_sub = manifest.get("source_category"), manifest.get("source_subcategory")
         placed = categories.content_category(reg, row.get("title"), row.get("summary"), src_cat, src_sub)
         reread = {"content": _pair(placed["category"], placed["subcategory"]), "reasons": placed["reasons"]}
     return {
@@ -287,8 +288,9 @@ def classification_of(views: list[dict]) -> dict:
             basis[level][name] = basis[level].get(name, 0) + 1
         if cats["content"] is None:
             unlabelled += 1
-        elif cats["content"].split("/")[0] != (cats["source"] or "").split("/")[0]:
-            moved += 1
+        elif (cats["content_basis"]["category"] == "item" and cats["source"]
+              and cats["content"].split("/")[0] != cats["source"].split("/")[0]):
+            moved += 1   # only a category the item text chose, against the feed's source category
         if cats["reread"] is not None and cats["reread"]["content"] != cats["content"]:
             differs += 1
     return {"items": len(shown), "content": dict(sorted(content.items())),

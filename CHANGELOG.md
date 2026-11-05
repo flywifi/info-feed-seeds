@@ -53,7 +53,9 @@ All notable changes to this repository are recorded here. The format follows
   basis of each level, items moved out of their source category, items without a content category
   and items the current category rules would now place elsewhere. Each `latest.json` item gains
   `categories.reread`: the content category the current rules give its stored text, with the
-  keywords that decided it.
+  keywords that decided it (all of the category's keywords when they decide the category but no
+  single subcategory). Only a category the item text chose counts as moved. Placing an item skips
+  a keyword whose first word is not in its text, so ingest and the reread stay fast on large days.
 - Routing by content category: a profile's `content_categories` list (category or
   category/subcategory) routes into its digest only the items whose own content category it names,
   and `exclude_content_categories` keeps items out, winning over an inclusion. An item stored before

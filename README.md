@@ -332,7 +332,8 @@ Each item's `categories.reread` reads its stored title and summary again with th
 found in the title or summary, or the fallback to the source category). `report.json` carries
 `classification`, counts only, over the items in `latest.json`: each content category, the content
 categories under each source category, the basis of each level (item text, source or none), how
-many the item text moved out of their source category, how many have no content category, and how
+many the item text moved out of their source category (a category the text chose, not a fallback
+or a subcategory change), how many have no content category, and how
 many the current rules would now place elsewhere (`rules_now_differ`, items stored before a
 registry change keep the category they were given at ingest).
 

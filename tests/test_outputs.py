@@ -155,6 +155,25 @@ class ClassificationTests(unittest.TestCase):
         self.assertEqual(old["categories"]["reread"]["content"], "vulnerabilities/vendor-advisories")
         self.assertEqual(got["rules_now_differ"], 1, "the item without a category would now get one")
 
+    def test_moved_counts_only_a_category_the_text_chose(self):
+        same_category = placed("Scored", "vulnerabilities", "scoring", "item", sha="6" * 64)
+        by_source = placed("Quarterly newsletter", "attacks", "breaches", "source", sha="7" * 64,
+                           source_category="attacks", source_subcategory="breaches")
+        got = outputs.classification_of([same_category, by_source])
+        self.assertEqual(got["moved_out_of_source_category"], 0, "a subcategory change or a source fallback moves nothing")
+        moved = placed("Phishing scam wave", "attacks", "scams", "item", sha="8" * 64)
+        orphan = outputs.item_view(dict(row("Phishing scam wave", sha="9" * 64), content_category="attacks",
+                                        content_subcategory="scams", content_category_basis="item",
+                                        content_subcategory_basis="item"), None, PROFILE, set(), REG)
+        self.assertEqual(outputs.classification_of([moved, orphan])["moved_out_of_source_category"], 1,
+                         "an item whose feed is gone has no source category to leave")
+
+    def test_a_row_placed_against_a_feed_without_a_source_category_is_reread_the_same(self):
+        view = placed("Quarterly newsletter", None, None, "source", source_category=None, source_subcategory=None)
+        self.assertIsNone(view["categories"]["reread"]["content"], "the manifest's pair is not borrowed")
+        got = outputs.classification_of([view])
+        self.assertEqual((got["rules_now_differ"], got["without_content_category"]), (0, 1))
+
     def test_without_the_registry_nothing_is_reread(self):
         view = outputs.item_view(row("Phishing scam wave"), CAT_SOURCE, PROFILE, set())
         self.assertIsNone(view["categories"]["reread"])

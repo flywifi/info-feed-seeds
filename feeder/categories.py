@@ -177,6 +177,9 @@ def content_category(reg: dict, title: str, summary: str, source_category: str |
         for sid, sub in sorted(entry["subcategories"].items(), key=lambda kv: kv[1]["order"]):
             score, why = 0, []
             for kw in sub.get("keywords", []):
+                first = kw.lower().split()[0] if kw.split() else ""
+                if first not in low_title and first not in low_summary:
+                    continue   # the pattern needs its first word verbatim, so it cannot match: skip compiling it
                 rx = _word(kw)
                 if rx.search(low_title):
                     score, why = score + 2, why + [f"title has {kw!r}"]
@@ -206,6 +209,9 @@ def content_category(reg: dict, title: str, summary: str, source_category: str |
     else:
         subcategory, subcategory_basis = sid, "item"
     why = reasons.get((category, subcategory), []) if "item" in (category_basis, subcategory_basis) else []
+    if not why and category_basis == "item":
+        # The keywords decided the category but no single subcategory: they are the reasons.
+        why = [r for (cid, _), rs in reasons.items() if cid == category for r in rs]
     return {"category": category, "subcategory": subcategory, "category_basis": category_basis,
             "subcategory_basis": subcategory_basis,
             "reasons": why or ["no signal in the item text; the source category and source subcategory"]}
