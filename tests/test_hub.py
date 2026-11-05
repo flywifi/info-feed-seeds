@@ -1146,6 +1146,73 @@ class RetagTests(HubTestCase):
         self.assertEqual(self.poll(), 0)
         self.assertIn("0 new today", self.output)
 
+    def test_tags_are_read_from_sanitized_text(self):
+        sha = self.plant(13, "Router advisory", "Severity: <b>critical</b>, exploited&nbsp;in the wild", **self.PLACED)
+        self.assertEqual(self.retag(), 0)
+        row = self.stored(sha)
+        self.assertEqual((row["severity"], row["exploited"]), ("critical", True))
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("0 changed", self.output)
+
+    def test_a_recent_published_date_brings_an_old_row_into_the_window(self):
+        sha = self.plant(14, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z",
+                         published="2026-10-19T00:00:00Z", **self.PLACED)
+        self.assertEqual(self.retag("--since", "30"), 0)
+        self.assertEqual(self.stored(sha)["content_category"], "attacks")
+
+    def test_a_future_published_date_does_not_keep_an_old_row_in_the_window(self):
+        sha = self.plant(15, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z",
+                         published="2027-01-01T00:00:00Z", **self.PLACED)
+        self.assertEqual(self.retag("--since", "30"), 0)
+        self.assertEqual(self.stored(sha)["content_category"], "vulnerabilities")
+
+    def test_the_default_window_is_the_largest_profile_window(self):
+        path = self.root / "profiles" / "tr.json"
+        prof = jsonio.load_json(path)
+        prof["window_days"] = 90
+        jsonio.dump_json(path, prof)
+        sha = self.plant(16, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z", **self.PLACED)
+        self.assertEqual(self.retag(), 0)
+        self.assertEqual(self.stored(sha)["content_category"], "attacks")
+
+    def test_a_local_profile_the_poll_runs_widens_the_window(self):
+        wide = dict(self.profile, name="tr-wide", window_days=90)
+        jsonio.dump_json(self.root / "profiles" / "tr-wide.local.json", wide)
+        sha = self.plant(17, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z", **self.PLACED)
+        self.script["https://example.gov/alpha.xml"] = "not-modified"
+        self.assertEqual(self.run_hub("poll", "--profile", "tr-wide", "--date", DAY, "--state-dir", str(self.state),
+                                      "--out-dir", str(self.out)), 0)
+        self.assertEqual(self.stored(sha)["content_category"], "attacks", "rows 31 to 90 days old are read again")
+
+    def test_a_failing_retag_does_not_stop_the_publish(self):
+        with mock.patch.object(hub, "retag_rows", side_effect=RuntimeError("boom")), \
+                mock.patch.object(hub, "warn") as warned:
+            self.assertEqual(self.poll(), 0)
+        self.assertTrue((self.out / "tr" / "report.json").exists())
+        self.assertIn("retag: skipped, RuntimeError: boom", [c.args[0] for c in warned.call_args_list])
+
+    def test_a_huge_window_reads_every_row(self):
+        sha = self.plant(18, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z", **self.PLACED)
+        self.assertEqual(self.retag("--since", "800000"), 0)
+        self.assertEqual(self.stored(sha)["content_category"], "attacks")
+
+    def test_only_retag_columns_can_be_written(self):
+        sha = self.plant(19, "Note", **self.PLACED)
+        store = Store.open(self.state)
+        try:
+            for name in ("title", "standards", "guard_level", "first_seen"):
+                with self.subTest(name=name), self.assertRaises(hub.StoreError):
+                    store.update_columns(sha, {name: "x"})
+        finally:
+            store.close()
+
+    def test_keyword_patterns_are_compiled_once(self):
+        hub.categories._word.cache_clear()
+        reg = hub.Repo(root=self.root).categories()
+        for _ in range(2):
+            hub.categories.content_category(reg, "Phishing scam wave", "", "attacks", "scams")
+        self.assertGreater(hub.categories._word.cache_info().hits, 0)
+
     def test_retag_refuses_a_missing_database_and_a_negative_window(self):
         self.assertEqual(self.retag(), 2)
         self.plant(10, "Note")

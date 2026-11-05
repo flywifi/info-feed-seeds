@@ -54,6 +54,11 @@ NEW_COLUMNS = (
     ("deadline", "TEXT"),
     ("updated", "TEXT"),
 )
+# The filter columns hub retag may rewrite: the content category with its basis, the source pair of a
+# row placed before content categories, and the tag columns. Hashes, text, guard and hit data are not here.
+RETAG_COLUMNS = ("content_category", "content_subcategory", "content_category_basis", "content_subcategory_basis",
+                 "source_category", "source_subcategory", "cves", "severity", "severity_rank", "exploited",
+                 "vendors", "deadline")
 LIST_COLUMNS = ("industries", "standards", "editions", "change_types", "cves", "vendors", "link_hosts")
 INDEXES = (
     "CREATE INDEX IF NOT EXISTS items_published ON items(published)",
@@ -169,11 +174,17 @@ class Store:
             " WHERE content_sha256 = ?", values + tuple(extra.values()) + (rec["content_sha256"],))
         return False
 
-    def rows_since(self, cutoff: str | None) -> list[dict]:
-        """Stored items whose first_seen or published day is on or after `cutoff` (YYYY-MM-DD), or every
-        item when it is None, in sha order. Columns keep their stored form (lists comma-joined)."""
-        where = " WHERE substr(first_seen, 1, 10) >= ? OR substr(COALESCE(published, ''), 1, 10) >= ?" if cutoff else ""
-        rows = self.conn.execute(f"SELECT * FROM items{where} ORDER BY content_sha256", (cutoff, cutoff) if cutoff else ())
+    def rows_since(self, cutoff: str | None, today: str | None = None) -> list[dict]:
+        """Stored items first seen on or after `cutoff` (YYYY-MM-DD), or published between `cutoff` and
+        `today` (a future date does not keep a row in the window), or every item when `cutoff` is None, in
+        sha order. Columns keep their stored form (lists comma-joined)."""
+        if cutoff is None:
+            rows = self.conn.execute("SELECT * FROM items ORDER BY content_sha256")
+        else:
+            rows = self.conn.execute(
+                "SELECT * FROM items WHERE substr(first_seen, 1, 10) >= ?"
+                " OR substr(COALESCE(published, ''), 1, 10) BETWEEN ? AND ? ORDER BY content_sha256",
+                (cutoff, cutoff, today or "9999-12-31"))
         return [dict(r) for r in rows]
 
     @staticmethod
@@ -182,11 +193,11 @@ class Store:
         return _column_value(name, value)
 
     def update_columns(self, sha: str, values: dict) -> None:
-        """Write only the named filter columns of one item; every other column, and its hits, stay as they are."""
-        known = {name for name, _ in NEW_COLUMNS}
-        unknown = sorted(set(values) - known)
+        """Write only the named retag columns of one item; every other column, and its hits, stay as they
+        are. A name outside RETAG_COLUMNS is refused."""
+        unknown = sorted(set(values) - set(RETAG_COLUMNS))
         if unknown:
-            raise StoreError(f"not a filter column: {', '.join(unknown)}")
+            raise StoreError(f"not a retag column: {', '.join(unknown)}")
         if values:
             sets = ", ".join(f"{name} = ?" for name in values)
             self.conn.execute(f"UPDATE items SET {sets} WHERE content_sha256 = ?",
@@ -298,4 +309,4 @@ def _item_row(row: sqlite3.Row) -> dict:
     return rec
 
 
-__all__ = ["DB_NAME", "LIST_COLUMNS", "NEW_COLUMNS", "SCHEMA", "SCHEMA_VERSION", "Store", "StoreError", "migrate"]
+__all__ = ["DB_NAME", "LIST_COLUMNS", "NEW_COLUMNS", "RETAG_COLUMNS", "SCHEMA", "SCHEMA_VERSION", "Store", "StoreError", "migrate"]

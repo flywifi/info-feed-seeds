@@ -64,7 +64,9 @@ All notable changes to this repository are recorded here. The format follows
   categories) and the tag columns, never the hits, guard columns or hashes, and never fetches. It
   prints a count per changed column and the most common category moves. `hub poll` runs it after
   polling and before selecting and rendering, so stored items, including those from feeds that
-  answer not-modified, publish under the current rules.
+  answer not-modified, publish under the current rules; its window covers every profile the poll
+  runs, local ones included, and a retag that fails is reported while the day still publishes.
+  Keyword patterns are compiled once per process.
 - Classification report: `report.json` gains `classification`, counts over the items in
   `latest.json` of each content category, the content categories under each source category, the
   basis of each level, items moved out of their source category, items without a content category

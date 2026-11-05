@@ -15,6 +15,7 @@ The registry is used two ways, and the two are kept apart:
 from __future__ import annotations
 
 import copy
+import functools
 import json
 import re
 from pathlib import Path
@@ -120,6 +121,7 @@ def registry_problems(reg: dict, topic_tags: set[str] | None = None) -> list[str
     return problems
 
 
+@functools.lru_cache(maxsize=4096)
 def _word(phrase: str) -> re.Pattern:
     return re.compile(r"(?<!\w)" + r"[\s-]+".join(re.escape(w) for w in phrase.lower().split()) + r"(?!\w)")
 

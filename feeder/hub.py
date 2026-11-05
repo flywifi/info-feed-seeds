@@ -35,7 +35,7 @@ from feeder import ROOT, adapters, categories, extract, guard, items, jsonio, ou
 from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, content_routed,  # noqa: E402
                            item_tags, json_files, lint, selected_sources)
 from feeder.schema_validate import validate  # noqa: E402
-from feeder.store import DB_NAME, Store, StoreError  # noqa: E402
+from feeder.store import DB_NAME, RETAG_COLUMNS, Store, StoreError  # noqa: E402
 
 EXIT_OK, EXIT_DEFECT, EXIT_CONFIG, EXIT_ALL_FAILED = 0, 1, 2, 3
 DEFAULT_STATE_DIR = ROOT / ".cache"
@@ -276,17 +276,13 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
 
 # --------------------------------------------------------------------------- retag
 
-RETAG_COLUMNS = ("content_category", "content_subcategory", "content_category_basis", "content_subcategory_basis",
-                 "source_category", "source_subcategory", "cves", "severity", "severity_rank", "exploited",
-                 "vendors", "deadline")
-
-
 def _pair_text(category, subcategory) -> str:
     return (f"{category}/{subcategory}" if subcategory else category) if category else "none"
 
 
 def retag_window(repo: Repo) -> int:
-    """The default retag window in days: the largest window_days of any profile (30 when none loads)."""
+    """The default retag window in days: the largest window_days of the tracked profiles (30 when none
+    loads); the poll also counts every profile it runs, local ones included."""
     days = []
     for name in repo.profile_names():
         try:
@@ -304,11 +300,12 @@ def retag_rows(store: Store, repo: Repo, sources: dict, today: date, since_days:
     Returns {"read", "changed", "columns": {name: count}, "moves": {(old, new): count}}."""
     reg = repo.categories()
     vendor_names = extract.load_vendors(repo.schema_dir / "vendors.json") or {}
-    cutoff = None if since_days == 0 else (today - timedelta(days=since_days)).isoformat()
+    every = since_days == 0 or since_days >= (today - date.min).days
+    cutoff = None if every else (today - timedelta(days=since_days)).isoformat()
     columns: dict[str, int] = {}
     moves: dict[tuple[str, str], int] = {}
     read = changed = 0
-    for row in store.rows_since(cutoff):
+    for row in store.rows_since(cutoff, today.isoformat()):
         read += 1
         new: dict = {}
         if reg is not None:
@@ -489,8 +486,14 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
             fetcher.save()
 
     # Stored rows are read again with the current registry and readers before any day is selected or
-    # rendered, so a feed that answered not-modified still publishes under today's rules.
-    report_retag(retag_rows(store, repo, sources, date.fromisoformat(day), retag_window(repo)))
+    # rendered, so a feed that answered not-modified still publishes under today's rules. The window
+    # covers every profile this poll runs, local ones included. A retag that fails leaves the rows with
+    # their ingest categories and tags; the day still publishes.
+    window = max([retag_window(repo)] + [int(p.get("window_days", 0)) for p in profiles])
+    try:
+        report_retag(retag_rows(store, repo, sources, date.fromisoformat(day), window))
+    except Exception as exc:  # noqa: BLE001 - the publish never depends on a reread
+        warn(f"retag: skipped, {type(exc).__name__}: {exc}")
 
     written: list[Path] = []
     summary_rows = []
