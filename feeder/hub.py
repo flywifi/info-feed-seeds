@@ -281,11 +281,12 @@ def render_day(store: Store, repo: Repo, profile: dict, sources: dict, day: str,
     chosen = selected_sources(profile, sources)
     by_id = {s.id: s for s in chosen}
     views = []
+    reg = repo.categories()
     for row in store.hits_for_day(profile["name"], day):
         src = by_id.get(row["feed_id"]) or sources.get(row["feed_id"])
         if src is not None:
             row["primary"] = item_tags(profile, src, row)[1]
-        views.append(outputs.item_view(row, src, profile, released))
+        views.append(outputs.item_view(row, src, profile, released, reg))
     health = outputs.health_entries(chosen, store.health_for_day(day))
     coverage = outputs.coverage_of(views, health)
     transitions = []

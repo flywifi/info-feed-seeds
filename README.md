@@ -327,6 +327,15 @@ critical, from a severity word or a CVSS score), `exploited`, `vendors` (ids fro
 `schema/vendors.json`) and `deadline`. A tag the text does not state stays empty. The `coverage` block counts,
 over the items in `latest.json`, how many each tag reader filled (`tagged`) and how many content categories
 came from the item's own text rather than its source (`content_category_from_item_text`).
+Each item's `categories.reread` reads its stored title and summary again with the current
+`schema/categories.json`: the content category those rules give and the reasons (the keywords
+found in the title or summary, or the fallback to the source category). `report.json` carries
+`classification`, counts only, over the items in `latest.json`: each content category, the content
+categories under each source category, the basis of each level (item text, source or none), how
+many the item text moved out of their source category (a category the text chose, not a fallback
+or a subcategory change), how many have no content category, and how
+many the current rules would now place elsewhere (`rules_now_differ`, items stored before a
+registry change keep the category they were given at ingest).
 
 Once the poll workflow publishes the `data` branch, digests are served at:
 
