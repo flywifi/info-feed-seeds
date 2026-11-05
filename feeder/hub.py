@@ -35,7 +35,7 @@ from feeder import ROOT, adapters, categories, extract, guard, items, jsonio, ou
 from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, content_routed,  # noqa: E402
                            item_tags, json_files, lint, selected_sources)
 from feeder.schema_validate import validate  # noqa: E402
-from feeder.store import DB_NAME, Store, StoreError  # noqa: E402
+from feeder.store import DB_NAME, RETAG_COLUMNS, Store, StoreError  # noqa: E402
 
 EXIT_OK, EXIT_DEFECT, EXIT_CONFIG, EXIT_ALL_FAILED = 0, 1, 2, 3
 DEFAULT_STATE_DIR = ROOT / ".cache"
@@ -274,6 +274,103 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
     return added
 
 
+# --------------------------------------------------------------------------- retag
+
+def _pair_text(category, subcategory) -> str:
+    return (f"{category}/{subcategory}" if subcategory else category) if category else "none"
+
+
+def retag_window(repo: Repo) -> int:
+    """The default retag window in days: the largest window_days of the tracked profiles (30 when none
+    loads); the poll also counts every profile it runs, local ones included."""
+    days = []
+    for name in repo.profile_names():
+        try:
+            days.append(int(repo.load_profile(name).get("window_days", 0)))
+        except (ConfigError, TypeError, ValueError):
+            continue
+    return max(days) if days else 30
+
+
+def retag_rows(store: Store, repo: Repo, sources: dict, today: date, since_days: int, *, write: bool = True) -> dict:
+    """Read stored rows again with the current category registry and tag readers, from the same inputs
+    the renderer's reread uses: the stored title and summary, against the source pair stored at ingest
+    (the manifest's pair, which is then written too, for a row placed before content categories). Only
+    the category, basis and tag columns change; nothing is fetched. `since_days` 0 reads every row.
+    Returns {"read", "changed", "columns": {name: count}, "moves": {(old, new): count}}."""
+    reg = repo.categories()
+    vendor_names = extract.load_vendors(repo.schema_dir / "vendors.json") or {}
+    every = since_days == 0 or since_days >= (today - date.min).days
+    cutoff = None if every else (today - timedelta(days=since_days)).isoformat()
+    columns: dict[str, int] = {}
+    moves: dict[tuple[str, str], int] = {}
+    read = changed = 0
+    for row in store.rows_since(cutoff, today.isoformat()):
+        read += 1
+        new: dict = {}
+        if reg is not None:
+            if row.get("content_category_basis") is not None:
+                src_cat, src_sub = row.get("source_category"), row.get("source_subcategory")
+            else:
+                src = sources.get(row["feed_id"])
+                manifest = src.manifest if src is not None else {}
+                src_cat, src_sub = manifest.get("source_category"), manifest.get("source_subcategory")
+                new.update(source_category=src_cat, source_subcategory=src_sub)
+            placed = categories.content_category(reg, row.get("title"), row.get("summary"), src_cat, src_sub)
+            new.update(content_category=placed["category"], content_subcategory=placed["subcategory"],
+                       content_category_basis=placed["category_basis"],
+                       content_subcategory_basis=placed["subcategory_basis"])
+        new.update(extract.tags(items.sanitize(row.get("title")), items.sanitize(row.get("summary")), vendor_names))
+        diff = {name: value for name, value in new.items() if Store.stored_form(name, value) != row.get(name)}
+        if not diff:
+            continue
+        changed += 1
+        for name in diff:
+            columns[name] = columns.get(name, 0) + 1
+        old = _pair_text(row.get("content_category"), row.get("content_subcategory"))
+        now = _pair_text(new.get("content_category", row.get("content_category")),
+                         new.get("content_subcategory", row.get("content_subcategory")))
+        if old != now:
+            moves[(old, now)] = moves.get((old, now), 0) + 1
+        if write:
+            store.update_columns(row["content_sha256"], diff)
+    return {"read": read, "changed": changed, "columns": columns, "moves": moves}
+
+
+def report_retag(result: dict) -> None:
+    say(f"retag: {result['read']} row(s) read, {result['changed']} changed")
+    for name in RETAG_COLUMNS:
+        if result["columns"].get(name):
+            say(f"  {name}: {result['columns'][name]}")
+    for (old, now), count in sorted(result["moves"].items(), key=lambda kv: (-kv[1], kv[0]))[:20]:
+        say(f"  content: {old} -> {now}: {count}")
+
+
+def cmd_retag(args, repo: Repo, now_fn) -> int:
+    state_dir = Path(args.state_dir) if args.state_dir else DEFAULT_STATE_DIR
+    if args.since is not None and args.since < 0:
+        warn("retag: --since takes 0 (every row) or a number of days")
+        return EXIT_CONFIG
+    if not (state_dir / DB_NAME).exists():
+        warn(f"retag: {state_dir.as_posix()}/{DB_NAME} does not exist")
+        return EXIT_CONFIG
+    try:
+        sources = repo.load_sources()
+        store = Store.open(state_dir, in_memory_copy=args.dry_run)
+    except (ConfigError, StoreError) as exc:
+        warn(f"retag: {exc}")
+        return EXIT_CONFIG
+    since = retag_window(repo) if args.since is None else args.since
+    result = retag_rows(store, repo, sources, now_fn().date(), since, write=not args.dry_run)
+    report_retag(result)
+    if args.dry_run:
+        say("retag: dry run, nothing written")
+        store.conn.close()
+    else:
+        store.close()
+    return EXIT_OK
+
+
 # --------------------------------------------------------------------------- rendering
 
 def render_day(store: Store, repo: Repo, profile: dict, sources: dict, day: str, released: set[str],
@@ -387,6 +484,16 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
             say(f"poll {sid}: {rec['status']}, {detail}{count}")
         if fetcher is not None and not args.dry_run:
             fetcher.save()
+
+    # Stored rows are read again with the current registry and readers before any day is selected or
+    # rendered, so a feed that answered not-modified still publishes under today's rules. The window
+    # covers every profile this poll runs, local ones included. A retag that fails leaves the rows with
+    # their ingest categories and tags; the day still publishes.
+    window = max([retag_window(repo)] + [int(p.get("window_days", 0)) for p in profiles])
+    try:
+        report_retag(retag_rows(store, repo, sources, date.fromisoformat(day), window))
+    except Exception as exc:  # noqa: BLE001 - the publish never depends on a reread
+        warn(f"retag: skipped, {type(exc).__name__}: {exc}")
 
     written: list[Path] = []
     summary_rows = []
@@ -679,6 +786,11 @@ def build_parser() -> argparse.ArgumentParser:
     poll.add_argument("--dry-run", action="store_true", help="write nothing (database, outputs or state)")
     poll.add_argument("--summary", help="write a Markdown run summary to this file")
     poll.add_argument("--commit-msg", help="write a commit message for the data branch to this file")
+    rt = sub.add_parser("retag", help="read stored items again with the current categories and tag readers")
+    rt.add_argument("--state-dir", help="where feeder.db lives (default .cache)")
+    rt.add_argument("--since", type=int, help="days back by first_seen or published (default: the largest "
+                    "window_days of any profile; 0 reads every row)")
+    rt.add_argument("--dry-run", action="store_true", help="print what would change and write nothing")
     sub.add_parser("lint", help="validate sources, profiles and releases")
     fmt = sub.add_parser("fmt", help="rewrite config JSON in canonical form")
     fmt.add_argument("--check", action="store_true")
@@ -718,6 +830,8 @@ def main(argv: list[str] | None = None, *, root: Path | None = None, fetcher_fac
     now_fn = now_fn or utc_now
     if args.command == "poll":
         return cmd_poll(args, repo, fetcher_factory or default_fetcher_factory, now_fn)
+    if args.command == "retag":
+        return cmd_retag(args, repo, now_fn)
     if args.command == "lint":
         return cmd_lint(args, repo)
     if args.command == "fmt":

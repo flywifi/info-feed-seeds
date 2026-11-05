@@ -83,6 +83,19 @@ Other commands:
 - `hub categories` lists the category registry; `hub categories add category/subcategory --label L --note N`
   extends it.
 - `hub release SHA --reason TEXT` releases a held item by its `content_sha256`.
+- `hub retag [--state-dir DIR] [--since DAYS] [--dry-run]` reads stored items again with the current
+  `schema/categories.json`, `schema/vendors.json` and tag readers: each row's stored title and summary,
+  against the source pair stored with it at ingest (the manifest's, which is then written too, for a row
+  placed before content categories). It rewrites only the content category and subcategory with their
+  basis, that source pair, and the tag columns (CVE ids, severity and its rank, exploited, vendors,
+  deadline); hits, the shown state, guard columns and hashes stay as they are, and nothing is fetched.
+  `--since` counts days back by `first_seen` or `published` (default: the largest `window_days` of the
+  tracked profiles and of any profile the poll runs; 30 when none loads; 0 reads every row). It prints the rows read and changed, a count per changed column and the
+  most common content category moves; `--dry-run` prints the same and writes nothing. `hub poll` runs
+  the same retag after it polls and before it selects and renders, so a feed that answers not-modified
+  still publishes under the current rules; a retag that fails is reported and the day still publishes.
+  After a registry or reader change, re-rendered earlier days show the new categories and tags, and
+  stored items inside the window that now qualify can enter today's digest.
 
 Run the tests with `python3 -m unittest discover -s tests -t .`.
 

@@ -7,7 +7,8 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from feeder import adapters, hub, jsonio
+from feeder import adapters, hub, jsonio, outputs
+from feeder.store import Store
 from feeder.items import RawItem
 from unittest import mock
 from feeder.config import RELEASES_COMMENT
@@ -944,17 +945,19 @@ class PollTests(HubTestCase):
         self.assertEqual(reread["Quarterly newsletter"]["reasons"],
                          ["no signal in the item text; the source category and source subcategory"])
 
-    def test_the_report_shows_items_the_current_rules_would_place_elsewhere(self):
+    def test_poll_retags_stored_rows_before_it_renders(self):
         self.routed_titles()
         path = self.root / "schema" / "categories.json"
         reg = jsonio.load_json(path)
         reg["categories"]["guidance"]["subcategories"]["explainers"]["keywords"].append("newsletter")
         jsonio.dump_json(path, reg)
-        self.script["https://example.gov/alpha.xml"] = "not-modified"   # nothing is read again; the stored rows stay
+        self.script["https://example.gov/alpha.xml"] = "not-modified"   # nothing is read again from the feed
         self.assertEqual(self.poll(), 0)
-        self.assertEqual(jsonio.load_json(self.out / "tr" / "report.json")["classification"]["rules_now_differ"], 1)
+        self.assertIn("retag: 3 row(s) read, 1 changed", self.output)
+        self.assertLess(self.output.index("retag:"), self.output.index("digest tr"), "retag runs before rendering")
+        self.assertEqual(jsonio.load_json(self.out / "tr" / "report.json")["classification"]["rules_now_differ"], 0)
         cats = {i["title_display"]: i["categories"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]}
-        self.assertEqual(cats["Quarterly newsletter"]["content"], "vulnerabilities/vendor-advisories", "kept from ingest")
+        self.assertEqual(cats["Quarterly newsletter"]["content"], "guidance/explainers", "the published day uses the new rules")
         self.assertEqual(cats["Quarterly newsletter"]["reread"],
                          {"content": "guidance/explainers", "reasons": ["title has 'newsletter'"]})
 
@@ -1010,6 +1013,225 @@ class PollTests(HubTestCase):
         latest = jsonio.load_json(self.out / "tr" / "latest.json")
         self.assertEqual(len(latest["items"]), 2)
         self.assertEqual({i["feed_id"] for i in latest["items"]}, {"alpha"})
+
+
+class RetagTests(HubTestCase):
+    """hub retag reads stored rows again with the current registry and tag readers; nothing is fetched."""
+
+    def plant(self, n, title, summary="", first_seen="2026-10-19T00:00:00Z", published=None, **cols):
+        store = Store.open(self.state)
+        sha = f"{n:064x}"
+        rec = {"content_sha256": sha, "feed_id": "alpha", "guid": f"p{n}", "title": title, "summary": summary,
+               "link": f"https://example.gov/p{n}", "link_key": f"example.gov/p{n}", "published": published,
+               "guard_level": "CLEAN", "guard_score": 0, "authors": [], "route_url": None, "retrieved_at": None}
+        rec.update(cols)
+        store.upsert_item(rec, first_seen=first_seen)
+        store.close()
+        return sha
+
+    def stored(self, sha):
+        store = Store.open(self.state)
+        try:
+            return store.item(sha)
+        finally:
+            store.close()
+
+    def retag(self, *extra):
+        return self.run_hub("retag", "--state-dir", str(self.state), *extra)
+
+    PLACED = {"source_category": "vulnerabilities", "source_subcategory": "vendor-advisories",
+              "content_category": "vulnerabilities", "content_subcategory": "vendor-advisories",
+              "content_category_basis": "source", "content_subcategory_basis": "source"}
+
+    def test_a_row_placed_under_an_older_registry_follows_a_new_keyword(self):
+        sha = self.plant(1, "Quarterly newsletter", **self.PLACED)
+        path = self.root / "schema" / "categories.json"
+        reg = jsonio.load_json(path)
+        reg["categories"]["guidance"]["subcategories"]["explainers"]["keywords"].append("newsletter")
+        jsonio.dump_json(path, reg)
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("retag: 1 row(s) read, 1 changed", self.output)
+        self.assertIn("  content_category: 1", self.output)
+        self.assertIn("  content: vulnerabilities/vendor-advisories -> guidance/explainers: 1", self.output)
+        row = self.stored(sha)
+        self.assertEqual((row["content_category"], row["content_subcategory"], row["content_category_basis"],
+                          row["content_subcategory_basis"]), ("guidance", "explainers", "item", "item"))
+        src = hub.Repo(root=self.root).load_sources()["alpha"]
+        view = outputs.item_view(row, src, self.profile, set(), hub.Repo(root=self.root).categories())
+        self.assertEqual(view["categories"]["reread"], {"content": "guidance/explainers", "reasons": ["title has 'newsletter'"]})
+        self.assertEqual(outputs.classification_of([view])["rules_now_differ"], 0)
+
+    def test_a_stored_ransomware_claim_leaves_breaches(self):
+        sha = self.plant(2, "Ransomware: Acme Tooling GmbH (qilin)", "New ransomware victim disclosed by qilin.",
+                         source_category="attacks", source_subcategory="threat-research", content_category="attacks",
+                         content_subcategory="breaches", content_category_basis="item", content_subcategory_basis="item")
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("  content: attacks/breaches -> attacks/ransomware-claims: 1", self.output)
+        self.assertEqual(self.stored(sha)["content_subcategory"], "ransomware-claims")
+
+    def test_a_dry_run_writes_nothing(self):
+        sha = self.plant(3, "Phishing scam wave targets banks", **self.PLACED)
+        before = (self.state / "feeder.db").read_bytes()
+        self.assertEqual(self.retag("--dry-run"), 0)
+        self.assertIn("retag: 1 row(s) read, 1 changed", self.output)
+        self.assertIn("retag: dry run, nothing written", self.output)
+        self.assertEqual((self.state / "feeder.db").read_bytes(), before)
+        self.assertEqual(self.stored(sha)["content_category"], "vulnerabilities")
+
+    def test_retag_rows_without_write_changes_no_row(self):
+        sha = self.plant(11, "Phishing scam wave targets banks", **self.PLACED)
+        repo = hub.Repo(root=self.root)
+        store = Store.open(self.state)
+        result = hub.retag_rows(store, repo, repo.load_sources(), NOW.date(), 30, write=False)
+        store.close()
+        self.assertEqual((result["read"], result["changed"]), (1, 1))
+        self.assertEqual(self.stored(sha)["content_category"], "vulnerabilities")
+
+    def test_a_second_run_changes_nothing(self):
+        self.plant(4, "Phishing scam wave targets banks", "CVSS:3.1 9.8", **self.PLACED)
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("1 changed", self.output)
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("retag: 1 row(s) read, 0 changed", self.output)
+
+    def test_tag_columns_are_read_again(self):
+        sha = self.plant(5, "Router advisory", "Rated CVSS:3.1 9.8 for CVE-2026-1234.", **self.PLACED)
+        self.assertEqual(self.retag(), 0)
+        row = self.stored(sha)
+        self.assertEqual((row["severity"], row["severity_rank"], row["cves"]), ("critical", 4, ["cve-2026-1234"]))
+        self.assertIn("  severity: 1", self.output)
+
+    def test_rows_outside_the_window_are_untouched(self):
+        old = self.plant(6, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z",
+                         published="2026-08-01T00:00:00Z", **self.PLACED)
+        recent = self.plant(7, "Phishing scam wave targets banks", published="2026-10-19T00:00:00Z", **self.PLACED)
+        self.assertEqual(self.retag("--since", "30"), 0)
+        self.assertEqual((self.stored(old)["content_category"], self.stored(recent)["content_category"]),
+                         ("vulnerabilities", "attacks"))
+        self.assertEqual(self.retag("--since", "0"), 0)
+        self.assertEqual(self.stored(old)["content_category"], "attacks", "0 reads every row")
+
+    def test_a_row_without_a_basis_takes_the_manifest_source_pair(self):
+        sha = self.plant(8, "Quarterly newsletter")
+        self.assertEqual(self.retag(), 0)
+        row = self.stored(sha)
+        self.assertEqual((row["source_category"], row["source_subcategory"], row["content_category"],
+                          row["content_category_basis"]), ("vulnerabilities", "vendor-advisories", "vulnerabilities", "source"))
+        placed = self.plant(9, "Quarterly newsletter", source_category="attacks", source_subcategory="breaches",
+                            content_category="attacks", content_subcategory="breaches", content_category_basis="source",
+                            content_subcategory_basis="source")
+        self.assertEqual(self.retag(), 0)
+        self.assertEqual(self.stored(placed)["source_category"], "attacks", "a placed row keeps its stored source pair")
+        bare = self.plant(12, "Quarterly newsletter", content_category_basis="source", content_subcategory_basis="source")
+        self.assertEqual(self.retag(), 0)
+        self.assertEqual((self.stored(bare)["source_category"], self.stored(bare)["content_category"]), (None, None),
+                         "a row placed against a feed without a source category is not given the manifest's")
+
+    def test_shown_state_is_kept_and_nothing_is_shown_again(self):
+        self.assertEqual(self.poll(), 0)
+        store = Store.open(self.state)
+        hits = sorted(tuple(r) for r in store.conn.execute("SELECT * FROM hits"))
+        store.close()
+        self.assertTrue(hits)
+        path = self.root / "schema" / "categories.json"
+        reg = jsonio.load_json(path)
+        reg["categories"]["guidance"]["subcategories"]["explainers"]["keywords"].append("new cybersecurity framework profile")
+        jsonio.dump_json(path, reg)
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("1 changed", self.output)
+        store = Store.open(self.state)
+        self.assertEqual(sorted(tuple(r) for r in store.conn.execute("SELECT * FROM hits")), hits)
+        store.close()
+        self.script["https://example.gov/alpha.xml"] = "not-modified"
+        self.assertEqual(self.poll(), 0)
+        self.assertIn("0 new today", self.output)
+
+    def test_tags_are_read_from_sanitized_text(self):
+        sha = self.plant(13, "Router advisory", "Severity: <b>critical</b>, exploited&nbsp;in the wild", **self.PLACED)
+        self.assertEqual(self.retag(), 0)
+        row = self.stored(sha)
+        self.assertEqual((row["severity"], row["exploited"]), ("critical", True))
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("0 changed", self.output)
+
+    def test_a_recent_published_date_brings_an_old_row_into_the_window(self):
+        sha = self.plant(14, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z",
+                         published="2026-10-19T00:00:00Z", **self.PLACED)
+        self.assertEqual(self.retag("--since", "30"), 0)
+        self.assertEqual(self.stored(sha)["content_category"], "attacks")
+
+    def test_a_future_published_date_does_not_keep_an_old_row_in_the_window(self):
+        sha = self.plant(15, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z",
+                         published="2027-01-01T00:00:00Z", **self.PLACED)
+        self.assertEqual(self.retag("--since", "30"), 0)
+        self.assertEqual(self.stored(sha)["content_category"], "vulnerabilities")
+
+    def test_the_default_window_is_the_largest_profile_window(self):
+        path = self.root / "profiles" / "tr.json"
+        prof = jsonio.load_json(path)
+        prof["window_days"] = 90
+        jsonio.dump_json(path, prof)
+        sha = self.plant(16, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z", **self.PLACED)
+        self.assertEqual(self.retag(), 0)
+        self.assertEqual(self.stored(sha)["content_category"], "attacks")
+
+    def test_a_local_profile_the_poll_runs_widens_the_window(self):
+        wide = dict(self.profile, name="tr-wide", window_days=90)
+        jsonio.dump_json(self.root / "profiles" / "tr-wide.local.json", wide)
+        sha = self.plant(17, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z", **self.PLACED)
+        self.script["https://example.gov/alpha.xml"] = "not-modified"
+        self.assertEqual(self.run_hub("poll", "--profile", "tr-wide", "--date", DAY, "--state-dir", str(self.state),
+                                      "--out-dir", str(self.out)), 0)
+        self.assertEqual(self.stored(sha)["content_category"], "attacks", "rows 31 to 90 days old are read again")
+
+    def test_a_failing_retag_does_not_stop_the_publish(self):
+        with mock.patch.object(hub, "retag_rows", side_effect=RuntimeError("boom")), \
+                mock.patch.object(hub, "warn") as warned:
+            self.assertEqual(self.poll(), 0)
+        self.assertTrue((self.out / "tr" / "report.json").exists())
+        self.assertIn("retag: skipped, RuntimeError: boom", [c.args[0] for c in warned.call_args_list])
+
+    def test_a_huge_window_reads_every_row(self):
+        sha = self.plant(18, "Phishing scam wave targets banks", first_seen="2026-08-01T00:00:00Z", **self.PLACED)
+        self.assertEqual(self.retag("--since", "800000"), 0)
+        self.assertEqual(self.stored(sha)["content_category"], "attacks")
+
+    def test_only_retag_columns_can_be_written(self):
+        sha = self.plant(19, "Note", **self.PLACED)
+        store = Store.open(self.state)
+        try:
+            for name in ("title", "standards", "guard_level", "first_seen"):
+                with self.subTest(name=name), self.assertRaises(hub.StoreError):
+                    store.update_columns(sha, {name: "x"})
+        finally:
+            store.close()
+
+    def test_keyword_patterns_are_compiled_once(self):
+        hub.categories._word.cache_clear()
+        reg = hub.Repo(root=self.root).categories()
+        for _ in range(2):
+            hub.categories.content_category(reg, "Phishing scam wave", "", "attacks", "scams")
+        self.assertGreater(hub.categories._word.cache_info().hits, 0)
+
+    def test_retag_refuses_a_missing_database_and_a_negative_window(self):
+        self.assertEqual(self.retag(), 2)
+        self.plant(10, "Note")
+        self.assertEqual(self.retag("--since", "-1"), 2)
+
+    def test_five_thousand_rows_retag_in_under_five_seconds(self):
+        import time
+        store = Store.open(self.state)
+        for n in range(5000):
+            store.upsert_item({"content_sha256": f"{n + 100:064x}", "feed_id": "alpha", "guid": f"t{n}",
+                               "title": f"Item {n} breach advisory", "summary": "Rated CVSS:3.1 9.8 for CVE-2026-1234.",
+                               "link": f"https://example.gov/t{n}", "link_key": f"example.gov/t{n}", "published": None,
+                               "guard_level": "CLEAN", "guard_score": 0, "authors": [], "route_url": None,
+                               "retrieved_at": None, **self.PLACED}, first_seen="2026-10-19T00:00:00Z")
+        store.close()
+        start = time.perf_counter()
+        self.assertEqual(self.retag(), 0)
+        self.assertLess(time.perf_counter() - start, 5.0)
+        self.assertIn("retag: 5000 row(s) read, 5000 changed", self.output)
 
 
 class GuardBandTests(HubTestCase):
