@@ -978,7 +978,8 @@ class PollTests(HubTestCase):
         m = jsonio.load_json(self.root / "sources" / "alpha" / "source.json")
         m["industries"] = ["healthcare"]
         jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", m)
-        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"], industries=["finance"])
+        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"],
+                        industries=getattr(self, "gamma_industries", ["finance"]))
         self.add_source("delta", "https://example.gov/delta.xml", ["cybersecurity"])
         self.script.update({"https://example.gov/alpha.xml": rss_with("Hospital advisory"),
                             "https://example.gov/gamma.xml": rss_with("Bank advisory").replace(b"/g0", b"/b0"),
@@ -1003,6 +1004,33 @@ class PollTests(HubTestCase):
         self.assertEqual(sorted(r["industries"] for r in store.conn.execute("SELECT industries FROM items")),
                          ["", "finance", "healthcare"], "the stored form is the comma-joined list")
         store.close()
+
+    def test_an_item_with_two_industries_counts_under_each(self):
+        self.gamma_industries = ["finance", "healthcare"]
+        got = self.industry_poll()
+        self.assertEqual(got["Bank advisory"], ["finance", "healthcare"])
+        report = jsonio.load_json(self.out / "tr" / "report.json")["classification"]
+        self.assertEqual((report["industries"], report["items"]), ({"finance": 1, "healthcare": 2, "none": 1}, 3))
+        self.assertGreater(sum(report["industries"].values()), report["items"])
+
+    def test_a_row_stored_before_industries_is_routed_by_its_source_manifest(self):
+        path = self.root / "sources" / "alpha" / "source.json"
+        m = jsonio.load_json(path)
+        m["industries"] = ["healthcare"]
+        jsonio.dump_json(path, m)
+        store = Store.open(self.state)
+        store.upsert_item({"content_sha256": "e" * 64, "feed_id": "alpha", "guid": "old", "title": "Hospital note",
+                           "summary": "", "link": "https://example.gov/old-note", "link_key": "example.gov/old-note",
+                           "published": "2026-10-19T00:00:00Z", "guard_level": "CLEAN", "guard_score": 0, "authors": [],
+                           "route_url": None, "retrieved_at": None}, first_seen="2026-10-19T00:00:00Z")
+        store.close()
+        self.profile["exclude_industries"] = ["healthcare"]
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.script["https://example.gov/alpha.xml"] = "not-modified"
+        with mock.patch.object(hub, "retag_rows", side_effect=RuntimeError("off")), mock.patch.object(hub, "warn"):
+            self.assertEqual(self.poll(), 0)
+        titles = [i["title_display"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]]
+        self.assertNotIn("Hospital note", titles, "the manifest stands in for the empty stored industries")
 
     def test_ingest_itself_stores_the_source_industries(self):
         with mock.patch.object(hub, "retag_rows", side_effect=RuntimeError("off")), mock.patch.object(hub, "warn"):
@@ -1486,8 +1514,22 @@ class LintFmtCatTests(HubTestCase):
         self.assertIn("industry 'healthcare' is listed twice", out)
         self.assertIn("excluded industry 'toys' is not in schema/categories.json industries", out)
         self.assertIn("industry 'finance' is both routed in and excluded", out)
+        self.add_source("hosp", "https://example.gov/hosp.xml", ["cybersecurity"], industries=["healthcare"])
         self.profile.update(industries=["healthcare"], exclude_industries=["finance"])
         jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.assertEqual(self.run_hub("lint"), 0, self.output)
+
+    def test_lint_reports_an_industry_no_polled_source_lists(self):
+        self.profile.update(industries=["finance"])
+        out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
+        self.assertIn("industry 'finance' is listed by no enabled source this profile polls, so it routes nothing", out)
+        self.add_source("bank", "https://example.gov/bank.xml", ["cybersecurity"], industries=["finance"], enabled=False,
+                        verified=None)
+        self.profile["sources"] = ["bank"]
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.assertEqual(self.run_hub("lint"), 1, "a disabled source does not count, even when listed by id")
+        self.assertIn("industry 'finance' is listed by no enabled source", self.output)
+        self.add_source("bank", "https://example.gov/bank.xml", ["cybersecurity"], industries=["finance"])
         self.assertEqual(self.run_hub("lint"), 0, self.output)
 
     def test_lint_reports_a_content_route_that_can_never_fire(self):

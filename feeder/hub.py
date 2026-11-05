@@ -241,7 +241,7 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
         if not earliest <= ref <= day:
             continue
         if (not accepts(profile, row) or not content_routed(profile, chosen[row["feed_id"]], row)
-                or not industry_routed(profile, row)):
+                or not industry_routed(profile, chosen[row["feed_id"]], row)):
             continue
         tags, _ = item_tags(profile, chosen[row["feed_id"]], row)
         shared = len(per_source.get((row["feed_id"], row["link_key"]), ())) > 1

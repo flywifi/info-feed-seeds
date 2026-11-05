@@ -26,9 +26,11 @@ private notes or anything that identifies a client or a campaign.
   `source_categories` list names, or every category but machine data when it has no list. Its
   `content_categories` list routes into the digest only the items whose content category it names,
   and `exclude_content_categories` keeps items out; without either, every polled item goes in.
-  Each item stores its source's `industries` from the manifest (the poll's retag keeps them current);
-  a profile's `industries` list routes in only items with an industry it names, `exclude_industries`
-  keeps them out and wins over an inclusion, and an item with no industry is never named.
+  Each item stores its source's `industries` from the manifest (the poll's retag rewrites them for the
+  rows in its window); a profile's `industries` list routes in only items with an industry it names,
+  `exclude_industries` keeps them out and wins over an inclusion, and an item with no industry is never
+  named. An industries list narrows the items of the sources a profile polls and never adds a source,
+  so lint reports an industry no enabled source the profile polls lists.
   Routing applies when items are selected; items already in a day's digest stay there. An item keeps
   the content category it was given at ingest; one stored before content categories is matched by
   the source's current category. Registry keywords score an item's text; a keyword adds nothing where
