@@ -18,7 +18,9 @@ from . import jsonio
 CVE_RE = re.compile(r"\bCVE-\d{4}-(?:\d{4}|[1-9]\d{4,18})\b", re.I | re.A)
 SEVERITY_WORDS = ("none", "low", "medium", "high", "critical")
 SEVERITY_RANK = {w: i for i, w in enumerate(SEVERITY_WORDS)}
-_WORD = r"(critical|high|medium|low)"
+_WORD = r"(critical|high|important|medium|moderate|low)"
+# Vendor scales that use other words for the same bands (Microsoft "Important", Red Hat "Moderate").
+_SCALE = {"important": "high", "moderate": "medium"}
 SEVERITY_RE = re.compile(rf"\({_WORD}\)|\b{_WORD}[ -]severity\b|\bseverity(?: level| rating)?\s?[:=]?\s?{_WORD}\b"
                          rf"|\brated {_WORD}(?![\w-])", re.I | re.A)
 CVSS_RE = re.compile(r"\bCVSS(?P<ver>(?::\s?|\s?v?)[234](?:\.\d)?)?(?P<kw>(?:\s?base)?(?:\s?score)?(?:\s?of)?\s?[:=]?)\s?"
@@ -34,6 +36,8 @@ EXPLOITED_RE = re.compile(r"\b(actively exploited|exploited in the wild|known ex
 _CLAUSE_END = re.compile(r"[.;:!?\n]|,\s(?:and|but|yet|while|whereas)\b|\bbut\b", re.I | re.A)
 _NEGATED = re.compile(r"\b(?:not(?!\sonly\b)|no(?!\s(?:longer|user\sinteraction|authentication|credentials|privileges|patch|fix|"
                       r"workaround)\b)|never|nor|cannot|unlikely|could|might|may(?!\shave\sbeen)|would)\b", re.I | re.A)
+# A severity word after "not" or "no" in the same clause states no severity.
+_SEVERITY_NEGATED = re.compile(r"\b(?:not|no)\b", re.I | re.A)
 MONTHS = {m: i for i, m in enumerate(("january", "february", "march", "april", "may", "june", "july", "august",
                                       "september", "october", "november", "december"), 1)}
 _MONTH_TOKENS = {**MONTHS, **{m[:3]: i for m, i in MONTHS.items()}, "sept": 9}
@@ -89,8 +93,16 @@ def _cvss_words(text: str) -> list[str]:
 def severity(text: str) -> str | None:
     """The highest severity the text states, as a severity word in a severity context or a CVSS score."""
     best = None
-    found = [next(g for g in m.groups() if g).lower() for m in SEVERITY_RE.finditer(text or "")]
-    found += _cvss_words(text or "")
+    text = text or ""
+    found = []
+    for m in SEVERITY_RE.finditer(text):
+        window = text[max(0, m.start() - 80):m.start()]
+        clause = window[max((b.end() for b in _CLAUSE_END.finditer(window)), default=0):]
+        if _SEVERITY_NEGATED.search(clause):
+            continue   # "not rated critical", "no high-severity issues"
+        word = next(g for g in m.groups() if g).lower()
+        found.append(_SCALE.get(word, word))
+    found += _cvss_words(text)
     for word in found:
         if best is None or SEVERITY_RANK[word] > SEVERITY_RANK[best]:
             best = word
@@ -202,7 +214,8 @@ def vendors(text: str, names: dict[str, list[str]]) -> list[str]:
     owner = {a: vid for vid, aliases in names.items() for a in aliases}
     if not owner or not text:
         return []
-    pattern = r"(?<![\w-])(?:" + "|".join(re.escape(a) for a in sorted(owner, key=len, reverse=True)) + r")(?![\w-])"
+    # A hyphen after the name still names the vendor ("Microsoft-signed"); one before it does not ("non-Microsoft").
+    pattern = r"(?<![\w-])(?:" + "|".join(re.escape(a) for a in sorted(owner, key=len, reverse=True)) + r")(?!\w)"
     found = {owner[m.group(0)] for m in re.finditer(pattern, text, re.A)}
     return [vid for vid in names if vid in found]
 

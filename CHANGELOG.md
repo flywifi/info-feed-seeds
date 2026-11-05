@@ -8,6 +8,18 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Fixed
 
+- Severity reads the Microsoft and Red Hat words, important as high and moderate as medium, in the
+  same severity contexts as the other words, and skips a severity word after "not" or "no" in the
+  same clause ("not rated critical" gives none). A vendor name followed by a hyphen still names the
+  vendor ("Microsoft-signed"); one after a hyphen does not ("non-Microsoft"), and a name in all
+  capitals stays unread so exact capitalisation keeps Cisco IOS and Apple iOS apart.
+- A follow URL that carries a user name or password is refused and counted as follow-refused, for
+  every adapter, instead of being fetched.
+- `hub categorize ID --write` on a source whose proposal is already its source category writes
+  nothing, says unchanged and exits 0, with no `--allow-machine-data` needed.
+- Wording: the category registry's default and the `--machine-data` help say a profile polls a
+  source category, and the README says `hub categorize` proposes the source category and names
+  govinfo-fr-bulkdata among the expected categorize differences.
 - A keyword adds nothing where each of its matches lies inside text longer keywords matched in the
   same text, across every subcategory, and keywords score the first 10,000 characters of the title and
   of the summary: "victim" inside "ransomware victim", "zero-day" inside "active
@@ -190,8 +202,8 @@ All notable changes to this repository are recorded here. The format follows
   prevention, OT security, virtual patching and application control updates) and thirteen signature and
   reputation feeds stored with `enabled: false`, each with two live proof records and a sample; the 16
   sources whose items link to an update page also carry that listing page as a page route with a
-  reachability record. `seeds/2026-10-23_fortiguard.md` lists all 23 feeds with status and category.
-  The technology-regulation profile selects the ten enabled sources by topic and category; its daily
+  reachability record. `seeds/2026-10-23_fortiguard.md` lists all 23 feeds with status and source category.
+  The technology-regulation profile selects the ten enabled sources by topic and source category; its daily
   cap rises from 40 to 80 and its description names the vendor feeds.
 - Adapter dispatch: `feeder/adapters` keeps a registry of adapter names (`feed` today; page, sitemap,
   xml, json-api, urllist and artifact are allowed in manifests and polled once their modules land)

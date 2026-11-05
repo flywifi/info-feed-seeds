@@ -41,6 +41,21 @@ class SeverityTests(unittest.TestCase):
         self.assertEqual(extract.severity("Severity: medium"), "medium")
         self.assertEqual(extract.severity("rated low by the vendor"), "low")
 
+    def test_vendor_scale_words_map_to_bands_in_a_severity_context(self):
+        for text, want in (("Security update (Important)", "high"), ("Severity: Moderate", "medium"),
+                           ("an important-severity fix", "high"), ("rated moderate by the vendor", "medium")):
+            with self.subTest(text=text):
+                self.assertEqual(extract.severity(text), want)
+        for text in ("an important update for customers", "moderate traffic on the site"):
+            with self.subTest(text=text):
+                self.assertIsNone(extract.severity(text))
+
+    def test_a_severity_word_after_not_or_no_in_the_same_clause_is_skipped(self):
+        self.assertIsNone(extract.severity("The flaw is not rated critical"))
+        self.assertIsNone(extract.severity("no high-severity issues were found"))
+        self.assertEqual(extract.severity("Not affected. The second flaw is rated critical"), "critical",
+                         "a negation in an earlier sentence does not reach the word")
+
     def test_a_cvss_score_sets_the_band_and_the_highest_wins(self):
         self.assertEqual(extract.severity("(Medium) CVSS v3.1 base score: 9.8"), "critical")
         self.assertEqual(extract.severity("CVSS 7.5"), "high")
@@ -115,6 +130,13 @@ class ExploitedTests(unittest.TestCase):
 
 
 class VendorTests(unittest.TestCase):
+    def test_a_hyphen_after_a_name_still_names_the_vendor_but_one_before_does_not(self):
+        self.assertEqual(extract.vendors("a Microsoft-signed driver", NAMES), ["microsoft"])
+        self.assertEqual(extract.vendors("Cisco-branded phones", NAMES), ["cisco"])
+        self.assertEqual(extract.vendors("non-Microsoft drivers", NAMES), [])
+        self.assertEqual(extract.vendors("MICROSOFT and CISCO in capitals", NAMES), [],
+                         "exact capitalisation keeps Cisco IOS and Apple iOS apart, so capitals are not read")
+
     def test_whole_words_with_their_exact_capitalisation(self):
         self.assertEqual(extract.vendors("FortiOS and FortiGate fixes", NAMES), ["fortinet"])
         self.assertEqual(extract.vendors("Cisco IOS XE and Apple iOS", NAMES), ["apple", "cisco"])

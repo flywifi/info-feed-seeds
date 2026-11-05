@@ -722,6 +722,9 @@ def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
         say(f"  content {cat}/{subcat}: {count} item(s); category from the {cat_basis}, subcategory from the {sub_basis}")
     if not args.write:
         return EXIT_OK
+    if found and found[0]["ref"] == current:
+        say(f"categorize: source category {current} unchanged")
+        return EXIT_OK   # nothing to write, so no --allow-machine-data is needed
     writable = [s for s in found if args.allow_machine_data or categories.digest_default(reg, s["ref"].split("/")[0])]
     if found and not writable:
         say(f"categorize: {found[0]['ref']} is machine data, which no profile polls by default; "
@@ -815,7 +818,7 @@ def build_parser() -> argparse.ArgumentParser:
     add.add_argument("--category-label")
     add.add_argument("--purpose", help="a new category's reader purpose")
     add.add_argument("--reason", help="why a new category is needed")
-    add.add_argument("--machine-data", action="store_true", help="a new category shown only by a profile that names it")
+    add.add_argument("--machine-data", action="store_true", help="a new category polled only by a profile that names it")
     return ap
 
 

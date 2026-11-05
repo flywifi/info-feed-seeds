@@ -71,7 +71,7 @@ def is_valid_pair(reg: dict, category: str | None, subcategory: str | None) -> b
 
 
 def digest_default(reg: dict, category: str | None) -> bool:
-    """True when a profile without a categories list shows this category; an unknown category counts as shown."""
+    """True when a profile without a source_categories list polls this category; an unknown category counts as polled."""
     entry = reg["categories"].get(category or "")
     return True if entry is None else bool(entry["digest_default"])
 
