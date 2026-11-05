@@ -155,6 +155,11 @@ class SchemaFixtureTests(unittest.TestCase):
         self.assertTrue(validate(dict(base, source_categories=[]), schema), "an empty list would select nothing")
         self.assertTrue(validate(dict(base, source_categories=["Attacks"]), schema))
         self.assertTrue(validate(dict(base, categories=["regulatory"]), schema), "the key names the source category")
+        for key in ("industries", "exclude_industries"):
+            with self.subTest(key=key):
+                self.assertEqual(validate(dict(base, **{key: ["healthcare", "finance"]}), schema), [])
+                for bad in ([], ["Healthcare"], ["attacks/breaches"], "healthcare", None):
+                    self.assertTrue(validate(dict(base, **{key: bad}), schema), bad)
         for key in ("content_categories", "exclude_content_categories"):
             with self.subTest(key=key):
                 self.assertEqual(validate(dict(base, **{key: ["attacks", "vulnerabilities/scoring"]}), schema), [])

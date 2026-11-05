@@ -948,6 +948,7 @@ class PollTests(HubTestCase):
             "items": 3, "content": {"attacks/scams": 1, "vulnerabilities/vendor-advisories": 2},
             "by_source": {"vulnerabilities/vendor-advisories": {"attacks/scams": 1, "vulnerabilities/vendor-advisories": 2}},
             "basis": {"category": {"item": 2, "source": 1}, "subcategory": {"item": 2, "source": 1}},
+            "industries": {"none": 3},
             "moved_out_of_source_category": 1, "without_content_category": 0, "rules_now_differ": 0})
         reread = {i["title_display"]: i["categories"]["reread"]
                   for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]}
@@ -971,6 +972,55 @@ class PollTests(HubTestCase):
         self.assertEqual(cats["Quarterly newsletter"]["content"], "guidance/explainers", "the published day uses the new rules")
         self.assertEqual(cats["Quarterly newsletter"]["reread"],
                          {"content": "guidance/explainers", "reasons": ["title has 'newsletter'"]})
+
+    def industry_poll(self, **lists):
+        """alpha (healthcare) and gamma (finance) each give one item, delta (no industry) one more."""
+        m = jsonio.load_json(self.root / "sources" / "alpha" / "source.json")
+        m["industries"] = ["healthcare"]
+        jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", m)
+        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"], industries=["finance"])
+        self.add_source("delta", "https://example.gov/delta.xml", ["cybersecurity"])
+        self.script.update({"https://example.gov/alpha.xml": rss_with("Hospital advisory"),
+                            "https://example.gov/gamma.xml": rss_with("Bank advisory").replace(b"/g0", b"/b0"),
+                            "https://example.gov/delta.xml": rss_with("Plain advisory").replace(b"/g0", b"/d0")})
+        for key in ("industries", "exclude_industries"):
+            self.profile.pop(key, None)
+        self.profile.update(lists)
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.runs = getattr(self, "runs", 0) + 1
+        self.state, self.out = self.tmp / f"istate{self.runs}", self.tmp / f"iout{self.runs}"
+        self.assertEqual(self.poll(), 0)
+        latest = jsonio.load_json(self.out / "tr" / "latest.json")
+        return {i["title_display"]: i["industries"] for i in latest["items"]}
+
+    def test_items_carry_their_source_industries(self):
+        self.assertEqual(self.industry_poll(), {"Hospital advisory": ["healthcare"], "Bank advisory": ["finance"],
+                                                "Plain advisory": []}, "without a list every item goes in")
+        report = jsonio.load_json(self.out / "tr" / "report.json")["classification"]
+        self.assertEqual(report["industries"], {"finance": 1, "healthcare": 1, "none": 1})
+        self.assertEqual(sum(report["industries"].values()), report["items"])
+        store = Store.open(self.state)
+        self.assertEqual(sorted(r["industries"] for r in store.conn.execute("SELECT industries FROM items")),
+                         ["", "finance", "healthcare"], "the stored form is the comma-joined list")
+        store.close()
+
+    def test_ingest_itself_stores_the_source_industries(self):
+        with mock.patch.object(hub, "retag_rows", side_effect=RuntimeError("off")), mock.patch.object(hub, "warn"):
+            got = self.industry_poll()
+        self.assertEqual(got["Hospital advisory"], ["healthcare"], "stored at ingest, not only by the retag")
+
+    def test_industries_route_only_the_items_they_name(self):
+        self.assertEqual(sorted(self.industry_poll(industries=["healthcare"])), ["Hospital advisory"])
+        self.assertEqual(sorted(self.industry_poll(industries=["healthcare", "finance"], exclude_industries=["finance"])),
+                         ["Hospital advisory"], "an exclusion wins over an inclusion")
+        self.assertEqual(sorted(self.industry_poll(exclude_industries=["healthcare"])), ["Bank advisory", "Plain advisory"],
+                         "an item with no industry passes an exclusion list")
+        self.assertNotIn("Plain advisory", self.industry_poll(industries=["finance", "healthcare"]),
+                         "an item with no industry is never named")
+
+    def test_items_routed_out_by_industry_take_no_slot(self):
+        self.profile["daily_cap"] = 1
+        self.assertEqual(sorted(self.industry_poll(industries=["finance"])), ["Bank advisory"])
 
     def test_items_routed_out_take_no_slot_under_the_daily_cap(self):
         self.profile["daily_cap"] = 1
@@ -1079,6 +1129,24 @@ class RetagTests(HubTestCase):
         self.assertEqual(self.retag(), 0)
         self.assertIn("  content: attacks/breaches -> attacks/ransomware-claims: 1", self.output)
         self.assertEqual(self.stored(sha)["content_subcategory"], "ransomware-claims")
+
+    def test_industries_follow_the_manifest_and_a_gone_feed_keeps_its_own(self):
+        path = self.root / "sources" / "alpha" / "source.json"
+        m = jsonio.load_json(path)
+        m["industries"] = ["healthcare"]
+        jsonio.dump_json(path, m)
+        sha = self.plant(20, "Note", **self.PLACED)
+        gone = self.plant(21, "Note", feed_id="gone", industries=["energy"], **self.PLACED)
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("  industries: 1", self.output)
+        self.assertEqual(self.stored(sha)["industries"], ["healthcare"])
+        m["industries"] = ["finance", "healthcare"]
+        jsonio.dump_json(path, m)
+        self.assertEqual(self.retag(), 0)
+        self.assertEqual(self.stored(sha)["industries"], ["finance", "healthcare"])
+        self.assertEqual(self.stored(gone)["industries"], ["energy"], "a row whose feed is gone keeps what it has")
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("0 changed", self.output)
 
     def test_a_dry_run_writes_nothing(self):
         sha = self.plant(3, "Phishing scam wave targets banks", **self.PLACED)
@@ -1411,6 +1479,17 @@ class LintFmtCatTests(HubTestCase):
         self.assertIn("excluded content category 'regulatory/pets' is not in schema/categories.json", out)
         self.assertIn("content category 'attacks' is both routed in and excluded", out)
 
+    def test_lint_reports_unknown_repeated_and_contradictory_industries(self):
+        self.profile.update(industries=["healthcare", "pets", "healthcare", "finance"], exclude_industries=["finance", "toys"])
+        out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
+        self.assertIn("industry 'pets' is not in schema/categories.json industries", out)
+        self.assertIn("industry 'healthcare' is listed twice", out)
+        self.assertIn("excluded industry 'toys' is not in schema/categories.json industries", out)
+        self.assertIn("industry 'finance' is both routed in and excluded", out)
+        self.profile.update(industries=["healthcare"], exclude_industries=["finance"])
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.assertEqual(self.run_hub("lint"), 0, self.output)
+
     def test_lint_reports_a_content_route_that_can_never_fire(self):
         self.profile.update(content_categories=["attacks/scams", "machine-data"], exclude_content_categories=["attacks"])
         out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
@@ -1430,7 +1509,8 @@ class LintFmtCatTests(HubTestCase):
                 self.assertEqual(self.run_hub("lint"), 0, self.output)
 
     def test_lint_reports_a_routing_list_of_the_wrong_shape_without_a_traceback(self):
-        for key in ("source_categories", "content_categories", "exclude_content_categories"):
+        for key in ("source_categories", "content_categories", "exclude_content_categories", "industries",
+                    "exclude_industries"):
             for value in (None, {"attacks": 1}, "attacks"):
                 with self.subTest(key=key, value=value):
                     profile = dict(self.profile, **{key: value})

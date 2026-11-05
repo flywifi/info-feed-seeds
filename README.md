@@ -26,6 +26,9 @@ private notes or anything that identifies a client or a campaign.
   `source_categories` list names, or every category but machine data when it has no list. Its
   `content_categories` list routes into the digest only the items whose content category it names,
   and `exclude_content_categories` keeps items out; without either, every polled item goes in.
+  Each item stores its source's `industries` from the manifest (the poll's retag keeps them current);
+  a profile's `industries` list routes in only items with an industry it names, `exclude_industries`
+  keeps them out and wins over an inclusion, and an item with no industry is never named.
   Routing applies when items are selected; items already in a day's digest stay there. An item keeps
   the content category it was given at ingest; one stored before content categories is matched by
   the source's current category. Registry keywords score an item's text; a keyword adds nothing where
@@ -358,7 +361,8 @@ came from the item's own text rather than its source (`content_category_from_ite
 Each item's `categories.reread` reads its stored title and summary again with the current
 `schema/categories.json`: the content category those rules give and the reasons (the keywords
 found in the title or summary, or the fallback to the source category). `report.json` carries
-`classification`, counts only, over the items in `latest.json`: each content category, the content
+`classification`, counts only, over the items in `latest.json`: each industry (an item with two counts
+under each, `none` for an item without one), each content category, the content
 categories under each source category, the basis of each level (item text, source or none), how
 many the item text moved out of their source category (a category the text chose, not a fallback
 or a subcategory change), how many have no content category, and how

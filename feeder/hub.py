@@ -33,7 +33,7 @@ if __package__ in (None, ""):
 
 from feeder import ROOT, adapters, categories, extract, guard, items, jsonio, outputs  # noqa: E402
 from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, content_routed,  # noqa: E402
-                           item_tags, json_files, lint, selected_sources)
+                           industry_routed, item_tags, json_files, lint, selected_sources)
 from feeder.schema_validate import validate  # noqa: E402
 from feeder.store import DB_NAME, RETAG_COLUMNS, Store, StoreError  # noqa: E402
 
@@ -193,6 +193,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
                            content_category=placed["category"], content_subcategory=placed["subcategory"],
                            content_category_basis=placed["category_basis"],
                            content_subcategory_basis=placed["subcategory_basis"])
+            # The source's industries, from its manifest, so an item can be routed and counted by industry.
+            rec["industries"] = list(source.manifest.get("industries") or [])
             # Tags the item's own text states: CVE ids, severity, exploitation, vendors and a deadline.
             rec.update(extract.tags(items.sanitize(raw.title), items.sanitize(raw.summary), vendor_names or {}))
             if store.upsert_item(rec, first_seen=now):
@@ -238,7 +240,8 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
         ref = (row["published"] or row["first_seen"])[:10]
         if not earliest <= ref <= day:
             continue
-        if not accepts(profile, row) or not content_routed(profile, chosen[row["feed_id"]], row):
+        if (not accepts(profile, row) or not content_routed(profile, chosen[row["feed_id"]], row)
+                or not industry_routed(profile, row)):
             continue
         tags, _ = item_tags(profile, chosen[row["feed_id"]], row)
         shared = len(per_source.get((row["feed_id"], row["link_key"]), ())) > 1
@@ -320,6 +323,9 @@ def retag_rows(store: Store, repo: Repo, sources: dict, today: date, since_days:
             new.update(content_category=placed["category"], content_subcategory=placed["subcategory"],
                        content_category_basis=placed["category_basis"],
                        content_subcategory_basis=placed["subcategory_basis"])
+        src = sources.get(row["feed_id"])
+        if src is not None:   # the manifest is the source of truth; a row whose feed is gone keeps its own
+            new["industries"] = list(src.manifest.get("industries") or [])
         new.update(extract.tags(items.sanitize(row.get("title")), items.sanitize(row.get("summary")), vendor_names))
         diff = {name: value for name, value in new.items() if Store.stored_form(name, value) != row.get(name)}
         if not diff:

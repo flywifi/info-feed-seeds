@@ -235,6 +235,18 @@ def content_routed(profile: dict, source: Source, item: dict) -> bool:
     return wanted is None or bool(refs & set(wanted))
 
 
+def industry_routed(profile: dict, item: dict) -> bool:
+    """Whether an item goes to this profile by the industries stored with it (its source's). An id in
+    `exclude_industries` keeps it out; when `industries` is set, only an item with an industry it names
+    goes in. An item with no industry is never named, so an `industries` list leaves it out and an
+    exclusion list lets it through. Without either list every item goes in."""
+    have = set(item.get("industries") or [])
+    if have & set(profile.get("exclude_industries") or []):
+        return False
+    wanted = profile.get("industries")
+    return wanted is None or bool(have & set(wanted))
+
+
 def _ref_list(profile: dict, key: str) -> list:
     """A profile list of references, or [] when the value is not a list (the schema reports the shape)."""
     value = profile.get(key)
@@ -427,6 +439,16 @@ def lint(repo: Repo) -> list[str]:
             for ref in named:
                 if refs is not None and ref not in refs:
                     problems.append(f"{rel}: {what} {ref!r} is not in schema/categories.json")
+        known_industries = categories.industry_ids(reg) if refs is not None else None
+        for key, what in (("industries", "industry"), ("exclude_industries", "excluded industry")):
+            named = _ref_list(profile, key)
+            for iid in sorted({i for i in named if named.count(i) > 1}):
+                problems.append(f"{rel}: {what} {iid!r} is listed twice")
+            for iid in named:
+                if known_industries is not None and iid not in known_industries:
+                    problems.append(f"{rel}: {what} {iid!r} is not in schema/categories.json industries")
+        for iid in sorted(set(_ref_list(profile, "industries")) & set(_ref_list(profile, "exclude_industries"))):
+            problems.append(f"{rel}: industry {iid!r} is both routed in and excluded")
         excluded = set(_ref_list(profile, "exclude_content_categories"))
         polled = {r.split("/", 1)[0] for r in _ref_list(profile, "source_categories")}
         polled |= {cat_of.get(s) for s in _ref_list(profile, "sources")}
@@ -459,7 +481,7 @@ def lint(repo: Repo) -> list[str]:
 
 
 __all__ = [
-    "ConfigError", "GUARD_RANK", "RELEASES_COMMENT", "Repo", "Source", "accepts", "category_allowed", "content_routed",
+    "ConfigError", "GUARD_RANK", "RELEASES_COMMENT", "Repo", "Source", "accepts", "category_allowed", "content_routed", "industry_routed",
     "is_held",
     "item_tags", "json_files", "keyword_tags", "lint", "profile_selects", "release_problems",
     "selected_sources", "with_defaults",

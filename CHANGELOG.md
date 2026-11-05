@@ -74,6 +74,13 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Industries on items: each item stores its source's manifest `industries` at ingest, and `hub retag`
+  (so every poll) rewrites them from the current manifest, while a row whose feed is gone keeps its
+  own. `latest.json` items carry `industries`, and `report.json` `classification` counts items per
+  industry (an item with two counts under each; `none` for an item without one). A profile's
+  `industries` list routes in only items with an industry it names and `exclude_industries` keeps
+  them out, winning over an inclusion, before the daily cap; an item with no industry is never named.
+  Lint reports an unknown or repeated industry id and one both routed in and excluded.
 - `hub retag [--state-dir DIR] [--since DAYS] [--dry-run]` reads stored items again with the current
   category registry and tag readers, from the same inputs the classification report's reread uses,
   and rewrites only the content category columns (and the source pair of a row placed before content
