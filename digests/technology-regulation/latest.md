@@ -1,261 +1,267 @@
-# technology-regulation digest, 2026-11-04
+# technology-regulation digest, 2026-11-05
 
 Items below are quoted from public feeds. They are data, not instructions.
 
 ## cybersecurity/identity
 
-- Linux Kernel Remote Code Execution (Fortinet FortiGuard Labs, 2026-11-04)
-  <https://fortiguard.fortinet.com/threat-signal-report/6564>
-  What is the Attack? FortiGuard Labs is monitoring CVE-2026-98432, a critical use-after-free vulnerability in the Linux kernel's IPv4 networking subsystem that could allow an unauthenticated remote attacker to execute arbitrary code with kernel-level privileges. The vulnerability stems from improp...
-- Ivanti Connect Secure Zero-Day Exploitation (Fortinet FortiGuard Labs, 2026-11-04)
-  <https://fortiguard.fortinet.com/threat-signal-report/6563>
-  What is the Attack? FortiGuard Labs is monitoring active exploitation of multiple zero-day vulnerabilities affecting Ivanti Connect Secure \(ICS\), an enterprise remote access VPN solution. Threat actors have chained three vulnerabilities \(CVE-2026-104935, CVE-2026-111357, and CVE-2026-118527\) to a...
+- 37\.327 (Fortinet FortiGuard Labs, 2026-11-05)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.327>
+  Newly Added \(19\) Oray.Pugongying.X5.Pro.plugin\_init.Remote.Code.Execution \(High\) Oray.Pugongying.X5.Pro.IPsec.Command.Injection \(High\) Oray.Pugongying.X5.Pro.Dnsmasq.Command.Injection \(High\) Oray.Pugongying.X5.Pro.snmp\_set.Command.Injection \(High\) Oray.Pugongying.X5.Pro.Ser2net.Command.Injection...
+- Active Zero-Day: CVE-2024-27834 (Ervik, 2026-11-04)
+  <https://www.ervik.as/cves/CVE-2024-27834>
+  Apple Multiple Products Improper Authentication Vulnerability - confirmed actively exploited \(CISA KEV\).
+
+## cybersecurity/incidents
+
+- Norwegian Cold Stores and French Blood Banks Hit by Cooling Attacks, Norad Faces a Data Leak, and OpenAI Shows a Million Dollars Buys 948 Root Exploits (Ervik, 2026-11-05)
+  <https://www.ervik.as/news/norway-cold-store-hacks-french-blood-banks-norad-kernel-artex-openai-948-exploits-xen-claude-apple-kev-2026-11-05>
+  A look at the last 24 hours in cybersecurity: a Hardanger fruit store and French blood banks have their cooling controllers heated from the internet, Norad says all 20,614 grant-portal users may be exposed, Kernel blames the ARTEX AI framework for its breach, OpenAI reports 948 working Linux root...
+
+## cybersecurity/ot-ics
+
+- 37\.32700 (Fortinet FortiGuard Labs, 2026-11-05)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.32700>
+  Newly Added \(2\) DrayTek.VigorSwitch.poe\_schedule\_profile.Buffer.Overflow. Linux.Kernel.tcp\_v4\_syn\_recv\_sock.Use.After.Free.
 
 ## cybersecurity/ransomware
 
-- Ransomware: prospecthillcamberwell.com.au \(safepay\) (Ervik, 2026-11-04)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by safepay.
-- Ransomware: jhz-bernardshof.de \(safepay\) (Ervik, 2026-11-04)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by safepay.
-- Ransomware: ehrenwall.de \(safepay\) (Ervik, 2026-11-04)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by safepay.
-- Ransomware: ruscopackaging.com \(safepay\) (Ervik, 2026-11-04)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by safepay.
-- Ransomware: valemany.com \(safepay\) (Ervik, 2026-11-04)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by safepay.
-- Ransomware: titres-services.net \(safepay\) (Ervik, 2026-11-04)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by safepay.
-- Ransomware: sportschule-steinbach.de \(safepay\) (Ervik, 2026-11-04)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by safepay.
-- Ransomware: fuss-sprunggelenk.de \(safepay\) (Ervik, 2026-11-04)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by safepay.
-- Ransomware: MAPFRE Brasil 2026 \(destello\) (Ervik, 2026-11-04)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by destello.
-- Ransomware: El Cajon, CA \(rhysida\) (Ervik, 2026-11-04)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by rhysida.
-- Norway Gets Its First Suspected Freezer Hack, Mercado Bitcoin Loses Tens of Millions, and CrowdStrike Buys Into AI Agent Security (Ervik, 2026-11-04)
-  <https://www.ervik.as/news/norway-freezer-hack-mercado-bitcoin-bundestag-spyware-3am-agentic-loop-crowdstrike-fiddler-2026-11-04>
-  A look at the last 24 hours in cybersecurity: a Norwegian store's freezer room is flooded by sprinklers after a suspected hack as the attacks spread across ten-plus countries, Brazil's Mercado Bitcoin freezes withdrawals after a reported $46 million outflow, Apple's spyware warnings reach the Ger...
-- Ransomware: marlo-inc.com \(settra\) (Ervik, 2026-11-03)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by settra.
-- Ransomware: Arthur Chapman Kettering Smetak Pikala PA \(qilin\) (Ervik, 2026-11-03)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: SK Global Software \(akira\) (Ervik, 2026-11-03)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by akira.
-- Ransomware: Pelham Plastics \(akira\) (Ervik, 2026-11-03)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by akira.
-- Ransomware: Bison Bag \(akira\) (Ervik, 2026-11-03)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by akira.
-- Ransomware: G... R... \(leakeddata\) (Ervik, 2026-11-03)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by leakeddata.
-- Ransomware: Boardman Park \(booba team\) (Ervik, 2026-11-03)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by booba team.
-- Ransomware: City of Edgewater \(booba team\) (Ervik, 2026-11-03)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by booba team.
-- Ransomware: Vetstoria \(booba team\) (Ervik, 2026-11-03)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by booba team.
-- Ransomware: DROUIN SAS \(booba team\) (Ervik, 2026-11-03)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by booba team.
-- Ransomware: kingdomtitle.net \(settra\) (Ervik, 2026-11-02)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by settra.
-- Ransomware: mackinengineering.com \(settra\) (Ervik, 2026-11-02)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by settra.
-- Ransomware: insurancehouse.com \(settra\) (Ervik, 2026-11-02)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by settra.
-- Ransomware: \[DISCLOSED\]Namibian Defence Force \(ransomhouse\) (Ervik, 2026-11-02)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by ransomhouse.
-- Ransomware: da\*\*\*t.com \(everstake\) (Ervik, 2026-11-02)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by everstake.
-- Ransomware: ra\*\*\*g.com \(everstake\) (Ervik, 2026-11-02)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by everstake.
-- Ransomware: Holland \& Knight \(redact\) (Ervik, 2026-11-02)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by redact.
-- Ransomware: \[DISCLOSED\]Pertamina \(ransomhouse\) (Ervik, 2026-11-02)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by ransomhouse.
-- Ransomware: Astino Berhad \(qilin\) (Ervik, 2026-11-02)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: Indiana Area School District \(interlock\) (Ervik, 2026-11-02)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by interlock.
-- Ransomware: Global Holding \(qilin\) (Ervik, 2026-11-01)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: synergy.co.id \(lockbit5\) (Ervik, 2026-11-01)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by lockbit5.
-- Ransomware: Highland Mountain Bike Park \(interlock\) (Ervik, 2026-11-01)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by interlock.
-- Ransomware: Assiniboine Dental Group \(interlock\) (Ervik, 2026-11-01)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by interlock.
-- Ransomware: My Cloud Grocer \(direwolf\) (Ervik, 2026-11-01)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by direwolf.
-- Ransomware: AmplifAI \(GoDaddy instance\) \(Whitearmor\) (Ervik, 2026-11-01)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by Whitearmor.
-- Ransomware: Shibata Co., Ltd. \(qilin\) (Ervik, 2026-11-01)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: BKV Vasúti Jármjavító Kft \(qilin\) (Ervik, 2026-11-01)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: Meshbesher \& Spence \(qilin\) (Ervik, 2026-11-01)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: Forum \(qilin\) (Ervik, 2026-11-01)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: Straze Garden Center \(payload\) (Ervik, 2026-10-31)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by payload.
-- Ransomware: Kraft Lernen \(payload\) (Ervik, 2026-10-31)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by payload.
-- Ransomware: SALEG \(Sachsen-Anhaltische Landesentwicklungsgesellschaft mbH\) \(payload\) (Ervik, 2026-10-31)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by payload.
-- Ransomware: Phoenix Charter Academy \(rhysida\) (Ervik, 2026-10-31)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by rhysida.
-- Ransomware: Digital Triumph \(n0n\) (Ervik, 2026-10-31)
+- Ransomware: Company \#137 \(n0n\) (Ervik, 2026-11-05)
   <https://www.ervik.as/ransomware>
   New ransomware victim disclosed by n0n.
+- Ransomware: Company \#136 \(n0n\) (Ervik, 2026-11-05)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by n0n.
+- Ransomware: Company \#135 \(n0n\) (Ervik, 2026-11-05)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by n0n.
+- Ransomware: Company \#134 \(n0n\) (Ervik, 2026-11-05)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by n0n.
+- Ransomware: Company \#133 \(n0n\) (Ervik, 2026-11-05)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by n0n.
+- Ransomware: Omni Hotels \& Resorts \(redact\) (Ervik, 2026-11-05)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by redact.
+- Ransomware: System Plus \(akira\) (Ervik, 2026-11-05)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by akira.
+- Ransomware: David L Wade \& Associates \(akira\) (Ervik, 2026-11-05)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by akira.
+- Ransomware: Source Energy Services \(akira\) (Ervik, 2026-11-05)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by akira.
+- Ransomware: Westboro Partners \(akira\) (Ervik, 2026-11-05)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by akira.
+- Ransomware: AUDIT ENTITY: Cabka \(audit team\) (Ervik, 2026-10-31)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by audit team.
+- Ransomware: AUDIT ENTITY: Pe\*\*\*CT \(audit team\) (Ervik, 2026-10-31)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by audit team.
+- Ransomware: AUDIT ENTITY: hn\*\*\*rg \(audit team\) (Ervik, 2026-10-31)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by audit team.
+- Ransomware: AUDIT ENTITY: jl\*\*\*om \(audit team\) (Ervik, 2026-10-31)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by audit team.
+- Ransomware: AUDIT ENTITY: ro\*\*\*up \(audit team\) (Ervik, 2026-10-31)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by audit team.
+- Ransomware: Sistemas Visuales 360 \(qilin\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by qilin.
+- Ransomware: Societe Ivoirienne De Telediffusion \(qilin\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by qilin.
+- Ransomware: Palletline \(qilin\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by qilin.
+- Ransomware: A... F... \(leakeddata\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by leakeddata.
+- Ransomware: Rapid Manufacturing \(aurora\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by aurora.
+- Ransomware: FrenchCreek Production \(akira\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by akira.
+- Ransomware: Phillips Nizer \(ransomhouse\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by ransomhouse.
+- Ransomware: Light Rail Manila \(qilin\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by qilin.
+- Ransomware: Hudson \& Hudson Sign Products \(akira\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by akira.
+- Ransomware: Service One Transportation \(akira\) (Ervik, 2026-10-30)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by akira.
+- Ransomware: sunnybrook.ca \(Scarlettgroup\) (Ervik, 2026-10-29)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by Scarlettgroup.
+- Ransomware: au.bank.in \(Scarlettgroup\) (Ervik, 2026-10-29)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by Scarlettgroup.
+- Ransomware: as\*\*\*g.com \(everstake\) (Ervik, 2026-10-29)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by everstake.
+- Ransomware: ca\*\*\*s.com \(everstake\) (Ervik, 2026-10-29)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by everstake.
+- Ransomware: in\*\*\*s.com \(everstake\) (Ervik, 2026-10-29)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by everstake.
+- Ransomware: corp-smart.com \(everstake\) (Ervik, 2026-10-29)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by everstake.
+- Ransomware: South Weber City \(booba team\) (Ervik, 2026-10-29)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by booba team.
+- Ransomware: Programs for Parents, Inc. \(booba team\) (Ervik, 2026-10-29)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by booba team.
+- Ransomware: Circleville Police Department \(booba team\) (Ervik, 2026-10-29)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by booba team.
+- Ransomware: Terrebonne Parish Government \(booba team\) (Ervik, 2026-10-29)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by booba team.
+- Ransomware: Hauhinco \(payload\) (Ervik, 2026-10-28)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by payload.
+- Ransomware: Marbre Design \(payload\) (Ervik, 2026-10-28)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by payload.
+- Ransomware: Trulife \(akira\) (Ervik, 2026-10-28)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by akira.
+- Ransomware: Roberts Consulting Services \(akira\) (Ervik, 2026-10-28)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by akira.
+- Ransomware: EWM Group \(aurora\) (Ervik, 2026-10-28)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by aurora.
+- Ransomware: Insurance Services \(akira\) (Ervik, 2026-10-28)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by akira.
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-92704: SharpEmu is an experimental PlayStation 5 emulator for Windows and Linux. In version 0.0.3-release.3 (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-92704>
+- CVE-2026-95652: Execution with unnecessary privileges vulnerability in TÜBİTAK BİLGEM Software Technologies Research (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-95652>
+  MEDIUM severity \(CVSS 6.6\) vulnerability.
+- CVE-2026-103864: Improper output neutralization for logs in Apache Sling Engine. This issue affects Apache Sling Engi (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-103864>
+  NONE severity vulnerability.
+- CVE-2026-103866: Inconsistent interpretation of HTTP requests \('HTTP Request/Response smuggling'\) vulnerability in Ap (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-103866>
+  NONE severity vulnerability.
+- CVE-2026-123020: A security vulnerability has been detected in eosphoros-ai DB-GPT up to 0.8.1. The affected element (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-123020>
+  MEDIUM severity \(CVSS 6.3\) vulnerability.
+- CVE-2026-123047: In Eclipse BaSyx Helm Charts versions 3.0.0-rc.1 to 3.12.1 of the \`basyx\` chart, deployments with th (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-123047>
+  HIGH severity \(CVSS 7.5\) vulnerability.
+- CVE-2026-123119: The Symfony HttpClient component NoPrivateNetworkHttpClient does not pin the checked IP address of c (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-123119>
+  NONE severity vulnerability.
+- CVE-2026-103863: Improper neutralization of input during web page generation \('cross-site scripting'\) vulnerability i (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-103863>
+  NONE severity vulnerability.
+- CVE-2026-73100: Insertion of Sensitive Information into Log File vulnerability in Apache Juneau. The default REST se (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-73100>
+  NONE severity vulnerability.
+- CVE-2026-73101: Generation of Error Message Containing Sensitive Information vulnerability in Apache Juneau. The RES (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-73101>
+  NONE severity vulnerability.
+- CVE-2026-73116: Insufficiently Protected Credentials vulnerability in Apache Juneau. The Apache Juneau RestClient fo (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-73116>
+  NONE severity vulnerability.
+- CVE-2026-73117: Improper Neutralization of CRLF Sequences in HTTP Headers \('HTTP Response Splitting'\) vulnerability (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-73117>
+  NONE severity vulnerability.
+- CVE-2026-96677: Improper Neutralization of Input During Web Page Generation \('Cross-site Scripting'\) vulnerability i (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-96677>
+  NONE severity vulnerability.
+- CVE-2026-123019: A weakness has been identified in eosphoros-ai DB-GPT up to 0.8.2. Impacted is the function exec\_mod (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-123019>
+  HIGH severity \(CVSS 7.3\) vulnerability.
+- CVE-2026-73095: Allocation of Resources Without Limits or Throttling vulnerability in Apache Juneau. The MessagePack (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-73095>
+  NONE severity vulnerability.
+- CVE-2026-73098: Improper control of dynamically-loaded code vulnerability in Apache Juneau. When Apache Juneau parse (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-73098>
+  NONE severity vulnerability.
+- CVE-2026-73099: Cross-Site Request Forgery \(CSRF\) vulnerability in Apache Juneau. The REST server accepts a "content (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-73099>
+  NONE severity vulnerability.
+- CVE-2026-121489: Improper Limitation of a Pathname to a Restricted Directory \('Path Traversal'\) vulnerability in Apac (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-121489>
+  NONE severity vulnerability.
+- CVE-2026-123018: A security flaw has been discovered in eosphoros-ai DB-GPT up to 0.8.2. This issue affects the funct (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-123018>
   HIGH severity \(CVSS 8.3\) vulnerability.
-- CVE-2026-91163: Warpgate is an open source SSH, HTTPS, and MySQL bastion host for Linux. Prior to 0.29.0, the Kubern (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-91163>
-  LOW severity \(CVSS 3.7\) vulnerability.
-- CVE-2026-91168: Warpgate is an open source SSH, HTTPS, and MySQL bastion host for Linux. From 0.21.0 until 0.29.0, t (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-91168>
-  MEDIUM severity \(CVSS 6.8\) vulnerability.
-- CVE-2026-121966: Traefik 2.x before 2.11.60 and 3.x before 3.7.16 sends ForwardAuth subrequests \(and, in 3.7, Ingress (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121966>
-  HIGH severity \(CVSS 8.7\) vulnerability.
-- CVE-2026-121967: Coder 2.28.0 before 2.29.22, 2.30.0 before 2.34.13, 2.35.0 before 2.35.10, 2.36.0 before 2.36.8, 2.3 (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121967>
-  MEDIUM severity \(CVSS 4.9\) vulnerability.
-- CVE-2026-122032: SPIP before 4.4.29 contains a SQL injection vulnerability that allows authenticated attackers with b (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-122032>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-121961: FreeRDP before 3.32.2 contains a use-after-free vulnerability in the freerdp-proxy DRDYNVC tracker w (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121961>
-  MEDIUM severity \(CVSS 5.9\) vulnerability.
-- CVE-2026-121962: FreeRDP before 3.32.2 contains a heap buffer overflow in transport\_default\_read\_pdu when handling pa (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121962>
-  HIGH severity \(CVSS 8.1\) vulnerability.
-- CVE-2026-121963: FreeRDP before 3.32.2 contains a use-after-free vulnerability in the asynchronous dynamic rdpsnd cha (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121963>
-  MEDIUM severity \(CVSS 5.9\) vulnerability.
-- CVE-2026-121964: FreeRDP before 3.32.2 contains a heap-based buffer overflow in the RD Gateway RPC client, where rpc\_ (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121964>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-121965: Parse Server before 8.6.113 and 9.0.0 before 9.10.6-alpha.5 contains a prototype pollution vulnerabi (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121965>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-121955: FreeRDP before 3.32.2 contains a use-after-free vulnerability in Emulate\_SCardReleaseContext that fr (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121955>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-121956: FreeRDP before 3.32.2 contains a double free in the WinPR Kerberos SSPI retrieveSomeTgt function, wh (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121956>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-121957: FreeRDP before 3.32.2 contains a use-after-free vulnerability that allows malicious RDP servers to c (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121957>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-121958: FreeRDP through 3.32.1 has a heap out-of-bounds write in the RDPGFX client because the delete\_surfac (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121958>
+- CVE-2026-123036: A flaw was found in ansible-core. When a task marked \`no\_log: true\` fails, the task result is censor (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-123036>
+  MEDIUM severity \(CVSS 5.5\) vulnerability.
+- CVE-2026-118869: An OS command injection vulnerability exists in SHIRASAGI, which may allow an authenticated attacker (Ervik, 2026-11-05)
+  <https://www.ervik.as/cves/CVE-2026-118869>
   HIGH severity \(CVSS 8.8\) vulnerability.
-- CVE-2026-121959: FreeRDP before 3.32.2 contains an infinite loop vulnerability in websocket\_context\_read that fails t (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121959>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-121960: FreeRDP before 3.32.2 contains a denial of service vulnerability in the NLA-enabled shadow server wh (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121960>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-121952: FreeRDP before 3.32.2 has an out-of-bounds write in the proxy because rdp\_read\_bitmap\_cache\_v2\_capab (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121952>
-  CRITICAL severity \(CVSS 9.8\) vulnerability.
-- CVE-2026-121953: FreeRDP before 3.32.2 has a use-after-free in the client's rdpgfx dynamic virtual channel: a duplica (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121953>
-  CRITICAL severity \(CVSS 9.8\) vulnerability.
-- CVE-2026-121954: FreeRDP before 3.32.2 has a heap out-of-bounds write in the planar codec because freerdp\_bitmap\_plan (Ervik, 2026-11-04)
-  <https://www.ervik.as/cves/CVE-2026-121954>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- 26\.11200 (Fortinet FortiGuard Labs, 2026-11-04)
-  <https://fortiguard.fortinet.com/updates/virtual-patching?version=26.11200>
-  Newly Added \(1\) Linux.Kernel.tcp\_v4\_syn\_recv\_sock.Use.After.Free.
-- 37\.326 (Fortinet FortiGuard Labs, 2026-11-04)
-  <https://fortiguard.fortinet.com/updates/ips?version=37.326>
-  Newly Added \(1\) Linux.Kernel.tcp\_v4\_syn\_recv\_sock.Use.After.Free \(Critical\) Modified \(2\) JeecgBoot.jmreport.qurestSql.SQL.Injection \(High\) JeecgBoot.JimuReport.queryFieldBySql.Command.Injection \(Critical\)
-- Active Zero-Day: CVE-2026-119977 (Ervik, 2026-11-03)
-  <https://www.ervik.as/cves/CVE-2026-119977>
-  WordPress WordPress Core Time-of-check Time-of-use \(TOCTOU\) Race Condition Vulnerability - confirmed actively exploited \(CISA KEV\).
+- 26\.11300 (Fortinet FortiGuard Labs, 2026-11-05)
+  <https://fortiguard.fortinet.com/updates/virtual-patching?version=26.11300>
+  Modified \(1\) Linux.Kernel.tcp\_v4\_syn\_recv\_sock.Use.After.Free.
 
 ## regulation/federal-rulemaking
 
-- Title 3 - The President (U.S. Government Publishing Office, 2026-11-04)
-  <https://www.govinfo.gov/app/details/CFR-2026-title3-vol1>
+- Title 5 - Administrative Personnel (U.S. Government Publishing Office, 2026-11-05)
+  <https://www.govinfo.gov/app/details/CFR-2026-title5-vol3>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 3 - The President (U.S. Government Publishing Office, 2026-11-04)
-  <https://www.govinfo.gov/app/details/CFR-2025-title3-vol1>
+- Title 5 - Administrative Personnel (U.S. Government Publishing Office, 2026-11-05)
+  <https://www.govinfo.gov/app/details/CFR-2025-title5-vol3>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Federal Register Vol. 89, No.69, April 9, 2024 (U.S. Government Publishing Office, 2026-11-04)
-  <https://www.govinfo.gov/app/details/FR-2024-04-09>
+- Federal Register Vol. 91, No.213, November 5, 2026 (U.S. Government Publishing Office, 2026-11-05)
+  <https://www.govinfo.gov/app/details/FR-2026-11-05>
   Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2024-04-09 (U.S. Government Publishing Office, 2026-11-04)
-  <https://www.govinfo.gov/bulkdata/FR/2024/04/FR-2024-04-09.xml>
+- FR-2026-11-05 (U.S. Government Publishing Office, 2026-11-05)
+  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-05.xml>
   Content Files XML
-- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-04)
-  <https://www.govinfo.gov/app/details/CFR-2026-title14-vol4>
+- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-04)
+  <https://www.govinfo.gov/app/details/CFR-2026-title10-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-04)
-  <https://www.govinfo.gov/app/details/CFR-2025-title14-vol4>
+- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-04)
+  <https://www.govinfo.gov/app/details/CFR-2025-title10-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Federal Register Vol. 91, No.212, November 4, 2026 (U.S. Government Publishing Office, 2026-11-04)
-  <https://www.govinfo.gov/app/details/FR-2026-11-04>
-  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-11-04 (U.S. Government Publishing Office, 2026-11-04)
-  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-04.xml>
-  Content Files XML
 
 ## technology/devices
 
-- FortiPAM 1.9.4 (Fortinet, 2026-11-04)
+- FortiClientEMS 8.0.1 (Fortinet, 2026-10-29)
   <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiPAM 1.9.4 B1768 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+  FortiClientEMS 8.0.1 B0192 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiPAM 1.9.3 (Fortinet, 2026-10-29)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiPAM 1.9.3 B1767 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiSOAR 8.0.1 (Fortinet, 2026-10-29)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiSOAR 8.0.1 B6095 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiSOAR 8.0.1 (Fortinet, 2026-10-29)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiSOAR 8.0.1 B6095 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiSOAR 8.0.1 (Fortinet, 2026-10-29)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiSOAR 8.0.1 B6095 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiClientLinux 8.0.1 (Fortinet, 2026-10-29)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiClientLinux 8.0.1 B0101 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiClientMac 8.0.1 (Fortinet, 2026-10-29)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiClientMac 8.0.1 B0132 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiClient 8.0.1 (Fortinet, 2026-10-29)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiClient 8.0.1 B0184 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
 
 ## Source health
 
@@ -270,11 +276,11 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-psirt: ok, HTTP 200, 50 items
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
-- fortinet-firmware: ok, HTTP 200, 79 items
-- govinfo-cfr: ok, HTTP 200, 100 items
+- fortinet-firmware: not-modified, HTTP 304
+- govinfo-cfr: ok, HTTP 200, 99 items
 - govinfo-fr: ok, HTTP 200, 100 items
 - govinfo-fr-bulkdata: ok, HTTP 200, 100 items
-- govinfo-lsa: not-modified, HTTP 304
+- govinfo-lsa: ok, HTTP 200, 100 items
 - nist-cybersecurity-insights: ok, HTTP 200, 40 items
 - nist-information-technology: ok, HTTP 200, 40 items
 - nist-news: ok, HTTP 200, 40 items
