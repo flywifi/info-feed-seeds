@@ -125,11 +125,13 @@ def _origin(url: str) -> tuple[str, str, int | None] | None:
 
 def follow_url(route_url: str, candidate) -> str | None:
     """The follow URL the poller may fetch, or None: http or https only, the same host and port as the
-    route, never from https down to http, fragment dropped. Anything an adapter returns is data from the
-    fetched document, never trusted."""
+    route, never from https down to http, never with a user name or password, fragment dropped. Anything
+    an adapter returns is data from the fetched document, never trusted."""
     if not isinstance(candidate, str):
         return None
     clean = urldefrag(candidate.strip())[0]
+    if "@" in urlsplit(clean).netloc:
+        return None   # a user name or password in a follow link is refused, not fetched
     cand, base = _origin(clean), _origin(route_url)
     if cand is None or base is None or cand[0] not in DEFAULT_PORTS or not cand[1]:
         return None

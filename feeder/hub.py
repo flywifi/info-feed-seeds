@@ -156,7 +156,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             # address that answered; any other host is refused and counted.
             next_url = adapters.follow_url(url, candidate) or (adapters.follow_url(base, candidate) if site else None)
             if next_url is None:
-                follow_refused += 1   # another host, port or scheme: never fetched, but counted
+                follow_refused += 1   # another host, port or scheme, or a user name or password: never fetched, but counted
                 continue
             if next_url in seen:
                 continue
@@ -722,12 +722,18 @@ def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
         say(f"  content {cat}/{subcat}: {count} item(s); category from the {cat_basis}, subcategory from the {sub_basis}")
     if not args.write:
         return EXIT_OK
+    if found and found[0]["ref"] == current:
+        say(f"categorize: source category {current} unchanged")
+        return EXIT_OK   # nothing to write, so no --allow-machine-data is needed
     writable = [s for s in found if args.allow_machine_data or categories.digest_default(reg, s["ref"].split("/")[0])]
     if found and not writable:
         say(f"categorize: {found[0]['ref']} is machine data, which no profile polls by default; "
             "give --allow-machine-data to write it")
     if not writable:
         return EXIT_DEFECT
+    if writable[0]["ref"] == current:
+        say(f"categorize: source category {current} unchanged")
+        return EXIT_OK   # the best proposal it may write is the one it has
     best_cat, best_sub = writable[0]["ref"].split("/")
     manifest = dict(src.manifest, source_category=best_cat, source_subcategory=best_sub)
     jsonio.dump_json(folder / ("source.local.json" if src.local else "source.json"), manifest)
@@ -815,7 +821,7 @@ def build_parser() -> argparse.ArgumentParser:
     add.add_argument("--category-label")
     add.add_argument("--purpose", help="a new category's reader purpose")
     add.add_argument("--reason", help="why a new category is needed")
-    add.add_argument("--machine-data", action="store_true", help="a new category shown only by a profile that names it")
+    add.add_argument("--machine-data", action="store_true", help="a new category polled only by a profile that names it")
     return ap
 
 

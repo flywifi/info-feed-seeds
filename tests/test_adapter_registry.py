@@ -64,7 +64,8 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(adapters.follow_url("http://example.gov/s.xml", "https://example.gov/c.xml"), "https://example.gov/c.xml",
                          "http may move up to https")
         for bad in ("http://example.gov/b.xml", "https://example.gov:8443/x", "https://example.gov:99999/x", "file:///etc/hostname", "ftp://example.gov/x", "data:text/plain,x", "https://evil.example/",
-                    "http://169.254.169.254/latest/", "//example.gov/x", "", None, 7):
+                    "http://169.254.169.254/latest/", "//example.gov/x", "", None, 7,
+                    "https://user@example.gov/b/2", "https://user:pass@example.gov/b/2", "https://@example.gov/b/2"):
             self.assertIsNone(adapters.follow_url(route, bad), bad)
 
     def test_kinds_per_adapter_cover_the_schema_kind_enum(self):

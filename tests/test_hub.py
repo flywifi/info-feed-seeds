@@ -657,6 +657,17 @@ class PollTests(HubTestCase):
         self.assertIn("https://other.example/p/1", [i["link"] for i in latest["items"]], "the item cites the site that answered")
         self.assertIn("- psi: ok, HTTP 200, 1 items, follow-refused", (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8"))
 
+    def test_a_follow_link_with_a_user_name_is_refused_not_fetched(self):
+        self.add_source("omi", "https://example.gov/b", ["cybersecurity"],
+                        routes=[{"kind": "page", "adapter": "page", "url": "https://example.gov/b",
+                                 "params": {"item_selector": "li", "next_selector": "a.next@href"}}])
+        self.script.update({"https://example.gov/b": b"<ul><li><a href='/p/1'>Cybersecurity notice</a></li></ul>"
+                                                     b"<a class='next' href='https://user@example.gov/b/2'>Older</a>"})
+        fetcher = FakeFetcher(self.script)
+        self.assertEqual(self._poll_one("omi", fetcher), 0)
+        self.assertEqual(fetcher.calls, ["https://example.gov/b"])
+        self.assertIn("- omi: ok, HTTP 200, 1 items, follow-refused", (self.out / "tr" / f"{DAY}.md").read_text(encoding="utf-8"))
+
     def test_a_link_back_to_the_answering_page_is_not_fetched_again(self):
         self.add_source("omega", "https://example.gov/o", ["cybersecurity"],
                         routes=[{"kind": "page", "adapter": "page", "url": "https://example.gov/o",
@@ -1484,6 +1495,26 @@ class LintFmtCatTests(HubTestCase):
         self.assertEqual((after["source_category"], after["source_subcategory"]), ("machine-data", "signature-versions"))
         self.assertEqual({k: v for k, v in after.items() if k not in ("source_category", "source_subcategory")},
                          {k: v for k, v in before.items() if k not in ("source_category", "source_subcategory")})
+
+    def test_categorize_write_on_a_source_already_in_its_proposal_changes_nothing(self):
+        self.add_source("mach", "https://example.gov/mach.xml", ["cybersecurity"],
+                        source_category="machine-data", source_subcategory="signature-versions")
+        self.script["https://example.gov/mach.xml"] = rss_with("37.319", "37.318", "37.317")
+        path = self.root / "sources" / "mach" / "source.json"
+        before = path.read_bytes()
+        self.assertEqual(self.run_hub("categorize", "mach", "--write"), 0, "no --allow-machine-data is needed")
+        self.assertIn("categorize: source category machine-data/signature-versions unchanged", self.output)
+        self.assertEqual(path.read_bytes(), before)
+
+    def test_categorize_write_keeps_a_source_whose_best_writable_proposal_is_its_own(self):
+        self.add_source("sig", "https://example.gov/sig.xml", ["cybersecurity/vulnerabilities"])
+        self.script["https://example.gov/sig.xml"] = rss_with("Antivirus definitions and database update",
+                                                               "New definitions and database update")
+        self.assertEqual(self.run_hub("categorize", "sig"), 0)
+        self.assertIn("suggest source category machine-data/signature-versions", self.output.splitlines()[1])
+        self.assertEqual(self.run_hub("categorize", "sig", "--write"), 0)
+        self.assertIn("categorize: source category vulnerabilities/vendor-advisories unchanged", self.output)
+        self.assertNotIn("wrote", self.output)
 
     def test_categorize_offline_reads_samples_and_says_when_nothing_fits(self):
         self.assertEqual(self.run_hub("categorize", "beta", "--offline", "--write"), 0)

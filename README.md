@@ -79,7 +79,10 @@ Other commands:
   source's routes without touching the poll's cache, or reads the proof samples with `--offline`; `--write`
   edits the manifest and never writes machine data without `--allow-machine-data`. For the six FortiGuard
   detection feeds, whose titles are version numbers, the proposal is machine data while the committed
-  source category is vulnerabilities/detections; that difference is expected.
+  source category is vulnerabilities/detections, and for govinfo-fr-bulkdata, whose titles are record ids,
+  the proposal is machine-data/bulk-data while the committed source category is regulatory/federal-rules;
+  those differences are expected. `--write` on a source whose proposal is already its source category
+  changes nothing and needs no flag.
 - `hub categories` lists the category registry; `hub categories add category/subcategory --label L --note N`
   extends it.
 - `hub release SHA --reason TEXT` releases a held item by its `content_sha256`.
@@ -341,7 +344,15 @@ holds BLOCK items from every output. Items at or above the profile's hold level 
 Each `latest.json` item carries `categories` (its source category, its content category and what
 decided it) and `tags` read from its own text: `cves`, `severity` and `severity_rank` (0 none to 4
 critical, from a severity word or a CVSS score), `exploited`, `vendors` (ids from
-`schema/vendors.json`) and `deadline`. A tag the text does not state stays empty. The `coverage` block counts,
+`schema/vendors.json`) and `deadline`. A tag the text does not state stays empty. Severity reads
+important as high and moderate as medium (the words Microsoft and Red Hat use) in the same severity
+contexts as the other words; a Red Hat title prefix such as `Important:` is not read. A severity word
+is skipped when "not" or "no" comes at most two words before it in the same clause, except "not only"
+and a "no" about user interaction, authentication, credentials, privileges, a patch, a fix, a
+workaround, action or a number. Vendor names match with their exact capitalisation, so Cisco IOS and
+Apple iOS stay apart, and a name written in capitals where the registry spells it otherwise
+(MICROSOFT, CISCO) is not read; a hyphen after a name still names the vendor ("Microsoft-signed"), one
+before it does not ("non-Microsoft"). The `coverage` block counts,
 over the items in `latest.json`, how many each tag reader filled (`tagged`) and how many content categories
 came from the item's own text rather than its source (`content_category_from_item_text`).
 Each item's `categories.reread` reads its stored title and summary again with the current
@@ -379,7 +390,7 @@ an item already shown on an earlier day can appear again.
 1. Fetch the feed with the named User-Agent and confirm it parses at least one item.
 2. Write `sources/<id>/source.json` and `methods.json` from that real fetch. The folder name is the
    id, topics come from `schema/topics.json`, the source category and source subcategory (and optional
-   industries) from `schema/categories.json` (`hub categorize ID` proposes them), and
+   industries) from `schema/categories.json` (`hub categorize ID` proposes the source category), and
    `classification_review` stays `pending`.
 3. Reference the id or its topics in a profile if wanted, and add a CHANGELOG line.
 4. Run `hub lint` and `hub fmt --check`, then open a pull request. Unproven sources go in the pull
