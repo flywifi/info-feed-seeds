@@ -36,8 +36,12 @@ EXPLOITED_RE = re.compile(r"\b(actively exploited|exploited in the wild|known ex
 _CLAUSE_END = re.compile(r"[.;:!?\n]|,\s(?:and|but|yet|while|whereas)\b|\bbut\b", re.I | re.A)
 _NEGATED = re.compile(r"\b(?:not(?!\sonly\b)|no(?!\s(?:longer|user\sinteraction|authentication|credentials|privileges|patch|fix|"
                       r"workaround)\b)|never|nor|cannot|unlikely|could|might|may(?!\shave\sbeen)|would)\b", re.I | re.A)
-# A severity word after "not" or "no" in the same clause states no severity.
-_SEVERITY_NEGATED = re.compile(r"\b(?:not|no)\b", re.I | re.A)
+# A severity word with "not" or "no" at most two words before it in the same clause states no
+# severity ("not rated critical", "no critical-severity flaws"). "not only" and a "no" about user
+# interaction, authentication, credentials, privileges, a patch, a fix, a workaround, action or a
+# number ("no user interaction required (Critical)", "Advisory No 12") do not negate it.
+_SEVERITY_NEGATED = re.compile(r"\b(?:not(?!\s+only\b)|no(?![\s-]*(?:\d|(?:user|auth\w*|credentials|privileges|patch|fix|"
+                               r"workaround|action)\b)))\b(?:\W+\w+){0,2}\W*\Z", re.I | re.A)
 MONTHS = {m: i for i, m in enumerate(("january", "february", "march", "april", "may", "june", "july", "august",
                                       "september", "october", "november", "december"), 1)}
 _MONTH_TOKENS = {**MONTHS, **{m[:3]: i for m, i in MONTHS.items()}, "sept": 9}
@@ -96,9 +100,11 @@ def severity(text: str) -> str | None:
     text = text or ""
     found = []
     for m in SEVERITY_RE.finditer(text):
-        window = text[max(0, m.start() - 80):m.start()]
-        clause = window[max((b.end() for b in _CLAUSE_END.finditer(window)), default=0):]
-        if _SEVERITY_NEGATED.search(clause):
+        # Searched in the full text with pos and endpos, so a word boundary sees the character before the
+        # 40-character window and the end of "piano" is not read as "no".
+        start = max(0, m.start() - 40)
+        cut = max((b.end() for b in _CLAUSE_END.finditer(text, start, m.start())), default=start)
+        if _SEVERITY_NEGATED.search(text, cut, m.start()):
             continue   # "not rated critical", "no high-severity issues"
         word = next(g for g in m.groups() if g).lower()
         found.append(_SCALE.get(word, word))

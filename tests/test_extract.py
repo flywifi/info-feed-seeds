@@ -56,6 +56,21 @@ class SeverityTests(unittest.TestCase):
         self.assertEqual(extract.severity("Not affected. The second flaw is rated critical"), "critical",
                          "a negation in an earlier sentence does not reach the word")
 
+    def test_a_negation_about_something_else_keeps_the_severity(self):
+        for text in ("Remote code execution, no user interaction required (Critical)",
+                     "The flaw, which does not require authentication, is rated critical",
+                     "This is not only rated critical but actively exploited", "Advisory No 12 (Critical)",
+                     "no-auth RCE in the web UI (Critical)", "No patch is available for this (Critical) flaw",
+                     "No action needed, critical severity", "pia" + "no " + "z" * 37 + "(Critical)",
+                     "Patched: no. Rated critical by the vendor"):
+            with self.subTest(text=text):
+                self.assertEqual(extract.severity(text), "critical")
+        for text in ("has not been rated critical", "There are no critical-severity flaws", "no longer rated critical",
+                     "This is not a critical-severity issue", "is not currently rated critical",
+                     "not considered high severity"):
+            with self.subTest(text=text):
+                self.assertIsNone(extract.severity(text))
+
     def test_a_cvss_score_sets_the_band_and_the_highest_wins(self):
         self.assertEqual(extract.severity("(Medium) CVSS v3.1 base score: 9.8"), "critical")
         self.assertEqual(extract.severity("CVSS 7.5"), "high")

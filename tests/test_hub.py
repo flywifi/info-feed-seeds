@@ -1506,6 +1506,16 @@ class LintFmtCatTests(HubTestCase):
         self.assertIn("categorize: source category machine-data/signature-versions unchanged", self.output)
         self.assertEqual(path.read_bytes(), before)
 
+    def test_categorize_write_keeps_a_source_whose_best_writable_proposal_is_its_own(self):
+        self.add_source("sig", "https://example.gov/sig.xml", ["cybersecurity/vulnerabilities"])
+        self.script["https://example.gov/sig.xml"] = rss_with("Antivirus definitions and database update",
+                                                               "New definitions and database update")
+        self.assertEqual(self.run_hub("categorize", "sig"), 0)
+        self.assertIn("suggest source category machine-data/signature-versions", self.output.splitlines()[1])
+        self.assertEqual(self.run_hub("categorize", "sig", "--write"), 0)
+        self.assertIn("categorize: source category vulnerabilities/vendor-advisories unchanged", self.output)
+        self.assertNotIn("wrote", self.output)
+
     def test_categorize_offline_reads_samples_and_says_when_nothing_fits(self):
         self.assertEqual(self.run_hub("categorize", "beta", "--offline", "--write"), 0)
         self.assertIn("read 1 title(s) from proof samples", self.output)

@@ -8,15 +8,19 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Fixed
 
-- Severity reads the Microsoft and Red Hat words, important as high and moderate as medium, in the
-  same severity contexts as the other words, and skips a severity word after "not" or "no" in the
-  same clause ("not rated critical" gives none). A vendor name followed by a hyphen still names the
-  vendor ("Microsoft-signed"); one after a hyphen does not ("non-Microsoft"), and a name in all
-  capitals stays unread so exact capitalisation keeps Cisco IOS and Apple iOS apart.
+- Severity reads important as high and moderate as medium (the words Microsoft and Red Hat use) in
+  the same severity contexts as the other words; a Red Hat title prefix such as `Important:` is not
+  read. A severity word is skipped when "not" or "no" comes at most two words before it in the same
+  clause ("not rated critical" gives none), except "not only" and a "no" about user interaction,
+  authentication, credentials, privileges, a patch, a fix, a workaround, action or a number. A vendor
+  name followed by a hyphen still names the vendor ("Microsoft-signed"); one after a hyphen does not
+  ("non-Microsoft"), and a name written in capitals where the registry spells it otherwise
+  (MICROSOFT, CISCO) stays unread, so exact capitalisation keeps Cisco IOS and Apple iOS apart.
 - A follow URL that carries a user name or password is refused and counted as follow-refused, for
   every adapter, instead of being fetched.
 - `hub categorize ID --write` on a source whose proposal is already its source category writes
-  nothing, says unchanged and exits 0, with no `--allow-machine-data` needed.
+  nothing, says unchanged and exits 0, with no `--allow-machine-data` needed; so does a source whose
+  best writable proposal, after a machine data one it may not write, is its source category.
 - Wording: the category registry's default and the `--machine-data` help say a profile polls a
   source category, and the README says `hub categorize` proposes the source category and names
   govinfo-fr-bulkdata among the expected categorize differences.

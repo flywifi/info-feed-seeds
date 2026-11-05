@@ -156,7 +156,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             # address that answered; any other host is refused and counted.
             next_url = adapters.follow_url(url, candidate) or (adapters.follow_url(base, candidate) if site else None)
             if next_url is None:
-                follow_refused += 1   # another host, port or scheme: never fetched, but counted
+                follow_refused += 1   # another host, port or scheme, or a user name or password: never fetched, but counted
                 continue
             if next_url in seen:
                 continue
@@ -731,6 +731,9 @@ def cmd_categorize(args, repo: Repo, fetcher_factory) -> int:
             "give --allow-machine-data to write it")
     if not writable:
         return EXIT_DEFECT
+    if writable[0]["ref"] == current:
+        say(f"categorize: source category {current} unchanged")
+        return EXIT_OK   # the best proposal it may write is the one it has
     best_cat, best_sub = writable[0]["ref"].split("/")
     manifest = dict(src.manifest, source_category=best_cat, source_subcategory=best_sub)
     jsonio.dump_json(folder / ("source.local.json" if src.local else "source.json"), manifest)
