@@ -8,6 +8,16 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Fixed
 
+- A keyword adds nothing where each of its matches lies inside text longer keywords matched in the
+  same text, across every subcategory, and keywords score the first 10,000 characters of the title and
+  of the summary: "victim" inside "ransomware victim", "zero-day" inside "active
+  zero-day" and "exploited" inside "known exploited" no longer score twice, so catalogue additions go
+  to `vulnerabilities/scoring`. Victims named by ransomware groups go to the new
+  `attacks/ransomware-claims` subcategory instead of `attacks/breaches`, which keeps confirmed
+  incidents; "ransomware victim" moved there with "victim disclosed" and "claimed by ransomware".
+  `attacks/exploited-now` gains "zero-day actively exploited" and "exploited zero-day". Items stored
+  before this change keep the category they were given at ingest. Registry lint reports a keyword
+  listed in two subcategories.
 - The poll workflow saves the item database only after the digests reach the data branch, so a
   failed push never marks items as shown in a digest that was not published.
 - An unproven disabled source must keep `verified` null and record at least one attempt (lint and
@@ -137,7 +147,7 @@ All notable changes to this repository are recorded here. The format follows
   basis of each; industries, standards, editions, change types, CVE ids, vendors and link hosts as
   lowercase lists; severity and its rank, exploited, language, deadline and updated. A sighting writes
   only the filter fields it carries, so a later sighting without enrichment keeps what is stored.
-- Category registry: `schema/categories.json` (9 categories, 46 subcategories and an industries
+- Category registry: `schema/categories.json` (9 categories, 47 subcategories and an industries
   list, checked against `schema/categories.schema.json`) and `feeder/categories.py`, used two ways
   that are kept apart. The source category places a feed as a whole: every source carries a
   `source_category` and a `source_subcategory`, and may carry `industries` (each listed once). The 32

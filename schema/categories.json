@@ -98,7 +98,6 @@
             "breach",
             "data leak",
             "compromised",
-            "ransomware victim",
             "victim"
           ],
           "label": "Breaches",
@@ -115,11 +114,24 @@
             "in the wild",
             "active zero-day",
             "actively exploited",
-            "exploitation"
+            "exploitation",
+            "zero-day actively exploited",
+            "exploited zero-day"
           ],
           "label": "Exploited now",
           "note": "vulnerabilities under active exploitation",
           "order": 1,
+          "topics": []
+        },
+        "ransomware-claims": {
+          "keywords": [
+            "ransomware victim",
+            "victim disclosed",
+            "claimed by ransomware"
+          ],
+          "label": "Ransomware claims",
+          "note": "victims named by ransomware groups, not yet confirmed",
+          "order": 6,
           "topics": []
         },
         "scams": {

@@ -28,7 +28,11 @@ private notes or anything that identifies a client or a campaign.
   and `exclude_content_categories` keeps items out; without either, every polled item goes in.
   Routing applies when items are selected; items already in a day's digest stay there. An item keeps
   the content category it was given at ingest; one stored before content categories is matched by
-  the source's current category.
+  the source's current category. Registry keywords score an item's text; a keyword adds nothing where
+  each of its matches lies inside text longer keywords matched in the same text, and only the first
+  10,000 characters of the title and of the summary are scored. Victims named by ransomware groups land in
+  `attacks/ransomware-claims`, apart from confirmed `attacks/breaches`, so a profile can keep them
+  out with `exclude_content_categories`.
 - `guard/releases.json`: items held by the injection guard that a person has released.
 - `seeds/`: dated seed files. These are imports; `sources/` is the truth.
 - `tools/`: the commit checker, its hooks, its exemptions list, the acknowledged-commit list and the
