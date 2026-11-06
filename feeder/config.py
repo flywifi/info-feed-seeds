@@ -352,6 +352,9 @@ def lint(repo: Repo) -> list[str]:
         problems += [f"schema/categories.json: key {k!r} appears twice in one object"
                      for k in categories.duplicate_keys(repo.categories_file)]
     refs = categories.all_refs(reg) if reg is not None and not problems else None
+    for registry in ("vendors.json", "standards.json"):
+        if not (repo.schema_dir / registry).exists():
+            problems.append(f"schema/{registry}: missing")
     problems += [f"schema/vendors.json: {p}" for p in extract.vendor_problems(repo.schema_dir / "vendors.json")]
     problems += [f"schema/standards.json: {p}" for p in extract.standard_problems(repo.schema_dir / "standards.json")]
     source_schema = repo.schema("source.schema.json")

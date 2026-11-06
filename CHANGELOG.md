@@ -75,14 +75,16 @@ All notable changes to this repository are recorded here. The format follows
 ### Added
 
 - Standards and editions on items: `schema/standards.json` lists standards and frameworks (FedRAMP,
-  HIPAA, GDPR, NIS2, DORA, SOC 2, CMMC, the NIST Cybersecurity Framework, PCI DSS, CIS Controls and
-  Benchmarks, ISO/IEC 27001, FIPS 140, NIST SP 800-53, 800-171, 800-61 and 800-207, and the NIST IR
-  reports the digests name), matched as whole words with their exact capitalisation. Ingest and
-  `hub retag` fill the store's `standards` column (ids in order of first mention) and `editions`
-  column (`<id>:<edition>` for an edition written right after the name: SP 800-53 Rev. 5 or
-  SP 800-53r5, FIPS 140-3, ISO/IEC 27001:2022, PCI DSS v4.0.1, CIS Controls v8, CMMC 2.0, CSF 2.0).
-  `latest.json` tags and coverage `tagged` carry both, and lint checks the registry as it checks
-  vendors. Publisher, change types, link hosts, language and updated stay empty.
+  HIPAA, GDPR, NIS2, the Digital Operational Resilience Act or EU DORA, SOC 2, CMMC, the NIST
+  Cybersecurity Framework, PCI DSS, CIS Controls and Benchmarks, ISO/IEC 27001, FIPS 140, NIST SP
+  800-53, 800-171, 800-61 and 800-207, and the NIST IR reports the digests name), matched as whole
+  words with their exact capitalisation. Ingest and `hub retag` fill the store's `standards` column
+  (ids in order of first mention) and `editions` column (`<id>:<edition>` for an edition written right
+  after the name on the same line: SP 800-53 Rev. 5 or SP 800-53r5, FIPS 140-3, ISO/IEC 27001:2022,
+  PCI DSS v4.0.1, CIS Controls v8, CMMC 2.0, CSF 2.0; at most the first 20 per item). `latest.json`
+  tags and coverage `tagged` carry both, and lint checks the registry as it checks vendors, with the
+  matcher's own right edge, and reports a missing vendor or standards registry. Publisher, change
+  types, link hosts, language and updated stay empty.
 - Industries on items: each item stores its source's manifest `industries` at ingest, and `hub retag`
   (and every poll, over its window) rewrites them from the current manifest, while a row whose feed is
   gone keeps its own. `latest.json` items carry `industries`, and `report.json` `classification` counts items per

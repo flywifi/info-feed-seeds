@@ -1537,6 +1537,18 @@ class LintFmtCatTests(HubTestCase):
         self.assertIn("excluded content category 'regulatory/pets' is not in schema/categories.json", out)
         self.assertIn("content category 'attacks' is both routed in and excluded", out)
 
+    def test_lint_reports_a_missing_registry(self):
+        for name in ("standards.json", "vendors.json"):
+            with self.subTest(name=name):
+                path = self.root / "schema" / name
+                saved = path.read_bytes()
+                path.unlink()
+                try:
+                    self.assertEqual(self.run_hub("lint"), 1)
+                    self.assertIn(f"schema/{name}: missing", self.output)
+                finally:
+                    path.write_bytes(saved)
+
     def test_lint_reports_standards_registry_defects(self):
         path = self.root / "schema" / "standards.json"
         reg = jsonio.load_json(path)

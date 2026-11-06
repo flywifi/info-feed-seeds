@@ -1,5 +1,6 @@
 """Tag readers on planted item text: CVE ids, severity, exploitation, vendors and deadlines, the vendor
 registry's own checks, and the readers' time on large inputs."""
+import itertools
 import json
 import tempfile
 import time
@@ -200,13 +201,20 @@ class StandardsTests(unittest.TestCase):
                 ("CIS Controls v8 mapping", "cis-controls", "cis-controls:8"),
                 ("CMMC 2.0 assessments begin", "cmmc", "cmmc:2.0"),
                 ("Profiles for CSF 2.0", "nist-csf", "nist-csf:2.0"),
-                ("The Cybersecurity Framework 2.0 quick start", "nist-csf", "nist-csf:2.0"),
+                ("The NIST Cybersecurity Framework 2.0 quick start", "nist-csf", "nist-csf:2.0"),
+                ("NIST 800-53 Rev. 5 baselines", "nist-sp-800-53", "nist-sp-800-53:r5"),
+                ("SP800-53r5 overlays", "nist-sp-800-53", "nist-sp-800-53:r5"),
+                ("NIST 800-171 Rev. 3 assessments", "nist-sp-800-171", "nist-sp-800-171:r3"),
+                ("PCI-DSS v4.0 deadlines", "pci-dss", "pci-dss:4.0"),
+                ("ISO27001:2022 certificate", "iso-27001", "iso-27001:2022"),
+                ("CIS Controls Version 8.1 guide", "cis-controls", "cis-controls:8.1"),
                 ("NIST CSF 1.1 crosswalk", "nist-csf", "nist-csf:1.1")):
             with self.subTest(text=text):
                 self.assertEqual(extract.standards(text, STD), [std])
                 self.assertEqual(extract.editions(text, STD), [edition])
         for text, std in (("FedRAMP 20x Class C", "fedramp"), ("HIPAA Security Rule", "hipaa"), ("GDPR fines", "gdpr"),
-                          ("NIS2 transposition", "nis2"), ("DORA reporting", "dora"), ("a SOC 2 Type II report", "soc-2"),
+                          ("NIS2 transposition", "nis2"), ("EU DORA reporting", "dora"),
+                          ("the Digital Operational Resilience Act applies", "dora"), ("a SOC 2 Type II report", "soc-2"),
                           ("CIS Benchmarks for Linux", "cis-benchmarks"), ("SP 800-61 incident handling", "nist-sp-800-61"),
                           ("Zero trust in SP 800-207", "nist-sp-800-207"), ("NIST IR 8625 O-RAN security", "nist-ir-8625")):
             with self.subTest(text=text):
@@ -216,9 +224,29 @@ class StandardsTests(unittest.TestCase):
     def test_names_that_are_not_a_standard(self):
         for text in ("Download the ISO image", "SOC analyst hiring", "the SP 800 series", "our framework 2.0 release",
                      "a soc 2 report in lower case", "SP 800-53A assessment procedures", "fedramp in lower case",
-                     "PreFedRAMP drafts", "non-FedRAMP clouds"):
+                     "PreFedRAMP drafts", "non-FedRAMP clouds", "Google 2025 DORA Report on DevOps",
+                     "Acme Releases Cybersecurity Framework 2.0 for Clients"):
             with self.subTest(text=text):
                 self.assertEqual((extract.standards(text, STD), extract.editions(text, STD)), ([], []))
+
+    def test_control_numbers_and_counts_are_not_editions(self):
+        for text in ("CIS Controls 1-6 first", "CIS Controls 3.4 safeguard", "CIS Controls 18 in total"):
+            with self.subTest(text=text):
+                self.assertEqual((extract.standards(text, STD), extract.editions(text, STD)), (["cis-controls"], []))
+        got = extract.tags("Updates to CMMC", "2.1 million contractors affected", NAMES, STD)
+        self.assertEqual((got["standards"], got["editions"]), (["cmmc"], []), "a version is never read across lines")
+        self.assertEqual(extract.editions("SP 800-53 r5 and SP 800-53, Rev. 5", STD), [], "only a revision written right after")
+
+    def test_an_alias_with_its_own_edition_needs_a_whole_version(self):
+        self.assertEqual((extract.standards("CSF 2.0.1 notes", STD), extract.editions("CSF 2.0.1 notes", STD)),
+                         (["nist-csf"], []))
+        self.assertEqual(extract.editions("CSF 2.0. Then more", STD), ["nist-csf:2.0"], "a sentence end is no version part")
+
+    def test_at_most_twenty_editions_are_kept_for_an_item(self):
+        text = " ".join(f"PCI DSS 1.{n}" for n in range(40))
+        self.assertEqual(len(extract.editions(text, STD)), 40)
+        got = extract.tags(text, "", NAMES, STD)["editions"]
+        self.assertEqual(got, [f"pci-dss:1.{n}" for n in range(20)])
 
     def test_first_mention_order_each_once(self):
         text = "FedRAMP and HIPAA, then FedRAMP again and SP 800-53 Rev. 5 and SP 800-53 Rev. 5"
@@ -229,6 +257,7 @@ class StandardsTests(unittest.TestCase):
         self.assertEqual(extract.standards("SP 800-53 and FIPS 140-3", STD), ["nist-sp-800-53", "fips-140"])
         self.assertEqual(extract.editions("SP 800-53 and FIPS 140-3", STD), ["fips-140:3"])
         self.assertEqual(extract.editions("FIPS 140-23 and PCI DSS v4.0.1.2", STD), [], "an edition is read whole or not at all")
+        self.assertEqual(extract.editions("FIPS 140-3-1 and SP 800-53 Rev. 5.1", STD), [])
         self.assertEqual(extract.editions("HIPAA 2.0 and CMMC rules version 2.0", STD), [],
                          "a version after another name, or not right after its own, is no edition")
 
@@ -237,12 +266,14 @@ class StandardsTests(unittest.TestCase):
         self.assertEqual((got["standards"], got["editions"]), (["nist-sp-800-53"], ["nist-sp-800-53:r5"]))
 
     def test_the_readers_take_linear_time(self):
-        for text in ("SP 800-53 Rev. 5 " * 6000, "FedRAMP " * 12500, "S" * 100_000, "CSF 2.0 " * 12500):
+        distinct = " ".join(f"PCI DSS {a}.{b}.{c}" for a, b, c in
+                            itertools.islice(itertools.product(range(1, 100), range(100), range(100)), 8000))
+        for text in ("SP 800-53 Rev. 5 " * 6000, "FedRAMP " * 12500, "S" * 100_000, "CSF 2.0 " * 12500, distinct):
             for reader in (extract.standards, extract.editions):
                 with self.subTest(reader=reader.__name__, text=text[:10]):
                     start = time.perf_counter()
                     reader(text[:100_000], STD)
-                    self.assertLess(time.perf_counter() - start, 0.25)
+                    self.assertLess(time.perf_counter() - start, 0.1)
 
     def test_the_registry_lints_clean_and_reports_each_defect(self):
         self.assertEqual(extract.standard_problems(ROOT / "schema" / "standards.json"), [])
@@ -257,6 +288,14 @@ class StandardsTests(unittest.TestCase):
             jsonio.dump_json(bad, {"standards": {"iso": {"aliases": ["ISO 27001"]}, "x": {"aliases": ["ISO 27001 Annex"]}}})
             self.assertEqual(extract.standard_problems(bad),
                              ["alias 'ISO 27001' (iso) is inside alias 'ISO 27001 Annex' (x) and is hidden by it"])
+            jsonio.dump_json(bad, {"standards": {"a": {"aliases": ["FIPS 140"]}, "b": {"aliases": ["FIPS 140-3"]}}})
+            self.assertEqual(extract.standard_problems(bad),
+                             ["alias 'FIPS 140' (a) is inside alias 'FIPS 140-3' (b) and is hidden by it"],
+                             "the lint uses the matcher's own right edge")
+            jsonio.dump_json(bad, {"standards": {"a": {"aliases": ["SP 800-53"]}, "b": {"aliases": ["SP 800-53r5"]}}})
+            self.assertEqual(extract.standard_problems(bad),
+                             ["alias 'SP 800-53' (a) is inside alias 'SP 800-53r5' (b) and is hidden by it"],
+                             "a revision written straight after a name is within the matcher's edge")
 
 
 class DeadlineTests(unittest.TestCase):

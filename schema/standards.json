@@ -23,8 +23,8 @@
     },
     "dora": {
       "aliases": [
-        "DORA",
-        "Digital Operational Resilience Act"
+        "Digital Operational Resilience Act",
+        "EU DORA"
       ],
       "label": "Digital Operational Resilience Act"
     },
@@ -56,7 +56,8 @@
     "iso-27001": {
       "aliases": [
         "ISO/IEC 27001",
-        "ISO 27001"
+        "ISO 27001",
+        "ISO27001"
       ],
       "label": "ISO/IEC 27001"
     },
@@ -69,7 +70,7 @@
     },
     "nist-csf": {
       "aliases": [
-        "Cybersecurity Framework",
+        "NIST Cybersecurity Framework",
         "NIST CSF",
         "CSF 2.0",
         "CSF 1.1"
@@ -90,7 +91,8 @@
     },
     "nist-sp-800-171": {
       "aliases": [
-        "SP 800-171"
+        "SP 800-171",
+        "NIST 800-171"
       ],
       "label": "NIST SP 800-171"
     },
@@ -102,7 +104,9 @@
     },
     "nist-sp-800-53": {
       "aliases": [
-        "SP 800-53"
+        "SP 800-53",
+        "NIST 800-53",
+        "SP800-53"
       ],
       "label": "NIST SP 800-53"
     },
@@ -114,7 +118,8 @@
     },
     "pci-dss": {
       "aliases": [
-        "PCI DSS"
+        "PCI DSS",
+        "PCI-DSS"
       ],
       "label": "PCI DSS"
     },

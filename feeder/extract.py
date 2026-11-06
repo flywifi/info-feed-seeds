@@ -184,10 +184,10 @@ def load_standards(path: Path) -> dict[str, list[str]]:
 
 def standard_problems(path: Path) -> list[str]:
     """The vendor registry's checks, applied to schema/standards.json."""
-    return vendor_problems(path, "standards", "standard")
+    return vendor_problems(path, "standards", "standard", right=_STD_RIGHT)
 
 
-def vendor_problems(path: Path, key: str = "vendors", noun: str = "vendor") -> list[str]:
+def vendor_problems(path: Path, key: str = "vendors", noun: str = "vendor", right: str = r"(?!\w)") -> list[str]:
     """Registry defects lint reports: invalid JSON, a bad id, an entry that is not an object, aliases that
     are not a list of strings, an entry without aliases, an alias shorter than 2 characters or padded with
     spaces, an alias listed twice, one alias claimed by two entries, or an alias that sits inside another
@@ -220,7 +220,8 @@ def vendor_problems(path: Path, key: str = "vendors", noun: str = "vendor") -> l
             owner.setdefault(alias, vid)
     for a, va in owner.items():
         for b, vb in owner.items():
-            if va != vb and a != b and re.search(r"(?<![\w-])" + re.escape(b) + r"(?![\w-])", a):
+            # The same right edge as the matcher, so an alias the matcher would hide is reported.
+            if va != vb and a != b and re.search(r"(?<![\w-])" + re.escape(b) + right, a):
                 problems.append(f"alias {b!r} ({vb}) is inside alias {a!r} ({va}) and is hidden by it")
     return problems
 
@@ -243,14 +244,17 @@ _STD_RIGHT = r"(?!(?!r\d)\w)"
 # name, how the edition is stored). Nothing else in the text is read as an edition.
 _VERSION = r"(\d{1,2}(?:\.\d{1,2}){1,2})(?!\w|\.\d)"
 EDITION_AFTER = {
-    "nist-sp-800-": (re.compile(r"(?:\s?(?:Rev|Revision)\.?\s?|r)(\d{1,2})(?!\w|\.\d)", re.A), "r{}"),
+    "nist-sp-800-": (re.compile(r"(?: ?(?:Rev|Revision)\.? ?|r)(\d{1,2})(?!\w|\.\d)", re.A), "r{}"),
     "fips-140": (re.compile(r"-(\d)(?!\w|-\d)", re.A), "{}"),
     "iso-27001": (re.compile(r":(\d{4})(?!\w)", re.A), "{}"),
-    "pci-dss": (re.compile(r"\sv?" + _VERSION, re.A), "{}"),
-    "cis-controls": (re.compile(r"\sv?(\d{1,2}(?:\.\d{1,2}){0,2})(?!\w|\.\d)", re.A), "{}"),
-    "cmmc": (re.compile(r"\sv?" + _VERSION, re.A), "{}"),
-    "nist-csf": (re.compile(r"\sv?" + _VERSION, re.A), "{}"),
+    "pci-dss": (re.compile(r" v?" + _VERSION, re.A), "{}"),
+    # A CIS Controls edition needs v or Version: "CIS Controls 18" or "1-6" are control numbers.
+    "cis-controls": (re.compile(r" (?:v|Version )(\d{1,2}(?:\.\d{1,2}){0,2})(?![\w-]|\.\d)", re.A), "{}"),
+    "cmmc": (re.compile(r" v?" + _VERSION, re.A), "{}"),
+    "nist-csf": (re.compile(r" v?" + _VERSION, re.A), "{}"),
 }
+# Editions read for one item; the rest of a long text adds none.
+EDITION_CAP = 20
 _ALIAS_EDITION = re.compile(r"\s(\d{1,2}(?:\.\d{1,2}){1,2})\Z", re.A)   # an alias that names its edition ("CSF 2.0")
 
 
@@ -282,22 +286,22 @@ def editions(text: str, names: dict[str, list[str]]) -> list[str]:
     gives cis-controls:8, "CMMC 2.0" gives cmmc:2.0 and "CSF 2.0" gives nist-csf:2.0. A version anywhere
     else, or after another standard's name, is never an edition."""
     owner, hits = _standard_hits(text, names)
-    out: list[str] = []
+    out: dict[str, None] = {}   # insertion-ordered, so dedup stays linear in the number of editions
     for m in hits:
         sid, value = owner[m.group(0)], None
         own = _ALIAS_EDITION.search(m.group(0))
         if own:
-            value = own.group(1)
+            # An alias that names its edition counts only when no further version part follows ("CSF 2.0.1").
+            value = own.group(1) if re.match(r"\.\d", text[m.end():m.end() + 2]) is None else None
         else:
             rule = next((r for prefix, r in EDITION_AFTER.items() if sid == prefix or
                          (prefix.endswith("-") and sid.startswith(prefix))), None)
             if rule is not None:
                 after = rule[0].match(text, m.end())
                 value = rule[1].format(after.group(1)) if after else None
-        tag = f"{sid}:{value}" if value else None
-        if tag and tag not in out:
-            out.append(tag)
-    return out
+        if value:
+            out.setdefault(f"{sid}:{value}", None)
+    return list(out)
 
 
 def tags(title: str, summary: str, names: dict[str, list[str]],
@@ -308,9 +312,10 @@ def tags(title: str, summary: str, names: dict[str, list[str]],
     found = deadlines(text)
     return {"cves": cve_ids(text), "severity": sev, "severity_rank": SEVERITY_RANK[sev] if sev else None,
             "exploited": exploited(text), "vendors": vendors(text, names), "deadline": found[0] if found else None,
-            "standards": standards(text, standard_names or {}), "editions": editions(text, standard_names or {})}
+            "standards": standards(text, standard_names or {}),
+            "editions": editions(text, standard_names or {})[:EDITION_CAP]}
 
 
-__all__ = ["EDITION_AFTER", "SEVERITY_RANK", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
+__all__ = ["EDITION_AFTER", "EDITION_CAP", "SEVERITY_RANK", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
            "load_vendors", "severity", "severity_from_score", "standard_problems", "standards", "tags",
            "vendor_problems", "vendors"]
