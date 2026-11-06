@@ -235,6 +235,19 @@ def content_routed(profile: dict, source: Source, item: dict) -> bool:
     return wanted is None or bool(refs & set(wanted))
 
 
+def industry_routed(profile: dict, source: Source, item: dict) -> bool:
+    """Whether an item goes to this profile by the industries stored with it (its source's), or its
+    source's manifest industries for a row stored before industries were (when the poll's retag did not
+    run). An id in `exclude_industries` keeps it out; when `industries` is set, only an item with an
+    industry it names goes in. An item with no industry is never named, so an `industries` list leaves
+    it out and an exclusion list lets it through. Without either list every item goes in."""
+    have = set(item.get("industries") or source.manifest.get("industries") or [])
+    if have & set(profile.get("exclude_industries") or []):
+        return False
+    wanted = profile.get("industries")
+    return wanted is None or bool(have & set(wanted))
+
+
 def _ref_list(profile: dict, key: str) -> list:
     """A profile list of references, or [] when the value is not a list (the schema reports the shape)."""
     value = profile.get(key)
@@ -344,6 +357,7 @@ def lint(repo: Repo) -> list[str]:
     methods_schema = repo.schema("methods.schema.json")
     known_ids: set[str] = set()
     cat_of: dict[str, str | None] = {}
+    loaded: dict[str, Source] = {}
 
     for folder in repo.source_folders():
         rel = _rel(folder, repo.root)
@@ -354,6 +368,7 @@ def lint(repo: Repo) -> list[str]:
             continue
         known_ids.add(src.id)
         cat_of[src.id] = src.source_category
+        loaded[src.id] = src
         name = "source.local.json" if src.local else "source.json"
         problems += [f"{rel}/{name}: {e}" for e in validate(src.manifest, source_schema)]
         if src.manifest.get("id") != folder.name:
@@ -409,7 +424,8 @@ def lint(repo: Repo) -> list[str]:
         except ValueError as exc:
             problems.append(f"{rel}: invalid JSON: {exc}")
             continue
-        problems += [f"{rel}: {e}" for e in validate(profile, profile_schema)]
+        shape = validate(profile, profile_schema)
+        problems += [f"{rel}: {e}" for e in shape]
         if profile.get("name") != name:
             problems.append(f"{rel}: name {profile.get('name')!r} does not equal the file name")
         for tag in list(profile.get("topics", [])) + list(profile.get("subtopic_keywords", {})) \
@@ -427,6 +443,24 @@ def lint(repo: Repo) -> list[str]:
             for ref in named:
                 if refs is not None and ref not in refs:
                     problems.append(f"{rel}: {what} {ref!r} is not in schema/categories.json")
+        known_industries = categories.industry_ids(reg) if refs is not None else None
+        for key, what in (("industries", "industry"), ("exclude_industries", "excluded industry")):
+            named = _ref_list(profile, key)
+            for iid in sorted({i for i in named if named.count(i) > 1}):
+                problems.append(f"{rel}: {what} {iid!r} is listed twice")
+            for iid in named:
+                if known_industries is not None and iid not in known_industries:
+                    problems.append(f"{rel}: {what} {iid!r} is not in schema/categories.json industries")
+        for iid in sorted(set(_ref_list(profile, "industries")) & set(_ref_list(profile, "exclude_industries"))):
+            problems.append(f"{rel}: industry {iid!r} is both routed in and excluded")
+        if not shape and known_industries is not None:
+            # An industries list narrows the items of the sources the profile polls; it never adds a source.
+            carried = {i for s in selected_sources(with_defaults(profile), loaded)
+                       if s.manifest.get("enabled", True) for i in s.manifest.get("industries") or []}
+            for iid in sorted(set(_ref_list(profile, "industries")) - carried):
+                if iid in known_industries:
+                    problems.append(f"{rel}: industry {iid!r} is listed by no enabled source this profile polls, "
+                                    "so it routes nothing")
         excluded = set(_ref_list(profile, "exclude_content_categories"))
         polled = {r.split("/", 1)[0] for r in _ref_list(profile, "source_categories")}
         polled |= {cat_of.get(s) for s in _ref_list(profile, "sources")}
@@ -459,7 +493,7 @@ def lint(repo: Repo) -> list[str]:
 
 
 __all__ = [
-    "ConfigError", "GUARD_RANK", "RELEASES_COMMENT", "Repo", "Source", "accepts", "category_allowed", "content_routed",
+    "ConfigError", "GUARD_RANK", "RELEASES_COMMENT", "Repo", "Source", "accepts", "category_allowed", "content_routed", "industry_routed",
     "is_held",
     "item_tags", "json_files", "keyword_tags", "lint", "profile_selects", "release_problems",
     "selected_sources", "with_defaults",

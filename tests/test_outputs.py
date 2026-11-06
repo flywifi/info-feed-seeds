@@ -110,7 +110,8 @@ class LatestJsonShapeTests(unittest.TestCase):
         self.assertEqual(doc["version"], "1")
         self.assertEqual(set(doc["items"][0]), {
             "content_sha256", "feed_id", "publisher", "title_display", "authors", "link",
-            "summary_display", "published", "first_seen", "topics", "authority", "tier", "categories", "tags", "offline_pattern_scan"})
+            "summary_display", "published", "first_seen", "topics", "authority", "tier", "industries", "categories", "tags",
+            "offline_pattern_scan"})
         self.assertEqual(doc["items"][0]["authors"], ["Jane Example"], "bylines are kept as the feed gave them")
         self.assertIn("must escape", doc["_comment"])
         self.assertEqual(cov["sources_responded"], 1)
@@ -173,6 +174,13 @@ class ClassificationTests(unittest.TestCase):
         self.assertIsNone(view["categories"]["reread"]["content"], "the manifest's pair is not borrowed")
         got = outputs.classification_of([view])
         self.assertEqual((got["rules_now_differ"], got["without_content_category"]), (0, 1))
+
+    def test_industries_count_an_item_under_each_of_its_industries(self):
+        two = outputs.item_view(dict(row("Bank and hospital note", sha="a" * 64), industries=["finance", "healthcare"]),
+                                CAT_SOURCE, PROFILE, set(), REG)
+        bare = outputs.item_view(dict(row("Plain note", sha="b" * 64), industries=[]), CAT_SOURCE, PROFILE, set(), REG)
+        got = outputs.classification_of([two, bare])
+        self.assertEqual((got["industries"], got["items"]), ({"finance": 1, "healthcare": 1, "none": 1}, 2))
 
     def test_without_the_registry_nothing_is_reread(self):
         view = outputs.item_view(row("Phishing scam wave"), CAT_SOURCE, PROFILE, set())

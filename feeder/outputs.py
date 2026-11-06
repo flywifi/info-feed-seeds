@@ -142,6 +142,7 @@ def item_view(row: dict, source, profile: dict, released: set[str], reg: dict | 
             "severity_rank": row.get("severity_rank"), "exploited": bool(row.get("exploited")),
             "vendors": list(row.get("vendors") or []), "deadline": row.get("deadline"),
         },
+        "industries": list(row.get("industries") or []),
         "categories": {
             "source": _pair(manifest.get("source_category"), manifest.get("source_subcategory")),
             "content": _pair(row.get("content_category"), row.get("content_subcategory")),
@@ -242,7 +243,8 @@ def latest_json(profile: dict, day: str, views: list[dict], health: list[dict], 
             "title_display": view["title_display"], "authors": view["authors"], "link": view["link"],
             "summary_display": view["summary_display"], "published": view["published"],
             "first_seen": view["first_seen"], "topics": view["topics"], "authority": view["authority"],
-            "tier": view["tier"], "categories": view["categories"], "tags": view["tags"], guard.FIELD_NAME: view["scan"],
+            "tier": view["tier"], "industries": view["industries"], "categories": view["categories"],
+            "tags": view["tags"], guard.FIELD_NAME: view["scan"],
         })
     return {"_comment": JSON_COMMENT, "version": FORMAT_VERSION, "profile": profile["name"], "date": day,
             "generated": generated, "items": out_items, "health": health, "coverage": coverage}
@@ -276,8 +278,11 @@ def classification_of(views: list[dict]) -> dict:
     content: dict[str, int] = {}
     by_source: dict[str, dict[str, int]] = {}
     basis: dict[str, dict[str, int]] = {"category": {}, "subcategory": {}}
+    industries: dict[str, int] = {}
     moved = unlabelled = differs = 0
     for view in shown:
+        for iid in view.get("industries") or ["none"]:   # an item with two industries counts under each
+            industries[iid] = industries.get(iid, 0) + 1
         cats = view["categories"]
         pair = cats["content"] or "none"
         content[pair] = content.get(pair, 0) + 1
@@ -296,6 +301,7 @@ def classification_of(views: list[dict]) -> dict:
     return {"items": len(shown), "content": dict(sorted(content.items())),
             "by_source": {k: dict(sorted(v.items())) for k, v in sorted(by_source.items())},
             "basis": {k: dict(sorted(v.items())) for k, v in basis.items()},
+            "industries": dict(sorted(industries.items())),
             "moved_out_of_source_category": moved, "without_content_category": unlabelled,
             "rules_now_differ": differs}
 

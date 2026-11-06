@@ -38,6 +38,15 @@
       "minItems": 1,
       "type": "array"
     },
+    "exclude_industries": {
+      "description": "Industries kept out of this profile's digest, matched the same way as industries; an exclusion wins over an inclusion.",
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
     "exclude_keywords": {
       "description": "Lowercase words or phrases; an item matching any of these is dropped even when it matches an include keyword.",
       "items": {
@@ -70,6 +79,15 @@
         "minLength": 1,
         "type": "string"
       },
+      "type": "array"
+    },
+    "industries": {
+      "description": "Industries this profile routes into its digest: ids from the industries list of schema/categories.json, matched against the industries stored with each item (its source's). An item with no industry is never named. Without this list every item goes in.",
+      "items": {
+        "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+        "type": "string"
+      },
+      "minItems": 1,
       "type": "array"
     },
     "name": {

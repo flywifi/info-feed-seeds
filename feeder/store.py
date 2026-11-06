@@ -55,10 +55,10 @@ NEW_COLUMNS = (
     ("updated", "TEXT"),
 )
 # The filter columns hub retag may rewrite: the content category with its basis, the source pair of a
-# row placed before content categories, and the tag columns. Hashes, text, guard and hit data are not here.
+# row placed before content categories, the source's industries, and the tag columns. Hashes, text, guard and hit data are not here.
 RETAG_COLUMNS = ("content_category", "content_subcategory", "content_category_basis", "content_subcategory_basis",
-                 "source_category", "source_subcategory", "cves", "severity", "severity_rank", "exploited",
-                 "vendors", "deadline")
+                 "source_category", "source_subcategory", "industries", "cves", "severity", "severity_rank",
+                 "exploited", "vendors", "deadline")
 LIST_COLUMNS = ("industries", "standards", "editions", "change_types", "cves", "vendors", "link_hosts")
 INDEXES = (
     "CREATE INDEX IF NOT EXISTS items_published ON items(published)",
