@@ -148,25 +148,25 @@ def deadlines(text: str) -> list[str]:
     return list(dict.fromkeys(d for d in (_long_date(m.group(1)) for m in matches) if d))
 
 
-def _vendor_entries(path: Path):
-    """(problems, {vendor id: entry}) from the registry file; the file may be missing."""
+def _registry_entries(path: Path, key: str = "vendors"):
+    """(problems, {id: entry}) from a name registry file (vendors or standards); the file may be missing."""
     if not path.exists():
         return [], {}
     try:
         doc = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
         return [f"not valid JSON ({exc})"], {}
-    vendors = doc.get("vendors") if isinstance(doc, dict) else None
-    if not isinstance(vendors, dict):
-        return ["has no \"vendors\" object"], {}
-    return [], vendors
+    entries = doc.get(key) if isinstance(doc, dict) else None
+    if not isinstance(entries, dict):
+        return [f"has no \"{key}\" object"], {}
+    return [], entries
 
 
-def load_vendors(path: Path) -> dict[str, list[str]]:
-    """{vendor id: [aliases]} from the vendor registry, sorted by vendor id. Entries and aliases the matcher
-    cannot use (not an object, aliases not a list of strings, short or padded aliases) are skipped, and a
-    missing or unreadable file gives none."""
-    _, entries = _vendor_entries(path)
+def load_vendors(path: Path, key: str = "vendors") -> dict[str, list[str]]:
+    """{id: [aliases]} from the vendor registry (or, with key "standards", the standards registry), sorted
+    by id. Entries and aliases the matcher cannot use (not an object, aliases not a list of strings, short
+    or padded aliases) are skipped, and a missing or unreadable file gives none."""
+    _, entries = _registry_entries(path, key)
     out = {}
     for vid, entry in sorted(entries.items()):
         aliases = entry.get("aliases") if isinstance(entry, dict) else None
@@ -177,33 +177,43 @@ def load_vendors(path: Path) -> dict[str, list[str]]:
     return out
 
 
-def vendor_problems(path: Path) -> list[str]:
+def load_standards(path: Path) -> dict[str, list[str]]:
+    """{standard id: [aliases]} from schema/standards.json, with the same rules as the vendor registry."""
+    return load_vendors(path, "standards")
+
+
+def standard_problems(path: Path) -> list[str]:
+    """The vendor registry's checks, applied to schema/standards.json."""
+    return vendor_problems(path, "standards", "standard")
+
+
+def vendor_problems(path: Path, key: str = "vendors", noun: str = "vendor") -> list[str]:
     """Registry defects lint reports: invalid JSON, a bad id, an entry that is not an object, aliases that
-    are not a list of strings, a vendor without aliases, an alias shorter than 2 characters or padded with
-    spaces, an alias listed twice, one alias claimed by two vendors, or an alias that sits inside another
-    vendor's longer alias and is hidden by it."""
-    problems, entries = _vendor_entries(path)
+    are not a list of strings, an entry without aliases, an alias shorter than 2 characters or padded with
+    spaces, an alias listed twice, one alias claimed by two entries, or an alias that sits inside another
+    entry's longer alias and is hidden by it."""
+    problems, entries = _registry_entries(path, key)
     owner: dict[str, str] = {}
     for vid, entry in entries.items():
         if not ID_RE.fullmatch(vid):
-            problems.append(f"vendor id {vid!r} is not lower-case words joined by hyphens")
+            problems.append(f"{noun} id {vid!r} is not lower-case words joined by hyphens")
         if not isinstance(entry, dict):
-            problems.append(f"vendor {vid!r} is not an object")
+            problems.append(f"{noun} {vid!r} is not an object")
             continue
         aliases = entry.get("aliases")
         if not isinstance(aliases, list) or not all(isinstance(a, str) for a in aliases):
-            problems.append(f"vendor {vid!r}: aliases must be a list of strings")
+            problems.append(f"{noun} {vid!r}: aliases must be a list of strings")
             continue
         if not aliases:
-            problems.append(f"vendor {vid!r} has no aliases")
+            problems.append(f"{noun} {vid!r} has no aliases")
         seen: set[str] = set()
         for alias in aliases:
             if alias != alias.strip():
-                problems.append(f"vendor {vid!r}: alias {alias!r} has leading or trailing spaces")
+                problems.append(f"{noun} {vid!r}: alias {alias!r} has leading or trailing spaces")
             elif len(alias) < 2:
-                problems.append(f"vendor {vid!r}: alias {alias!r} is too short")
+                problems.append(f"{noun} {vid!r}: alias {alias!r} is too short")
             elif alias in seen:
-                problems.append(f"vendor {vid!r}: alias {alias!r} is listed twice")
+                problems.append(f"{noun} {vid!r}: alias {alias!r} is listed twice")
             elif alias in owner and owner[alias] != vid:
                 problems.append(f"alias {alias!r} is claimed by {owner[alias]!r} and {vid!r}")
             seen.add(alias)
@@ -226,14 +236,81 @@ def vendors(text: str, names: dict[str, list[str]]) -> list[str]:
     return [vid for vid in names if vid in found]
 
 
-def tags(title: str, summary: str, names: dict[str, list[str]]) -> dict:
+# Standards: an alias matches as a whole word with its exact capitalisation, like a vendor name. A
+# revision written straight after it ("SP 800-53r5") still lets the name match.
+_STD_RIGHT = r"(?!(?!r\d)\w)"
+# The edition written right after a standard's name, by family: (pattern anchored at the end of the
+# name, how the edition is stored). Nothing else in the text is read as an edition.
+_VERSION = r"(\d{1,2}(?:\.\d{1,2}){1,2})(?!\w|\.\d)"
+EDITION_AFTER = {
+    "nist-sp-800-": (re.compile(r"(?:\s?(?:Rev|Revision)\.?\s?|r)(\d{1,2})(?!\w|\.\d)", re.A), "r{}"),
+    "fips-140": (re.compile(r"-(\d)(?!\w|-\d)", re.A), "{}"),
+    "iso-27001": (re.compile(r":(\d{4})(?!\w)", re.A), "{}"),
+    "pci-dss": (re.compile(r"\sv?" + _VERSION, re.A), "{}"),
+    "cis-controls": (re.compile(r"\sv?(\d{1,2}(?:\.\d{1,2}){0,2})(?!\w|\.\d)", re.A), "{}"),
+    "cmmc": (re.compile(r"\sv?" + _VERSION, re.A), "{}"),
+    "nist-csf": (re.compile(r"\sv?" + _VERSION, re.A), "{}"),
+}
+_ALIAS_EDITION = re.compile(r"\s(\d{1,2}(?:\.\d{1,2}){1,2})\Z", re.A)   # an alias that names its edition ("CSF 2.0")
+
+
+def _standard_hits(text: str, names: dict[str, list[str]]):
+    owner = {a: sid for sid, aliases in names.items() for a in aliases}
+    if not owner or not text:
+        return owner, iter(())
+    pattern = (r"(?<![\w-])(?:" + "|".join(re.escape(a) for a in sorted(owner, key=len, reverse=True)) + r")"
+               + _STD_RIGHT)
+    return owner, re.finditer(pattern, text, re.A)
+
+
+def standards(text: str, names: dict[str, list[str]]) -> list[str]:
+    """Standard ids whose aliases appear as whole words with their exact capitalisation, in order of
+    first mention, each once, in one pass."""
+    owner, hits = _standard_hits(text, names)
+    out: list[str] = []
+    for m in hits:
+        sid = owner[m.group(0)]
+        if sid not in out:
+            out.append(sid)
+    return out
+
+
+def editions(text: str, names: dict[str, list[str]]) -> list[str]:
+    """For each standard found, the edition written right after its name, as "<id>:<edition>" in order of
+    first mention: "SP 800-53 Rev. 5" gives nist-sp-800-53:r5, "FIPS 140-3" gives fips-140:3,
+    "ISO/IEC 27001:2022" gives iso-27001:2022, "PCI DSS v4.0.1" gives pci-dss:4.0.1, "CIS Controls v8"
+    gives cis-controls:8, "CMMC 2.0" gives cmmc:2.0 and "CSF 2.0" gives nist-csf:2.0. A version anywhere
+    else, or after another standard's name, is never an edition."""
+    owner, hits = _standard_hits(text, names)
+    out: list[str] = []
+    for m in hits:
+        sid, value = owner[m.group(0)], None
+        own = _ALIAS_EDITION.search(m.group(0))
+        if own:
+            value = own.group(1)
+        else:
+            rule = next((r for prefix, r in EDITION_AFTER.items() if sid == prefix or
+                         (prefix.endswith("-") and sid.startswith(prefix))), None)
+            if rule is not None:
+                after = rule[0].match(text, m.end())
+                value = rule[1].format(after.group(1)) if after else None
+        tag = f"{sid}:{value}" if value else None
+        if tag and tag not in out:
+            out.append(tag)
+    return out
+
+
+def tags(title: str, summary: str, names: dict[str, list[str]],
+         standard_names: dict[str, list[str]] | None = None) -> dict:
     """The store's filter columns for one item, from its title and summary."""
     text = f"{title or ''}\n{summary or ''}"
     sev = severity(text)
     found = deadlines(text)
     return {"cves": cve_ids(text), "severity": sev, "severity_rank": SEVERITY_RANK[sev] if sev else None,
-            "exploited": exploited(text), "vendors": vendors(text, names), "deadline": found[0] if found else None}
+            "exploited": exploited(text), "vendors": vendors(text, names), "deadline": found[0] if found else None,
+            "standards": standards(text, standard_names or {}), "editions": editions(text, standard_names or {})}
 
 
-__all__ = ["SEVERITY_RANK", "cve_ids", "deadlines", "exploited", "load_vendors", "severity", "severity_from_score",
-           "tags", "vendor_problems", "vendors"]
+__all__ = ["EDITION_AFTER", "SEVERITY_RANK", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
+           "load_vendors", "severity", "severity_from_score", "standard_problems", "standards", "tags",
+           "vendor_problems", "vendors"]

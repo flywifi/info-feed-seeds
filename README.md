@@ -349,7 +349,12 @@ holds BLOCK items from every output. Items at or above the profile's hold level 
 Each `latest.json` item carries `categories` (its source category, its content category and what
 decided it) and `tags` read from its own text: `cves`, `severity` and `severity_rank` (0 none to 4
 critical, from a severity word or a CVSS score), `exploited`, `vendors` (ids from
-`schema/vendors.json`) and `deadline`. A tag the text does not state stays empty. Severity reads
+`schema/vendors.json`), `deadline`, `standards` (ids from `schema/standards.json`, in order of first
+mention) and `editions` (`<id>:<edition>` for an edition written right after a standard's name, such
+as `nist-sp-800-53:r5`, `fips-140:3`, `iso-27001:2022`, `pci-dss:4.0.1`, `cmmc:2.0` or `nist-csf:2.0`).
+Standard names match like vendor names, as whole words with their exact capitalisation; not read: a
+standard named only by its number without its family, "ISO image", "SOC" alone, "the framework", and
+a version that is not written right after its own standard's name. A tag the text does not state stays empty. Severity reads
 important as high and moderate as medium (the words Microsoft and Red Hat use) in the same severity
 contexts as the other words; a Red Hat title prefix such as `Important:` is not read. A severity word
 is skipped when "not" or "no" comes at most two words before it in the same clause, except "not only"

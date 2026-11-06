@@ -6,10 +6,11 @@ import time
 import unittest
 from pathlib import Path
 
-from feeder import extract, jsonio
+from feeder import extract, items, jsonio
 from tests.helpers import ROOT
 
 NAMES = extract.load_vendors(ROOT / "schema" / "vendors.json")
+STD = extract.load_standards(ROOT / "schema" / "standards.json")
 
 
 def elapsed(fn, *args):
@@ -186,6 +187,78 @@ class VendorTests(unittest.TestCase):
             self.assertEqual(len(extract.vendor_problems(bad)), 1)
 
 
+class StandardsTests(unittest.TestCase):
+    def test_each_family_and_its_edition(self):
+        for text, std, edition in (
+                ("Guidance on SP 800-53 Rev. 5 controls", "nist-sp-800-53", "nist-sp-800-53:r5"),
+                ("Mapping to SP 800-53r5", "nist-sp-800-53", "nist-sp-800-53:r5"),
+                ("SP 800-171 Revision 3 is final", "nist-sp-800-171", "nist-sp-800-171:r3"),
+                ("Validated under FIPS 140-3", "fips-140", "fips-140:3"),
+                ("Certified to ISO/IEC 27001:2022", "iso-27001", "iso-27001:2022"),
+                ("The ISO 27001:2013 transition ends", "iso-27001", "iso-27001:2013"),
+                ("PCI DSS v4.0.1 is now in force", "pci-dss", "pci-dss:4.0.1"),
+                ("CIS Controls v8 mapping", "cis-controls", "cis-controls:8"),
+                ("CMMC 2.0 assessments begin", "cmmc", "cmmc:2.0"),
+                ("Profiles for CSF 2.0", "nist-csf", "nist-csf:2.0"),
+                ("The Cybersecurity Framework 2.0 quick start", "nist-csf", "nist-csf:2.0"),
+                ("NIST CSF 1.1 crosswalk", "nist-csf", "nist-csf:1.1")):
+            with self.subTest(text=text):
+                self.assertEqual(extract.standards(text, STD), [std])
+                self.assertEqual(extract.editions(text, STD), [edition])
+        for text, std in (("FedRAMP 20x Class C", "fedramp"), ("HIPAA Security Rule", "hipaa"), ("GDPR fines", "gdpr"),
+                          ("NIS2 transposition", "nis2"), ("DORA reporting", "dora"), ("a SOC 2 Type II report", "soc-2"),
+                          ("CIS Benchmarks for Linux", "cis-benchmarks"), ("SP 800-61 incident handling", "nist-sp-800-61"),
+                          ("Zero trust in SP 800-207", "nist-sp-800-207"), ("NIST IR 8625 O-RAN security", "nist-ir-8625")):
+            with self.subTest(text=text):
+                self.assertEqual(extract.standards(text, STD), [std])
+                self.assertEqual(extract.editions(text, STD), [], "no edition is written next to it")
+
+    def test_names_that_are_not_a_standard(self):
+        for text in ("Download the ISO image", "SOC analyst hiring", "the SP 800 series", "our framework 2.0 release",
+                     "a soc 2 report in lower case", "SP 800-53A assessment procedures", "fedramp in lower case",
+                     "PreFedRAMP drafts", "non-FedRAMP clouds"):
+            with self.subTest(text=text):
+                self.assertEqual((extract.standards(text, STD), extract.editions(text, STD)), ([], []))
+
+    def test_first_mention_order_each_once(self):
+        text = "FedRAMP and HIPAA, then FedRAMP again and SP 800-53 Rev. 5 and SP 800-53 Rev. 5"
+        self.assertEqual(extract.standards(text, STD), ["fedramp", "hipaa", "nist-sp-800-53"])
+        self.assertEqual(extract.editions(text, STD), ["nist-sp-800-53:r5"])
+
+    def test_an_edition_belongs_only_to_the_name_it_follows(self):
+        self.assertEqual(extract.standards("SP 800-53 and FIPS 140-3", STD), ["nist-sp-800-53", "fips-140"])
+        self.assertEqual(extract.editions("SP 800-53 and FIPS 140-3", STD), ["fips-140:3"])
+        self.assertEqual(extract.editions("FIPS 140-23 and PCI DSS v4.0.1.2", STD), [], "an edition is read whole or not at all")
+        self.assertEqual(extract.editions("HIPAA 2.0 and CMMC rules version 2.0", STD), [],
+                         "a version after another name, or not right after its own, is no edition")
+
+    def test_sanitized_text_is_read(self):
+        got = extract.tags(items.sanitize("Guide to SP&nbsp;800-53 Rev.&nbsp;5"), "", NAMES, STD)
+        self.assertEqual((got["standards"], got["editions"]), (["nist-sp-800-53"], ["nist-sp-800-53:r5"]))
+
+    def test_the_readers_take_linear_time(self):
+        for text in ("SP 800-53 Rev. 5 " * 6000, "FedRAMP " * 12500, "S" * 100_000, "CSF 2.0 " * 12500):
+            for reader in (extract.standards, extract.editions):
+                with self.subTest(reader=reader.__name__, text=text[:10]):
+                    start = time.perf_counter()
+                    reader(text[:100_000], STD)
+                    self.assertLess(time.perf_counter() - start, 0.25)
+
+    def test_the_registry_lints_clean_and_reports_each_defect(self):
+        self.assertEqual(extract.standard_problems(ROOT / "schema" / "standards.json"), [])
+        with tempfile.TemporaryDirectory() as td:
+            bad = Path(td) / "standards.json"
+            jsonio.dump_json(bad, {"standards": {"Bad Id": {"aliases": ["Xx"]}, "a": {"aliases": []}, "b": {"aliases": ["Q"]},
+                                                 "c": {"aliases": ["Shared"]}, "d": {"aliases": ["Shared"]}}})
+            problems = extract.standard_problems(bad)
+            for want in ("standard id 'Bad Id' is not lower-case words joined by hyphens", "standard 'a' has no aliases",
+                         "standard 'b': alias 'Q' is too short", "alias 'Shared' is claimed by 'c' and 'd'"):
+                self.assertIn(want, problems)
+            jsonio.dump_json(bad, {"standards": {"iso": {"aliases": ["ISO 27001"]}, "x": {"aliases": ["ISO 27001 Annex"]}}})
+            self.assertEqual(extract.standard_problems(bad),
+                             ["alias 'ISO 27001' (iso) is inside alias 'ISO 27001 Annex' (x) and is hidden by it"])
+
+
 class DeadlineTests(unittest.TestCase):
     def test_dates_tied_to_a_deadline(self):
         text = ("Comments are due March 31, 2027. Effective date: 1 July 2027. The deadline 2027-01-15 stands. "
@@ -248,9 +321,10 @@ class TagsTests(unittest.TestCase):
         got = extract.tags("FortiOS heap overflow (Critical)", "CVE-2026-24858 is actively exploited. Patches must be "
                            "applied by November 10, 2026.", NAMES)
         self.assertEqual(got, {"cves": ["CVE-2026-24858"], "severity": "critical", "severity_rank": 4, "exploited": True,
-                               "vendors": ["fortinet"], "deadline": "2026-11-10"})
+                               "vendors": ["fortinet"], "deadline": "2026-11-10", "standards": [], "editions": []})
         self.assertEqual(extract.tags("Workshop announced", "", NAMES),
-                         {"cves": [], "severity": None, "severity_rank": None, "exploited": False, "vendors": [], "deadline": None})
+                         {"cves": [], "severity": None, "severity_rank": None, "exploited": False, "vendors": [], "deadline": None,
+                          "standards": [], "editions": []})
 
 
 if __name__ == "__main__":

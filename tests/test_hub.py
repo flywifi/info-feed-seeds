@@ -612,7 +612,8 @@ class PollTests(HubTestCase):
         latest = jsonio.load_json(self.out / "tr" / "latest.json")
         item = next(i for i in latest["items"] if i["link"] == "https://example.gov/adv/1")
         self.assertEqual(item["tags"], {"cves": ["CVE-2026-24858"], "severity": "critical", "severity_rank": 4,
-                                        "exploited": True, "vendors": ["fortinet"], "deadline": "2026-11-10"})
+                                        "exploited": True, "vendors": ["fortinet"], "deadline": "2026-11-10",
+                                        "standards": [], "editions": []})
         tagged = latest["coverage"]["tagged"]
         self.assertEqual({k: tagged[k] for k in ("cves", "severity", "exploited", "vendors", "deadline")},
                          {"cves": 1, "severity": 1, "exploited": 1, "vendors": 1, "deadline": 1})
@@ -994,6 +995,25 @@ class PollTests(HubTestCase):
         latest = jsonio.load_json(self.out / "tr" / "latest.json")
         return {i["title_display"]: i["industries"] for i in latest["items"]}
 
+    def test_polled_items_carry_standards_and_editions(self):
+        self.script["https://example.gov/alpha.xml"] = rss_with("CMMC 2.0 rule and FIPS 140-3 modules", "Quarterly newsletter")
+        self.assertEqual(self.poll(), 0)
+        latest = jsonio.load_json(self.out / "tr" / "latest.json")
+        tags = {i["title_display"]: i["tags"] for i in latest["items"]}
+        self.assertEqual((tags["CMMC 2.0 rule and FIPS 140-3 modules"]["standards"],
+                          tags["CMMC 2.0 rule and FIPS 140-3 modules"]["editions"]),
+                         (["cmmc", "fips-140"], ["cmmc:2.0", "fips-140:3"]))
+        self.assertEqual((tags["Quarterly newsletter"]["standards"], tags["Quarterly newsletter"]["editions"]), ([], []))
+        tagged = latest["coverage"]["tagged"]
+        self.assertEqual((tagged["standards"], tagged["editions"]), (1, 1))
+
+    def test_ingest_itself_reads_standards(self):
+        self.script["https://example.gov/alpha.xml"] = rss_with("PCI DSS v4.0.1 is in force")
+        with mock.patch.object(hub, "retag_rows", side_effect=RuntimeError("off")), mock.patch.object(hub, "warn"):
+            self.assertEqual(self.poll(), 0)
+        item = jsonio.load_json(self.out / "tr" / "latest.json")["items"][0]
+        self.assertEqual((item["tags"]["standards"], item["tags"]["editions"]), (["pci-dss"], ["pci-dss:4.0.1"]))
+
     def test_items_carry_their_source_industries(self):
         self.assertEqual(self.industry_poll(), {"Hospital advisory": ["healthcare"], "Bank advisory": ["finance"],
                                                 "Plain advisory": []}, "without a list every item goes in")
@@ -1176,6 +1196,16 @@ class RetagTests(HubTestCase):
         self.assertEqual(self.retag(), 0)
         self.assertIn("0 changed", self.output)
 
+    def test_retag_fills_standards_and_editions(self):
+        sha = self.plant(22, "FedRAMP 20x and SP 800-53 Rev. 5 update", **self.PLACED)
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("  standards: 1", self.output)
+        self.assertIn("  editions: 1", self.output)
+        row = self.stored(sha)
+        self.assertEqual((row["standards"], row["editions"]), (["fedramp", "nist-sp-800-53"], ["nist-sp-800-53:r5"]))
+        self.assertEqual(self.retag(), 0)
+        self.assertIn("0 changed", self.output)
+
     def test_a_dry_run_writes_nothing(self):
         sha = self.plant(3, "Phishing scam wave targets banks", **self.PLACED)
         before = (self.state / "feeder.db").read_bytes()
@@ -1307,7 +1337,7 @@ class RetagTests(HubTestCase):
         sha = self.plant(19, "Note", **self.PLACED)
         store = Store.open(self.state)
         try:
-            for name in ("title", "standards", "guard_level", "first_seen"):
+            for name in ("title", "link_hosts", "guard_level", "first_seen"):
                 with self.subTest(name=name), self.assertRaises(hub.StoreError):
                     store.update_columns(sha, {name: "x"})
         finally:
@@ -1506,6 +1536,13 @@ class LintFmtCatTests(HubTestCase):
         self.assertIn("content category 'attacks' is listed twice", out)
         self.assertIn("excluded content category 'regulatory/pets' is not in schema/categories.json", out)
         self.assertIn("content category 'attacks' is both routed in and excluded", out)
+
+    def test_lint_reports_standards_registry_defects(self):
+        path = self.root / "schema" / "standards.json"
+        reg = jsonio.load_json(path)
+        reg["standards"]["fedramp-copy"] = {"aliases": ["FedRAMP"], "label": "x"}
+        out = self.lint_after(lambda: jsonio.dump_json(path, reg))
+        self.assertIn("schema/standards.json: alias 'FedRAMP' is claimed by", out)
 
     def test_lint_reports_unknown_repeated_and_contradictory_industries(self):
         self.profile.update(industries=["healthcare", "pets", "healthcare", "finance"], exclude_industries=["finance", "toys"])

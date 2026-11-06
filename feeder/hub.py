@@ -102,7 +102,7 @@ def _without_userinfo(address: str) -> str:
 
 
 def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | None = None,
-                vendor_names: dict | None = None) -> dict:
+                vendor_names: dict | None = None, standard_names: dict | None = None) -> dict:
     """Fetch the source's configured routes in order until one answers, dispatching each body to
     its adapter and following the adapter's `follow` URLs up to the route's bound. A 304 ends the
     source's poll as not-modified: its items were stored at the earlier fetch, so later routes and
@@ -196,7 +196,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             # The source's industries, from its manifest, so an item can be routed and counted by industry.
             rec["industries"] = list(source.manifest.get("industries") or [])
             # Tags the item's own text states: CVE ids, severity, exploitation, vendors and a deadline.
-            rec.update(extract.tags(items.sanitize(raw.title), items.sanitize(raw.summary), vendor_names or {}))
+            rec.update(extract.tags(items.sanitize(raw.title), items.sanitize(raw.summary), vendor_names or {},
+                                    standard_names or {}))
             if store.upsert_item(rec, first_seen=now):
                 new += 1
         flags = (("truncated", truncated), ("follow-partial", follow_failed), ("follow-refused", follow_refused))
@@ -303,6 +304,7 @@ def retag_rows(store: Store, repo: Repo, sources: dict, today: date, since_days:
     Returns {"read", "changed", "columns": {name: count}, "moves": {(old, new): count}}."""
     reg = repo.categories()
     vendor_names = extract.load_vendors(repo.schema_dir / "vendors.json") or {}
+    standard_names = extract.load_standards(repo.schema_dir / "standards.json") or {}
     every = since_days == 0 or since_days >= (today - date.min).days
     cutoff = None if every else (today - timedelta(days=since_days)).isoformat()
     columns: dict[str, int] = {}
@@ -326,7 +328,8 @@ def retag_rows(store: Store, repo: Repo, sources: dict, today: date, since_days:
         src = sources.get(row["feed_id"])
         if src is not None:   # the manifest is the source of truth; a row whose feed is gone keeps its own
             new["industries"] = list(src.manifest.get("industries") or [])
-        new.update(extract.tags(items.sanitize(row.get("title")), items.sanitize(row.get("summary")), vendor_names))
+        new.update(extract.tags(items.sanitize(row.get("title")), items.sanitize(row.get("summary")), vendor_names,
+                                standard_names))
         diff = {name: value for name, value in new.items() if Store.stored_form(name, value) != row.get(name)}
         if not diff:
             continue
@@ -459,6 +462,7 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
     else:
         fetcher = None
         vendor_names = extract.load_vendors(repo.schema_dir / "vendors.json")
+        standard_names = extract.load_standards(repo.schema_dir / "standards.json")
         for sid in sorted(wanted):
             src = wanted[sid]
             runs_on = src.manifest.get("runs_on") or ["actions", "local"]
@@ -476,7 +480,8 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
                 continue
             if fetcher is None:
                 fetcher = fetcher_factory(state_dir)
-            rec = poll_source(fetcher, src, store, day, now_z, reg=repo.categories(), vendor_names=vendor_names)
+            rec = poll_source(fetcher, src, store, day, now_z, reg=repo.categories(), vendor_names=vendor_names,
+                              standard_names=standard_names)
             attempted += rec["attempted"]
             failed += rec["failed"]
             new_items += rec["new"]

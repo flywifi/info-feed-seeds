@@ -141,6 +141,7 @@ def item_view(row: dict, source, profile: dict, released: set[str], reg: dict | 
             "cves": [c.upper() for c in row.get("cves") or []], "severity": row.get("severity"),
             "severity_rank": row.get("severity_rank"), "exploited": bool(row.get("exploited")),
             "vendors": list(row.get("vendors") or []), "deadline": row.get("deadline"),
+            "standards": list(row.get("standards") or []), "editions": list(row.get("editions") or []),
         },
         "industries": list(row.get("industries") or []),
         "categories": {
@@ -263,7 +264,7 @@ def coverage_of(views: list[dict], health: list[dict]) -> dict:
         "held_by_guard": sum(1 for v in views if v["state"] in ("blocked", "held")),
         # How many items each tag reader filled, so a reader that stops matching shows as a drop.
         "tagged": {name: sum(1 for v in views if v["state"] not in ("blocked", "held") and v["tags"][name])
-                   for name in ("cves", "severity", "exploited", "vendors", "deadline")},
+                   for name in ("cves", "severity", "exploited", "vendors", "deadline", "standards", "editions")},
         "content_category_from_item_text": sum(1 for v in views if v["state"] not in ("blocked", "held")
                                                and v["categories"]["content_basis"]["category"] == "item"),
     }

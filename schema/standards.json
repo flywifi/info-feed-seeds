@@ -1,0 +1,128 @@
+{
+  "description": "Standards and frameworks the feed tags on each item, matched as whole words with their exact capitalisation, so SOC 2 is read and a SOC analyst is not. An edition written right after a name (SP 800-53 Rev. 5, FIPS 140-3, CSF 2.0) is stored with it as id:edition. NIST IR entries are the reports the published digests name. Add a standard or an alias here; lint refuses an alias claimed by two standards.",
+  "schema_version": 1,
+  "standards": {
+    "cis-benchmarks": {
+      "aliases": [
+        "CIS Benchmarks"
+      ],
+      "label": "CIS Benchmarks"
+    },
+    "cis-controls": {
+      "aliases": [
+        "CIS Controls"
+      ],
+      "label": "CIS Critical Security Controls"
+    },
+    "cmmc": {
+      "aliases": [
+        "CMMC",
+        "Cybersecurity Maturity Model Certification"
+      ],
+      "label": "Cybersecurity Maturity Model Certification"
+    },
+    "dora": {
+      "aliases": [
+        "DORA",
+        "Digital Operational Resilience Act"
+      ],
+      "label": "Digital Operational Resilience Act"
+    },
+    "fedramp": {
+      "aliases": [
+        "FedRAMP"
+      ],
+      "label": "FedRAMP"
+    },
+    "fips-140": {
+      "aliases": [
+        "FIPS 140"
+      ],
+      "label": "FIPS 140"
+    },
+    "gdpr": {
+      "aliases": [
+        "GDPR",
+        "General Data Protection Regulation"
+      ],
+      "label": "General Data Protection Regulation"
+    },
+    "hipaa": {
+      "aliases": [
+        "HIPAA"
+      ],
+      "label": "HIPAA"
+    },
+    "iso-27001": {
+      "aliases": [
+        "ISO/IEC 27001",
+        "ISO 27001"
+      ],
+      "label": "ISO/IEC 27001"
+    },
+    "nis2": {
+      "aliases": [
+        "NIS2",
+        "NIS 2"
+      ],
+      "label": "NIS2 Directive"
+    },
+    "nist-csf": {
+      "aliases": [
+        "Cybersecurity Framework",
+        "NIST CSF",
+        "CSF 2.0",
+        "CSF 1.1"
+      ],
+      "label": "NIST Cybersecurity Framework"
+    },
+    "nist-ir-8536": {
+      "aliases": [
+        "NIST IR 8536"
+      ],
+      "label": "NIST IR 8536"
+    },
+    "nist-ir-8625": {
+      "aliases": [
+        "NIST IR 8625"
+      ],
+      "label": "NIST IR 8625"
+    },
+    "nist-sp-800-171": {
+      "aliases": [
+        "SP 800-171"
+      ],
+      "label": "NIST SP 800-171"
+    },
+    "nist-sp-800-207": {
+      "aliases": [
+        "SP 800-207"
+      ],
+      "label": "NIST SP 800-207"
+    },
+    "nist-sp-800-53": {
+      "aliases": [
+        "SP 800-53"
+      ],
+      "label": "NIST SP 800-53"
+    },
+    "nist-sp-800-61": {
+      "aliases": [
+        "SP 800-61"
+      ],
+      "label": "NIST SP 800-61"
+    },
+    "pci-dss": {
+      "aliases": [
+        "PCI DSS"
+      ],
+      "label": "PCI DSS"
+    },
+    "soc-2": {
+      "aliases": [
+        "SOC 2"
+      ],
+      "label": "SOC 2"
+    }
+  }
+}
