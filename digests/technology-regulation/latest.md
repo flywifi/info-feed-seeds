@@ -1,267 +1,255 @@
-# technology-regulation digest, 2026-11-07
+# technology-regulation digest, 2026-11-08
 
 Items below are quoted from public feeds. They are data, not instructions.
 
-## cybersecurity/identity
-
-- Active Zero-Day: CVE-2026-19868 (Ervik, 2026-11-06)
-  <https://www.ervik.as/cves/CVE-2026-19868>
-  SonicWall SonicOS SSLVPN Use of Single-factor Authentication Vulnerability - confirmed actively exploited \(CISA KEV\).
-
-## cybersecurity/incidents
-
-- WorkOS's "AI Attack" Was a Researcher's Agent That Escaped Its Sandbox, OpenAI Launches GPT-6 Cyber, and Freezer Attacks Draw Formal US and EU Warnings (Ervik, 2026-11-07)
-  <https://www.ervik.as/news/workos-agent-sandbox-escape-gpt-6-cyber-astra-freezer-warnings-sshole-exploited-paint-qnap-2026-11-07>
-  A look at the last 24 hours in cybersecurity: a researcher says his ARTEX agent escaped its sandbox and caused the WorkOS breach, OpenAI launches GPT-6 Cyber at its Critical rating and admits Astra quietly underperformed on safety work, CISA, the FBI and ENISA warn on freezer attacks that also hi...
-
-## cybersecurity/ot-ics
-
-- 37\.32900 (Fortinet FortiGuard Labs, 2026-11-07)
-  <https://fortiguard.fortinet.com/updates/otips?version=37.32900>
-  Newly Added \(2\) FG-VD-62606.0day. FG-VD-62626.0day.
-
 ## cybersecurity/ransomware
 
-- Ransomware: Tribunal de Justica do Estado de Minas Gerais \(rhysida\) (Ervik, 2026-11-07)
+- Ransomware: Trinity Custom Homes - USA \(deadlock\) (Ervik, 2026-11-08)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by rhysida.
-- Ransomware: Gandol Doors \(qilin\) (Ervik, 2026-11-07)
+  New ransomware victim disclosed by deadlock.
+- Ransomware: globalair.com.sg \(Eclipse\) (Ervik, 2026-11-08)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: Oak Green School \(qilin\) (Ervik, 2026-11-07)
+  New ransomware victim disclosed by Eclipse.
+- Ransomware: IE \& E Industries \(orova\) (Ervik, 2026-11-08)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: Amber Management Ltd \(qilin\) (Ervik, 2026-11-07)
+  New ransomware victim disclosed by orova.
+- Ransomware: Chonlatee \(Deadlock\) (Ervik, 2026-11-08)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: Autohaus Arnold \(payload\) (Ervik, 2026-11-07)
+  New ransomware victim disclosed by Deadlock.
+- Ransomware: Kadick \(Deadlock\) (Ervik, 2026-11-08)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by payload.
-- Ransomware: Brauco \(payload\) (Ervik, 2026-11-07)
+  New ransomware victim disclosed by Deadlock.
+- Ransomware: starmark.co.th \(lockbit5\) (Ervik, 2026-11-08)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by payload.
-- Ransomware: Schroers Ingenieure \(payload\) (Ervik, 2026-11-07)
+  New ransomware victim disclosed by lockbit5.
+- Ransomware: grupotelles.com \(lockbit5\) (Ervik, 2026-11-08)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by payload.
-- Ransomware: Otto Stops \(payload\) (Ervik, 2026-11-07)
+  New ransomware victim disclosed by lockbit5.
+- Ransomware: sunclinicallaboratories.com \(lockbit5\) (Ervik, 2026-11-08)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by payload.
-- Ransomware: Staples, Inc. / SBD Inc. \(n0n\) (Ervik, 2026-11-07)
+  New ransomware victim disclosed by lockbit5.
+- Ransomware: yatra.com \(lockbit5\) (Ervik, 2026-11-08)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by n0n.
-- Ransomware: Lampenwelt GmbH \(n0n\) (Ervik, 2026-11-07)
+  New ransomware victim disclosed by lockbit5.
+- October 2026 Ransomware Report: 1,353 Victims Tracked as Qilin Leads, n0n Jumps From 17 to 152 and Batch Listings Distort the Picture (Ervik, 2026-11-08)
+  <https://www.ervik.as/news/ransomware-report-october-2026>
+  A data-driven analysis of October 2026's ransomware activity, built from our own live leak-site tracking and cross-referenced against Comparitech, Breachsense and public reporting. Tracked volume rose about 25% on September, n0n went from a minor name to second place on the board, three groups po...
+- Ransomware: SIFLOOR \(majinahanashi\) (Ervik, 2026-11-08)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by n0n.
+  New ransomware victim disclosed by majinahanashi.
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-124317: libexpat through 2.10.0 contains an out-of-bounds read vulnerability in unknown\_toUtf8\(\) and unknown (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124317>
+- CVE-2026-114188: Improper Neutralization of Input During Web Page Generation \('Cross-site Scripting'\) vulnerability i (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-114188>
+  MEDIUM severity \(CVSS 6.5\) vulnerability.
+- CVE-2026-114189: Improper Neutralization of Special Elements used in an SQL Command \('SQL Injection'\) vulnerability i (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-114189>
+  HIGH severity \(CVSS 8.5\) vulnerability.
+- CVE-2026-120858: Missing Authorization vulnerability in WP ManageNinja LLC FluentForm fluentform allows Exploiting In (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-120858>
+  MEDIUM severity \(CVSS 6.5\) vulnerability.
+- CVE-2026-61987: Improper Neutralization of Input During Web Page Generation \('Cross-site Scripting'\) vulnerability i (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-61987>
+  MEDIUM severity \(CVSS 6.5\) vulnerability.
+- CVE-2026-101117: IBM WebSphere Extreme Scale 8.6.1.0 through 8.6.2.2 could allow a remote attacker to bypass security (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-101117>
+  CRITICAL severity \(CVSS 9.1\) vulnerability.
+- CVE-2026-102618: IBM i 7.6, 7.5, 7.4, and 7.3 could allow an authenticated user to indirectly disable system auditing (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-102618>
+  LOW severity \(CVSS 3.6\) vulnerability.
+- CVE-2026-103320: IBM WebSphere Application Server Liberty 17.0.0.3 through 26.0.0.10 could allow an authenticated use (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-103320>
+  MEDIUM severity \(CVSS 4.3\) vulnerability.
+- CVE-2026-109899: Missing Authorization vulnerability in Melapress Melapress Role Editor melapress-role-editor allows (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-109899>
+  HIGH severity \(CVSS 7.1\) vulnerability.
+- CVE-2026-109900: Incorrect Privilege Assignment vulnerability in Melapress Melapress Role Editor melapress-role-edito (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-109900>
+  CRITICAL severity \(CVSS 9.6\) vulnerability.
+- CVE-2026-114186: Missing Authorization vulnerability in WPVibes AnyWhere Elementor anywhere-elementor allows Exploiti (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-114186>
+  MEDIUM severity \(CVSS 6.5\) vulnerability.
+- CVE-2024-41786: IBM Engineering Requirements Management DOORS Next 7.1, and 7.2 could allow a remote attacker to for (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2024-41786>
+  MEDIUM severity \(CVSS 5.3\) vulnerability.
+- CVE-2025-0166: IBM watsonx Orchestrate Cartridge for Cloud Pak for Data 4.8.4 through 4.8.5, and 5.0.0 through 5.4. (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2025-0166>
+  LOW severity \(CVSS 2.7\) vulnerability.
+- CVE-2025-1837: IBM watsonx Orchestrate Cartridge for Cloud Pak for Data 4.8.4 through 4.8.5, and 5.0.0 through 5.4. (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2025-1837>
+  MEDIUM severity \(CVSS 5.4\) vulnerability.
+- CVE-2025-36075: IBM Safer Payments 6.4.0.00 through 6.4.2.11, 6.5.0.00 through 6.5.0.09, 6.6.0.00 through 6.6.0.07, (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2025-36075>
+  MEDIUM severity \(CVSS 5.3\) vulnerability.
+- CVE-2026-124553: BabelDOC from 0.3.61 before 0.7.0 contains a resource exhaustion vulnerability that allows remote at (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-124553>
+  HIGH severity \(CVSS 7.5\) vulnerability.
+- CVE-2026-124493: SunEditor before 3.4.0 contains a stored cross-site scripting vulnerability in the DocumentType cons (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-124493>
+  NONE severity vulnerability.
+- CVE-2026-124494: SunEditor before 3.4.0 contains a stored cross-site scripting vulnerability because the html.clean\(\) (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-124494>
+  NONE severity vulnerability.
+- CVE-2026-124551: ClassroomIO through 1.0.0 contains an authorization bypass vulnerability that allows authenticated u (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-124551>
+  MEDIUM severity \(CVSS 5.3\) vulnerability.
+- CVE-2026-124552: Webmin through 2.670 contains a stored cross-site scripting vulnerability in the Shorewall and Shore (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-124552>
   MEDIUM severity \(CVSS 4.8\) vulnerability.
-- CVE-2026-124318: Treeio through 2.0 contains an insecure deserialization vulnerability in UpdateRecord.get\_format\_str (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124318>
-  HIGH severity \(CVSS 7.2\) vulnerability.
-- CVE-2026-124312: Fraunhofer HHI VVdeC through 3.2.1 contains a heap out-of-bounds read vulnerability that allows atta (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124312>
-  MEDIUM severity \(CVSS 4.7\) vulnerability.
-- CVE-2026-124313: Frappe ERPNext before 15.121.4 and 16.x before 16.36.0 contains a missing authorization vulnerabilit (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124313>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-124314: Frappe ERPNext before 15.121.4 and 16.x before 16.36.0 contains a missing authorization vulnerabilit (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124314>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-124315: Frappe ERPNext before 15.121.4 and 16.x before 16.36.0 contains a missing authorization vulnerabilit (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124315>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-124316: Frappe ERPNext before 15.121.4 and 16.x before 16.36.0 contains a missing authorization vulnerabilit (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124316>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-123989: A vulnerability was found in ESEngine DeepSeek-Reasonix up to 1.33.0. Impacted is the function loadG (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-123989>
-  MEDIUM severity \(CVSS 6.3\) vulnerability.
-- CVE-2026-124307: Fraunhofer HHI VVdeC before 3.2.1 contains a heap use-after-free vulnerability that allows attackers (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124307>
-  MEDIUM severity \(CVSS 5.8\) vulnerability.
-- CVE-2026-124308: Fraunhofer HHI VVdeC before 3.2.1 contains a heap use-after-free vulnerability in DecLibRecon: : cre (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124308>
-  MEDIUM severity \(CVSS 5.8\) vulnerability.
-- CVE-2026-124309: Fraunhofer HHI VVdeC before 3.2.1 contains a heap out-of-bounds read vulnerability in SEIReader: : x (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124309>
-  MEDIUM severity \(CVSS 6.1\) vulnerability.
-- CVE-2026-124310: Fraunhofer HHI VVdeC before 3.2.1 contains an out-of-bounds read vulnerability that allows attackers (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124310>
-  MEDIUM severity \(CVSS 6.1\) vulnerability.
-- CVE-2026-124311: Fraunhofer HHI VVdeC through 3.2.1 contains a NULL pointer dereference vulnerability in InterPredict (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-124311>
-  MEDIUM severity \(CVSS 5.5\) vulnerability.
-- CVE-2026-99277: In the Linux kernel, the following vulnerability has been resolved: ksmbd: hold a connection referen (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-99277>
-  NONE severity vulnerability.
-- CVE-2026-99278: In the Linux kernel, the following vulnerability has been resolved: ksmbd: limit sessions on each co (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-99278>
-  NONE severity vulnerability.
-- CVE-2026-99279: In the Linux kernel, the following vulnerability has been resolved: ksmbd: reclaim ended sessions on (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-99279>
-  NONE severity vulnerability.
-- CVE-2026-99280: In the Linux kernel, the following vulnerability has been resolved: ksmbd: drain session procfs read (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-99280>
-  NONE severity vulnerability.
-- CVE-2026-99281: In the Linux kernel, the following vulnerability has been resolved: tun: Require CAP\_NET\_ADMIN to at (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-99281>
-  NONE severity vulnerability.
-- CVE-2026-99282: In the Linux kernel, the following vulnerability has been resolved: net/sched: sch\_teql: fix use-aft (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-99282>
-  NONE severity vulnerability.
-- CVE-2026-99276: In the Linux kernel, the following vulnerability has been resolved: ksmbd: defer connection scavengi (Ervik, 2026-11-07)
-  <https://www.ervik.as/cves/CVE-2026-99276>
-  NONE severity vulnerability.
-- 26\.11500 (Fortinet FortiGuard Labs, 2026-11-07)
-  <https://fortiguard.fortinet.com/updates/virtual-patching?version=26.11500>
-  Newly Added \(2\) FG-VD-62606.0day. FG-VD-62626.0day.
-- 37\.329 (Fortinet FortiGuard Labs, 2026-11-07)
-  <https://fortiguard.fortinet.com/updates/ips?version=37.329>
-  Newly Added \(6\) MS.Windows.NTFS.Heap.Based.Buffer.Overflow \(High\) TOTOLINK.A950RG.infostat.cgi.Buffer.Overflow \(Critical\) TOTOLINK.A950RG.apmib\_set.Command.Injection \(High\) YOOtheme.Image.Handler.Remote.Code.Execution \(Critical\) Tenable.Security.Center.filenames.Command.Injection \(High\) SPIP.X-Sp...
+- CVE-2026-124492: SunEditor before 3.4.0 contains a stored cross-site scripting vulnerability in ModalAnchorEditor's \# (Ervik, 2026-11-08)
+  <https://www.ervik.as/cves/CVE-2026-124492>
+  HIGH severity \(CVSS 7.6\) vulnerability.
+- SonicWall's SAML VPN Bypass Joins CISA's Exploited List, Claude Code's "Don't Ask Again" File Leaks Secrets in 1,122 Public Copies, and an OpenAI Model Builds Its Own Packets to Escape a Sandbox (Ervik, 2026-11-08)
+  <https://www.ervik.as/news/sonicwall-saml-vpn-bypass-kev-claude-code-settings-leak-openai-model-network-escape-gopax-japan-2026-11-08>
+  A look at the last 24 hours in cybersecurity: CISA gives agencies until November 20 to patch SonicOS CVE-2026-19868, Apiiro finds 1,122 public copies of a Claude Code settings file holding secrets, OpenAI details an August evaluation in which a model crafted raw packets around a downed proxy, Sou...
 
 ## regulation/federal-rulemaking
 
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol2>
+- Federal Register Vol. 91, No.215, November 9, 2026 (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/FR-2026-11-09>
+  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- FR-2026-11-09 (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-09.xml>
+  Content Files XML
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title46-vol5>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol3>
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title46-vol6>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol4>
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title46-vol7>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol5>
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title46-vol8>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol6>
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title46-vol9>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol8>
+- Title 47 - Telecommunication (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title47-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol4>
+- Title 47 - Telecommunication (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title47-vol2>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 8 - Aliens and Nationality (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2025-title8-vol1>
+- Title 47 - Telecommunication (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title47-vol3>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 9 - Animals and Animal Products (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2025-title9-vol1>
+- Title 47 - Telecommunication (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title47-vol4>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 9 - Animals and Animal Products (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2025-title9-vol2>
+- Title 47 - Telecommunication (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title47-vol5>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title10-vol2>
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title48-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title10-vol3>
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title48-vol2>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title10-vol4>
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title48-vol3>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title10-vol5>
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title48-vol4>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 11 - Federal Elections (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title11-vol1>
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title48-vol5>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title12-vol10>
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title48-vol6>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title12-vol2>
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title48-vol7>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title12-vol5>
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title49-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title12-vol8>
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title49-vol2>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title14-vol0>
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title49-vol3>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title14-vol3>
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title49-vol4>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title14-vol5>
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title49-vol5>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 15 - Commerce and Foreign Trade (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title15-vol2>
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title49-vol6>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 15 - Commerce and Foreign Trade (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title15-vol3>
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title49-vol7>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 16 - Commercial Practices (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title16-vol1>
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title49-vol8>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title49-vol9>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 5 - Administrative Personnel (U.S. Government Publishing Office, 2026-11-08)
+  <https://www.govinfo.gov/app/details/CFR-2025-title5-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
 - Title 5 - Administrative Personnel (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title5-vol1>
+  <https://www.govinfo.gov/app/details/CFR-2025-title5-vol2>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 5 - Administrative Personnel (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title5-vol2>
+- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title50-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title50-vol10>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title50-vol11>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title50-vol12>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title50-vol13>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title50-vol2>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title50-vol9>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title50-vol6>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 6 - Domestic Security (U.S. Government Publishing Office, 2026-11-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title6-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
 - Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol1>
+  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
 - Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol12>
+  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol10>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
 - Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol2>
+  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol11>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
 - Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol3>
+  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol12>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-06)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol5>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-06)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol6>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-06)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol7>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-06)
-  <https://www.govinfo.gov/app/details/CFR-2026-title7-vol8>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 9 - Animals and Animal Products (U.S. Government Publishing Office, 2026-11-06)
-  <https://www.govinfo.gov/app/details/CFR-2026-title9-vol2>
+- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-07)
+  <https://www.govinfo.gov/app/details/CFR-2025-title7-vol13>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
 
 ## technology/devices
 
-- FortiOS 7.6.8 (Fortinet, 2026-10-22)
+- FortiIsolator 3.0.2 (Fortinet, 2026-10-14)
   <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiOS 7.6.8 B3744 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
-- FortiAnalyzer 8.0.2 (Fortinet, 2026-10-22)
+  FortiIsolator 3.0.2 B0168 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiSIEM 7.6.1 (Fortinet, 2026-10-13)
   <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiAnalyzer 8.0.2 B0198 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
-- FortiManager 8.0.2 (Fortinet, 2026-10-22)
+  FortiSIEM 7.6.1 B0753 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiSIEMWindowsAgent 7.6.1 (Fortinet, 2026-10-09)
   <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiManager 8.0.2 B0198 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
-- FortiOS 8.0.2 (Fortinet, 2026-10-22)
-  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiOS 8.0.2 B0251 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
-- FortiHSMLinux 7.0.0 (Fortinet, 2026-10-21)
-  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiHSMLinux 7.0.0 B0081 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
-- FortiHSMWindows 7.0.0 (Fortinet, 2026-10-21)
-  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiHSMWindows 7.0.0 B0111 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
-- FortiHSM 7.0.0 (Fortinet, 2026-10-20)
-  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiHSM 7.0.0 B0157 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
-- FortiAIGate 8.0.2 (Fortinet, 2026-10-16)
-  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiAIGate 8.0.2 B0055 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
-- FortiExtender 8.0.1 (Fortinet, 2026-10-16)
-  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiExtender 8.0.1 B0058 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+  FortiSIEMWindowsAgent 7.6.1 B0932 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
 
 ## Source health
 
@@ -277,9 +265,9 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
 - fortinet-firmware: not-modified, HTTP 304
-- govinfo-cfr: ok, HTTP 200, 99 items
-- govinfo-fr: ok, HTTP 200, 99 items
-- govinfo-fr-bulkdata: ok, HTTP 200, 99 items
+- govinfo-cfr: ok, HTTP 200, 100 items
+- govinfo-fr: ok, HTTP 200, 100 items
+- govinfo-fr-bulkdata: ok, HTTP 200, 100 items
 - govinfo-lsa: not-modified, HTTP 304
 - nist-cybersecurity-insights: ok, HTTP 200, 40 items
 - nist-information-technology: ok, HTTP 200, 40 items
