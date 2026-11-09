@@ -4,11 +4,11 @@
     "basis": {
       "category": {
         "item": 32,
-        "source": 47
+        "source": 48
       },
       "subcategory": {
         "item": 32,
-        "source": 47
+        "source": 48
       }
     },
     "by_source": {
@@ -19,29 +19,26 @@
         "vulnerabilities/scoring": 20
       },
       "regulatory/codified": {
-        "regulatory/codified": 42
+        "regulatory/codified": 47
       },
-      "regulatory/federal-rules": {
-        "regulatory/federal-rules": 2
-      },
-      "releases/firmware": {
-        "releases/firmware": 3
+      "standards/measurement": {
+        "standards/measurement": 1
       }
     },
     "content": {
       "attacks/exploited-now": 1,
       "attacks/ransomware-claims": 10,
       "attacks/threat-research": 1,
-      "regulatory/codified": 42,
-      "regulatory/federal-rules": 2,
-      "releases/firmware": 3,
+      "regulatory/codified": 47,
+      "standards/measurement": 1,
       "vulnerabilities/scoring": 20
     },
     "industries": {
-      "cybersecurity": 35,
-      "federal": 44
+      "cybersecurity": 32,
+      "federal": 47,
+      "technology": 1
     },
-    "items": 79,
+    "items": 80,
     "moved_out_of_source_category": 20,
     "rules_now_differ": 0,
     "without_content_category": 0
@@ -49,33 +46,44 @@
   "coverage": {
     "content_category_from_item_text": 32,
     "held_by_guard": 0,
-    "items_in_json": 79,
-    "items_in_markdown": 79,
-    "items_selected": 79,
+    "items_in_json": 80,
+    "items_in_markdown": 80,
+    "items_selected": 80,
     "sources_did_not_run": 0,
     "sources_failed": 0,
     "sources_responded": 21,
     "sources_selected": 21,
     "tagged": {
-      "cves": 21,
+      "cves": 22,
       "deadline": 0,
       "editions": 0,
-      "exploited": 0,
-      "severity": 18,
+      "exploited": 1,
+      "severity": 20,
       "standards": 0,
-      "vendors": 2
+      "vendors": 1
     }
   },
-  "date": "2026-11-08",
+  "date": "2026-11-09",
   "did_not_run": [],
-  "generated": "2026-11-08T17:03:36Z",
+  "generated": "2026-11-09T21:26:48Z",
   "guard": {
     "held_by_category": {},
     "held_by_level": {},
     "released_shown": 0,
     "review_marked": 0
   },
-  "health_transitions": [],
+  "health_transitions": [
+    {
+      "feed_id": "govinfo-fr",
+      "from": "ok",
+      "to": "not-modified"
+    },
+    {
+      "feed_id": "govinfo-fr-bulkdata",
+      "from": "ok",
+      "to": "not-modified"
+    }
+  ],
   "profile": "technology-regulation",
   "version": "1"
 }
