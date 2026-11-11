@@ -3,103 +3,81 @@
   "classification": {
     "basis": {
       "category": {
-        "item": 37,
-        "source": 43
+        "item": 35,
+        "source": 45
       },
       "subcategory": {
-        "item": 36,
-        "source": 44
+        "item": 33,
+        "source": 47
       }
     },
     "by_source": {
       "attacks/threat-research": {
-        "attacks/exploited-now": 4,
         "attacks/ransomware-claims": 10,
-        "vulnerabilities/scoring": 20
+        "vulnerabilities/disclosures": 1,
+        "vulnerabilities/scoring": 21
       },
       "regulatory/codified": {
-        "regulatory/codified": 38
+        "regulatory/codified": 40
       },
       "regulatory/federal-rules": {
         "regulatory/federal-rules": 2
       },
-      "releases/firmware": {
-        "releases/firmware": 2
-      },
-      "standards/security": {
-        "guidance/security-guidance": 1
-      },
       "vulnerabilities/detections": {
-        "vulnerabilities/detections": 3
+        "vulnerabilities/detections": 6
       }
     },
     "content": {
-      "attacks/exploited-now": 4,
       "attacks/ransomware-claims": 10,
-      "guidance/security-guidance": 1,
-      "regulatory/codified": 38,
+      "regulatory/codified": 40,
       "regulatory/federal-rules": 2,
-      "releases/firmware": 2,
-      "vulnerabilities/detections": 3,
-      "vulnerabilities/scoring": 20
+      "vulnerabilities/detections": 6,
+      "vulnerabilities/disclosures": 1,
+      "vulnerabilities/scoring": 21
     },
     "industries": {
-      "cybersecurity": 39,
-      "federal": 40,
-      "payments": 1,
-      "retail": 1
+      "cybersecurity": 38,
+      "federal": 42
     },
     "items": 80,
-    "moved_out_of_source_category": 21,
+    "moved_out_of_source_category": 22,
     "rules_now_differ": 0,
     "without_content_category": 0
   },
   "coverage": {
-    "content_category_from_item_text": 37,
-    "held_by_guard": 0,
+    "content_category_from_item_text": 35,
+    "held_by_guard": 1,
     "items_in_json": 80,
     "items_in_markdown": 80,
-    "items_selected": 80,
+    "items_selected": 81,
     "sources_did_not_run": 0,
     "sources_failed": 0,
     "sources_responded": 21,
     "sources_selected": 21,
     "tagged": {
-      "cves": 24,
+      "cves": 23,
       "deadline": 0,
       "editions": 0,
-      "exploited": 3,
-      "severity": 2,
-      "standards": 1,
+      "exploited": 0,
+      "severity": 15,
+      "standards": 0,
       "vendors": 3
     }
   },
-  "date": "2026-11-10",
+  "date": "2026-11-11",
   "did_not_run": [],
-  "generated": "2026-11-10T18:40:05Z",
+  "generated": "2026-11-11T18:42:35Z",
   "guard": {
-    "held_by_category": {},
-    "held_by_level": {},
+    "held_by_category": {
+      "AUTHORITY": 1
+    },
+    "held_by_level": {
+      "BLOCK": 1
+    },
     "released_shown": 0,
     "review_marked": 0
   },
-  "health_transitions": [
-    {
-      "feed_id": "fortinet-firmware",
-      "from": "not-modified",
-      "to": "ok"
-    },
-    {
-      "feed_id": "govinfo-fr",
-      "from": "not-modified",
-      "to": "ok"
-    },
-    {
-      "feed_id": "govinfo-fr-bulkdata",
-      "from": "not-modified",
-      "to": "ok"
-    }
-  ],
+  "health_transitions": [],
   "profile": "technology-regulation",
   "version": "1"
 }
