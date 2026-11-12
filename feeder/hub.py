@@ -273,17 +273,21 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str, held: d
         tags = sorted({t for _, ts in members for t in ts})
         if row["guard_level"] == guard.BLOCK:
             store.add_hit(name, row["content_sha256"], day, tags)
-        elif visible < int(profile["daily_cap"]):
-            feed, cap = row["feed_id"], source_cap(profile, row["feed_id"])
-            if cap is not None and shown_by_feed.get(feed, 0) >= cap:
+        else:
+            # A story several sources carry is charged to the first of them with room in its share.
+            feeds = list(dict.fromkeys(m[0]["feed_id"] for m in members))
+            feed = next((f for f in feeds if source_cap(profile, f) is None
+                         or shown_by_feed.get(f, 0) < source_cap(profile, f)), None)
+            if feed is None:
+                # Counted whether or not the daily cap is full, so a second poll reports the same number.
                 if held is not None:
-                    held[feed] = held.get(feed, 0) + 1
+                    held[row["feed_id"]] = held.get(row["feed_id"], 0) + 1
                 continue   # not shown and not marked: it can enter a later day while inside the window
+            if visible >= int(profile["daily_cap"]):
+                continue
             store.add_hit(name, row["content_sha256"], day, tags)
             visible += 1
             shown_by_feed[feed] = shown_by_feed.get(feed, 0) + 1
-        else:
-            continue
         taken_keys.add(key)
         added += 1
     return added

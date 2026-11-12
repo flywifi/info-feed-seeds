@@ -1090,6 +1090,7 @@ class PollTests(HubTestCase):
         self.assertEqual(self.held(), {"alpha": 2})
         self.script = {u: "not-modified" for u in self.script}
         self.assertEqual(self.share_poll(), ["A3", "A4", "G1"], "a second poll on the same day adds nothing")
+        self.assertEqual(self.held(), {"alpha": 2}, "and reports the same number")
         self.assertEqual(self.share_poll(day="2026-10-21"), ["A1", "A2"], "the items kept back enter the next day")
         self.assertEqual(self.held(), {})
 
@@ -1104,6 +1105,23 @@ class PollTests(HubTestCase):
     def test_the_daily_cap_still_holds_with_a_share(self):
         self.assertEqual(self.share_poll(source_cap=3, daily_cap=2), ["A3", "A4"])
         self.assertEqual(self.held(), {}, "items past the daily cap are not counted as kept back by a share")
+
+    def test_the_kept_back_count_is_the_same_on_a_second_poll_of_a_full_day(self):
+        self.assertEqual(self.share_poll(daily_cap=2, source_caps={"alpha": 1}), ["A4", "G1"])
+        self.assertEqual(self.held(), {"alpha": 3})
+        self.script = {u: "not-modified" for u in self.script}
+        self.assertEqual(self.share_poll(), ["A4", "G1"])
+        self.assertEqual(self.held(), {"alpha": 3})
+
+    def test_a_lower_per_source_share_also_wins(self):
+        self.assertEqual(self.share_poll(source_cap=3, source_caps={"alpha": 1}), ["A4", "G1"])
+
+    def test_an_item_held_by_the_guard_takes_a_share_like_a_daily_slot(self):
+        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"])
+        self.script["https://example.gov/gamma.xml"] = rss_with("G1").replace(b"/g0", b"/x0")
+        self.script["https://example.gov/alpha.xml"] = rss_with("A1", QUARANTINE_TITLE)
+        self.assertEqual(self.share_poll(source_cap=1), ["G1"], "the held item is alpha's one item of the day")
+        self.assertEqual(self.held(), {"alpha": 1})
 
     def test_blocked_items_do_not_count_toward_a_share(self):
         self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"])
@@ -1121,6 +1139,14 @@ class PollTests(HubTestCase):
         self.script["https://example.gov/gamma.xml"] = rss_with("Shared story copy", "G2")
         self.assertEqual(self.share_poll(source_caps={"gamma": 1}), ["G2", "Shared story"])
         self.assertEqual(self.held(), {}, "the shared story is alpha's, so gamma's one slot is free for G2")
+
+    def test_a_shared_story_goes_in_when_any_source_carrying_it_has_room(self):
+        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"])
+        self.script["https://example.gov/alpha.xml"] = rss_with("Shared story", "A-new")
+        self.script["https://example.gov/gamma.xml"] = rss_with("Shared story copy")
+        self.assertEqual(self.share_poll(source_caps={"alpha": 1}), ["A-new", "Shared story"])
+        self.assertEqual(self.held(), {})
+        self.assertEqual(self.share_poll(day="2026-10-21", source_caps={"alpha": 1, "gamma": 1}), [])
 
     def test_items_routed_out_take_no_slot_under_the_daily_cap(self):
         self.profile["daily_cap"] = 1
@@ -1629,6 +1655,11 @@ class LintFmtCatTests(HubTestCase):
         self.profile.update(source_cap=40, source_caps={"alpha": 5})
         jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
         self.assertEqual(self.run_hub("lint"), 0, self.output)
+        self.add_source("tech", "https://example.gov/tech.xml", ["technology"])
+        self.profile.update(source_caps={"tech": 5})
+        out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
+        self.assertIn("source_caps names 'tech', which this profile does not poll", out)
+        self.profile.update(source_caps={"alpha": 5})
         for bad in ({"source_cap": None}, {"source_caps": ["alpha"]}, {"source_caps": {"alpha": "5"}}):
             with self.subTest(bad=bad):
                 out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", dict(self.profile, **bad)))

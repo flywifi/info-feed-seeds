@@ -252,9 +252,10 @@ def source_cap(profile: dict, feed_id: str) -> int | None:
     """The most items one source may take in a day of this profile: its entry in `source_caps`, else
     `source_cap`, else None (no share)."""
     caps = profile.get("source_caps")
-    own = caps.get(feed_id) if isinstance(caps, dict) else None
-    cap = own if own is not None else profile.get("source_cap")
-    return cap if isinstance(cap, int) and not isinstance(cap, bool) and cap >= 1 else None
+    for cap in (caps.get(feed_id) if isinstance(caps, dict) else None, profile.get("source_cap")):
+        if isinstance(cap, int) and not isinstance(cap, bool) and cap >= 1:
+            return cap
+    return None
 
 
 def _ref_list(profile: dict, key: str) -> list:
@@ -470,6 +471,10 @@ def lint(repo: Repo) -> list[str]:
         for sid in sorted(caps):
             if sid not in known_ids:
                 problems.append(f"{rel}: source_caps names {sid!r}, which has no folder under sources/")
+        if not shape:
+            polled_ids = {s.id for s in selected_sources(with_defaults(profile), loaded)}
+            for sid in sorted(set(caps) & known_ids - polled_ids):
+                problems.append(f"{rel}: source_caps names {sid!r}, which this profile does not poll")
         daily = profile.get("daily_cap")
         if isinstance(daily, int):
             shares = [("source_cap", profile.get("source_cap"))] + [(f"source_caps {s!r}", c) for s, c in sorted(caps.items())]
