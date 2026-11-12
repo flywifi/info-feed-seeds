@@ -33,7 +33,7 @@ if __package__ in (None, ""):
 
 from feeder import ROOT, adapters, categories, extract, guard, items, jsonio, outputs  # noqa: E402
 from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, content_routed,  # noqa: E402
-                           industry_routed, item_tags, json_files, lint, selected_sources)
+                           industry_routed, item_tags, json_files, lint, selected_sources, source_cap)
 from feeder.schema_validate import validate  # noqa: E402
 from feeder.store import DB_NAME, RETAG_COLUMNS, Store, StoreError  # noqa: E402
 
@@ -213,14 +213,19 @@ def _guid_key(row: dict) -> str:
     return f"guid:{row['feed_id']}:{row['guid']}"
 
 
-def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
-    """Give new eligible items a hit on `day`, up to the daily cap. Returns the hits added."""
+def select_for_day(store: Store, profile: dict, sources: dict, day: str, held: dict | None = None) -> int:
+    """Give new eligible items a hit on `day`, up to the daily cap and each source's share. Returns the
+    hits added; `held` collects, per source, the items its share kept back (they stay eligible)."""
     name = profile["name"]
     chosen = {s.id: s for s in selected_sources(profile, sources)}
     taken = store.hit_shas(name)
     taken_keys = store.hit_link_keys(name)
     existing = store.hits_for_day(name, day)
     visible = sum(1 for r in existing if r["guard_level"] != guard.BLOCK)
+    shown_by_feed: dict[str, int] = {}
+    for r in existing:
+        if r["guard_level"] != guard.BLOCK:
+            shown_by_feed[r["feed_id"]] = shown_by_feed.get(r["feed_id"], 0) + 1
     day_dt = date.fromisoformat(day)
     earliest = (day_dt - timedelta(days=int(profile["window_days"]))).isoformat()
 
@@ -269,8 +274,14 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str) -> int:
         if row["guard_level"] == guard.BLOCK:
             store.add_hit(name, row["content_sha256"], day, tags)
         elif visible < int(profile["daily_cap"]):
+            feed, cap = row["feed_id"], source_cap(profile, row["feed_id"])
+            if cap is not None and shown_by_feed.get(feed, 0) >= cap:
+                if held is not None:
+                    held[feed] = held.get(feed, 0) + 1
+                continue   # not shown and not marked: it can enter a later day while inside the window
             store.add_hit(name, row["content_sha256"], day, tags)
             visible += 1
+            shown_by_feed[feed] = shown_by_feed.get(feed, 0) + 1
         else:
             continue
         taken_keys.add(key)
@@ -383,7 +394,7 @@ def cmd_retag(args, repo: Repo, now_fn) -> int:
 # --------------------------------------------------------------------------- rendering
 
 def render_day(store: Store, repo: Repo, profile: dict, sources: dict, day: str, released: set[str],
-               generated: str, out_dir: Path) -> dict:
+               generated: str, out_dir: Path, source_cap_held: dict | None = None) -> dict:
     chosen = selected_sources(profile, sources)
     by_id = {s.id: s for s in chosen}
     views = []
@@ -405,7 +416,7 @@ def render_day(store: Store, repo: Repo, profile: dict, sources: dict, day: str,
             transitions.append({"feed_id": entry["feed_id"], "from": before, "to": entry["status"]})
     markdown = outputs.render_markdown(profile, day, views, health)
     latest = outputs.latest_json(profile, day, views, health, coverage, generated)
-    report = outputs.report_json(profile, day, views, health, coverage, transitions, generated)
+    report = outputs.report_json(profile, day, views, health, coverage, transitions, generated, source_cap_held)
     return {"files": outputs.plan_files(out_dir, profile, day, markdown, latest, report),
             "coverage": coverage}
 
@@ -509,7 +520,8 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
     written: list[Path] = []
     summary_rows = []
     for profile in profiles:
-        added = select_for_day(store, profile, sources, day)
+        held: dict[str, int] = {}
+        added = select_for_day(store, profile, sources, day, held)
         days = [day]
         for back in range(1, int(profile.get("backfill_days", 0)) + 1):
             prior = (date.fromisoformat(day) - timedelta(days=back)).isoformat()
@@ -517,7 +529,8 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
                 days.append(prior)
         coverage = None
         for d in sorted(days):
-            rendered = render_day(store, repo, profile, sources, d, released, now_z, out_dir)
+            rendered = render_day(store, repo, profile, sources, d, released, now_z, out_dir,
+                                  held if d == day else None)
             if d == day:
                 coverage = rendered["coverage"]
             if args.dry_run:

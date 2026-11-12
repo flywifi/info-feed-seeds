@@ -148,6 +148,15 @@ class SchemaFixtureTests(unittest.TestCase):
         self.assertTrue(validate(bad_result, schema))
         self.assertIn("source_label", attempt)
 
+    def test_profile_source_shares(self):
+        schema = load_schema("profile.schema.json")
+        base = load_fixture("profile_example.json")
+        self.assertEqual(validate(dict(base, source_cap=20, source_caps={"nist-news": 5}), schema), [])
+        for bad in ({"source_cap": 0}, {"source_cap": "20"}, {"source_cap": 2.5}, {"source_caps": ["nist-news"]},
+                    {"source_caps": {"nist-news": 0}}, {"source_caps": {"nist-news": "5"}}):
+            with self.subTest(bad=bad):
+                self.assertTrue(validate(dict(base, **bad), schema))
+
     def test_profile_categories(self):
         schema = load_schema("profile.schema.json")
         base = load_fixture("profile_example.json")

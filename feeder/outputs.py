@@ -308,7 +308,7 @@ def classification_of(views: list[dict]) -> dict:
 
 
 def report_json(profile: dict, day: str, views: list[dict], health: list[dict], coverage: dict,
-                transitions: list[dict], generated: str) -> dict:
+                transitions: list[dict], generated: str, source_cap_held: dict | None = None) -> dict:
     by_level: dict[str, int] = {}
     categories: dict[str, int] = {}
     for view in views:
@@ -328,6 +328,8 @@ def report_json(profile: dict, day: str, views: list[dict], health: list[dict], 
                   "review_marked": sum(1 for v in views if v["state"] == "review")},
         "did_not_run": did_not_run,
         "classification": classification_of(views),
+        # Items each source's daily share kept back today; they stay eligible for a later day.
+        "held_by_source_cap": dict(sorted((source_cap_held or {}).items())),
     }
 
 

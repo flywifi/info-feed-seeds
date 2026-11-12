@@ -74,6 +74,12 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Per-source daily share: a profile's `source_cap` is the most items any one source may take in a
+  day, and `source_caps` sets it per source id, winning over the general one. It applies when items
+  are selected, newest first, inside the daily cap; items kept back are not marked as shown and can
+  enter a later day while inside the window, and blocked items take none of a share. `report.json`
+  counts the items kept back per source in `held_by_source_cap`. Lint reports a share for a source
+  without a folder and a share above the daily cap. Without either setting nothing changes.
 - Standards and editions on items: `schema/standards.json` lists standards and frameworks (FedRAMP,
   HIPAA, GDPR, NIS2, the Digital Operational Resilience Act or EU DORA, SOC 2, CMMC, the NIST
   Cybersecurity Framework, PCI DSS, CIS Controls and Benchmarks, ISO/IEC 27001, FIPS 140, NIST SP

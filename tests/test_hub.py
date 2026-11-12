@@ -1070,6 +1070,58 @@ class PollTests(HubTestCase):
         self.profile["daily_cap"] = 1
         self.assertEqual(sorted(self.industry_poll(industries=["finance"])), ["Bank advisory"])
 
+    def share_poll(self, day=DAY, **settings):
+        """alpha gives A1 to A4 (A4 newest) and gamma gives G1; returns the digest's titles."""
+        if not (self.root / "sources" / "gamma").exists():
+            self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"])
+            self.script["https://example.gov/alpha.xml"] = rss_with("A1", "A2", "A3", "A4")
+            self.script["https://example.gov/gamma.xml"] = rss_with("G1").replace(b"/g0", b"/x0")
+        self.profile.update(settings)
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.assertEqual(self.run_hub("poll", "--profile", "tr", "--date", day, "--state-dir", str(self.state),
+                                      "--out-dir", str(self.out)), 0)
+        return sorted(i["title_display"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"])
+
+    def held(self):
+        return jsonio.load_json(self.out / "tr" / "report.json")["held_by_source_cap"]
+
+    def test_a_source_takes_at_most_its_share_and_the_rest_enter_later(self):
+        self.assertEqual(self.share_poll(source_cap=2), ["A3", "A4", "G1"], "the newest of a source go first")
+        self.assertEqual(self.held(), {"alpha": 2})
+        self.script = {u: "not-modified" for u in self.script}
+        self.assertEqual(self.share_poll(), ["A3", "A4", "G1"], "a second poll on the same day adds nothing")
+        self.assertEqual(self.share_poll(day="2026-10-21"), ["A1", "A2"], "the items kept back enter the next day")
+        self.assertEqual(self.held(), {})
+
+    def test_a_per_source_share_wins_over_the_general_one(self):
+        self.assertEqual(self.share_poll(source_cap=1, source_caps={"alpha": 3}), ["A2", "A3", "A4", "G1"])
+        self.assertEqual(self.held(), {"alpha": 1})
+
+    def test_without_a_share_every_item_goes_in(self):
+        self.assertEqual(self.share_poll(), ["A1", "A2", "A3", "A4", "G1"])
+        self.assertEqual(self.held(), {})
+
+    def test_the_daily_cap_still_holds_with_a_share(self):
+        self.assertEqual(self.share_poll(source_cap=3, daily_cap=2), ["A3", "A4"])
+        self.assertEqual(self.held(), {}, "items past the daily cap are not counted as kept back by a share")
+
+    def test_blocked_items_do_not_count_toward_a_share(self):
+        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"])
+        self.script["https://example.gov/gamma.xml"] = rss_with("G1").replace(b"/g0", b"/x0")
+        self.script["https://example.gov/alpha.xml"] = rss_with("A1", BLOCK_TITLE, "A3")
+        self.assertEqual(self.share_poll(source_cap=2), ["A1", "A3", "G1"])
+        self.assertEqual(self.held(), {})
+        self.script["https://example.gov/alpha.xml"] = rss_with("A1", BLOCK_TITLE, "A3", "A4", "A5")
+        self.assertEqual(self.share_poll(source_cap=4), ["A1", "A3", "A4", "A5", "G1"],
+                         "a blocked item already selected today takes none of the share on a later poll")
+
+    def test_a_story_two_sources_share_counts_for_the_source_that_leads_it(self):
+        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"])
+        self.script["https://example.gov/alpha.xml"] = rss_with("Shared story")
+        self.script["https://example.gov/gamma.xml"] = rss_with("Shared story copy", "G2")
+        self.assertEqual(self.share_poll(source_caps={"gamma": 1}), ["G2", "Shared story"])
+        self.assertEqual(self.held(), {}, "the shared story is alpha's, so gamma's one slot is free for G2")
+
     def test_items_routed_out_take_no_slot_under_the_daily_cap(self):
         self.profile["daily_cap"] = 1
         self.assertEqual(self.routed_titles(content_categories=["attacks"]), ["Phishing scam wave targets banks"])
@@ -1567,6 +1619,20 @@ class LintFmtCatTests(HubTestCase):
         self.profile.update(industries=["healthcare"], exclude_industries=["finance"])
         jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
         self.assertEqual(self.run_hub("lint"), 0, self.output)
+
+    def test_lint_reports_a_share_for_an_unknown_source_or_above_the_daily_cap(self):
+        self.profile.update(source_cap=99, source_caps={"nope": 2, "alpha": 41})
+        out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile))
+        self.assertIn("source_caps names 'nope', which has no folder under sources/", out)
+        self.assertIn("source_cap 99 is above daily_cap 40, so it limits nothing", out)
+        self.assertIn("source_caps 'alpha' 41 is above daily_cap 40, so it limits nothing", out)
+        self.profile.update(source_cap=40, source_caps={"alpha": 5})
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.assertEqual(self.run_hub("lint"), 0, self.output)
+        for bad in ({"source_cap": None}, {"source_caps": ["alpha"]}, {"source_caps": {"alpha": "5"}}):
+            with self.subTest(bad=bad):
+                out = self.lint_after(lambda: jsonio.dump_json(self.root / "profiles" / "tr.json", dict(self.profile, **bad)))
+                self.assertIn("expected type", out)
 
     def test_lint_reports_an_industry_no_polled_source_lists(self):
         self.profile.update(industries=["finance"])
