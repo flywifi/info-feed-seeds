@@ -244,7 +244,7 @@ _STD_RIGHT = r"(?!(?!r\d)\w)"
 # name, how the edition is stored). Nothing else in the text is read as an edition.
 _VERSION = r"(\d{1,2}(?:\.\d{1,2}){1,2})(?!\w|\.\d)"
 EDITION_AFTER = {
-    "nist-sp-800-": (re.compile(r"(?: ?(?:Rev|Revision)\.? ?|r)(\d{1,2})(?!\w|\.\d)", re.A), "r{}"),
+    "nist-sp-800-": (re.compile(r"(?: ?(?:Rev|Revision)\.? ?|r)0?([1-9]\d?)(?!\w|\.\d)", re.A), "r{}"),
     "fips-140": (re.compile(r"-(\d)(?!\w|-\d)", re.A), "{}"),
     "iso-27001": (re.compile(r":(\d{4})(?!\w)", re.A), "{}"),
     "pci-dss": (re.compile(r" v?" + _VERSION, re.A), "{}"),

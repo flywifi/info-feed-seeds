@@ -8,6 +8,8 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Fixed
 
+- A NIST SP 800 revision written with a leading zero ("Rev. 05") is stored without it (`r5`), and
+  revision 0 is no edition.
 - Severity reads important as high and moderate as medium (the words Microsoft and Red Hat use) in
   the same severity contexts as the other words; a Red Hat title prefix such as `Important:` is not
   read. A severity word is skipped when "not" or "no" comes at most two words before it in the same

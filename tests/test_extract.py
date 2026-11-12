@@ -236,6 +236,15 @@ class StandardsTests(unittest.TestCase):
         got = extract.tags("Updates to CMMC", "2.1 million contractors affected", NAMES, STD)
         self.assertEqual((got["standards"], got["editions"]), (["cmmc"], []), "a version is never read across lines")
         self.assertEqual(extract.editions("SP 800-53 r5 and SP 800-53, Rev. 5", STD), [], "only a revision written right after")
+        for text in ("SP 800-53\nRev. 5", "PCI DSS\nv4.0", "NIST CSF\n2.0", "CIS Controls\nv8"):
+            with self.subTest(text=text):
+                self.assertEqual(extract.editions(text, STD), [], "an edition on the next line is not read")
+
+    def test_a_revision_number_drops_its_leading_zero(self):
+        self.assertEqual(extract.editions("SP 800-53 Rev. 05 and SP 800-171r03", STD),
+                         ["nist-sp-800-53:r5", "nist-sp-800-171:r3"])
+        self.assertEqual(extract.editions("SP 800-53 Rev. 0, SP 800-53 Rev. 00 and SP 800-53 Rev. 10", STD),
+                         ["nist-sp-800-53:r10"], "revision 0 is no edition")
 
     def test_an_alias_with_its_own_edition_needs_a_whole_version(self):
         self.assertEqual((extract.standards("CSF 2.0.1 notes", STD), extract.editions("CSF 2.0.1 notes", STD)),
