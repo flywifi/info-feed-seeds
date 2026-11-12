@@ -248,6 +248,16 @@ def industry_routed(profile: dict, source: Source, item: dict) -> bool:
     return wanted is None or bool(have & set(wanted))
 
 
+def source_cap(profile: dict, feed_id: str) -> int | None:
+    """The most items one source may take in a day of this profile: its entry in `source_caps`, else
+    `source_cap`, else None (no share)."""
+    caps = profile.get("source_caps")
+    for cap in (caps.get(feed_id) if isinstance(caps, dict) else None, profile.get("source_cap")):
+        if isinstance(cap, int) and not isinstance(cap, bool) and cap >= 1:
+            return cap
+    return None
+
+
 def _ref_list(profile: dict, key: str) -> list:
     """A profile list of references, or [] when the value is not a list (the schema reports the shape)."""
     value = profile.get(key)
@@ -457,6 +467,20 @@ def lint(repo: Repo) -> list[str]:
                     problems.append(f"{rel}: {what} {iid!r} is not in schema/categories.json industries")
         for iid in sorted(set(_ref_list(profile, "industries")) & set(_ref_list(profile, "exclude_industries"))):
             problems.append(f"{rel}: industry {iid!r} is both routed in and excluded")
+        caps = profile.get("source_caps") if isinstance(profile.get("source_caps"), dict) else {}
+        for sid in sorted(caps):
+            if sid not in known_ids:
+                problems.append(f"{rel}: source_caps names {sid!r}, which has no folder under sources/")
+        if not shape:
+            polled_ids = {s.id for s in selected_sources(with_defaults(profile), loaded)}
+            for sid in sorted(set(caps) & known_ids - polled_ids):
+                problems.append(f"{rel}: source_caps names {sid!r}, which this profile does not poll")
+        daily = profile.get("daily_cap")
+        if isinstance(daily, int):
+            shares = [("source_cap", profile.get("source_cap"))] + [(f"source_caps {s!r}", c) for s, c in sorted(caps.items())]
+            for where, cap in shares:
+                if isinstance(cap, int) and not isinstance(cap, bool) and cap > daily:
+                    problems.append(f"{rel}: {where} {cap} is above daily_cap {daily}, so it limits nothing")
         if not shape and known_industries is not None:
             # An industries list narrows the items of the sources the profile polls; it never adds a source.
             carried = {i for s in selected_sources(with_defaults(profile), loaded)
@@ -500,5 +524,5 @@ __all__ = [
     "ConfigError", "GUARD_RANK", "RELEASES_COMMENT", "Repo", "Source", "accepts", "category_allowed", "content_routed", "industry_routed",
     "is_held",
     "item_tags", "json_files", "keyword_tags", "lint", "profile_selects", "release_problems",
-    "selected_sources", "with_defaults",
+    "selected_sources", "source_cap", "with_defaults",
 ]

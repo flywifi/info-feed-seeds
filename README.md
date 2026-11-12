@@ -30,7 +30,12 @@ private notes or anything that identifies a client or a campaign.
   rows in its window); a profile's `industries` list routes in only items with an industry it names,
   `exclude_industries` keeps them out and wins over an inclusion, and an item with no industry is never
   named. An industries list narrows the items of the sources a profile polls and never adds a source,
-  so lint reports an industry no enabled source the profile polls lists.
+  so lint reports an industry no enabled source the profile polls lists. `source_cap` is the most
+  items any one source may take in a day, and `source_caps` sets it per source id (an entry there
+  wins). An item the guard holds takes a share as it takes a daily slot, and a story several sources
+  carry is charged to the first of them with room. Items a share keeps back are not marked as shown, so they can enter a later day while inside
+  the window; a source that always exceeds its share carries a backlog, and its oldest items leave
+  the window unseen. `report.json` counts them per source in `held_by_source_cap`.
   Routing applies when items are selected; items already in a day's digest stay there. An item keeps
   the content category it was given at ingest; one stored before content categories is matched by
   the source's current category. Registry keywords score an item's text; a keyword adds nothing where

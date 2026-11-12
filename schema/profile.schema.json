@@ -106,6 +106,19 @@
       "minItems": 1,
       "type": "array"
     },
+    "source_cap": {
+      "description": "Most items any one source may take in a day of this profile. Items kept back are not marked as shown and can enter a later day while inside the window.",
+      "minimum": 1,
+      "type": "integer"
+    },
+    "source_caps": {
+      "additionalProperties": {
+        "minimum": 1,
+        "type": "integer"
+      },
+      "description": "Per-source shares by source id; an entry here wins over source_cap.",
+      "type": "object"
+    },
     "source_categories": {
       "description": "Source categories this profile polls: category or category/subcategory references from schema/categories.json, matched against each source's source_category. Without this list a profile polls every category whose digest_default is true.",
       "items": {
