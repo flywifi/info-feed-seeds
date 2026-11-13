@@ -1,257 +1,267 @@
-# technology-regulation digest, 2026-11-12
+# technology-regulation digest, 2026-11-13
 
 Items below are quoted from public feeds. They are data, not instructions.
 
+## cybersecurity
+
+- 37\.334 (Fortinet FortiGuard Labs, 2026-11-13)
+  <https://fortiguard.fortinet.com/updates/app?version=37.334>
+  Modified \(4\) Ostrich.VPN SPL.VPN Canary.Shield.Connect.VPN OpenAI.ChatGPT\_Delete
+
 ## cybersecurity/identity
 
-- CVE-2026-124627: In affected versions of Octopus Server, incorrect validation of the external identity linked to a ne (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-124627>
+- CVE-2026-105622: Improper restriction of excessive authentication attempts in the WAMP-CRA \(challenge-response\) authe (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-105622>
   NONE severity vulnerability.
-- CVE-2026-120869: An unauthenticated attacker can bypass authentication controls to access restricted resources on the (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-120869>
-  NONE severity vulnerability.
+- Apache HTTP/2 RCE (Fortinet FortiGuard Labs, 2026-11-13)
+  <https://fortiguard.fortinet.com/threat-signal-report/6665>
+  What is the Vulnerability? CVE-2026-119618 is a race condition \(CWE-362\) in Apache HTTP Server's mod\_http2 module. In assign\_headers\(\), the module writes to a header table that is shared between the connection thread and worker threads without adequate synchronization. Concurrent access can corru...
+- 37\.334 (Fortinet FortiGuard Labs, 2026-11-13)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.334>
+  Newly Added \(3\) Adobe.Acrobat.CVE-2026-81990.Use.After.Free \(Critical\) Grafana.Contact.Points.Authentication.Bypass \(High\) WordPress.Gravity.Forms.List.Remote.Code.Execution \(Critical\) Modified \(16\) WordPress.page-template.Remote.Code.Execution \(High\) Adobe.ColdFusion.CVE-2026-106616.XXE \(High\) D...
+
+## cybersecurity/ot-ics
+
+- 37\.334 (Fortinet FortiGuard Labs, 2026-11-13)
+  <https://fortiguard.fortinet.com/updates/ots?version=37.334>
+  Modified \(6\) frangoteam.FUXA.nodered.Security.Bypass frangoteam.FUXA.nodered.fuxa.scripts.Information.Disclosure EnOcean.SmartServer.IP-852.TimeZone.Setting.Command.Injection OpenPLC.v3.Modbus.Device.Name.Buffer.Overflow Siemens.SINEC.NMS.unZipJarFilestoLocation.Path.Traversal frangoteam.FUXA.Sch...
+- 37\.33400 (Fortinet FortiGuard Labs, 2026-11-13)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.33400>
+  Newly Added \(2\) Edimax.EW-7438RPn.formEZCHNwlanSetup.Command.Injection. UTT.HiPER.1200GW.pptpSrvGlobalConfig.Command.Injection.
 
 ## cybersecurity/ransomware
 
-- Ransomware: Ministry of Health Malaysia \(Panzer\) (Ervik, 2026-11-12)
+- Ransomware: sportsmansguide.com \(inc ransom\) (Ervik, 2026-11-13)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by Panzer.
-- Ransomware: Texas Truck Center \(N0n\) (Ervik, 2026-11-12)
+  New ransomware victim disclosed by inc ransom.
+- Ransomware: World Wide Fittings 🇺🇸 \(bravox\) (Ervik, 2026-11-13)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by N0n.
-- Ransomware: Native Touch Inc. \(N0n\) (Ervik, 2026-11-12)
+  New ransomware victim disclosed by bravox.
+- Ransomware: AWO Bundesverband 🇩🇪 \(bravox\) (Ervik, 2026-11-13)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by N0n.
-- Ransomware: LEO Pharma A/S \(N0n\) (Ervik, 2026-11-12)
+  New ransomware victim disclosed by bravox.
+- Ransomware: BAE Exchange \(the gentlemen\) (Ervik, 2026-11-13)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by N0n.
-- Ransomware: Female Daily Network \(N0n\) (Ervik, 2026-11-12)
+  New ransomware victim disclosed by the gentlemen.
+- Ransomware: A\&O Shearman \(leakeddata\) (Ervik, 2026-11-13)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by N0n.
-- Ransomware: cey-tech.com \(krybit\) (Ervik, 2026-11-12)
+  New ransomware victim disclosed by leakeddata.
+- Ransomware: Garden Valley School Division \(interlock\) (Ervik, 2026-11-13)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by krybit.
-- Ransomware: Promantra, Inc. \(metaencryptor\) (Ervik, 2026-11-12)
+  New ransomware victim disclosed by interlock.
+- Ransomware: SPI Corp / SPI Energy group \(spicorp-invest.com\) \(pixelleaks\) (Ervik, 2026-11-13)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by metaencryptor.
-- Ransomware: Chicago History Museum \(incransom\) (Ervik, 2026-11-12)
+  New ransomware victim disclosed by pixelleaks.
+- Ransomware: BEAM Society \(iBeam platform, www\.ibeam.hk\) \(pixelleaks\) (Ervik, 2026-11-13)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by incransom.
-- Ransomware: Zito Marketi \(incransom\) (Ervik, 2026-11-12)
+  New ransomware victim disclosed by pixelleaks.
+- Ransomware: King International Investment Ltd \(HKEX: 00928, Lianhe Medical subsidiary\) \(pixelleaks\) (Ervik, 2026-11-13)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by incransom.
-- Ransomware: aidon.com \(incransom\) (Ervik, 2026-11-12)
+  New ransomware victim disclosed by pixelleaks.
+- Ransomware: International Utility Specialists Inc. \(pixelleaks\) (Ervik, 2026-11-13)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by incransom.
-- Barracuda Confirms Its Email Gateway Root Chain Is Being Exploited, Apache httpd Gets a Critical mod\_http2 RCE Fix, and Fortinet Ships Three Criticals Found With Claude Mythos (Ervik, 2026-11-12)
-  <https://www.ervik.as/news/barracuda-esg-exploited-apache-httpd-cve-2026-119618-fortinet-criticals-n-able-hotfix-zdi-meta-maersk-grok-apps-2026-11-12>
-  A look at the last 24 hours in cybersecurity: Barracuda confirms exploitation, Apache 2.4.71 fixes an unauthenticated mod\_http2 RCE, Fortinet patches three criticals, N-able recovers from 30-plus leaked zero-days, ZDI drops 42 Meta ML library bugs, and Maersk confirms access to a legacy acquisiti...
+  New ransomware victim disclosed by pixelleaks.
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-71367: An incorrect authorization vulnerability was found in AWX's WebSocket consumer. The consumer\_access\( (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-71367>
-  MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-92083: Missing Authorization vulnerability in TÜBİTAK BİLGEM Yazılım Teknolojileri Araştırma Enstitüsü pard (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-92083>
-  HIGH severity \(CVSS 7.8\) vulnerability.
-- CVE-2026-97845: An uncontrolled recursion vulnerability has been discovered in the Qt QXmlSimpleReader XML parsing f (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-97845>
+- CVE-2026-124278: Authorization Bypass Through User-Controlled Key vulnerability in elixir-grpc grpc\_server and grpc a (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-124278>
   NONE severity vulnerability.
-- CVE-2026-127058: WonderCMS before 3.7.0 contains an unverified password change vulnerability in the saveAction functi (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-127058>
-  MEDIUM severity \(CVSS 4.9\) vulnerability.
-- CVE-2026-124628: In affected versions of Octopus Server, incorrect validation of changes a user made to their own LDA (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-124628>
+- CVE-2026-123635: Missing Release of Resource after Effective Lifetime vulnerability in elixir-grpc grpc\_server allows (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-123635>
   NONE severity vulnerability.
-- CVE-2026-126995: A vulnerability was found in tjake Jlama up to 0.8.4/0.9.0-beta. Affected by this vulnerability is t (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-126995>
-  MEDIUM severity \(CVSS 6.3\) vulnerability.
-- CVE-2026-124018: Gutenverse Form plugin for WordPress before 3.2.2 contains a CSV formula injection vulnerability tha (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-124018>
-  HIGH severity \(CVSS 7.1\) vulnerability.
-- [held: pattern score 10] CVE-2026-123039: The Gaia OS DynamicCLI daemon runs as root and listens on a world-writable local socket \(/tmp/dynami (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-123039>
-- CVE-2026-114466: Arbitrary data can be read or written through git-fast-import\(1\) and git-fast-export\(1\) features not (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-114466>
-  MEDIUM severity \(CVSS 4.4\) vulnerability.
-- CVE-2026-114467: Out-of-bounds write possible in Git when git-merge\(1\) used on tag with more than two GPG signatures (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-114467>
-  LOW severity \(CVSS 3.3\) vulnerability.
-- CVE-2026-114469: Out-of-bounds read can crash git-apply\(1\) when binary patch inflates to very large size (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-114469>
-  MEDIUM severity \(CVSS 4.4\) vulnerability.
-- CVE-2026-116835: In affected versions of Octopus Server, insufficient validation of custom claims on OIDC accounts al (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-116835>
+- CVE-2026-121808: Improper Handling of Highly Compressed Data \(Data Amplification\) vulnerability in elixir-grpc grpc\_c (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-121808>
   NONE severity vulnerability.
-- CVE-2026-120490: On Scalable Platforms, an administrator with permissions to edit and install the Access Control Poli (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-120490>
-  LOW severity \(CVSS 3.8\) vulnerability.
-- CVE-2026-107484: An input and authorization validation vulnerability in Gaia Portal backend handlers could allow an a (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-107484>
-  HIGH severity \(CVSS 7.3\) vulnerability.
-- CVE-2026-75864: Zohocorp ManageEngine DDI Central versions below 6301 is affected by an improper authorization vulne (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-75864>
-  HIGH severity \(CVSS 8.1\) vulnerability.
-- CVE-2026-75867: Zohocorp ManageEngine DDI Central versions below 6301 is affected by an authorization bypass vulnera (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-75867>
-  HIGH severity \(CVSS 8.1\) vulnerability.
-- CVE-2026-75868: Zohocorp ManageEngine DDI Central versions below 6301 is affected by an authorization bypass vulnera (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-75868>
-  HIGH severity \(CVSS 8.1\) vulnerability.
-- CVE-2026-75869: Zohocorp ManageEngine DDI Central versions below 6301 is affected by an authorization bypass and Pow (Ervik, 2026-11-12)
-  <https://www.ervik.as/cves/CVE-2026-75869>
+- CVE-2026-111545: Dell PowerStore contains a SQL Injection vulnerability. An authenticated attacker could exploit this (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-111545>
   HIGH severity \(CVSS 8.8\) vulnerability.
-- 37\.333 (Fortinet FortiGuard Labs, 2026-11-12)
-  <https://fortiguard.fortinet.com/updates/ips?version=37.333>
-  Newly Added \(1\) MS.Windows.CVE-2026-95920.Privilege.Elevation \(High\) Modified \(20\) TOTOLINK.X2000R.boa.formIpQos.mac.Buffer.Overflow \(High\) TOTOLINK.X2000R.boa.formMapDelDevice.hostname.Buffer.Overflow \(High\) TP-Link.Tapo.C320WS.connectAp.Stack.Overflow \(High\) TOTOLINK.X2000R.boa.formFilter.vpnUs...
+- CVE-2026-109091: A buffer overflow in handling EDID Display-Range descriptors in X.Org xwayland before 24.1.15 and X (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-109091>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-105624: The login flow in Zenitel Connect before 1.11.0 applies per-account lockout on repeated failed login (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-105624>
+  NONE severity vulnerability.
+- CVE-2026-105625: The web interface in Zenitel Connect before 1.11.0 loads an integration iframe without sandboxing or (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-105625>
+  NONE severity vulnerability.
+- CVE-2026-105671: The login flow in Zenitel Connect before 1.11.0 returns different error responses depending on wheth (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-105671>
+  NONE severity vulnerability.
+- CVE-2026-105623: The web interface in Zenitel Connect before 1.11.0 serves production JavaScript source maps without (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-105623>
+  NONE severity vulnerability.
+- CVE-2026-103813: Dell PowerStore contains an OS Command Injection vulnerability. An authenticated user with limited p (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-103813>
+  CRITICAL severity \(CVSS 9.1\) vulnerability.
+- CVE-2024-58406: Huatian Dynamic OA8000 collaborative office system contains an unauthenticated path traversal vulner (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2024-58406>
+  HIGH severity \(CVSS 7.5\) vulnerability.
+- CVE-2026-82175: Dell PowerStore contains a Server-Side Request Forgery \(SSRF\) vulnerability. A high-privileged attac (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-82175>
+  LOW severity \(CVSS 3.8\) vulnerability.
+- CVE-2026-128970: Psono Server Community Edition versions 1.12.6 through 7.5.0 and Psono Server Enterprise Edition bef (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-128970>
+  MEDIUM severity \(CVSS 5.4\) vulnerability.
+- CVE-2026-128990: xschem 2.9.9 through 3.4.7 contains a heap out-of-bounds write vulnerability in read\_dataset\(\) in sr (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-128990>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-128991: xschem 2.9.9 through 3.4.7 contains an out-of-bounds read vulnerability in read\_xschem\_file\(\) in src (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-128991>
+  MEDIUM severity \(CVSS 5.3\) vulnerability.
+- CVE-2026-129092: CCC Attestation SIG attested-tls-poc through commit 731ca82 contains a time-of-check time-of-use vul (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-129092>
+  MEDIUM severity \(CVSS 5.7\) vulnerability.
+- CVE-2026-128908: OS command injection \(CWE-78\) in the network-configuration handling of the management service \(uavmo (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-128908>
+  HIGH severity \(CVSS 8.8\) vulnerability.
+- CVE-2026-128909: Improper verification of cryptographic signature \(CWE-347\) in the firmware update handler of the man (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-128909>
+  HIGH severity \(CVSS 8.8\) vulnerability.
+- CVE-2026-128910: Use of hard-coded credentials \(CWE-798\) on the 1300 communications board in DJI AeroScope Mobile \(TP (Ervik, 2026-11-13)
+  <https://www.ervik.as/cves/CVE-2026-128910>
+  MEDIUM severity \(CVSS 6.8\) vulnerability.
+- Chinese Operators Run Autonomous AI Pentest Agents Against 19 Organizations, PHP2Shell Hits Check Point Gateways With a Wiper, and N-central Falls Against Its Own Hotfix (Ervik, 2026-11-13)
+  <https://www.ervik.as/news/cairn-ai-autonomous-attacks-silent-lynx-php2shell-check-point-n-central-hotfix2-quay-wfx-loot-signdrop-2026-11-13>
+  A look at the last 24 hours in cybersecurity: Unit 42 documents 25 AI-driven intrusion operations, a Kazakhstan-linked crew runs an open-source agent against Central Asia, Check Point gateways are hit by PHP2Shell, 21 N-central servers mine Monero, and a public Windows SYSTEM exploit has no patch.
+- 37\.336 (Fortinet FortiGuard Labs, 2026-11-13)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.336>
+  Newly Added \(1\) Apache.HTTP.Server.CVE-2026-119618.Remote.Code.Injection \(Critical\)
+- 37\.335 (Fortinet FortiGuard Labs, 2026-11-13)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.335>
+  Newly Added \(4\) Linksys.E5600.upload\_fw.cgi.Buffer.Overflow \(High\) Linksys.E5600.mesh\_login.cgi.Buffer.Overflow \(Medium\) TOTOLINK.A950RG.setWiFiBasicConfig.Buffer.Overflow \(High\) TightVNC.Viewer.FrameBuffer.Buffer.Overflow \(High\) Modified \(1\) SAP.NetWeaver.Internet.Communication.Manager.Integer.U...
 
 ## regulation/federal-rulemaking
 
+- Title 44 - Emergency Management and Assistance (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title44-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 45 - Public Welfare (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title45-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 45 - Public Welfare (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title45-vol2>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 45 - Public Welfare (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title45-vol3>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 45 - Public Welfare (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title45-vol4>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 45 - Public Welfare (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title45-vol5>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title46-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title46-vol2>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title46-vol3>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title46-vol4>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title46-vol5>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title46-vol6>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title46-vol7>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Federal Register Vol. 91, No.218, November 13, 2026 (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/FR-2026-11-13>
+  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- FR-2026-11-13 (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-13.xml>
+  Content Files XML
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title46-vol8>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 46 - Shipping (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title46-vol9>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 47 - Telecommunication (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title47-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 47 - Telecommunication (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title47-vol2>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 47 - Telecommunication (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title47-vol3>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 47 - Telecommunication (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title47-vol4>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 47 - Telecommunication (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title47-vol5>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title48-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title48-vol2>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title48-vol3>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title48-vol4>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title48-vol5>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title48-vol6>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 48 - Federal Acquisition Regulations System (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title48-vol7>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-13)
+  <https://www.govinfo.gov/app/details/CFR-2024-title49-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-12)
+  <https://www.govinfo.gov/app/details/CFR-2024-title49-vol2>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-12)
+  <https://www.govinfo.gov/app/details/CFR-2024-title49-vol3>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-12)
+  <https://www.govinfo.gov/app/details/CFR-2024-title49-vol4>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-12)
+  <https://www.govinfo.gov/app/details/CFR-2024-title49-vol5>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-12)
+  <https://www.govinfo.gov/app/details/CFR-2024-title49-vol6>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-12)
+  <https://www.govinfo.gov/app/details/CFR-2024-title49-vol7>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-12)
+  <https://www.govinfo.gov/app/details/CFR-2024-title49-vol8>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 49 - Transportation (U.S. Government Publishing Office, 2026-11-12)
+  <https://www.govinfo.gov/app/details/CFR-2024-title49-vol9>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
 - Title 5 - Administrative Personnel (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title5-vol3>
+  <https://www.govinfo.gov/app/details/CFR-2024-title5-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol1>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol10>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol11>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol12>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol13>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol3>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol2>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol5>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol4>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol6>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol9>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol7>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 50 - Wildlife and Fisheries (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title50-vol8>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 6 - Domestic Security (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title6-vol1>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol1>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol10>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol11>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol12>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol13>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol15>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol14>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol2>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol3>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol4>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol5>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol6>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol7>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol8>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 7 - Agriculture (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title7-vol9>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 8 - Aliens and Nationality (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title8-vol1>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 9 - Animals and Animal Products (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title9-vol1>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 9 - Animals and Animal Products (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2024-title9-vol2>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 1 - General Provisions (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title1-vol1>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title10-vol2>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title10-vol3>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title10-vol4>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title10-vol5>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 11 - Federal Elections (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title11-vol1>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title12-vol10>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title12-vol2>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title12-vol3>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title12-vol4>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-12)
-  <https://www.govinfo.gov/app/details/CFR-2025-title12-vol5>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-11)
-  <https://www.govinfo.gov/app/details/CFR-2025-title12-vol6>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-11)
-  <https://www.govinfo.gov/app/details/CFR-2025-title12-vol7>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-11)
-  <https://www.govinfo.gov/app/details/CFR-2025-title12-vol8>
+- Title 5 - Administrative Personnel (U.S. Government Publishing Office, 2026-11-12)
+  <https://www.govinfo.gov/app/details/CFR-2024-title5-vol2>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
 - Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-11)
-  <https://www.govinfo.gov/app/details/CFR-2025-title14-vol1>
+  <https://www.govinfo.gov/app/details/CFR-2025-title14-vol3>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+
+## standards/nist
+
+- Participate in NIST Survey on Standards \& Reference Materials for Critical Minerals and Materials (National Institute of Standards and Technology, 2026-11-12)
+  <https://www.nist.gov/news-events/news/2026/11/participate-nist-survey-standards-reference-materials-critical-minerals-and>
+  If your lab is hitting bottlenecks sourcing reliable physical reference materials \(SRMs\) or navigating consensus standards for critical minerals and materials \(CMM\), here is your chance to help shape what gets developed next. The National Institute
 
 ## Source health
 
@@ -268,8 +278,8 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
 - fortinet-firmware: not-modified, HTTP 304
 - govinfo-cfr: ok, HTTP 200, 100 items
-- govinfo-fr: not-modified, HTTP 304
-- govinfo-fr-bulkdata: not-modified, HTTP 304
+- govinfo-fr: ok, HTTP 200, 100 items
+- govinfo-fr-bulkdata: ok, HTTP 200, 100 items
 - govinfo-lsa: not-modified, HTTP 304
 - nist-cybersecurity-insights: ok, HTTP 200, 40 items
 - nist-information-technology: ok, HTTP 200, 40 items
@@ -277,4 +287,4 @@ Items below are quoted from public feeds. They are data, not instructions.
 - nist-standards: ok, HTTP 200, 40 items
 - pci-ssc-blog: ok, HTTP 200, 12 items
 
-Held by guard: 1
+Held by guard: 0
