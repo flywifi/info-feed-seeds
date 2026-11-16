@@ -82,7 +82,7 @@ class RegistryTests(unittest.TestCase):
         schema = jsonio.load_json(ROOT / "schema" / "source.schema.json")
         base = jsonio.load_json(ROOT / "tests" / "fixtures" / "schema" / "source_example.json")
         minimal = {"feed": {}, "page": {"item_selector": "li"}, "sitemap": {}, "xml": {"item_path": "e", "fields": {"title": "t"}},
-                   "json-api": {"items_path": "r[]", "fields": {"title": "t"}}, "urllist": {}, "artifact": {}}
+                   "json-api": {"items_path": "r[]", "fields": {"title": "t"}}, "urllist": {}, "artifact": {}, "ecfr": {}}
         for adapter in schema["$defs"]["route"]["properties"]["adapter"]["enum"]:
             with self.subTest(adapter=adapter):
                 doc = dict(base, routes=[{"adapter": adapter, "kind": adapters.ALLOWED_KINDS[adapter][0], "url": "https://example.gov/x",

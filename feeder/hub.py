@@ -183,7 +183,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
         new = 0
         for raw, page_url, retrieved_at in raws:
             rec = items.build_item(source.id, page_url, raw, retrieved_at=retrieved_at)
-            scan = guard.scan_item_fields(raw.title, raw.summary, *raw.authors)
+            scan = guard.scan_item_fields(raw.title, raw.summary, *raw.authors, *items.label_words(rec.get("extra") or {}))
             rec["guard_level"], rec["guard_score"] = scan["risk_level"], scan["total_score"]
             if reg is not None:
                 # The source category places the feed; the content category places this item by its own text.
@@ -198,6 +198,18 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             # Tags the item's own text states: CVE ids, severity, exploitation, vendors and a deadline.
             rec.update(extract.tags(items.sanitize(raw.title), items.sanitize(raw.summary), vendor_names or {},
                                     standard_names or {}))
+            # Labels the source gives as its own fields: CFR parts, agencies, a document or change type,
+            # an effective date, and a comment deadline, which wins over one read from the text.
+            given = rec.get("extra") or {}
+            rec["cfr_given"] = list(given.get("cfr") or [])
+            rec["cfr"] = _cfr_merged(rec["cfr_given"], rec.get("cfr") or [])
+            # Written at every sighting, so a label the source withdraws is cleared.
+            rec.update(agencies=list(given.get("agencies") or []), change_types=list(given.get("change_types") or []),
+                       effective=given.get("effective"))
+            if given.get("deadline"):
+                rec.update(deadline=given["deadline"], deadline_basis="source")
+            else:
+                rec["deadline_basis"] = "text" if rec.get("deadline") else None
             if store.upsert_item(rec, first_seen=now):
                 new += 1
         flags = (("truncated", truncated), ("follow-partial", follow_failed), ("follow-refused", follow_refused))
@@ -208,6 +220,11 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
 
 
 # --------------------------------------------------------------------------- selection
+
+def _cfr_merged(given: list, read: list) -> list:
+    """The CFR parts a source gave as fields, then those read from the text, each once."""
+    return list(dict.fromkeys([*given, *read]))[:extract.CFR_CAP]
+
 
 def _guid_key(row: dict) -> str:
     return f"guid:{row['feed_id']}:{row['guid']}"
@@ -345,6 +362,13 @@ def retag_rows(store: Store, repo: Repo, sources: dict, today: date, since_days:
             new["industries"] = list(src.manifest.get("industries") or [])
         new.update(extract.tags(items.sanitize(row.get("title")), items.sanitize(row.get("summary")), vendor_names,
                                 standard_names))
+        # What the source gave as fields is not in the text: its CFR parts are merged back in, and its
+        # deadline is left as it is.
+        new["cfr"] = _cfr_merged([v for v in (row.get("cfr_given") or "").split(",") if v], new.get("cfr") or [])
+        if row.get("deadline_basis") == "source":
+            new.pop("deadline", None)
+        else:
+            new["deadline_basis"] = "text" if new.get("deadline") else None
         diff = {name: value for name, value in new.items() if Store.stored_form(name, value) != row.get(name)}
         if not diff:
             continue

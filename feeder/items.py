@@ -248,7 +248,13 @@ def build_item(feed_id: str, route_url: str, raw: RawItem, retrieved_at: str | N
     }
 
 
-__all__ = [
+def label_words(row: dict) -> list[str]:
+    """The ids a source gave as labels (agencies, change types) as words, so the injection guard reads
+    them with the title and summary: they are published too."""
+    return [v.replace("-", " ") for name in ("agencies", "change_types") for v in row.get(name) or [] if isinstance(v, str)]
+
+
+__all__ = ["label_words", 
     "DISPLAY_SUMMARY_CAP", "EMAIL_REDACTION", "RawItem", "build_item", "content_sha256",
     "display_fields", "link_key", "match_keywords", "normalize_link", "now_utc_z", "sanitize",
     "strip_html", "tag_topics", "to_utc_z",

@@ -9,7 +9,8 @@ and `params` and returns the shared {"kind", "items", "follow"} shape (see feede
 - xml: item_path and field paths in ElementTree's path subset ('name@attr' reads an attribute, '.' the
   item text), namespaces as a prefix map. Fields: title, link, guid, summary, published.
 - json-api: items_path and field paths ('results[].title'; '[]' maps over a list), next_path for the
-  next page URL, max_pages.
+  next page URL, max_pages. Optional label paths in fields: deadline and effective (YYYY-MM-DD),
+  cfr_titles with cfr_parts (zipped into 'title/part'), agencies and change_types (ids).
 - artifact: one item per distinct file content, keyed by its sha256, so the store adds a new item only
   when the file changes. Param: label.
 
@@ -24,8 +25,9 @@ import xml.etree.ElementTree as ET
 import zlib
 
 from ..fetchkit import DEFAULT_BODY_CAP, inflate_capped
+from ..extract import cfr_ref
 from ..items import RawItem, to_utc_z
-from .base import AdapterError, refuse_dtd
+from .base import LABEL_CAP, AdapterError, iso_day, refuse_dtd, slugs
 
 SM = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 ITEM_FIELDS = ("title", "link", "guid", "summary", "published")
@@ -125,6 +127,27 @@ def json_path(obj, path: str):
     return cur
 
 
+def labels(row: dict, fields: dict) -> dict:
+    """Labels a JSON API gives as its own fields: a comment deadline and an effective date, the CFR
+    parts a document changes, agency ids, and a document type. Only well-formed values are kept."""
+    out: dict = {}
+    for name in ("deadline", "effective"):
+        day = iso_day(json_path(row, fields[name])) if name in fields else None
+        if day:
+            out[name] = day
+    if "cfr_titles" in fields and "cfr_parts" in fields:
+        titles, parts = json_path(row, fields["cfr_titles"]), json_path(row, fields["cfr_parts"])
+        pairs = zip(titles if isinstance(titles, list) else [titles], parts if isinstance(parts, list) else [parts])
+        refs = list(dict.fromkeys(ref for ref in (cfr_ref(t, p) for t, p in pairs) if ref))[:LABEL_CAP]
+        if refs:
+            out["cfr"] = refs
+    for name in ("agencies", "change_types"):
+        ids = slugs(json_path(row, fields[name])) if name in fields else []
+        if ids:
+            out[name] = ids
+    return out
+
+
 def parse_json_api(data: bytes, *, url: str | None = None, params: dict | None = None) -> dict:
     params = params or {}
     fields = params.get("fields") or {}
@@ -145,6 +168,7 @@ def parse_json_api(data: bytes, *, url: str | None = None, params: dict | None =
                       for k, v in values.items() if v is None or isinstance(v, (str, int, float))}
             item = _item(values)
             if item:
+                item.extra.update(labels(row, fields))
                 items.append(item)
     nxt = json_path(doc, params["next_path"]) if params.get("next_path") else None
     return {"kind": "json-api", "items": items, "follow": [nxt] if isinstance(nxt, str) and nxt else []}
@@ -159,4 +183,4 @@ def parse_artifact(data: bytes, *, url: str | None = None, params: dict | None =
     return {"kind": "artifact", "items": [item], "follow": []}
 
 
-__all__ = ["json_path", "parse_artifact", "parse_json_api", "parse_sitemap", "parse_urllist", "parse_xml"]
+__all__ = ["json_path", "labels", "parse_artifact", "parse_json_api", "parse_sitemap", "parse_urllist", "parse_xml"]
