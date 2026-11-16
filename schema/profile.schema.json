@@ -9,6 +9,15 @@
       "minimum": 0,
       "type": "integer"
     },
+    "cfr_parts": {
+      "description": "CFR references this profile routes into its digest, as title/part (32/170, which takes every section of the part) or title/section (48/252.204-7012), matched against the references stored with each item. An item with no CFR reference is never named. Without this list every item goes in.",
+      "items": {
+        "pattern": "^([1-9]|[1-4][0-9]|50)/(0|[1-9][0-9]{0,3})(-[0-9]{1,3})?[a-z]?(\\.[a-z0-9]+([._-][a-z0-9]+)*)?$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
     "content_categories": {
       "description": "Content categories this profile routes into its digest: category or category/subcategory references from schema/categories.json, matched against the content category each item's own text decided at ingest (an item stored before that is matched by its source category). Without this list every item of a polled source is routed. Machine data comes only from sources the profile polls, so name it in source_categories too.",
       "items": {
@@ -28,6 +37,15 @@
     },
     "enabled": {
       "type": "boolean"
+    },
+    "exclude_cfr_parts": {
+      "description": "CFR references kept out of this profile's digest, matched the same way as cfr_parts; an exclusion wins over an inclusion.",
+      "items": {
+        "pattern": "^([1-9]|[1-4][0-9]|50)/(0|[1-9][0-9]{0,3})(-[0-9]{1,3})?[a-z]?(\\.[a-z0-9]+([._-][a-z0-9]+)*)?$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
     },
     "exclude_content_categories": {
       "description": "Content categories kept out of this profile's digest, matched the same way as content_categories; an exclusion wins over an inclusion, so a category can be routed in with one of its subcategories kept out.",

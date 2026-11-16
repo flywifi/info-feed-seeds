@@ -30,7 +30,15 @@ private notes or anything that identifies a client or a campaign.
   rows in its window); a profile's `industries` list routes in only items with an industry it names,
   `exclude_industries` keeps them out and wins over an inclusion, and an item with no industry is never
   named. An industries list narrows the items of the sources a profile polls and never adds a source,
-  so lint reports an industry no enabled source the profile polls lists. `source_cap` is the most
+  so lint reports an industry no enabled source the profile polls lists.
+  `cfr-watch.json` lists the Code of Federal Regulations parts and sections the feed watches, keyed
+  as `title/part` (`32/170`, which takes every section of the part) or `title/section`
+  (`48/252.204-7012`, only that section), each with the heading the eCFR gives and optional standards
+  ids. A source whose manifest sets `watched_only` gives only items under an entry: a new entry takes
+  stored items at the next poll, and an empty list gives none. A profile's `cfr_parts` list routes in
+  only items under a reference it names, and `exclude_cfr_parts` keeps them out and wins over an
+  inclusion. An item under an entry is tagged with the standards the entry names, at poll and by
+  `hub retag`. `source_cap` is the most
   items any one source may take in a day, and `source_caps` sets it per source id (an entry there
   wins). An item the guard holds takes a share as it takes a daily slot, and a story several sources
   carry is charged to the first of them with room. Items a share keeps back are not marked as shown, so they can enter a later day while inside
@@ -370,7 +378,9 @@ standard's name on the same line, a CIS Controls number without v or Version, an
 same line ("CMMC 1.5 million") is read as an edition. A tag the text does not state stays empty. `cfr` lists the
 Code of Federal Regulations parts an item cites or its source gives, as `title/part`, followed by
 `title/part.section` when a section is cited ("45 CFR 164.308" gives `45/164` and `45/164.308`; at
-most 20 per item). `labels` holds what a source gives as fields: `agencies`, `change_types`,
+most 20 per item, those under a watch-list entry first). A list after a citation is read too: more
+sections of the same part ("164.308 and 164.312"), both ends of a section range ("73.54-73.56"), and
+more parts after "Parts" ("parts 160 and 164"). `labels` holds what a source gives as fields: `agencies`, `change_types`,
 `effective`, and `deadline_basis` (`source` for a deadline given as a field, `text` for one read from
 the item's words). The injection guard reads the label ids with the title and summary. `report.json` counts the items per CFR part under `classification.cfr`. Severity reads
 important as high and moderate as medium (the words Microsoft and Red Hat use) in the same severity

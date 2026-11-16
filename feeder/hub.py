@@ -33,7 +33,7 @@ if __package__ in (None, ""):
 
 from feeder import ROOT, adapters, categories, extract, guard, items, jsonio, outputs  # noqa: E402
 from feeder.config import (ConfigError, Repo, RELEASES_COMMENT, SHA_RE, accepts, content_routed,  # noqa: E402
-                           industry_routed, item_tags, json_files, lint, selected_sources, source_cap)
+                           cfr_routed, industry_routed, item_tags, json_files, lint, selected_sources, source_cap)
 from feeder.schema_validate import validate  # noqa: E402
 from feeder.store import DB_NAME, RETAG_COLUMNS, Store, StoreError  # noqa: E402
 
@@ -102,7 +102,8 @@ def _without_userinfo(address: str) -> str:
 
 
 def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | None = None,
-                vendor_names: dict | None = None, standard_names: dict | None = None) -> dict:
+                vendor_names: dict | None = None, standard_names: dict | None = None,
+                cfr_watch: dict | None = None) -> dict:
     """Fetch the source's configured routes in order until one answers, dispatching each body to
     its adapter and following the adapter's `follow` URLs up to the route's bound. A 304 ends the
     source's poll as not-modified: its items were stored at the earlier fetch, so later routes and
@@ -202,7 +203,8 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             # an effective date, and a comment deadline, which wins over one read from the text.
             given = rec.get("extra") or {}
             rec["cfr_given"] = list(given.get("cfr") or [])
-            rec["cfr"] = _cfr_merged(rec["cfr_given"], rec.get("cfr") or [])
+            rec["cfr"] = _cfr_merged(rec["cfr_given"], rec.get("cfr") or [], cfr_watch)
+            rec["standards"] = _with_watch_standards(rec.get("standards") or [], rec["cfr"], cfr_watch)
             # Written at every sighting, so a label the source withdraws is cleared.
             rec.update(agencies=list(given.get("agencies") or []), change_types=list(given.get("change_types") or []),
                        effective=given.get("effective"))
@@ -221,18 +223,34 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
 
 # --------------------------------------------------------------------------- selection
 
-def _cfr_merged(given: list, read: list) -> list:
-    """The CFR parts a source gave as fields, then those read from the text, each once."""
-    return list(dict.fromkeys([*given, *read]))[:extract.CFR_CAP]
+def _cfr_merged(given: list, read: list, watch: dict | None = None) -> list:
+    """The CFR references a source gave as fields, then those read from the text, each once, at most
+    CFR_CAP. When there are more, those under a watch-list entry are kept first, so the cap cannot
+    cut the reference an item is watched for; the order of first mention stays."""
+    merged = list(dict.fromkeys([*given, *read]))
+    if len(merged) <= extract.CFR_CAP:
+        return merged
+    watched = set(watch or {})
+    first = [ref for ref in merged if extract.cfr_under([ref]) & watched]
+    taken = set(first)
+    keep = set((first + [ref for ref in merged if ref not in taken])[:extract.CFR_CAP])
+    return [ref for ref in merged if ref in keep]
+
+
+def _with_watch_standards(standards: list, cfr: list, watch: dict | None) -> list:
+    """The standards the text names, then those the watch list ties to the item's CFR references."""
+    return list(dict.fromkeys([*standards, *extract.watch_standards(cfr, watch)]))
 
 
 def _guid_key(row: dict) -> str:
     return f"guid:{row['feed_id']}:{row['guid']}"
 
 
-def select_for_day(store: Store, profile: dict, sources: dict, day: str, held: dict | None = None) -> int:
+def select_for_day(store: Store, profile: dict, sources: dict, day: str, held: dict | None = None,
+                   watch: dict | None = None) -> int:
     """Give new eligible items a hit on `day`, up to the daily cap and each source's share. Returns the
-    hits added; `held` collects, per source, the items its share kept back (they stay eligible)."""
+    hits added; `held` collects, per source, the items its share kept back (they stay eligible). `watch`
+    is the CFR watch list: a watched-only source gives only items under one of its entries."""
     name = profile["name"]
     chosen = {s.id: s for s in selected_sources(profile, sources)}
     taken = store.hit_shas(name)
@@ -264,7 +282,8 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str, held: d
         if not earliest <= ref <= day:
             continue
         if (not accepts(profile, row) or not content_routed(profile, chosen[row["feed_id"]], row)
-                or not industry_routed(profile, chosen[row["feed_id"]], row)):
+                or not industry_routed(profile, chosen[row["feed_id"]], row)
+                or not cfr_routed(profile, chosen[row["feed_id"]], row, watch)):
             continue
         tags, _ = item_tags(profile, chosen[row["feed_id"]], row)
         shared = len(per_source.get((row["feed_id"], row["link_key"]), ())) > 1
@@ -337,6 +356,7 @@ def retag_rows(store: Store, repo: Repo, sources: dict, today: date, since_days:
     reg = repo.categories()
     vendor_names = extract.load_vendors(repo.schema_dir / "vendors.json") or {}
     standard_names = extract.load_standards(repo.schema_dir / "standards.json") or {}
+    watch = extract.load_cfr_watch(repo.schema_dir / "cfr-watch.json")
     every = since_days == 0 or since_days >= (today - date.min).days
     cutoff = None if every else (today - timedelta(days=since_days)).isoformat()
     columns: dict[str, int] = {}
@@ -364,7 +384,8 @@ def retag_rows(store: Store, repo: Repo, sources: dict, today: date, since_days:
                                 standard_names))
         # What the source gave as fields is not in the text: its CFR parts are merged back in, and its
         # deadline is left as it is.
-        new["cfr"] = _cfr_merged([v for v in (row.get("cfr_given") or "").split(",") if v], new.get("cfr") or [])
+        new["cfr"] = _cfr_merged([v for v in (row.get("cfr_given") or "").split(",") if v], new.get("cfr") or [], watch)
+        new["standards"] = _with_watch_standards(new.get("standards") or [], new["cfr"], watch)
         if row.get("deadline_basis") == "source":
             new.pop("deadline", None)
         else:
@@ -496,6 +517,7 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
         wanted = {k: v for k, v in wanted.items() if k == args.only}
 
     attempted = failed = responded = new_items = 0
+    cfr_watch = extract.load_cfr_watch(repo.schema_dir / "cfr-watch.json")
     if args.offline:
         say(f"poll {day}: offline, no fetches; rendering from {state_dir.as_posix()}")
     else:
@@ -520,7 +542,7 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
             if fetcher is None:
                 fetcher = fetcher_factory(state_dir)
             rec = poll_source(fetcher, src, store, day, now_z, reg=repo.categories(), vendor_names=vendor_names,
-                              standard_names=standard_names)
+                              standard_names=standard_names, cfr_watch=cfr_watch)
             attempted += rec["attempted"]
             failed += rec["failed"]
             new_items += rec["new"]
@@ -549,7 +571,7 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
     summary_rows = []
     for profile in profiles:
         held: dict[str, int] = {}
-        added = select_for_day(store, profile, sources, day, held)
+        added = select_for_day(store, profile, sources, day, held, cfr_watch)
         days = [day]
         for back in range(1, int(profile.get("backfill_days", 0)) + 1):
             prior = (date.fromisoformat(day) - timedelta(days=back)).isoformat()

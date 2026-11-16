@@ -177,6 +177,84 @@ def load_vendors(path: Path, key: str = "vendors") -> dict[str, list[str]]:
     return out
 
 
+def cfr_under(refs) -> set:
+    """An item's CFR references together with the part of each section: 32/170.14 is under 32/170."""
+    have = {r for r in refs or [] if isinstance(r, str)}
+    return have | {r.split(".", 1)[0] for r in have}
+
+
+def watch_ref_ok(ref) -> bool:
+    """Whether a value is a CFR part (32/170) or section (48/252.204-7012) as items store one: lower
+    case, a hyphen in the part only under Title 41 (elsewhere the reader takes it for a range), and a
+    section number that does not end in a dot."""
+    if not isinstance(ref, str) or "/" not in ref:
+        return False
+    title, _, rest = ref.partition("/")
+    part, dot, tail = rest.partition(".")
+    if ("-" in part and title != "41") or (dot and not re.fullmatch(r"[a-z0-9]+(?:[._-][a-z0-9]+)*", tail, re.A)):
+        return False
+    return cfr_ref(title, part, rest if dot else None) == ref
+
+
+def load_cfr_watch(path: Path) -> dict[str, dict]:
+    """{reference: {"label": text, "standards": [ids]}} from schema/cfr-watch.json, sorted by reference. An
+    entry lint refuses (a key that is not a reference, an entry that is not an object) is skipped, and a
+    missing or unreadable file gives none, so a watched-only source then gives no items."""
+    _, entries = _registry_entries(path, "watch")
+    out = {}
+    for ref, entry in sorted(entries.items()):
+        if watch_ref_ok(ref) and isinstance(entry, dict):
+            label, std = entry.get("label"), entry.get("standards")
+            out[ref] = {"label": label if isinstance(label, str) else "",
+                        "standards": [s for s in std if isinstance(s, str)] if isinstance(std, list) else []}
+    return out
+
+
+def cfr_watched(refs, watch) -> list[str]:
+    """The watch-list entries an item's CFR references fall under, in watch-list order: a part entry takes
+    the part and every section of it, a section entry only that section."""
+    have = cfr_under(refs)
+    return [ref for ref in watch or {} if ref in have]
+
+
+def watch_standards(refs, watch) -> list[str]:
+    """The standard ids the watch list ties to the entries an item's references fall under, each once."""
+    out: dict[str, None] = {}
+    for ref in cfr_watched(refs, watch):
+        for sid in watch[ref].get("standards") or []:
+            out.setdefault(sid, None)
+    return list(out)
+
+
+def cfr_watch_problems(path: Path, standard_ids=()) -> list[str]:
+    """Watch-list defects lint reports: invalid JSON, a key that is not a CFR part or section, an entry that
+    is not an object or has a key other than label and standards, a missing or padded label, standards that
+    are not a list of ids, an id listed twice, or an id schema/standards.json does not have."""
+    problems, entries = _registry_entries(path, "watch")
+    known = set(standard_ids)
+    for ref, entry in entries.items():
+        if not watch_ref_ok(ref):
+            problems.append(f"reference {ref!r} is not a CFR part (32/170) or section (48/252.204-7012)")
+            continue
+        if not isinstance(entry, dict):
+            problems.append(f"entry {ref!r} is not an object")
+            continue
+        for key in sorted(set(entry) - {"label", "standards"}):
+            problems.append(f"entry {ref!r} has an unexpected key {key!r}")
+        label = entry.get("label")
+        if not isinstance(label, str) or not label or label != label.strip():
+            problems.append(f"entry {ref!r} needs a label with no space around it")
+        std = entry.get("standards", [])
+        if not isinstance(std, list) or not all(isinstance(s, str) for s in std):
+            problems.append(f"entry {ref!r}: standards must be a list of ids")
+            continue
+        for sid in sorted({s for s in std if std.count(s) > 1}):
+            problems.append(f"entry {ref!r}: standard {sid!r} is listed twice")
+        for sid in sorted(set(std) - known):
+            problems.append(f"entry {ref!r}: standard {sid!r} is not in schema/standards.json")
+    return problems
+
+
 def load_standards(path: Path) -> dict[str, list[str]]:
     """{standard id: [aliases]} from schema/standards.json, with the same rules as the vendor registry."""
     return load_vendors(path, "standards")
@@ -310,11 +388,20 @@ def editions(text: str, names: dict[str, list[str]]) -> list[str]:
 # gives the part only, since "1.401" is another section), a compilation ("3 CFR, 2011 Comp.") and an
 # edition year ("40 CFR 2026 edition").
 CFR_RE = re.compile(r"(?<![\w.-])(\d{1,2}) ?C\.?F\.?R\.?,? ?"
-                    r"(?:(?:[Pp]arts?|PARTS?|[Pp]ts?\.|[Ss]ections?|[Ss]ecs?\.?|\u00a7{1,2}) ?)?"
+                    r"(?:([Pp]arts?|PARTS?|[Pp]ts?\.|[Ss]ections?|[Ss]ecs?\.?|\u00a7{1,2}) ?)?"
                     r"(\d{1,4}(?:-\d{1,3})?[a-z]?)(\.[A-Z]?\d[\w-]{0,15}(?:\.\d[\w-]{0,14})?)?"
                     r"(?!\w|(?:\(\w{1,4}\))+-\d|,? Comp\b| [Ee]dition\b)", re.A)
 # CFR references kept for one item; the rest of a long text adds none.
 CFR_CAP = 20
+# References read from one text, or given by one source, before the cap for one item is applied.
+CFR_READ_CAP = 200
+# What may follow a citation: more sections of the same part ("164.308, 164.310 and 164.312",
+# "170.14 to 170.18") or, after "Parts", more parts of the same title ("parts 160, 162 and 164"). A
+# number that starts the next citation ("and 40 CFR") is not part of the list, and a paragraph in
+# brackets after a section ("164.308(a)(1) and 164.312") is passed over.
+_CFR_MORE = re.compile(r"(?:\(\w{1,4}\)){0,6}(?:, ?(?:and |or )?| and | or | through | to )(?:\u00a7{1,2} ?)?"
+                       r"(\d{1,4}(?:-\d{1,3})?[a-z]?)(\.[A-Z]?\d[\w-]{0,15}(?:\.\d[\w-]{0,14})?)?"
+                       r"(?!\w|(?:\(\w{1,4}\))+-\d|,? Comp\b| [Ee]dition\b| ?C\.?F\.?R)", re.A)
 
 
 def cfr_ref(title, part, section=None) -> str | None:
@@ -330,18 +417,42 @@ def cfr_ref(title, part, section=None) -> str | None:
     return f"{int(t)}/{s}" if re.fullmatch(re.escape(p) + r"\.[\w.-]{1,40}", s, re.A) else None
 
 
+def _section_refs(title: str, part: str, rest: str) -> list:
+    """The references one section token gives: the section, or both ends of a range written with the
+    part repeated (".54-73.56" after part 73 gives 73.54 and 73.56)."""
+    ends = rest.split(f"-{part}.", 1)
+    return [cfr_ref(title, part, part + tail) for tail in [ends[0]] + [f".{end}" for end in ends[1:]]]
+
+
 def cfr_refs(text: str) -> list[str]:
     """CFR parts the text cites, as 'title/part', each followed by 'title/part.section' when a section is
-    cited, in order of first mention, each once, at most CFR_CAP."""
+    cited, in order of first mention, each once, at most CFR_READ_CAP. A list after a citation is read
+    too: more sections of the same part, both ends of a section range, and more parts after "Parts"."""
     out: dict[str, None] = {}
-    for m in CFR_RE.finditer(text or ""):
-        title, part, rest = m.groups()
+    text = text or ""
+    for m in CFR_RE.finditer(text):
+        title, word, part, rest = m.groups()
         if "-" in part and title != "41":   # only Title 41 numbers parts with a hyphen; elsewhere it is a range
             part, rest = part.split("-", 1)[0], None
-        for ref in (cfr_ref(title, part), cfr_ref(title, part, part + rest) if rest else None):
+        found = [cfr_ref(title, part)] + (_section_refs(title, part, rest) if rest else [])
+        plural = bool(word) and word.lower().rstrip(".") in ("parts", "pts")
+        pos = m.end()
+        while (rest or plural) and len(found) < CFR_READ_CAP:
+            more = _CFR_MORE.match(text, pos)
+            if not more:
+                break
+            number, tail = more.groups()
+            if rest and tail and number == part:
+                found += _section_refs(title, part, tail)
+            elif plural and not rest and not tail:
+                found.append(cfr_ref(title, number if title == "41" else number.split("-", 1)[0]))
+            else:
+                break
+            pos = more.end()
+        for ref in found:
             if ref:
                 out.setdefault(ref, None)
-    return list(out)[:CFR_CAP]
+    return list(out)[:CFR_READ_CAP]
 
 
 def tags(title: str, summary: str, names: dict[str, list[str]],
@@ -356,6 +467,7 @@ def tags(title: str, summary: str, names: dict[str, list[str]],
             "editions": editions(text, standard_names or {})[:EDITION_CAP], "cfr": cfr_refs(text)}
 
 
-__all__ = ["CFR_CAP", "EDITION_AFTER", "EDITION_CAP", "SEVERITY_RANK", "cfr_ref", "cfr_refs", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
+__all__ = ["CFR_CAP", "CFR_READ_CAP", "EDITION_AFTER", "EDITION_CAP", "SEVERITY_RANK", "cfr_ref", "cfr_refs", "cfr_under",
+           "cfr_watch_problems", "cfr_watched", "load_cfr_watch", "watch_ref_ok", "watch_standards", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
            "load_vendors", "severity", "severity_from_score", "standard_problems", "standards", "tags",
            "vendor_problems", "vendors"]

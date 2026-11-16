@@ -1,0 +1,87 @@
+{
+  "description": "Parts and sections of the Code of Federal Regulations the feed watches, keyed as title/part (32/170, which takes every section of the part) or title/section (48/252.204-7012, only that section). A source marked watched_only gives only items under an entry here. Each label is the heading the eCFR gives; standards are ids from schema/standards.json that an item under the entry is tagged with. Add or remove an entry here: the next poll applies it to the items inside its window, and nothing else needs to change.",
+  "schema_version": 1,
+  "watch": {
+    "10/73.54": {
+      "label": "Protection of digital computer and communication systems and networks."
+    },
+    "10/73.77": {
+      "label": "Cyber security event notifications."
+    },
+    "12/53": {
+      "label": "Computer-Security Incident Notification"
+    },
+    "12/748": {
+      "label": "Security Program, Suspicious Transactions, Catastrophic Acts, Cyber Incidents, and Bank Secrecy Act Compliance"
+    },
+    "15/791": {
+      "label": "Securing the Information and Communications Technology and Services Supply Chain"
+    },
+    "16/312": {
+      "label": "Children's Online Privacy Protection Rule (Coppa Rule)"
+    },
+    "16/314": {
+      "label": "Standards for Safeguarding Customer Information"
+    },
+    "17/248": {
+      "label": "Regulations S-P, S-AM, and S-ID"
+    },
+    "32/117": {
+      "label": "National Industrial Security Program Operating Manual (NISPOM)"
+    },
+    "32/170": {
+      "label": "Cybersecurity Maturity Model Certification (CMMC) Program",
+      "standards": [
+        "cmmc"
+      ]
+    },
+    "32/2002": {
+      "label": "Controlled Unclassified Information (CUI)"
+    },
+    "32/236": {
+      "label": "Department of Defense (DoD) Defense Industrial Base (DIB) Cybersecurity (CS) Activities"
+    },
+    "33/101": {
+      "label": "Maritime Security: General"
+    },
+    "45/160": {
+      "label": "General Administrative Requirements",
+      "standards": [
+        "hipaa"
+      ]
+    },
+    "45/164": {
+      "label": "Security and Privacy",
+      "standards": [
+        "hipaa"
+      ]
+    },
+    "48/204": {
+      "label": "Administrative and Information Matters"
+    },
+    "48/252.204-7012": {
+      "label": "Safeguarding Covered Defense Information and Cyber Incident Reporting."
+    },
+    "48/252.204-7019": {
+      "label": "Notice of NIST SP 800-171 DoD Assessment Requirements.",
+      "standards": [
+        "nist-sp-800-171"
+      ]
+    },
+    "48/252.204-7020": {
+      "label": "NIST SP 800-171 DoD Assessment Requirements.",
+      "standards": [
+        "nist-sp-800-171"
+      ]
+    },
+    "48/252.204-7021": {
+      "label": "Contractor Compliance With the Cybersecurity Maturity Model Certification Level Requirements.",
+      "standards": [
+        "cmmc"
+      ]
+    },
+    "6/27": {
+      "label": "Chemical Facility Anti-Terrorism Standards"
+    }
+  }
+}
