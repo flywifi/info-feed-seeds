@@ -76,6 +76,14 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Items carry the labels their source gives as fields: CFR parts, agencies, a document or change
+  type, an effective date, and a comment deadline, which wins over one read from the text
+  (`deadline_basis` says which). A `json-api` route names the label paths in `fields`. CFR citations
+  written in any item's text ("32 CFR 170", "45 CFR 164.308") are read into the same `cfr` tag, at
+  poll and by `hub retag`. `latest.json` items gain `tags.cfr` and `labels`; `report.json` counts
+  items per CFR part.
+- An `ecfr` adapter reads the eCFR change list: one item per changed section or appendix, with its
+  CFR reference and change types.
 - Per-source daily share: a profile's `source_cap` is the most items any one source may take in a
   day, and `source_caps` sets it per source id, winning over the general one. It applies when items
   are selected, newest first, inside the daily cap; items kept back are not marked as shown and can

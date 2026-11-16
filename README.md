@@ -11,7 +11,7 @@ private notes or anything that identifies a client or a campaign.
 ## Layout
 
 - `feeder/`: the hub CLI (`hub.py`) and its modules: fetching (`fetchkit.py`), feed parsing
-  (`adapters/`: `feed.py`, `page.py`, and `files.py` with the sitemap, URL list, XML, JSON API and artifact adapters), items, the injection guard, the SQLite store (`store.py`), digest outputs
+  (`adapters/`: `feed.py`, `page.py`, `ecfr.py` (the eCFR change list), and `files.py` with the sitemap, URL list, XML, JSON API and artifact adapters), items, the injection guard, the SQLite store (`store.py`), digest outputs
   (`outputs.py`), configuration and lint (`config.py`), the category registry loader and placement
   suggester (`categories.py`), and the single file writer (`jsonio.py`).
 - `sources/<id>/`: one folder per source. `source.json` lists every known route (feed, page,
@@ -335,11 +335,15 @@ recorded for reachability, never polled.
 | `xml` | any XML document | `item_path`, `fields` | `namespaces` |
 | `json-api` | a JSON API response | `items_path`, `fields` | `next_path`, `max_pages` |
 | `artifact` | one file, a new item each time its sha256 changes | none | `label` |
+| `ecfr` | the eCFR change list, one item per changed section or appendix | none | none |
 
 `fields` maps item fields (`title`, `link`, `guid`, `summary`, `published`) to paths: ElementTree
 paths for `xml` (`name@attr` for an attribute, `.` for the item text), dotted paths for `json-api`
 (`results[].title`). Follow URLs (child sitemaps, next pages) stay on the route's host and port and
-are capped by `max_sitemaps` or `max_pages` (default 3).
+are capped by `max_sitemaps` or `max_pages` (default 3). A `json-api` route may also name label
+paths in `fields`: `deadline` and `effective` (calendar days), `cfr_titles` with `cfr_parts` (paired
+into CFR references such as `32/170`), `agencies` and `change_types`. Only well-formed values are
+kept, and a deadline given this way wins over one read from the text.
 
 ## Outputs
 
@@ -363,7 +367,12 @@ alone, "the framework", a bare "Cybersecurity Framework" (only "NIST Cybersecuri
 CSF" or "CSF" with a version), a bare "DORA", a version that is not written right after its own
 standard's name on the same line, a CIS Controls number without v or Version, and "SP 800-53 r5" or
 "SP 800-53, Rev. 5", which give the standard without the edition. A count right after a name on the
-same line ("CMMC 1.5 million") is read as an edition. A tag the text does not state stays empty. Severity reads
+same line ("CMMC 1.5 million") is read as an edition. A tag the text does not state stays empty. `cfr` lists the
+Code of Federal Regulations parts an item cites or its source gives, as `title/part`, followed by
+`title/part.section` when a section is cited ("45 CFR 164.308" gives `45/164` and `45/164.308`; at
+most 20 per item). `labels` holds what a source gives as fields: `agencies`, `change_types`,
+`effective`, and `deadline_basis` (`source` for a deadline given as a field, `text` for one read from
+the item's words). `report.json` counts the items per CFR part under `classification.cfr`. Severity reads
 important as high and moderate as medium (the words Microsoft and Red Hat use) in the same severity
 contexts as the other words; a Red Hat title prefix such as `Important:` is not read. A severity word
 is skipped when "not" or "no" comes at most two words before it in the same clause, except "not only"
