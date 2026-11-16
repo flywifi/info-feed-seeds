@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from urllib.parse import urldefrag, urlsplit
 
-from ..items import RawItem
+from ..items import RawItem, encodable, encodable_item
 from . import ecfr, feed, files, page
 from .base import AdapterError
 
@@ -105,13 +105,17 @@ def follow_limit(route: dict) -> int:
 
 def check_result(parsed) -> dict:
     """The adapter's return value when it has the shared shape, else TypeError, so a broken adapter
-    fails its own route instead of the poll run."""
+    fails its own route instead of the poll run. The items and follow URLs come back with every
+    character that cannot be encoded replaced, so nothing after this point can fail on one."""
     if not isinstance(parsed, dict) or not isinstance(parsed.get("items"), list):
         raise TypeError("adapter result has no items list")
     if not all(isinstance(item, RawItem) for item in parsed["items"]):
         raise TypeError("adapter result items are not RawItem objects")
     if not isinstance(parsed.get("follow") or [], list):
         raise TypeError("adapter result follow is not a list")
+    parsed["items"] = [encodable_item(item) for item in parsed["items"]]
+    if parsed.get("follow"):
+        parsed["follow"] = encodable(parsed["follow"])
     return parsed
 
 

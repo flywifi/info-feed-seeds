@@ -10,7 +10,7 @@ from __future__ import annotations
 import hashlib
 import re
 import unicodedata
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields, replace
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from html import unescape
@@ -37,6 +37,24 @@ class RawItem:
     published: str | None = None
     authors: list[str] = field(default_factory=list)
     extra: dict = field(default_factory=dict)
+
+
+def encodable(value):
+    """The value with every character that cannot be written as UTF-8 (a lone surrogate, which JSON
+    allows) replaced by '?', through lists and dicts. Anything that is not text is returned as it is."""
+    if isinstance(value, str):
+        return value.encode("utf-8", "replace").decode("utf-8")
+    if isinstance(value, list):
+        return [encodable(v) for v in value]
+    if isinstance(value, dict):
+        return {encodable(k): encodable(v) for k, v in value.items()}
+    return value
+
+
+def encodable_item(raw: RawItem) -> RawItem:
+    """A copy of a raw item whose text can all be encoded, so one bad character costs that character
+    and not the poll: the id hash, the store and the output files all write UTF-8."""
+    return replace(raw, **{f.name: encodable(getattr(raw, f.name)) for f in fields(raw)})
 
 
 # --------------------------------------------------------------------------- identity
@@ -254,8 +272,8 @@ def label_words(row: dict) -> list[str]:
     return [v.replace("-", " ") for name in ("agencies", "change_types") for v in row.get(name) or [] if isinstance(v, str)]
 
 
-__all__ = ["label_words", 
+__all__ = [
     "DISPLAY_SUMMARY_CAP", "EMAIL_REDACTION", "RawItem", "build_item", "content_sha256",
-    "display_fields", "link_key", "match_keywords", "normalize_link", "now_utc_z", "sanitize",
-    "strip_html", "tag_topics", "to_utc_z",
+    "display_fields", "encodable", "encodable_item", "label_words", "link_key", "match_keywords",
+    "normalize_link", "now_utc_z", "sanitize", "strip_html", "tag_topics", "to_utc_z",
 ]

@@ -1563,6 +1563,22 @@ class LabelTests(HubTestCase):
         item = next(i for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"] if i["feed_id"] == "ecfr")
         self.assertEqual((item["title_display"], item["tags"]["cfr"]), ("26 CFR 1.401(a)-1 Plans.", ["26/1"]))
 
+    def test_a_character_that_cannot_be_encoded_costs_itself_and_not_the_poll(self):
+        bad = dict(self.DOC, title="Bad \ud800 title", html_url="https://example.gov/d/\udfff", document_number="2026-\ud800",
+                   abstract="Summary \ud800 text.", agencies=[{"slug": "agency \ud800"}])
+        good = dict(self.DOC, html_url="https://example.gov/d/5", document_number="2026-5")
+        got, _ = self.poll_api(bad, good)
+        self.assertEqual(sorted(i["title_display"] for i in got.values()), ["Bad ? title", "Proposed rule on incident reporting"])
+        self.assertEqual(self.stored("2026-?")["summary"], "Summary ? text.")
+        feed = {"version": "https://jsonfeed.org/version/1.1", "title": "J", "items": [
+            {"id": "j1", "url": "https://example.gov/j1", "title": "Feed \ud800 item", "content_text": "x",
+             "date_published": "2026-10-19T01:00:00Z", "authors": [{"name": "A \udfff"}]}]}
+        self.script["https://example.gov/alpha.xml"] = json.dumps(feed).encode()
+        self.assertEqual(self.poll(), 0)
+        latest = jsonio.load_json(self.out / "tr" / "latest.json")
+        self.assertIn("Feed ? item", [i["title_display"] for i in latest["items"]])
+        (self.out / "tr" / "latest.json").read_bytes().decode("utf-8")
+
     def test_a_feed_item_citing_a_part_is_tagged(self):
         self.script["https://example.gov/alpha.xml"] = rss_with("CMMC rule under 32 CFR 170 takes effect")
         self.assertEqual(self.poll(), 0)
