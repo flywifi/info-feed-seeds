@@ -366,6 +366,69 @@ class CfrTests(unittest.TestCase):
         self.assertEqual(got["cfr"], ["32/170", "48/204"])
 
 
+class CfrWatchTests(unittest.TestCase):
+    FILE = ROOT / "schema" / "cfr-watch.json"
+    WATCH = {"32/170": {"label": "a", "standards": ["cmmc"]}, "45/164": {"label": "b", "standards": ["hipaa", "cmmc"]},
+             "48/252.204-7012": {"label": "c", "standards": []}}
+
+    def test_the_repository_watch_list_is_clean_and_loads(self):
+        self.assertEqual(extract.cfr_watch_problems(self.FILE, STD), [])
+        watch = extract.load_cfr_watch(self.FILE)
+        self.assertEqual(watch["32/170"], {"label": "Cybersecurity Maturity Model Certification (CMMC) Program", "standards": ["cmmc"]})
+        self.assertEqual(watch["12/53"]["standards"], [])
+        self.assertEqual(list(watch), sorted(watch))
+        self.assertEqual(extract.load_cfr_watch(ROOT / "schema" / "no-such.json"), {})
+
+    def test_a_part_takes_its_sections_and_a_section_only_itself(self):
+        for refs, want in ((["32/170"], ["32/170"]), (["32/170", "32/170.14"], ["32/170"]), (["32/170.14"], ["32/170"]),
+                           (["48/252"], []), (["48/252", "48/252.204-7012"], ["48/252.204-7012"]),
+                           (["48/252.204-7013"], []), (["45/164.308", "32/170"], ["32/170", "45/164"]),
+                           (["32/1700"], []), ([], []), (None, []), ([None, 5], [])):
+            with self.subTest(refs=refs):
+                self.assertEqual(extract.cfr_watched(refs, self.WATCH), want)
+        self.assertEqual(extract.cfr_watched(["32/170"], None), [])
+        self.assertEqual(extract.cfr_under(["32/170.14", "48/252.204-7012"]), {"32/170.14", "32/170", "48/252.204-7012", "48/252"})
+
+    def test_standards_come_from_every_entry_an_item_falls_under(self):
+        self.assertEqual(extract.watch_standards(["45/164.308", "32/170"], self.WATCH), ["cmmc", "hipaa"])
+        self.assertEqual(extract.watch_standards(["48/252.204-7012"], self.WATCH), [])
+        self.assertEqual(extract.watch_standards(["14/39"], self.WATCH), [])
+
+    def test_a_reference_is_a_part_or_a_section_in_the_stored_form(self):
+        for ref in ("32/170", "7/2a", "48/252.204-7012", "26/1.401", "45/164.308", "47/0", "47/0.11", "41/60-30", "41/102-117.5"):
+            self.assertTrue(extract.watch_ref_ok(ref), ref)
+        for ref in ("32 CFR 170", "32/170.", "99/1", "0/1", "32/", "/170", "32/170/1", "32/170.14 ", "32/A", "45/164.309x y", 32, None,
+                    "45/x", "032/170", "32/0170", "32/0170.1", "32/170.1/2", "32/170.1 2"):
+            self.assertFalse(extract.watch_ref_ok(ref), ref)
+
+    def test_lint_reports_each_watch_list_defect(self):
+        with tempfile.TemporaryDirectory() as td:
+            bad = Path(td) / "cfr-watch.json"
+            self.assertEqual(extract.cfr_watch_problems(bad, STD), [], "a missing file is reported by lint itself")
+            bad.write_text("{", encoding="utf-8")
+            self.assertIn("not valid JSON", extract.cfr_watch_problems(bad, STD)[0])
+            bad.write_text('{"parts": {}}', encoding="utf-8")
+            self.assertEqual(extract.cfr_watch_problems(bad, STD), ['has no "watch" object'])
+            bad.write_text(json.dumps({"watch": {
+                "32 CFR 170": {"label": "x"}, "99/1": {"label": "x"}, "45/164": "HIPAA", "12/53": {"standards": []},
+                "16/314": {"label": " padded "}, "16/312": {"label": "x", "standards": "hipaa"},
+                "32/170": {"label": "x", "standards": ["cmmc", "cmmc", "nope"], "note": "n"}, "6/27": {"label": "ok", "standards": ["hipaa"]}}}),
+                encoding="utf-8")
+            self.assertEqual(extract.cfr_watch_problems(bad, STD), [
+                "reference '32 CFR 170' is not a CFR part (32/170) or section (48/252.204-7012)",
+                "reference '99/1' is not a CFR part (32/170) or section (48/252.204-7012)",
+                "entry '45/164' is not an object",
+                "entry '12/53' needs a label with no space around it",
+                "entry '16/314' needs a label with no space around it",
+                "entry '16/312': standards must be a list of ids",
+                "entry '32/170' has an unexpected key 'note'",
+                "entry '32/170': standard 'cmmc' is listed twice",
+                "entry '32/170': standard 'nope' is not in schema/standards.json"])
+            self.assertEqual(list(extract.load_cfr_watch(bad)), ["12/53", "16/312", "16/314", "32/170", "6/27"],
+                             "entries the matcher cannot use are skipped")
+            self.assertEqual(extract.load_cfr_watch(bad)["16/312"], {"label": "x", "standards": []})
+
+
 class DeadlineTests(unittest.TestCase):
     def test_dates_tied_to_a_deadline(self):
         text = ("Comments are due March 31, 2027. Effective date: 1 July 2027. The deadline 2027-01-15 stands. "

@@ -175,6 +175,20 @@ class SchemaFixtureTests(unittest.TestCase):
                 self.assertTrue(validate(dict(base, **{key: []}), schema), "an empty list is refused")
                 self.assertTrue(validate(dict(base, **{key: ["Attacks"]}), schema))
 
+    def test_profile_cfr_references_and_a_watched_only_source(self):
+        schema = load_schema("profile.schema.json")
+        base = load_fixture("profile_example.json")
+        for key in ("cfr_parts", "exclude_cfr_parts"):
+            with self.subTest(key=key):
+                self.assertEqual(validate(dict(base, **{key: ["32/170", "48/252.204-7012", "7/2a", "41/102-117"]}), schema), [])
+                for bad in ([], ["32 CFR 170"], ["32/170 "], ["170"], ["32/170."], ["32/0170"], ["0/1"], "32/170", None, [32]):
+                    self.assertTrue(validate(dict(base, **{key: bad}), schema), bad)
+        source = load_schema("source.schema.json")
+        doc = load_fixture("source_example.json")
+        self.assertEqual(validate(dict(doc, watched_only=True), source), [])
+        self.assertEqual(validate(dict(doc, watched_only=False), source), [])
+        self.assertTrue(validate(dict(doc, watched_only="yes"), source))
+
     def test_profile_example_validates(self):
         self.assertEqual(validate(load_fixture("profile_example.json"), load_schema("profile.schema.json")), [])
         bad = load_fixture("profile_example.json")

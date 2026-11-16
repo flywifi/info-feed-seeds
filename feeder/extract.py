@@ -177,6 +177,79 @@ def load_vendors(path: Path, key: str = "vendors") -> dict[str, list[str]]:
     return out
 
 
+def cfr_under(refs) -> set:
+    """An item's CFR references together with the part of each section: 32/170.14 is under 32/170."""
+    have = {r for r in refs or [] if isinstance(r, str)}
+    return have | {r.split(".", 1)[0] for r in have}
+
+
+def watch_ref_ok(ref) -> bool:
+    """Whether a value is a CFR part (32/170) or section (48/252.204-7012) in the stored form."""
+    if not isinstance(ref, str) or "/" not in ref:
+        return False
+    title, _, rest = ref.partition("/")
+    return cfr_ref(title, rest.split(".", 1)[0], rest if "." in rest else None) == ref
+
+
+def load_cfr_watch(path: Path) -> dict[str, dict]:
+    """{reference: {"label": text, "standards": [ids]}} from schema/cfr-watch.json, sorted by reference. An
+    entry lint refuses (a key that is not a reference, an entry that is not an object) is skipped, and a
+    missing or unreadable file gives none, so a watched-only source then gives no items."""
+    _, entries = _registry_entries(path, "watch")
+    out = {}
+    for ref, entry in sorted(entries.items()):
+        if watch_ref_ok(ref) and isinstance(entry, dict):
+            label, std = entry.get("label"), entry.get("standards")
+            out[ref] = {"label": label if isinstance(label, str) else "",
+                        "standards": [s for s in std if isinstance(s, str)] if isinstance(std, list) else []}
+    return out
+
+
+def cfr_watched(refs, watch) -> list[str]:
+    """The watch-list entries an item's CFR references fall under, in watch-list order: a part entry takes
+    the part and every section of it, a section entry only that section."""
+    have = cfr_under(refs)
+    return [ref for ref in watch or {} if ref in have]
+
+
+def watch_standards(refs, watch) -> list[str]:
+    """The standard ids the watch list ties to the entries an item's references fall under, each once."""
+    out: dict[str, None] = {}
+    for ref in cfr_watched(refs, watch):
+        for sid in watch[ref].get("standards") or []:
+            out.setdefault(sid, None)
+    return list(out)
+
+
+def cfr_watch_problems(path: Path, standard_ids=()) -> list[str]:
+    """Watch-list defects lint reports: invalid JSON, a key that is not a CFR part or section, an entry that
+    is not an object or has a key other than label and standards, a missing or padded label, standards that
+    are not a list of ids, an id listed twice, or an id schema/standards.json does not have."""
+    problems, entries = _registry_entries(path, "watch")
+    known = set(standard_ids)
+    for ref, entry in entries.items():
+        if not watch_ref_ok(ref):
+            problems.append(f"reference {ref!r} is not a CFR part (32/170) or section (48/252.204-7012)")
+            continue
+        if not isinstance(entry, dict):
+            problems.append(f"entry {ref!r} is not an object")
+            continue
+        for key in sorted(set(entry) - {"label", "standards"}):
+            problems.append(f"entry {ref!r} has an unexpected key {key!r}")
+        label = entry.get("label")
+        if not isinstance(label, str) or not label or label != label.strip():
+            problems.append(f"entry {ref!r} needs a label with no space around it")
+        std = entry.get("standards", [])
+        if not isinstance(std, list) or not all(isinstance(s, str) for s in std):
+            problems.append(f"entry {ref!r}: standards must be a list of ids")
+            continue
+        for sid in sorted({s for s in std if std.count(s) > 1}):
+            problems.append(f"entry {ref!r}: standard {sid!r} is listed twice")
+        for sid in sorted(set(std) - known):
+            problems.append(f"entry {ref!r}: standard {sid!r} is not in schema/standards.json")
+    return problems
+
+
 def load_standards(path: Path) -> dict[str, list[str]]:
     """{standard id: [aliases]} from schema/standards.json, with the same rules as the vendor registry."""
     return load_vendors(path, "standards")
@@ -356,6 +429,7 @@ def tags(title: str, summary: str, names: dict[str, list[str]],
             "editions": editions(text, standard_names or {})[:EDITION_CAP], "cfr": cfr_refs(text)}
 
 
-__all__ = ["CFR_CAP", "EDITION_AFTER", "EDITION_CAP", "SEVERITY_RANK", "cfr_ref", "cfr_refs", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
+__all__ = ["CFR_CAP", "EDITION_AFTER", "EDITION_CAP", "SEVERITY_RANK", "cfr_ref", "cfr_refs", "cfr_under",
+           "cfr_watch_problems", "cfr_watched", "load_cfr_watch", "watch_ref_ok", "watch_standards", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
            "load_vendors", "severity", "severity_from_score", "standard_problems", "standards", "tags",
            "vendor_problems", "vendors"]

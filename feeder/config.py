@@ -248,6 +248,21 @@ def industry_routed(profile: dict, source: Source, item: dict) -> bool:
     return wanted is None or bool(have & set(wanted))
 
 
+def cfr_routed(profile: dict, source: Source, item: dict, watch: dict | None = None) -> bool:
+    """Whether an item goes to this profile by the CFR references stored with it. A source marked
+    `watched_only` gives only items under a watch-list entry, so without a watch list it gives none. A
+    reference in `exclude_cfr_parts` keeps an item out; when `cfr_parts` is set, only an item under one of
+    them goes in. A part takes its sections; a section takes only itself. Without the lists, and for a
+    source that is not watched-only, every item goes in."""
+    have = extract.cfr_under(item.get("cfr"))
+    if source.manifest.get("watched_only") is True and not have & set(watch or {}):
+        return False
+    if have & set(profile.get("exclude_cfr_parts") or []):
+        return False
+    wanted = profile.get("cfr_parts")
+    return wanted is None or bool(have & set(wanted))
+
+
 def source_cap(profile: dict, feed_id: str) -> int | None:
     """The most items one source may take in a day of this profile: its entry in `source_caps`, else
     `source_cap`, else None (no share)."""
@@ -362,11 +377,15 @@ def lint(repo: Repo) -> list[str]:
         problems += [f"schema/categories.json: key {k!r} appears twice in one object"
                      for k in categories.duplicate_keys(repo.categories_file)]
     refs = categories.all_refs(reg) if reg is not None and not problems else None
-    for registry in ("vendors.json", "standards.json"):
+    for registry in ("vendors.json", "standards.json", "cfr-watch.json"):
         if not (repo.schema_dir / registry).exists():
             problems.append(f"schema/{registry}: missing")
     problems += [f"schema/vendors.json: {p}" for p in extract.vendor_problems(repo.schema_dir / "vendors.json")]
     problems += [f"schema/standards.json: {p}" for p in extract.standard_problems(repo.schema_dir / "standards.json")]
+    watch_file = repo.schema_dir / "cfr-watch.json"
+    problems += [f"schema/cfr-watch.json: {p}" for p in
+                 extract.cfr_watch_problems(watch_file, extract.load_standards(repo.schema_dir / "standards.json"))]
+    watch = extract.load_cfr_watch(watch_file)
     source_schema = repo.schema("source.schema.json")
     methods_schema = repo.schema("methods.schema.json")
     known_ids: set[str] = set()
@@ -402,6 +421,9 @@ def lint(repo: Repo) -> list[str]:
             for industry in listed:
                 if industry not in categories.industry_ids(reg):
                     problems.append(f"{rel}/{name}: industry {industry!r} is not in schema/categories.json")
+        if src.manifest.get("watched_only") is True and src.manifest.get("enabled", True) and not watch:
+            problems.append(f"{rel}/{name}: watched_only is set but schema/cfr-watch.json lists nothing, "
+                            "so the source gives no items")
         if "auth" in src.manifest and not src.local:
             problems.append(f"{rel}: a credential-gated source must live in source.local.json")
         for route in src.manifest.get("routes", []):
@@ -467,6 +489,20 @@ def lint(repo: Repo) -> list[str]:
                     problems.append(f"{rel}: {what} {iid!r} is not in schema/categories.json industries")
         for iid in sorted(set(_ref_list(profile, "industries")) & set(_ref_list(profile, "exclude_industries"))):
             problems.append(f"{rel}: industry {iid!r} is both routed in and excluded")
+        for key, what in (("cfr_parts", "CFR reference"), ("exclude_cfr_parts", "excluded CFR reference")):
+            named = _ref_list(profile, key)
+            for ref in sorted({r for r in named if named.count(r) > 1}):
+                problems.append(f"{rel}: {what} {ref!r} is listed twice")
+            for ref in named:
+                if not extract.watch_ref_ok(ref):
+                    problems.append(f"{rel}: {what} {ref!r} is not a CFR part (32/170) or section (48/252.204-7012)")
+        kept_out = set(_ref_list(profile, "exclude_cfr_parts"))
+        for ref in sorted(set(_ref_list(profile, "cfr_parts"))):
+            part = ref.split(".", 1)[0]
+            if ref in kept_out:
+                problems.append(f"{rel}: CFR reference {ref!r} is both routed in and excluded")
+            elif part in kept_out:
+                problems.append(f"{rel}: CFR reference {ref!r} is routed in but its part {part!r} is excluded")
         caps = profile.get("source_caps") if isinstance(profile.get("source_caps"), dict) else {}
         for sid in sorted(caps):
             if sid not in known_ids:

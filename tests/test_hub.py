@@ -1583,6 +1583,120 @@ class LabelTests(HubTestCase):
         self.assertEqual(self.run_hub("lint"), 0, self.output)
 
 
+class CfrWatchTests(HubTestCase):
+    """The CFR watch list: what a watched-only source gives, profile routing by reference, and the
+    standards a watched part carries."""
+
+    API = LabelTests.API
+
+    def docs(self):
+        base = dict(LabelTests.DOC, abstract="Amends the rule.", comments_close_on=None, effective_on=None)
+        return [dict(base, title="Program rule", html_url="https://example.gov/d/1", document_number="w-1",
+                     cfr_references=[{"title": 32, "part": "170"}]),
+                dict(base, title="Airworthiness directive", html_url="https://example.gov/d/2", document_number="w-2",
+                     cfr_references=[{"title": 14, "part": "39"}]),
+                dict(base, title="Safeguards section", html_url="https://example.gov/d/3", document_number="w-3",
+                     abstract="Revises 45 CFR 164.308.", cfr_references=[]),
+                dict(base, title="Meeting notice", html_url="https://example.gov/d/4", document_number="w-4", cfr_references=[])]
+
+    def set_watch(self, watch):
+        jsonio.dump_json(self.root / "schema" / "cfr-watch.json", {"description": "t", "schema_version": 1, "watch": watch})
+
+    def shown(self):
+        return sorted(i["title_display"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"])
+
+    def watch_poll(self, watched_only=True, **lists):
+        self.add_source("fr", self.API, ["regulation/federal-rulemaking"],
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": self.API,
+                                 "params": {"items_path": "results", "fields": LabelTests.FIELDS}}],
+                        **({"watched_only": True} if watched_only else {}))
+        self.script.update({self.API: json.dumps({"results": self.docs()}).encode(),
+                            "https://example.gov/alpha.xml": rss_with("Plain advisory")})
+        for key in ("cfr_parts", "exclude_cfr_parts"):
+            self.profile.pop(key, None)
+        self.profile.update(lists)
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.runs = getattr(self, "runs", 0) + 1
+        self.state, self.out = self.tmp / f"wstate{self.runs}", self.tmp / f"wout{self.runs}"
+        self.assertEqual(self.poll(), 0)
+        return self.shown()
+
+    def test_a_watched_only_source_gives_only_items_under_the_watch_list(self):
+        self.assertEqual(self.watch_poll(), ["Plain advisory", "Program rule", "Safeguards section"],
+                         "a source that is not watched-only is untouched")
+        self.assertEqual(self.watch_poll(watched_only=False),
+                         ["Airworthiness directive", "Meeting notice", "Plain advisory", "Program rule", "Safeguards section"])
+
+    def test_a_new_watch_entry_takes_stored_items_at_the_next_poll(self):
+        self.set_watch({"32/170": {"label": "x"}})
+        self.assertEqual(self.watch_poll(), ["Plain advisory", "Program rule"])
+        self.set_watch({"32/170": {"label": "x"}, "14/39": {"label": "y"}, "45/164.308": {"label": "z"}})
+        self.assertEqual(self.poll(), 0)
+        self.assertEqual(self.shown(), ["Airworthiness directive", "Plain advisory", "Program rule", "Safeguards section"])
+
+    def test_without_a_watch_list_a_watched_only_source_gives_nothing(self):
+        self.set_watch({})
+        self.assertEqual(self.watch_poll(), ["Plain advisory"])
+        self.assertEqual(self.run_hub("lint"), 1)
+        self.assertIn("sources/fr/source.json: watched_only is set but schema/cfr-watch.json lists nothing", self.output)
+        (self.root / "schema" / "cfr-watch.json").unlink()
+        self.assertEqual(self.watch_poll(), ["Plain advisory"])
+        self.assertEqual(self.run_hub("lint"), 1)
+        self.assertIn("schema/cfr-watch.json: missing", self.output)
+
+    def test_a_profile_routes_by_cfr_reference(self):
+        every = ["Airworthiness directive", "Meeting notice", "Plain advisory", "Program rule", "Safeguards section"]
+        for lists, want in (
+                ({"cfr_parts": ["32/170"]}, ["Program rule"]),
+                ({"cfr_parts": ["45/164"]}, ["Safeguards section"]),
+                ({"cfr_parts": ["45/164.308", "14/39"]}, ["Airworthiness directive", "Safeguards section"]),
+                ({"cfr_parts": ["45/164.312"]}, []),
+                ({"exclude_cfr_parts": ["14/39"]}, [t for t in every if t != "Airworthiness directive"]),
+                ({"exclude_cfr_parts": ["45/164"]}, [t for t in every if t != "Safeguards section"]),
+                ({"cfr_parts": ["32/170", "14/39"], "exclude_cfr_parts": ["14/39"]}, ["Program rule"])):
+            with self.subTest(lists=lists):
+                self.assertEqual(self.watch_poll(watched_only=False, **lists), want)
+
+    def test_a_watched_part_carries_its_standards_until_the_list_drops_them(self):
+        self.watch_poll()
+        self.assertIn("0 changed", self.output, "the tags are stored at ingest, so the poll's own retag finds nothing to change")
+        tags = {i["title_display"]: i["tags"]["standards"] for i in jsonio.load_json(self.out / "tr" / "latest.json")["items"]}
+        self.assertEqual(tags, {"Plain advisory": [], "Program rule": ["cmmc"], "Safeguards section": ["hipaa"]})
+        self.assertEqual(self.run_hub("retag", "--state-dir", str(self.state)), 0)
+        self.assertIn("0 changed", self.output)
+        self.set_watch({"32/170": {"label": "x"}, "45/164": {"label": "y", "standards": ["hipaa", "nist-sp-800-53"]}})
+        self.assertEqual(self.run_hub("retag", "--state-dir", str(self.state)), 0)
+        self.assertIn("  standards: 2", self.output)
+        self.assertEqual((LabelTests.stored(self, "w-1")["standards"], LabelTests.stored(self, "w-3")["standards"]),
+                         ("", "hipaa,nist-sp-800-53"))
+
+    def test_a_standard_named_in_the_text_and_tied_to_the_part_is_tagged_once(self):
+        self.script["https://example.gov/alpha.xml"] = rss_with("CMMC assessment guide for 32 CFR 170 and HIPAA")
+        self.assertEqual(self.poll(), 0)
+        item = jsonio.load_json(self.out / "tr" / "latest.json")["items"][0]
+        self.assertEqual(item["tags"]["standards"], ["cmmc", "hipaa"])
+
+    def test_lint_checks_the_watch_list_and_the_profile_references(self):
+        self.assertEqual(self.run_hub("lint"), 0, self.output)
+        self.set_watch({"32 CFR 170": {"label": "x"}, "32/170": {"label": "x", "standards": ["nope"]}})
+        self.assertEqual(self.run_hub("lint"), 1)
+        self.assertIn("schema/cfr-watch.json: reference '32 CFR 170' is not a CFR part (32/170) or section (48/252.204-7012)", self.output)
+        self.assertIn("schema/cfr-watch.json: entry '32/170': standard 'nope' is not in schema/standards.json", self.output)
+        self.set_watch({"32/170": {"label": "x", "standards": ["cmmc"]}})
+        self.profile.update(cfr_parts=["32/170", "32/170", "45/164.308", "48/204"], exclude_cfr_parts=["32/170", "45/164", "9/9", "9/9"])
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.assertEqual(self.run_hub("lint"), 1)
+        for line in ("CFR reference '32/170' is listed twice", "excluded CFR reference '9/9' is listed twice",
+                     "CFR reference '32/170' is both routed in and excluded",
+                     "CFR reference '45/164.308' is routed in but its part '45/164' is excluded"):
+            self.assertIn(f"profiles/tr.json: {line}", self.output)
+        self.assertNotIn("'48/204' is", self.output)
+        self.profile.update(cfr_parts=["32 CFR 170"], exclude_cfr_parts="45/164")
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.assertEqual(self.run_hub("lint"), 1)
+        self.assertIn("profiles/tr.json: CFR reference '32 CFR 170' is not a CFR part (32/170) or section (48/252.204-7012)", self.output)
+
+
 class GuardBandTests(HubTestCase):
     def setUp(self):
         super().setUp()

@@ -505,6 +505,10 @@
         "string",
         "null"
       ]
+    },
+    "watched_only": {
+      "description": "When true, only items under an entry of schema/cfr-watch.json are selected from this source. For sources that list every rule or every regulation change.",
+      "type": "boolean"
     }
   },
   "required": [
