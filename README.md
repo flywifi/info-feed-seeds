@@ -351,7 +351,9 @@ paths for `xml` (`name@attr` for an attribute, `.` for the item text), dotted pa
 are capped by `max_sitemaps` or `max_pages` (default 3). A `json-api` route may also name label
 paths in `fields`: `deadline` and `effective` (calendar days), `cfr_titles` with `cfr_parts` (paired
 into CFR references such as `32/170`), `agencies` and `change_types`. Only well-formed values are
-kept, and a deadline given this way wins over one read from the text.
+kept, and a deadline given this way wins over one read from the text. In everything an adapter returns, a
+character that cannot be written as UTF-8 is replaced by `?`, so one bad value costs that character
+and not the poll.
 
 ## Outputs
 
