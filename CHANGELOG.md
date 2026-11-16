@@ -8,9 +8,11 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Fixed
 
-- A character that cannot be encoded (a lone surrogate, which JSON allows) in an item's title,
-  summary, link, id, author or label no longer stops a poll: it is replaced by `?` when the adapter
-  returns, in every item and follow URL.
+- A character that cannot be encoded (a lone surrogate, which JSON allows) in what an adapter
+  returns no longer stops a poll: in a title, summary, author or label it is replaced by `?`, and in
+  an id, link or follow URL it is percent-escaped, so two different values stay different. A link or
+  follow URL that cannot be taken apart (a bad bracket, port or host) no longer stops a poll either:
+  the link is stored as written and not published as a link, and the follow URL is refused.
 - A NIST SP 800 revision written with a leading zero ("Rev. 05") is stored without it (`r5`), and
   revision 0 is no edition.
 - Severity reads important as high and moderate as medium (the words Microsoft and Red Hat use) in
