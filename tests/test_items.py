@@ -107,16 +107,25 @@ class EncodableTests(unittest.TestCase):
     def test_a_lone_surrogate_becomes_a_question_mark_and_other_text_is_kept(self):
         for value, want in (("Bad \ud800 title", "Bad ? title"), ("\udfff", "?"), ("caf\u00e9 \U0001f512 ok", "caf\u00e9 \U0001f512 ok"),
                             ("", ""), (None, None), (7, 7), (["a\ud800", ["b\udfff"]], ["a?", ["b?"]]),
-                            ({"k\ud800": ["v\ud800", None]}, {"k?": ["v?", None]})):
+                            ({"k\ud800": ["v\ud800", None]}, {"k%ED%A0%80": ["v?", None]})):
             with self.subTest(value=value):
                 self.assertEqual(items.encodable(value), want)
+        self.assertEqual(items.encodable(["a\ud800", "a\ud801", "caf\u00e9"], True), ["a%ED%A0%80", "a%ED%A0%81", "caf\u00e9"],
+                         "escaped, two different ids stay different")
+        self.assertEqual(len(items.encodable({"k\ud800": 1, "k?": 2, "k\udfff": 3})), 3, "no two keys become one")
 
     def test_every_text_field_of_a_raw_item_can_be_encoded(self):
         raw = items.RawItem(guid="g\ud800", link="https://example.gov/\ud800", title="T\ud800", summary="S\ud800",
                             published="2026-10-19T00:00:00Z", authors=["A\ud800"], extra={"agencies": ["x\ud800"]})
         clean = items.encodable_item(raw)
         self.assertEqual((clean.guid, clean.link, clean.title, clean.summary, clean.published, clean.authors, clean.extra),
-                         ("g?", "https://example.gov/?", "T?", "S?", "2026-10-19T00:00:00Z", ["A?"], {"agencies": ["x?"]}))
+                         ("g%ED%A0%80", "https://example.gov/%ED%A0%80", "T?", "S?", "2026-10-19T00:00:00Z", ["A?"],
+                          {"agencies": ["x?"]}))
+        deep: list = []
+        for _ in range(5000):
+            deep = [deep]
+        kept = items.encodable_item(items.RawItem(guid="g", title="Deep", extra={"tags": deep}))
+        self.assertEqual((kept.title, kept.extra), ("Deep", {}), "labels nested too deep are dropped, the item is kept")
         self.assertEqual(raw.title, "T\ud800", "the item the adapter built is not changed")
         items.build_item("feed", "https://example.gov/", clean)["content_sha256"].encode("ascii")
 
@@ -124,8 +133,27 @@ class EncodableTests(unittest.TestCase):
         from feeder import adapters
         parsed = adapters.check_result({"kind": "x", "items": [items.RawItem(title="T\ud800")],
                                         "follow": ["https://example.gov/p\ud800"]})
-        self.assertEqual((parsed["items"][0].title, parsed["follow"]), ("T?", ["https://example.gov/p?"]))
+        self.assertEqual((parsed["items"][0].title, parsed["follow"]), ("T?", ["https://example.gov/p%ED%A0%80"]))
         self.assertEqual(adapters.check_result({"kind": "x", "items": []})["items"], [])
+
+
+class BadLinkTests(unittest.TestCase):
+    BAD = ("http://[bad", "https://example.gov:99999/x", "https://exam\u2100ple.gov/x", "https://example.gov\uff0fx")
+
+    def test_a_link_that_cannot_be_taken_apart_is_kept_as_written(self):
+        for url in self.BAD:
+            with self.subTest(url=url):
+                self.assertEqual(items.normalize_link(f"  {url} "), url)
+                self.assertEqual(items.link_key(url), "example.gov/x" if ":99999" in url else url)
+                self.assertEqual(items.build_item("feed", "https://example.gov/", items.RawItem(guid="g", link=url, title="T"))["link"], url)
+
+    def test_such_a_follow_url_is_refused(self):
+        from feeder import adapters
+        for url in self.BAD:
+            with self.subTest(url=url):
+                self.assertIsNone(adapters.follow_url("https://example.gov/list", url))
+        self.assertEqual(adapters.follow_url("https://example.gov/list", "https://example.gov/list?page=2"),
+                         "https://example.gov/list?page=2")
 
 
 if __name__ == "__main__":

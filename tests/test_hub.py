@@ -1569,7 +1569,7 @@ class LabelTests(HubTestCase):
         good = dict(self.DOC, html_url="https://example.gov/d/5", document_number="2026-5")
         got, _ = self.poll_api(bad, good)
         self.assertEqual(sorted(i["title_display"] for i in got.values()), ["Bad ? title", "Proposed rule on incident reporting"])
-        self.assertEqual(self.stored("2026-?")["summary"], "Summary ? text.")
+        self.assertEqual(self.stored("2026-%ED%A0%80")["summary"], "Summary ? text.")
         feed = {"version": "https://jsonfeed.org/version/1.1", "title": "J", "items": [
             {"id": "j1", "url": "https://example.gov/j1", "title": "Feed \ud800 item", "content_text": "x",
              "date_published": "2026-10-19T01:00:00Z", "authors": [{"name": "A \udfff"}]}]}
@@ -1578,6 +1578,35 @@ class LabelTests(HubTestCase):
         latest = jsonio.load_json(self.out / "tr" / "latest.json")
         self.assertIn("Feed ? item", [i["title_display"] for i in latest["items"]])
         (self.out / "tr" / "latest.json").read_bytes().decode("utf-8")
+
+    def test_links_that_differ_only_in_a_bad_character_stay_separate_items(self):
+        feed = {"version": "https://jsonfeed.org/version/1.1", "title": "J", "items": [
+            {"url": f"https://example.gov/doc/{tail}", "title": title, "content_text": "x", "date_published": "2026-10-19T01:00:00Z"}
+            for tail, title in (("\ud800", "First rule"), ("\ud801", "Second rule"), ("", "Listing page"))]}
+        self.script["https://example.gov/alpha.xml"] = json.dumps(feed).encode()
+        self.assertEqual(self.poll(), 0)
+        latest = jsonio.load_json(self.out / "tr" / "latest.json")
+        self.assertEqual(sorted((i["title_display"], i["link"]) for i in latest["items"]), [
+            ("First rule", "https://example.gov/doc/%ED%A0%80"), ("Listing page", "https://example.gov/doc/"),
+            ("Second rule", "https://example.gov/doc/%ED%A0%81")])
+
+    def test_a_link_or_next_page_that_is_not_a_url_does_not_stop_the_poll(self):
+        feed = {"version": "https://jsonfeed.org/version/1.1", "title": "J", "items": [
+            {"id": f"b{n}", "url": url, "title": f"Item {n}", "content_text": "x", "date_published": "2026-10-19T01:00:00Z"}
+            for n, url in enumerate(("http://[bad", "https://example.gov:99999/x", "https://exam\u2100ple.gov/x",
+                                     "https://example.gov\uff0fx", "https://example.gov/fine"))]}
+        self.script["https://example.gov/alpha.xml"] = json.dumps(feed).encode()
+        self.add_source("fr", self.API, ["regulation/federal-rulemaking"],
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": self.API,
+                                 "params": {"items_path": "results", "fields": self.FIELDS, "next_path": "next_page_url"}}])
+        self.script[self.API] = json.dumps({"results": [self.DOC], "next_page_url": "http://[bad"}).encode()
+        self.assertEqual(self.poll(), 0)
+        latest = jsonio.load_json(self.out / "tr" / "latest.json")
+        self.assertEqual(sorted(i["title_display"] for i in latest["items"]),
+                         ["Item 0", "Item 1", "Item 2", "Item 3", "Item 4", "Proposed rule on incident reporting"])
+        self.assertEqual({i["title_display"]: i["link"] for i in latest["items"] if i["title_display"].startswith("Item")},
+                         {"Item 0": None, "Item 1": None, "Item 2": None, "Item 3": None, "Item 4": "https://example.gov/fine"},
+                         "a link that is not a URL is stored and never published as one")
 
     def test_a_feed_item_citing_a_part_is_tagged(self):
         self.script["https://example.gov/alpha.xml"] = rss_with("CMMC rule under 32 CFR 170 takes effect")

@@ -10,12 +10,12 @@ from __future__ import annotations
 import hashlib
 import re
 import unicodedata
-from dataclasses import dataclass, field, fields, replace
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from html import unescape
 from html.parser import HTMLParser
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, quote, urlencode, urlsplit, urlunsplit
 
 DISPLAY_SUMMARY_CAP = 300
 EMAIL_REDACTION = "[email redacted]"
@@ -39,22 +39,36 @@ class RawItem:
     extra: dict = field(default_factory=dict)
 
 
-def encodable(value):
+_SURROGATE = re.compile("[\ud800-\udfff]")
+
+
+def encodable(value, escape: bool = False):
     """The value with every character that cannot be written as UTF-8 (a lone surrogate, which JSON
-    allows) replaced by '?', through lists and dicts. Anything that is not text is returned as it is."""
+    allows) replaced, through lists and dicts: by '?' in text, or with `escape` by its percent-escaped
+    bytes ('%ED%A0%80'), which keeps two different ids or links different. Dict keys are always
+    escaped. Anything that is not text is returned as it is."""
     if isinstance(value, str):
-        return value.encode("utf-8", "replace").decode("utf-8")
+        if escape:
+            return _SURROGATE.sub(lambda m: quote(m.group().encode("utf-8", "surrogatepass")), value)
+        return _SURROGATE.sub("?", value)
     if isinstance(value, list):
-        return [encodable(v) for v in value]
+        return [encodable(v, escape) for v in value]
     if isinstance(value, dict):
-        return {encodable(k): encodable(v) for k, v in value.items()}
+        return {encodable(k, True): encodable(v, escape) for k, v in value.items()}
     return value
 
 
 def encodable_item(raw: RawItem) -> RawItem:
     """A copy of a raw item whose text can all be encoded, so one bad character costs that character
-    and not the poll: the id hash, the store and the output files all write UTF-8."""
-    return replace(raw, **{f.name: encodable(getattr(raw, f.name)) for f in fields(raw)})
+    and not the poll: the id hash, the store and the output files all write UTF-8. The id and the link
+    are escaped, the rest is replaced; labels nested too deep to walk are dropped and the item kept."""
+    try:
+        extra = encodable(raw.extra)
+    except RecursionError:
+        extra = {}
+    return replace(raw, guid=encodable(raw.guid, True), link=encodable(raw.link, True), title=encodable(raw.title),
+                   summary=encodable(raw.summary), published=encodable(raw.published),
+                   authors=encodable(raw.authors), extra=extra)
 
 
 # --------------------------------------------------------------------------- identity
@@ -181,12 +195,15 @@ def normalize_link(url: str) -> str:
     text = (url or "").strip()
     if not text:
         return ""
-    parts = urlsplit(text)
+    try:
+        parts = urlsplit(text)
+        port = parts.port
+    except ValueError:   # not a URL that can be taken apart (a bad bracket, port or host): kept as written
+        return text
     scheme = parts.scheme.lower()
     host = (parts.hostname or "").lower()
     if not host:
         return text
-    port = parts.port
     if port and not ((scheme == "http" and port == 80) or (scheme == "https" and port == 443)):
         host = f"{host}:{port}"
     if parts.username:
@@ -204,7 +221,10 @@ def link_key(url: str | None) -> str | None:
     if not url:
         return None
     normalized = normalize_link(url)
-    parts = urlsplit(normalized)
+    try:
+        parts = urlsplit(normalized)
+    except ValueError:
+        return normalized or None
     host = (parts.hostname or "").lower()
     if host.startswith("www."):
         host = host[4:]

@@ -106,7 +106,7 @@ def follow_limit(route: dict) -> int:
 def check_result(parsed) -> dict:
     """The adapter's return value when it has the shared shape, else TypeError, so a broken adapter
     fails its own route instead of the poll run. The items and follow URLs come back with every
-    character that cannot be encoded replaced, so nothing after this point can fail on one."""
+    character that cannot be encoded replaced or escaped, so nothing after this point can fail on one."""
     if not isinstance(parsed, dict) or not isinstance(parsed.get("items"), list):
         raise TypeError("adapter result has no items list")
     if not all(isinstance(item, RawItem) for item in parsed["items"]):
@@ -115,7 +115,7 @@ def check_result(parsed) -> dict:
         raise TypeError("adapter result follow is not a list")
     parsed["items"] = [encodable_item(item) for item in parsed["items"]]
     if parsed.get("follow"):
-        parsed["follow"] = encodable(parsed["follow"])
+        parsed["follow"] = encodable(parsed["follow"], True)
     return parsed
 
 
@@ -136,9 +136,12 @@ def follow_url(route_url: str, candidate) -> str | None:
     an adapter returns is data from the fetched document, never trusted."""
     if not isinstance(candidate, str):
         return None
-    clean = urldefrag(candidate.strip())[0]
-    if "@" in urlsplit(clean).netloc:
-        return None   # a user name or password in a follow link is refused, not fetched
+    try:
+        clean = urldefrag(candidate.strip())[0]
+        if "@" in urlsplit(clean).netloc:
+            return None   # a user name or password in a follow link is refused, not fetched
+    except ValueError:
+        return None       # not a URL that can be taken apart
     cand, base = _origin(clean), _origin(route_url)
     if cand is None or base is None or cand[0] not in DEFAULT_PORTS or not cand[1]:
         return None
