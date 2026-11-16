@@ -316,10 +316,20 @@ class CfrTests(unittest.TestCase):
                 ("DFARS clause at 48 CFR 252.204-7012.", ["48/252", "48/252.204-7012"]),
                 ("32 C.F.R. \u00a7 170.14 lists the levels", ["32/170", "32/170.14"]),
                 ("under 16 CFR Sec. 314.4 and 16 CFR Section 314.5", ["16/314", "16/314.4", "16/314.5"]),
-                ("14 CFR Parts 39 and 91", ["14/39"]),
+                ("14 CFR Parts 39 and 91", ["14/39", "14/91"]),
                 ("title 12 CFR 53, again 12 CFR 53", ["12/53"]),
                 ("41 CFR 60-30.1 and 41 CFR part 102-117", ["41/60-30", "41/60-30.1", "41/102-117"]),
                 ("14 CFR parts 91-93 and 40 CFR parts 1500-1508", ["14/91", "40/1500"]),
+                ("Amends 10 CFR 73.54-73.56.", ["10/73", "10/73.54", "10/73.56"]),
+                ("Amends 10 CFR 73.50 and 73.54.", ["10/73", "10/73.50", "10/73.54"]),
+                ("48 CFR 252.204-7008, 252.204-7009, and 252.204-7012",
+                 ["48/252", "48/252.204-7008", "48/252.204-7009", "48/252.204-7012"]),
+                ("32 CFR 170.14 to 170.18 and 2.5 million", ["32/170", "32/170.14", "32/170.18"]),
+                ("45 CFR 164.308(a)(1) and 164.312(b), or 165.1", ["45/164", "45/164.308", "45/164.312"]),
+                ("45 CFR Parts 160, 162, and 164 to strengthen", ["45/160", "45/162", "45/164"]),
+                ("45 CFR part 160 and 164", ["45/160"]), ("41 CFR parts 60-1 and 60-30", ["41/60-1", "41/60-30"]),
+                ("41 CFR 60-30.1-60-30.5", ["41/60-30", "41/60-30.1", "41/60-30.5"]),
+                ("14 CFR parts 91 through 97 and 12 CFR 53", ["14/91", "14/97", "12/53"]),
                 ("26 CFR 1.401(a)-1 Plans.", ["26/1"]), ("26 CFR 31.3406(b)(3)-5", ["26/31"]),
                 ("26 CFR 1.401-1", ["26/1", "26/1.401-1"]),
                 ("32 CFR PART 170 and 32 C.F.R. pt. 236", ["32/170", "32/236"]),
@@ -351,11 +361,12 @@ class CfrTests(unittest.TestCase):
 
     def test_at_most_twenty_references_in_linear_time(self):
         many = " ".join(f"{1 + n % 50} CFR {n}" for n in range(1, 400))
-        self.assertEqual(len(extract.cfr_refs(many)), extract.CFR_CAP)
-        pairs = "1 CFR 1 " + " ".join(f"{n} CFR {n}.1" for n in range(2, 30))
-        self.assertEqual(extract.cfr_refs(pairs)[-2:], ["10/10.1", "11/11"], "a part and its section do not pass the cap")
+        self.assertEqual(len(extract.cfr_refs(many)), extract.CFR_READ_CAP)
+        self.assertEqual(len(extract.cfr_refs("45 CFR parts 1" + "".join(f", {n}" for n in range(2, 900)))), extract.CFR_READ_CAP)
         for text in ("32 CFR 170 " * 9000, "3" * 100_000, "32 CFR " * 14000, "32 CFR 170." * 9000,
-                     "26 CFR 1.401" + "(a)" * 33000, "3 CFR, " * 14000, "26 CFR 1.4(a)-" * 7000):
+                     "26 CFR 1.401" + "(a)" * 33000, "3 CFR, " * 14000, "26 CFR 1.4(a)-" * 7000,
+                     "45 CFR parts 160" + ", 160" * 19000, "45 CFR 164.308" + ", 164.308" * 10000,
+                     "45 CFR 164.308" + "(a)" * 33000 + " and 164.312"):
             with self.subTest(text=text[:12]):
                 start = time.perf_counter()
                 extract.cfr_refs(text[:100_000])
@@ -395,10 +406,12 @@ class CfrWatchTests(unittest.TestCase):
         self.assertEqual(extract.watch_standards(["14/39"], self.WATCH), [])
 
     def test_a_reference_is_a_part_or_a_section_in_the_stored_form(self):
-        for ref in ("32/170", "7/2a", "48/252.204-7012", "26/1.401", "45/164.308", "47/0", "47/0.11", "41/60-30", "41/102-117.5"):
+        for ref in ("32/170", "7/2a", "48/252.204-7012", "26/1.401", "45/164.308", "47/0", "47/0.11", "41/60-30", "41/102-117.5",
+                    "33/165.t08-0467", "49/222.64.2"):
             self.assertTrue(extract.watch_ref_ok(ref), ref)
         for ref in ("32 CFR 170", "32/170.", "99/1", "0/1", "32/", "/170", "32/170/1", "32/170.14 ", "32/A", "45/164.309x y", 32, None,
-                    "45/x", "032/170", "32/0170", "32/0170.1", "32/170.1/2", "32/170.1 2"):
+                    "45/x", "032/170", "32/0170", "32/0170.1", "32/170.1/2", "32/170.1 2",
+                    "45/160-164", "32/170.14.", "32/170..", "32/170.-1", "17/240.10B-5", "32/170\n"):
             self.assertFalse(extract.watch_ref_ok(ref), ref)
 
     def test_lint_reports_each_watch_list_defect(self):

@@ -1676,6 +1676,48 @@ class CfrWatchTests(HubTestCase):
         item = jsonio.load_json(self.out / "tr" / "latest.json")["items"][0]
         self.assertEqual(item["tags"]["standards"], ["cmmc", "hipaa"])
 
+    def test_the_cap_keeps_the_reference_an_item_is_watched_for(self):
+        many = [{"title": 48, "part": str(n)} for n in range(201, 221)] + [{"title": 32, "part": "170"}]
+        doc = dict(LabelTests.DOC, title="Omnibus rule", abstract="Amends many parts. See 48 CFR 252.204-7012.",
+                   html_url="https://example.gov/d/7", document_number="w-7", cfr_references=many,
+                   comments_close_on=None, effective_on=None)
+        self.docs = lambda: [doc]
+        self.assertEqual(self.watch_poll(), ["Omnibus rule", "Plain advisory"])
+        self.assertIn("0 changed", self.output, "the cap is applied with the watch list at ingest")
+        row = LabelTests.stored(self, "w-7")
+        cfr = row["cfr"].split(",")
+        self.assertEqual((len(cfr), cfr[:2], cfr[-2:], row["standards"], len(row["cfr_given"].split(","))),
+                         (20, ["48/201", "48/202"], ["32/170", "48/252.204-7012"], "cmmc", 21),
+                         "the two watched references stay, in the order they were given and read")
+        self.assertEqual(self.run_hub("retag", "--state-dir", str(self.state)), 0)
+        self.assertIn("0 changed", self.output)
+        self.set_watch({"14/39": {"label": "x"}})
+        self.assertEqual(self.run_hub("retag", "--state-dir", str(self.state)), 0)
+        self.assertEqual(LabelTests.stored(self, "w-7")["cfr"].split(","), [f"48/{n}" for n in range(201, 221)],
+                         "with nothing watched among them, the first twenty stay")
+
+    def test_a_key_written_twice_and_a_local_profile_reference_are_refused(self):
+        from feeder import config
+        (self.root / "schema" / "cfr-watch.json").write_text(
+            '{"watch": {"32/170": {"label": "A", "standards": ["cmmc"]}, "32/170": {"label": "B"}}}\n', encoding="utf-8")
+        self.assertEqual(self.run_hub("lint"), 1)
+        self.assertIn("schema/cfr-watch.json: key '32/170' appears twice in one object", self.output)
+        for key, ref in (("cfr_parts", "45/160-164"), ("exclude_cfr_parts", "32/170\n")):
+            with self.subTest(key=key):
+                jsonio.dump_json(self.root / "profiles" / "mine.local.json", dict(self.profile, name="mine", **{key: [ref]}))
+                with self.assertRaisesRegex(config.ConfigError, f"profiles/mine.local.json: {key} .* is not a CFR part"):
+                    config.Repo(self.root).load_profile("mine")
+        jsonio.dump_json(self.root / "profiles" / "mine.local.json", dict(self.profile, name="mine", cfr_parts=["41/60-30", "32/170.14"]))
+        self.assertEqual(config.Repo(self.root).load_profile("mine")["cfr_parts"], ["41/60-30", "32/170.14"])
+
+    def test_a_section_cited_in_a_list_or_a_range_is_under_its_entry(self):
+        base = dict(LabelTests.DOC, comments_close_on=None, effective_on=None, cfr_references=[])
+        texts = {"Range": "Amends 10 CFR 73.54-73.56.", "List": "Amends 48 CFR 252.204-7008 and 252.204-7012.",
+                 "Second": "Amends 10 CFR 73.50 and 73.54.", "Other": "Amends 10 CFR 73.50 and 73.51."}
+        self.docs = lambda: [dict(base, title=name, abstract=text, html_url=f"https://example.gov/d/{name}", document_number=f"w-{name}")
+                             for name, text in texts.items()]
+        self.assertEqual(self.watch_poll(), ["List", "Plain advisory", "Range", "Second"])
+
     def test_lint_checks_the_watch_list_and_the_profile_references(self):
         self.assertEqual(self.run_hub("lint"), 0, self.output)
         self.set_watch({"32 CFR 170": {"label": "x"}, "32/170": {"label": "x", "standards": ["nope"]}})

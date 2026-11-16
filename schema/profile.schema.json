@@ -12,7 +12,7 @@
     "cfr_parts": {
       "description": "CFR references this profile routes into its digest, as title/part (32/170, which takes every section of the part) or title/section (48/252.204-7012), matched against the references stored with each item. An item with no CFR reference is never named. Without this list every item goes in.",
       "items": {
-        "pattern": "^[1-9][0-9]?/(0|[1-9][0-9]{0,3})(-[0-9]{1,3})?[a-z]?(\\.[A-Za-z0-9_.-]{1,40})?$",
+        "pattern": "^([1-9]|[1-4][0-9]|50)/(0|[1-9][0-9]{0,3})(-[0-9]{1,3})?[a-z]?(\\.[a-z0-9]+([._-][a-z0-9]+)*)?$",
         "type": "string"
       },
       "minItems": 1,
@@ -41,7 +41,7 @@
     "exclude_cfr_parts": {
       "description": "CFR references kept out of this profile's digest, matched the same way as cfr_parts; an exclusion wins over an inclusion.",
       "items": {
-        "pattern": "^[1-9][0-9]?/(0|[1-9][0-9]{0,3})(-[0-9]{1,3})?[a-z]?(\\.[A-Za-z0-9_.-]{1,40})?$",
+        "pattern": "^([1-9]|[1-4][0-9]|50)/(0|[1-9][0-9]{0,3})(-[0-9]{1,3})?[a-z]?(\\.[a-z0-9]+([._-][a-z0-9]+)*)?$",
         "type": "string"
       },
       "minItems": 1,

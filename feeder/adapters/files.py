@@ -25,9 +25,9 @@ import xml.etree.ElementTree as ET
 import zlib
 
 from ..fetchkit import DEFAULT_BODY_CAP, inflate_capped
-from ..extract import cfr_ref
+from ..extract import CFR_READ_CAP, cfr_ref
 from ..items import RawItem, to_utc_z
-from .base import LABEL_CAP, AdapterError, iso_day, refuse_dtd, slugs
+from .base import AdapterError, iso_day, refuse_dtd, slugs
 
 SM = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 ITEM_FIELDS = ("title", "link", "guid", "summary", "published")
@@ -138,7 +138,7 @@ def labels(row: dict, fields: dict) -> dict:
     if "cfr_titles" in fields and "cfr_parts" in fields:
         titles, parts = json_path(row, fields["cfr_titles"]), json_path(row, fields["cfr_parts"])
         pairs = zip(titles if isinstance(titles, list) else [titles], parts if isinstance(parts, list) else [parts])
-        refs = list(dict.fromkeys(ref for ref in (cfr_ref(t, p) for t, p in pairs) if ref))[:LABEL_CAP]
+        refs = list(dict.fromkeys(ref for ref in (cfr_ref(t, p) for t, p in pairs) if ref))[:CFR_READ_CAP]
         if refs:
             out["cfr"] = refs
     for name in ("agencies", "change_types"):

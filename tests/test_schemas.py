@@ -181,7 +181,8 @@ class SchemaFixtureTests(unittest.TestCase):
         for key in ("cfr_parts", "exclude_cfr_parts"):
             with self.subTest(key=key):
                 self.assertEqual(validate(dict(base, **{key: ["32/170", "48/252.204-7012", "7/2a", "41/102-117"]}), schema), [])
-                for bad in ([], ["32 CFR 170"], ["32/170 "], ["170"], ["32/170."], ["32/0170"], ["0/1"], "32/170", None, [32]):
+                for bad in ([], ["32 CFR 170"], ["32/170 "], ["170"], ["32/170."], ["32/0170"], ["0/1"], ["99/1"], ["51/1"], ["17/240.10B-5"], ["32/170..1"],
+                            "32/170", None, [32]):
                     self.assertTrue(validate(dict(base, **{key: bad}), schema), bad)
         source = load_schema("source.schema.json")
         doc = load_fixture("source_example.json")

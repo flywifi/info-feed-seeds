@@ -203,7 +203,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             # an effective date, and a comment deadline, which wins over one read from the text.
             given = rec.get("extra") or {}
             rec["cfr_given"] = list(given.get("cfr") or [])
-            rec["cfr"] = _cfr_merged(rec["cfr_given"], rec.get("cfr") or [])
+            rec["cfr"] = _cfr_merged(rec["cfr_given"], rec.get("cfr") or [], cfr_watch)
             rec["standards"] = _with_watch_standards(rec.get("standards") or [], rec["cfr"], cfr_watch)
             # Written at every sighting, so a label the source withdraws is cleared.
             rec.update(agencies=list(given.get("agencies") or []), change_types=list(given.get("change_types") or []),
@@ -223,9 +223,18 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
 
 # --------------------------------------------------------------------------- selection
 
-def _cfr_merged(given: list, read: list) -> list:
-    """The CFR parts a source gave as fields, then those read from the text, each once."""
-    return list(dict.fromkeys([*given, *read]))[:extract.CFR_CAP]
+def _cfr_merged(given: list, read: list, watch: dict | None = None) -> list:
+    """The CFR references a source gave as fields, then those read from the text, each once, at most
+    CFR_CAP. When there are more, those under a watch-list entry are kept first, so the cap cannot
+    cut the reference an item is watched for; the order of first mention stays."""
+    merged = list(dict.fromkeys([*given, *read]))
+    if len(merged) <= extract.CFR_CAP:
+        return merged
+    watched = set(watch or {})
+    first = [ref for ref in merged if extract.cfr_under([ref]) & watched]
+    taken = set(first)
+    keep = set((first + [ref for ref in merged if ref not in taken])[:extract.CFR_CAP])
+    return [ref for ref in merged if ref in keep]
 
 
 def _with_watch_standards(standards: list, cfr: list, watch: dict | None) -> list:
@@ -375,7 +384,7 @@ def retag_rows(store: Store, repo: Repo, sources: dict, today: date, since_days:
                                 standard_names))
         # What the source gave as fields is not in the text: its CFR parts are merged back in, and its
         # deadline is left as it is.
-        new["cfr"] = _cfr_merged([v for v in (row.get("cfr_given") or "").split(",") if v], new.get("cfr") or [])
+        new["cfr"] = _cfr_merged([v for v in (row.get("cfr_given") or "").split(",") if v], new.get("cfr") or [], watch)
         new["standards"] = _with_watch_standards(new.get("standards") or [], new["cfr"], watch)
         if row.get("deadline_basis") == "source":
             new.pop("deadline", None)

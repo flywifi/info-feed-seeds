@@ -163,6 +163,12 @@ class Repo:
         errors = validate(profile, self.schema("profile.schema.json"))
         if errors:
             raise ConfigError(f"{_rel(path, self.root)}: " + "; ".join(errors))
+        # A local profile is never linted, so a reference no item can carry is refused here too.
+        for key in ("cfr_parts", "exclude_cfr_parts"):
+            for ref in profile.get(key) or []:
+                if not extract.watch_ref_ok(ref):
+                    raise ConfigError(f"{_rel(path, self.root)}: {key} {ref!r} is not a CFR part (32/170) or "
+                                      "section (48/252.204-7012)")
         return with_defaults(profile)
 
     def profile_names(self) -> list[str]:
@@ -385,6 +391,9 @@ def lint(repo: Repo) -> list[str]:
     watch_file = repo.schema_dir / "cfr-watch.json"
     problems += [f"schema/cfr-watch.json: {p}" for p in
                  extract.cfr_watch_problems(watch_file, extract.load_standards(repo.schema_dir / "standards.json"))]
+    if watch_file.exists():
+        problems += [f"schema/cfr-watch.json: key {k!r} appears twice in one object"
+                     for k in categories.duplicate_keys(watch_file)]
     watch = extract.load_cfr_watch(watch_file)
     source_schema = repo.schema("source.schema.json")
     methods_schema = repo.schema("methods.schema.json")
