@@ -319,13 +319,21 @@ class CfrTests(unittest.TestCase):
                 ("14 CFR Parts 39 and 91", ["14/39"]),
                 ("title 12 CFR 53, again 12 CFR 53", ["12/53"]),
                 ("41 CFR 60-30.1 and 41 CFR part 102-117", ["41/60-30", "41/60-30.1", "41/102-117"]),
-                ("14 CFR parts 91-93 and 40 CFR parts 1500-1508", ["14/91", "40/1500"])):
+                ("14 CFR parts 91-93 and 40 CFR parts 1500-1508", ["14/91", "40/1500"]),
+                ("26 CFR 1.401(a)-1 Plans.", ["26/1"]), ("26 CFR 31.3406(b)(3)-5", ["26/31"]),
+                ("26 CFR 1.401-1", ["26/1", "26/1.401-1"]),
+                ("32 CFR PART 170 and 32 C.F.R. pt. 236", ["32/170", "32/236"]),
+                ("32 CFR Sec 170.14", ["32/170", "32/170.14"]),
+                ("33 CFR 165.T08-0467", ["33/165", "33/165.t08-0467"]),
+                ("45 CFR 164.308.The rule and 49 CFR 222.64.2", ["45/164", "45/164.308", "49/222", "49/222.64.2"])):
             with self.subTest(text=text):
                 self.assertEqual(extract.cfr_refs(text), want)
 
     def test_text_that_is_not_a_citation(self):
         for text in ("99 CFR 170", "0 CFR 5", "100 CFR 5", "32 CFR", "32 cfr 170", "CFR 170", "32 CFR 17000", "32 CFR 0170",
-                     "v1.32 CFR 170", "the 2 CFRs", "32 CFR Part", ""):
+                     "v1.32 CFR 170", "the 2 CFRs", "32 CFR Part", "",
+                     "Executive Order 13563 (3 CFR, 2011 Comp., p. 215)", "58 FR 51735, 3 CFR, 1993 Comp., p. 638",
+                     "40 CFR 2026 edition", "40 CFR 2026 Edition"):
             with self.subTest(text=text):
                 self.assertEqual(extract.cfr_refs(text), [])
 
@@ -336,7 +344,7 @@ class CfrTests(unittest.TestCase):
                          ("14/91.401", "47/0", "47/0.11"))
         self.assertEqual((extract.cfr_ref(41, "60-30"), extract.cfr_ref("41", "60-30", "60-30.1")), ("41/60-30", "41/60-30.1"))
         for title, part, section in ((51, "1", None), (0, "1", None), ("x", "1", None), (True, "1", None), (None, "1", None),
-                                     (32, "", None), (32, "17 0", None), (32, "0170", None), (32, "00", None), (41, "60-", None), (41, "60-3000", None), (32, None, None), (14, "91", "92.1"),
+                                     (32, "", None), (32, "17 0", None), (32, "0170", None), (32, "00", None), (41, "60-", None), (41, "60-3000", None), ("5" * 5000, "1", None), ("032", "170", None), (32, None, None), (14, "91", "92.1"),
                                      (14, "91", "91"), (26, "1", "1.401(a)-1")):
             with self.subTest(title=title, part=part, section=section):
                 self.assertIsNone(extract.cfr_ref(title, part, section))
@@ -346,7 +354,8 @@ class CfrTests(unittest.TestCase):
         self.assertEqual(len(extract.cfr_refs(many)), extract.CFR_CAP)
         pairs = "1 CFR 1 " + " ".join(f"{n} CFR {n}.1" for n in range(2, 30))
         self.assertEqual(extract.cfr_refs(pairs)[-2:], ["10/10.1", "11/11"], "a part and its section do not pass the cap")
-        for text in ("32 CFR 170 " * 9000, "3" * 100_000, "32 CFR " * 14000, "32 CFR 170." * 9000):
+        for text in ("32 CFR 170 " * 9000, "3" * 100_000, "32 CFR " * 14000, "32 CFR 170." * 9000,
+                     "26 CFR 1.401" + "(a)" * 33000, "3 CFR, " * 14000, "26 CFR 1.4(a)-" * 7000):
             with self.subTest(text=text[:12]):
                 start = time.perf_counter()
                 extract.cfr_refs(text[:100_000])

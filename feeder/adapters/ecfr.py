@@ -16,7 +16,8 @@ SITE = "https://www.ecfr.gov/current"
 
 
 def _text(value) -> str:
-    return " ".join(value.split()) if isinstance(value, str) else ""
+    """One line of text; a character that cannot be encoded (a lone surrogate) becomes '?'."""
+    return " ".join(value.split()).encode("utf-8", "replace").decode("utf-8") if isinstance(value, str) else ""
 
 
 def parse(data: bytes, *, url: str | None = None, params: dict | None = None) -> dict:
@@ -56,7 +57,8 @@ def parse(data: bytes, *, url: str | None = None, params: dict | None = None) ->
         if kinds:
             extra["change_types"] = kinds
         summary = "; ".join(t for t in (_text(names.get("part")), _text(names.get("chapter"))) if t)
-        items.append(RawItem(guid=f"ecfr:{number}:{section or appendix or 'part-' + part}:{day or 'undated'}",
+        # The part is in the id: several parts of one title can carry an appendix of the same name.
+        items.append(RawItem(guid=f"ecfr:{number}:{part}:{section or appendix or 'part'}:{day or 'undated'}",
                              link=link, title=f"{cite} {heading}".strip(), summary=summary,
                              published=to_utc_z(day), extra=extra))
     return {"kind": "ecfr", "items": items, "follow": []}

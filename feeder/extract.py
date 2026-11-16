@@ -306,8 +306,13 @@ def editions(text: str, names: dict[str, list[str]]) -> list[str]:
 
 # A CFR citation as sources write it: "32 CFR 170", "45 CFR Part 164", "48 CFR 252.204-7012",
 # "32 C.F.R. \u00a7 170.14". Only the first part of "Parts 160 and 164" is read.
-CFR_RE = re.compile(r"(?<![\w.-])(\d{1,2}) ?C\.?F\.?R\.?,? ?(?:(?:[Pp]arts?|[Ss]ections?|[Ss]ec\.|\u00a7{1,2}) ?)?"
-                    r"(\d{1,4}(?:-\d{1,3})?[a-z]?)(\.\d[\w-]{0,15}(?:\.[\w-]{1,15})?)?(?!\w)", re.A)
+# Not read: a section whose number carries a paragraph in brackets before a hyphen (26 CFR 1.401(a)-1
+# gives the part only, since "1.401" is another section), a compilation ("3 CFR, 2011 Comp.") and an
+# edition year ("40 CFR 2026 edition").
+CFR_RE = re.compile(r"(?<![\w.-])(\d{1,2}) ?C\.?F\.?R\.?,? ?"
+                    r"(?:(?:[Pp]arts?|PARTS?|[Pp]ts?\.|[Ss]ections?|[Ss]ecs?\.?|\u00a7{1,2}) ?)?"
+                    r"(\d{1,4}(?:-\d{1,3})?[a-z]?)(\.[A-Z]?\d[\w-]{0,15}(?:\.\d[\w-]{0,14})?)?"
+                    r"(?!\w|(?:\(\w{1,4}\))+-\d|,? Comp\b| [Ee]dition\b)", re.A)
 # CFR references kept for one item; the rest of a long text adds none.
 CFR_CAP = 20
 
@@ -317,7 +322,7 @@ def cfr_ref(title, part, section=None) -> str | None:
     anything else. Titles and parts may be numbers or strings, as sources give them. A part may carry a
     hyphen, as Title 41 numbers its parts (41 CFR 60-30)."""
     t, p = str(title).strip(), str(part).strip().lower()
-    if not (t.isascii() and t.isdigit() and 1 <= int(t) <= 50) or not re.fullmatch(r"(?:0|[1-9]\d{0,3})(?:-\d{1,3})?[a-z]?", p, re.A):
+    if not (t.isascii() and t.isdigit() and len(t) <= 2 and 1 <= int(t) <= 50) or not re.fullmatch(r"(?:0|[1-9]\d{0,3})(?:-\d{1,3})?[a-z]?", p, re.A):
         return None
     if section is None:
         return f"{int(t)}/{p}"

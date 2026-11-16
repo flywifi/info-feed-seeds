@@ -173,6 +173,8 @@ class LabelTests(unittest.TestCase):
                        cfr_references=[{"title": 99, "part": "1"}, {"title": 14, "part": "x y"}, {"part": "39"}, "junk"],
                        agencies=[{"slug": None}, {"slug": "  "}, 5])
         self.assertEqual(got, {})
+        self.assertEqual(self.one(cfr_references=[{"title": "5" * 5000, "part": "1"}, {"title": "032", "part": "1"}]), {},
+                         "a title no CFR has is not a reference and stops nothing")
         self.assertEqual(self.one(cfr_references={"title": 14, "part": "39"}, agencies="Federal Aviation Administration"), {},
                          "a path that reaches no list of entries gives no label")
         scalar = dict(self.FIELDS, cfr_titles="t", cfr_parts="p", agencies="agency")
@@ -209,17 +211,33 @@ class EcfrTests(unittest.TestCase):
         got = [(i.title, i.link, i.published, i.guid, i.summary, i.extra) for i in parsed["items"]]
         self.assertEqual(got, [
             ("14 CFR 91.401 Applicability.", "https://www.ecfr.gov/current/title-14/section-91.401", "2026-11-10T00:00:00Z",
-             "ecfr:14:91.401:2026-11-10", "General Operating and Flight Rules; Federal Aviation Administration",
+             "ecfr:14:91:91.401:2026-11-10", "General Operating and Flight Rules; Federal Aviation Administration",
              {"cfr": ["14/91", "14/91.401"], "change_types": ["effective"]}),
             ("15 CFR part 744, Supplement No. 4 to Part 744 Entity List", "https://www.ecfr.gov/current/title-15/part-744",
-             "2026-11-09T00:00:00Z", "ecfr:15:Supplement No. 4 to Part 744:2026-11-09", "Control Policy; Bureau of Industry and Security",
+             "2026-11-09T00:00:00Z", "ecfr:15:744:Supplement No. 4 to Part 744:2026-11-09", "Control Policy; Bureau of Industry and Security",
              {"cfr": ["15/744"], "change_types": ["effective", "cross-reference"]}),
             ("26 CFR 1.401(a)-1 Plans.", "https://www.ecfr.gov/current/title-26/section-1.401(a)-1", None,
-             "ecfr:26:1.401(a)-1:undated", "", {"cfr": ["26/1"]}),
+             "ecfr:26:1:1.401(a)-1:undated", "", {"cfr": ["26/1"]}),
             ("41 CFR 60-30.1 Applicability of rules.", "https://www.ecfr.gov/current/title-41/section-60-30.1", "2026-11-06T00:00:00Z",
-             "ecfr:41:60-30.1:2026-11-06", "Rules of Practice for Administrative Proceedings",
+             "ecfr:41:60-30:60-30.1:2026-11-06", "Rules of Practice for Administrative Proceedings",
              {"cfr": ["41/60-30", "41/60-30.1"], "change_types": ["effective"]}),
         ], "a row without a real CFR title and part is skipped")
+
+    def test_changes_keep_apart_and_a_malformed_row_does_not_stop_the_rest(self):
+        from feeder.adapters import ecfr
+
+        def index(part):
+            return {"starts_on": "2026-10-19", "hierarchy": {"title": "47", "part": part, "appendix": "Alphabetical Index"},
+                    "headings": {"appendix": "Alphabetical Index"}}
+        rows = [index("73"), index("74"),
+                {"starts_on": "2026-10-19", "hierarchy": {"title": "5" * 5000, "part": "1", "section": "1.1"}},
+                {"starts_on": "2026-10-19", "hierarchy": {"title": "14", "part": "91", "section": "91.4\ud800"},
+                 "headings": {"section": "Bad \udfff heading"}}]
+        items = ecfr.parse(json.dumps({"results": rows}).encode(), url="https://www.ecfr.gov/api/search/v1/results")["items"]
+        self.assertEqual([i.guid for i in items], ["ecfr:47:73:Alphabetical Index:2026-10-19", "ecfr:47:74:Alphabetical Index:2026-10-19",
+                                                   "ecfr:14:91:91.4?:2026-10-19"], "the same appendix name in two parts is two changes")
+        self.assertEqual((items[2].title, items[2].link, items[2].extra["cfr"]),
+                         ("14 CFR 91.4? Bad ? heading", "https://www.ecfr.gov/current/title-14/section-91.4%3F", ["14/91"]))
 
     def test_a_body_that_is_not_a_change_list_is_refused(self):
         from feeder.adapters import ecfr
