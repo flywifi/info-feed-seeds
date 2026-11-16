@@ -378,7 +378,9 @@ standard's name on the same line, a CIS Controls number without v or Version, an
 same line ("CMMC 1.5 million") is read as an edition. A tag the text does not state stays empty. `cfr` lists the
 Code of Federal Regulations parts an item cites or its source gives, as `title/part`, followed by
 `title/part.section` when a section is cited ("45 CFR 164.308" gives `45/164` and `45/164.308`; at
-most 20 per item). `labels` holds what a source gives as fields: `agencies`, `change_types`,
+most 20 per item, those under a watch-list entry first). A list after a citation is read too: more
+sections of the same part ("164.308 and 164.312"), both ends of a section range ("73.54-73.56"), and
+more parts after "Parts" ("parts 160 and 164"). `labels` holds what a source gives as fields: `agencies`, `change_types`,
 `effective`, and `deadline_basis` (`source` for a deadline given as a field, `text` for one read from
 the item's words). The injection guard reads the label ids with the title and summary. `report.json` counts the items per CFR part under `classification.cfr`. Severity reads
 important as high and moderate as medium (the words Microsoft and Red Hat use) in the same severity
