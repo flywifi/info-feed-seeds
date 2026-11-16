@@ -1,5 +1,5 @@
 {
-  "description": "Parts and sections of the Code of Federal Regulations the feed watches, keyed as title/part (32/170, which takes every section of the part) or title/section (48/252.204-7012, only that section). A source marked watched_only gives only items under an entry here. Each label is the heading the eCFR gives; standards are ids from schema/standards.json that an item under the entry is tagged with. Add or remove an entry here; nothing else changes.",
+  "description": "Parts and sections of the Code of Federal Regulations the feed watches, keyed as title/part (32/170, which takes every section of the part) or title/section (48/252.204-7012, only that section). A source marked watched_only gives only items under an entry here. Each label is the heading the eCFR gives; standards are ids from schema/standards.json that an item under the entry is tagged with. Add or remove an entry here: the next poll applies it to the items inside its window, and nothing else needs to change.",
   "schema_version": 1,
   "watch": {
     "10/73.54": {
@@ -57,10 +57,10 @@
       ]
     },
     "48/204": {
-      "label": "Administrative Matters"
+      "label": "Administrative and Information Matters"
     },
     "48/252.204-7012": {
-      "label": "Safeguarding covered defense information and cyber incident reporting."
+      "label": "Safeguarding Covered Defense Information and Cyber Incident Reporting."
     },
     "48/252.204-7019": {
       "label": "Notice of NIST SP 800-171 DoD Assessment Requirements.",
