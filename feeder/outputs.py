@@ -103,7 +103,8 @@ def item_view(row: dict, source, profile: dict, released: set[str], reg: dict | 
     'blocked' (BLOCK), 'held' (at or above hold_at, not released), 'released', 'review' or 'clean'.
     With the category registry, the item's stored text is read again with the current rules, so a
     reader sees why it sits where it does and whether the rules would now place it elsewhere."""
-    scan = guard.scan_item_fields(row.get("title"), row.get("summary"), *(row.get("authors") or []))
+    scan = guard.scan_item_fields(row.get("title"), row.get("summary"), *(row.get("authors") or []),
+                                  *items.label_words(row))
     level = scan["risk_level"]
     hold_at = profile.get("guard", {}).get("hold_at", guard.QUARANTINE)
     sha = row["content_sha256"]

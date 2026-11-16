@@ -183,7 +183,7 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
         new = 0
         for raw, page_url, retrieved_at in raws:
             rec = items.build_item(source.id, page_url, raw, retrieved_at=retrieved_at)
-            scan = guard.scan_item_fields(raw.title, raw.summary, *raw.authors)
+            scan = guard.scan_item_fields(raw.title, raw.summary, *raw.authors, *items.label_words(rec.get("extra") or {}))
             rec["guard_level"], rec["guard_score"] = scan["risk_level"], scan["total_score"]
             if reg is not None:
                 # The source category places the feed; the content category places this item by its own text.
@@ -203,9 +203,9 @@ def poll_source(fetcher, source, store: Store, day: str, now: str, reg: dict | N
             given = rec.get("extra") or {}
             rec["cfr_given"] = list(given.get("cfr") or [])
             rec["cfr"] = _cfr_merged(rec["cfr_given"], rec.get("cfr") or [])
-            for name in ("agencies", "change_types", "effective"):
-                if given.get(name):
-                    rec[name] = given[name]
+            # Written at every sighting, so a label the source withdraws is cleared.
+            rec.update(agencies=list(given.get("agencies") or []), change_types=list(given.get("change_types") or []),
+                       effective=given.get("effective"))
             if given.get("deadline"):
                 rec.update(deadline=given["deadline"], deadline_basis="source")
             else:

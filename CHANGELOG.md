@@ -81,7 +81,7 @@ All notable changes to this repository are recorded here. The format follows
   (`deadline_basis` says which). A `json-api` route names the label paths in `fields`. CFR citations
   written in any item's text ("32 CFR 170", "45 CFR 164.308") are read into the same `cfr` tag, at
   poll and by `hub retag`. `latest.json` items gain `tags.cfr` and `labels`; `report.json` counts
-  items per CFR part.
+  items per CFR part. The injection guard reads the label ids with the title and summary.
 - An `ecfr` adapter reads the eCFR change list: one item per changed section or appendix, with its
   CFR reference and change types.
 - Per-source daily share: a profile's `source_cap` is the most items any one source may take in a
