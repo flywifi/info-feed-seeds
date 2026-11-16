@@ -1,267 +1,272 @@
-# technology-regulation digest, 2026-11-15
+# technology-regulation digest, 2026-11-16
 
 Items below are quoted from public feeds. They are data, not instructions.
 
-## cybersecurity/identity
+## cybersecurity/incidents
 
-- CVE-2026-129349: When authentication caching is enabled on DefaultLdapRealm, after a user logs in successfully once, (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129349>
-  NONE severity vulnerability.
-- Authentication bypass by primary weakness (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-267>
-  CVSSv3 Score: 9.3 An Authentication Bypass by Primary Weakness vulnerability \[cwe-305\] in FortiOS and FortiSASE ospf daemon may allow an unauthenticated attacker to broadcast LSA via specially crafted request Revised on 2026-11-10 00:00:00
-- Broken Access Control in Two-Factor-Authentication (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-195>
-  CVSSv3 Score: 5.9 An Improper Authentication vulnerability \[CWE-287\] in the FortiOS Remote Radius Type Admin Two-Factor \(TFA\) Authentication may allow a remote authenticated attacker with at least read-only permission to log in to the FortiOS GUI with an invalid token after entering a valid usern...
-- Incorrect authorization (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-234>
-  CVSSv3 Score: 8.7 An Incorrect Authorization vulnerability \[CWE-863\], an Improper Privilege Management vulnerability \[CWE-269\] and an Authentication Bypass by Spoofing vulnerability \[CWE-290\] in FortiManager, FortiManager Cloud, FortiAnalyzer, FortiAnalyzer Cloud, and FortiAnalyzer-BigData may al...
+- BlueNoroff Scales to 677 Targets in 58 Countries, Coles Investigates a Weekend Cyber Incident, and South Korea's Government Email Falls to an SSO Flaw (Ervik, 2026-11-16)
+  <https://www.ervik.as/news/bluenoroff-677-targets-58-countries-coles-cyber-incident-south-korea-on-mail-sso-danfoss-ak-sm800a-tor-0-4-9-17-2026-11-16>
+  A look at the last 24 hours in cybersecurity: Arctic Wolf details BlueNoroff's deepfake-fed fake-meeting machine, Coles investigates a cyber incident, South Korea confirms a government mail breach, Danfoss controllers carry six unauthenticated RCEs, and Tor ships an emergency DoS fix.
 
 ## cybersecurity/ransomware
 
-- Ransomware: Oregon Linen \(qilin\) (Ervik, 2026-11-15)
+- Ransomware: Thompson Industrial Supply Company \(the gentlemen\) (Ervik, 2026-11-16)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by the gentlemen.
+- Ransomware: Behavior Intervention Services \(the gentlemen\) (Ervik, 2026-11-16)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by the gentlemen.
+- Ransomware: Cykoria \(the gentlemen\) (Ervik, 2026-11-16)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by the gentlemen.
+- Ransomware: Groupe SERL \(the gentlemen\) (Ervik, 2026-11-16)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by the gentlemen.
+- Ransomware: Living Well Home Care \(the gentlemen\) (Ervik, 2026-11-16)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by the gentlemen.
+- Ransomware: Infflux \(the gentlemen\) (Ervik, 2026-11-16)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by the gentlemen.
+- Ransomware: Johnson Bros. Bakery Supply, Inc. \(Global Secret Group\) (Ervik, 2026-11-16)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by Global Secret Group.
+- Ransomware: t\*\*l\*\*kw\*\*\*\*\*p.com \(Curious Worm\) (Ervik, 2026-11-16)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by Curious Worm.
+- Ransomware: Burney Wealth \(shiba\) (Ervik, 2026-11-16)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by shiba.
+- Ransomware: Agram Concern \(qilin\) (Ervik, 2026-11-16)
   <https://www.ervik.as/ransomware>
   New ransomware victim disclosed by qilin.
-- Ransomware: Cole Manufacturing \(qilin\) (Ervik, 2026-11-15)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: Kessler Soils Engineering Products \(qilin\) (Ervik, 2026-11-15)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: Sarimelati Kencana Tbk PT \(inc ransom\) (Ervik, 2026-11-15)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by inc ransom.
-- Ransomware: Kayaku Safety Systems Malaysia Sdn Bhd \(qilin\) (Ervik, 2026-11-15)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Cursor Traces a Trojanized Claude Code Extension to a Leaked Fireworks Key, a German Drone Maker Gets a Malicious Update, and the FBI Warns on ARTEX Agents (Ervik, 2026-11-15)
-  <https://www.ervik.as/news/cursor-fireworks-claude-code-extension-quantum-systems-drones-artex-fbi-flash-arara-osaka-tsmc-postgresql-2026-11-15>
-  A look at the last 24 hours in cybersecurity: Cursor explains the Fireworks key behind a backdoored extension, Quantum Systems drones are grounded after a poisoned QBase update, the FBI issues an ARTEX FLASH, Arara leaks 77 million addresses, TSMC and Apify confirm data loss, and PostgreSQL ships...
-- Ransomware: PT. Fiber Networks Indonesia \(AltosDLP surveillance platform, fiber.net.id\) \(pixelleaks\) (Ervik, 2026-11-15)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by pixelleaks.
-- Ransomware: pah.com.my \(lockbit5\) (Ervik, 2026-11-15)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by lockbit5.
-- Ransomware: Starbucks \(N0n\) (Ervik, 2026-11-14)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by N0n.
-- Ransomware: Airport Appliance, Inc. \(N0n\) (Ervik, 2026-11-14)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by N0n.
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-129468: Netcccyun dnsmgr 2.18 before 2.22 contains a missing authorization vulnerability in POST /cloudflare (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129468>
+- CVE-2026-97894: LibreOffice Calc can open spreadsheets in the DIF format, and text files such as CSV in the UTF-16 e (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-97894>
+  NONE severity vulnerability.
+- CVE-2026-97999: LibreOffice Base documents can hold an embedded HSQLDB database. When the experimental features opti (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-97999>
+  NONE severity vulnerability.
+- CVE-2026-98100: LibreOffice can import documents in the HWP format, including pictures that link to an external file (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-98100>
+  NONE severity vulnerability.
+- CVE-2026-97892: LibreOffice checks the digital signatures of a PDF document when the document is opened, and shows w (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-97892>
+  NONE severity vulnerability.
+- CVE-2026-91114: Silverstripe Framework is a PHP framework which powers the Silverstripe CMS. Prior to 6.2.13, Permis (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-91114>
+  MEDIUM severity \(CVSS 4.4\) vulnerability.
+- CVE-2026-91115: Silverstripe Framework is a PHP framework which powers the Silverstripe CMS. From 6.0.0 until 6.2.13 (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-91115>
+  HIGH severity \(CVSS 8.8\) vulnerability.
+- CVE-2026-87932: LibreOffice Writer can save documents in DOCX format. A document can contain content controls whose (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-87932>
+  NONE severity vulnerability.
+- CVE-2026-88987: Silverstripe Framework is a PHP framework which powers the Silverstripe CMS. Prior to 6.2.13, the HT (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-88987>
+  MEDIUM severity \(CVSS 5.4\) vulnerability.
+- CVE-2026-88988: Silverstripe Framework is a PHP framework which powers the Silverstripe CMS. Prior to 6.2.13, the HT (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-88988>
+  MEDIUM severity \(CVSS 5.4\) vulnerability.
+- CVE-2026-88989: Silverstripe Framework is a PHP framework which powers the Silverstripe CMS. Prior to 6.2.13, a CMS (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-88989>
   MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-129469: Course-tencent-cloud before 2.0.2 contains an insecure direct object reference vulnerability that al (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129469>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-129452: A vulnerability has been found in DrayTek Vigor2960 1.5.1.6. This vulnerability affects the function (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129452>
-  CRITICAL severity \(CVSS 9.1\) vulnerability.
-- CVE-2026-129467: GeoPulse 1.5.0 through 2.3.0 contains an insecure direct object reference vulnerability in GET /api/ (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129467>
+- CVE-2026-91110: Silverstripe Framework is a PHP framework which powers the Silverstripe CMS. Prior to 6.2.13, the HT (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-91110>
+  MEDIUM severity \(CVSS 6.4\) vulnerability.
+- CVE-2026-91112: Silverstripe Framework is a PHP framework which powers the Silverstripe CMS. Prior to 6.2.13, a user (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-91112>
+  MEDIUM severity \(CVSS 6.8\) vulnerability.
+- CVE-2026-91113: Silverstripe Framework is a PHP framework which powers the Silverstripe CMS. Prior to 6.2.13, a CMS (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-91113>
   MEDIUM severity \(CVSS 4.3\) vulnerability.
-- CVE-2026-129451: A flaw has been found in DrayTek Vigor2960 up to 1.5.1.6. This affects the function app\_guest\_export (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129451>
-  CRITICAL severity \(CVSS 9.9\) vulnerability.
-- CVE-2026-129450: A vulnerability was detected in DrayTek Vigor2960 1.5.1.6. Affected by this issue is the function su (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129450>
-  CRITICAL severity \(CVSS 9.9\) vulnerability.
-- CVE-2026-129449: A security vulnerability has been detected in DrayTek Vigor2960 up to 1.5.1.6. Affected by this vuln (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129449>
-  CRITICAL severity \(CVSS 9.9\) vulnerability.
-- CVE-2026-82568: The Give - Peer-to-Peer plugin for WordPress is vulnerable to time-based SQL Injection via the 'sort (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-82568>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-82663: The Give - Peer-to-Peer plugin for WordPress is vulnerable to authorization bypass in all versions u (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-82663>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-129445: A security flaw has been discovered in D-Link DIR-850L FW1.20WWb03. This impacts an unknown function (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129445>
-  HIGH severity \(CVSS 8.2\) vulnerability.
-- CVE-2026-129444: A vulnerability was identified in D-Link DSL-6740C 20131126. This affects an unknown function of the (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129444>
-  CRITICAL severity \(CVSS 10\) vulnerability.
-- CVE-2026-129443: A vulnerability was determined in itsourcecode Airline Reservation System 1.0. The impacted element (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-129443>
-  MEDIUM severity \(CVSS 6.3\) vulnerability.
-- CVE-2026-114452: The Membership Plugin WordPress plugin before 4.0.6 does not verify that the membership referenced i (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-114452>
+- CVE-2026-84234: LibreOffice can open PDF files in Draw, where the PDF import converts each page into drawing objects (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-84234>
   NONE severity vulnerability.
-- CVE-2026-116559: The A2Reviews WordPress plugin through 1.2.3 does not properly verify authorization on several of it (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-116559>
+- CVE-2026-84443: LibreOffice Base documents can bind macros to document events, such as opening or closing the docume (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-84443>
   NONE severity vulnerability.
-- CVE-2026-123707: The WPGraphQL WordPress plugin before 2.27.1 does not restrict access to posts in custom non-public (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-123707>
+- CVE-2026-86046: termux-sync is an open source tool for backing up and restoring a Termux environment across devices. (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-86046>
+  HIGH severity \(CVSS 7.1\) vulnerability.
+- CVE-2026-64890: : Cleartext Storage of Sensitive Information vulnerability in Johnson Controls Open Blue Companion A (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-64890>
   NONE severity vulnerability.
-- CVE-2026-124671: The Burst Statistics WordPress plugin before 3.7.5 does not enforce a shared report's date range on (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-124671>
+- CVE-2026-18564: LibreOffice can export documents to PDF protected by a password. With the PDF 2.0 option the file is (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-18564>
   NONE severity vulnerability.
-- CVE-2026-124673: The Burst Statistics WordPress plugin before 3.7.5 does not check that a reported page view belongs (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-124673>
+- CVE-2026-18565: LibreOffice has an option, called stealth mode in earlier advisories, that stops documents from outs (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-18565>
   NONE severity vulnerability.
-- CVE-2026-127048: The Custom Block Builder WordPress plugin before 3.0.0 does not properly deny unauthorised requests (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-127048>
+- CVE-2026-18566: LibreOffice can import EMF, EMF+ and WMF images, which may be embedded in documents. Several out-of- (Ervik, 2026-11-16)
+  <https://www.ervik.as/cves/CVE-2026-18566>
   NONE severity vulnerability.
-- CVE-2026-114451: The Membership Plugin WordPress plugin before 4.0.6 does not perform any authorization or CSRF check (Ervik, 2026-11-15)
-  <https://www.ervik.as/cves/CVE-2026-114451>
-  NONE severity vulnerability.
-- Active Zero-Day: CVE-2026-114713 (Ervik, 2026-11-13)
-  <https://www.ervik.as/cves/CVE-2026-114713>
-  UnrealIRCd Improper Neutralization of Delimiters Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-123039 (Ervik, 2026-11-13)
-  <https://www.ervik.as/cves/CVE-2026-123039>
-  Check Point Multiple Products Incorrect Permission Assignment for Critical Resource Vulnerability - confirmed actively exploited \(CISA KEV\).
-- [held: pattern score 10] Authorization bypass through user-controlled key (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-204>
-- Authorization bypass through user-controlled key (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-235>
-  CVSSv3 Score: 8.2 An Authorization Bypass Through User-Controlled Key vulnerability \[CWE-639\] in FortiManager may allow a remote authenticated attacker with admin permission to elevate their privileges to root via crafted HTTP requests. Revised on 2026-11-10 00:00:00
-- Authorization bypass through user-controlled key in GUI (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-228>
-  CVSSv3 Score: 8.7 An Authorization Bypass Through User-Controlled Key vulnerability \[cwe-639\] in FortiManager, FortiManager Cloud and FortiSase-Sovereign GUI may allow an authenticated attacker to execute commands outside of the expected scope via specially crafted HTTP request. Revised on 2026-1...
-- Heap-based buffer overflow (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-223>
-  CVSSv3 Score: 7.2 A Heap-based Buffer Overflow vulnerability \[CWE-122\] in FortiManager, FortiAnalyzer, FortiManager Cloud and FortiAnalyzer Cloud may allow an authenticated attacker with admin privileges to execute unauthorized code or commands via a crafted request. Revised on 2026-11-10 00:00:00
-- Heap-based buffer overflow (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-232>
-  CVSSv3 Score: 7.2 A Heap-based Buffer Overflow vulnerability \[CWE-122\] in FortiManager, FortiManager Cloud, FortiAnalyzer and FortiAnalyzer Cloud may allow an authenticated administrator to execute unauthorized code or commands or cause a denial of service via specially crafted JSON-RPC requests....
-- Improper control of generation of code (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-230>
-  CVSSv3 Score: 7.2 A Code Injection vulnerability \[CWE-94\] in FortiManager, FortiManager Cloud, FortiAnalyzer and FortiAnalyzer Cloud may allow an authenticated administrator to execute unauthorized code or commands via specially crafted requests. Revised on 2026-11-10 00:00:00
-- Improper limitation of a pathname to a restricted directory (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-205>
-  CVSSv3 Score: 7.5 An Improper Limitation of a Pathname to a Restricted Directory \('Path Traversal'\) vulnerability \[CWE-22\] in FortiMai may allow an unauthenticated attacker to execute unauthorized commands via crafted requests. Revised on 2026-11-10 00:00:00
-- Improper limitation of a pathname to a restricted directory (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-236>
-  CVSSv3 Score: 7.2 An External Control of File Name or Path vulnerability \[CWE-22\] and an Improper Neutralization of Special Elements vulnerability \[CWE-74\] in FortiManager, FortiManager Cloud, FortiAnalyzer, and FortiAnalyzer Cloud may allow an authenticated administrator to read or write arbitra...
-- Improper limitation of a pathname to a restricted directory (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-199>
-  CVSSv3 Score: 9.8 An Improper limitation of a pathname to a restricted directory \('path traversal'\) vulnerability \[CWE-22\] in FortiMail may allow an unauthenticated attacker to execute unauthorized code or commands via crafted requests. Revised on 2026-11-10 00:00:00
-- Improper neutralization of argument delimiters in a command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-239>
-  CVSSv3 Score: 7.2 An Improper Neutralization of Argument Delimiters in a Command \('Argument Injection'\)\[CWE-88\] vulnerability in FortiManager,FortiAnalyzer, FortiManager Cloud, FortiAnalyzer Cloud may allow an authenticated privileged admin user to execute unauthorized code or commands. Revised o...
-- Improper neutralization of special elements used in a template engine (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-249>
-  CVSSv3 Score: 7.2 A Server-Side Template Injection vulnerability \[CWE-1336\] in FortiManager, FortiManager Cloud, FortiAnalyzer and FortiAnalyzer Cloud may allow an authenticated attacker with restricted privileges to execute unauthorized code or commands via a specially crafted request. Revised o...
-- Improper neutralization of special elements used in an os command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-224>
-  CVSSv3 Score: 7.2 An OS Command Injection vulnerability \[CWE-78\] in FortiManager, FortiManager Cloud, FortiAnalyzer and FortiAnalyzer Cloud may allow an authenticated administrator to execute unauthorized code or commands via specially crafted requests Revised on 2026-11-10 00:00:00
-- Improper neutralization of special elements used in an os command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-200>
-  CVSSv3 Score: 9.8 An Improper neutralization of special elements used in a command \('command injection'\) \[CWE-77\] in FortiMail may allow an unauthenticated attacker to execute unauthorized code or commands via crafted HA join-request packets. Revised on 2026-11-10 00:00:00
-- [held: pattern score 10] Improper neutralization of special elements used in an os command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-210>
-- Improper neutralization of special elements used in an OS command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-198>
-  CVSSv3 Score: 7.2 An improper neutralization of special elements used in an OS Command \('OS Command Injection'\) vulnerability \[CWE-78\] in FortiMail, FortiRecorder may allow an authenticated privileged attacker to execute unauthorized code or commands via a specifically crafted archive account con...
-- Improper neutralization of special elements used in an os command in GUI (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-251>
-  CVSSv3 Score: 7.2 An Improper Neutralization of Special Elements used in an OS Command \('OS Command Injection'\) vulnerability \[cwe-78\] in FortiManager, FortiAnalyzer, FortiManager Cloud, FortiAnalyzer Cloud, FortiSASE-Sovereign GUI may allow an authenticated attacker to execute unauthorized code...
-- Improper privilege management (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-231>
-  CVSSv3 Score: 7.2 An improper privilege management vulnerability \[CWE-269\] in FortiAnalyzer, FortiAnalyzer Cloud, FortiManager and FortiManager Cloud may allow an authenticated privileged attacker to elevate their privileges via crafted JSON-RPC request. Revised on 2026-11-10 00:00:00
-- Improper privilege management (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-263>
-  CVSSv3 Score: 7.2 An Improper Privilege Management vulnerability\[CWE-269\] in FortiAuthenticator may allow an authenticated attacker to escalate privileges. Revised on 2026-11-10 00:00:00
 
 ## regulation/federal-rulemaking
 
-- Title 42 - Public Health (U.S. Government Publishing Office, 2026-11-13)
-  <https://www.govinfo.gov/app/details/CFR-2024-title42-vol4>
+- Title 21 - Food and Drugs (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title21-vol6>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 43 - Public Lands: Interior (U.S. Government Publishing Office, 2026-11-13)
-  <https://www.govinfo.gov/app/details/CFR-2024-title43-vol1>
+- Title 21 - Food and Drugs (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title21-vol7>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 43 - Public Lands: Interior (U.S. Government Publishing Office, 2026-11-13)
-  <https://www.govinfo.gov/app/details/CFR-2024-title43-vol2>
+- Title 21 - Food and Drugs (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title21-vol5>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-11)
-  <https://www.govinfo.gov/app/details/CFR-2025-title14-vol5>
+- Title 21 - Food and Drugs (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title21-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol11>
+- Title 21 - Food and Drugs (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title21-vol4>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol12>
+- Title 19 - Customs Duties (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title19-vol3>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol13>
+- Title 20 - Employees' Benefits (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title20-vol4>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol14>
+- Title 20 - Employees' Benefits (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title20-vol3>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol15>
+- Title 20 - Employees' Benefits (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title20-vol2>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol16>
+- Title 20 - Employees' Benefits (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title20-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol17>
+- Title 2 - Grants and Agreements (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title2-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol18>
+- Title 19 - Customs Duties (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title19-vol2>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol19>
+- Title 19 - Customs Duties (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title19-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol2>
+- Title 18 - Conservation of Power and Water Resources (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title18-vol2>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol20>
+- Title 18 - Conservation of Power and Water Resources (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title18-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol21>
+- Title 17 - Commodity and Securities Exchanges (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title17-vol5>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol3>
+- Title 17 - Commodity and Securities Exchanges (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title17-vol4>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol22>
+- Title 17 - Commodity and Securities Exchanges (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title17-vol3>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol4>
+- Title 17 - Commodity and Securities Exchanges (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title17-vol2>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol5>
+- Title 16 - Commercial Practices (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title16-vol2>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol6>
+- Title 16 - Commercial Practices (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title16-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol7>
+- Title 17 - Commodity and Securities Exchanges (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title17-vol1>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 27 - Alcohol, Tobacco Products and Firearms (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title27-vol1>
+- Title 15 - Commerce and Foreign Trade (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title15-vol3>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol8>
+- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title14-vol5>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 26 - Internal Revenue (U.S. Government Publishing Office, 2026-11-10)
-  <https://www.govinfo.gov/app/details/CFR-2025-title26-vol9>
+- Title 15 - Commerce and Foreign Trade (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title15-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 15 - Commerce and Foreign Trade (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title15-vol2>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title14-vol4>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title14-vol3>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title14-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 14 - Aeronautics and Space (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title14-vol2>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 13 - Business Credit and Assistance (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title13-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title12-vol4>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title12-vol9>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title12-vol8>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title12-vol7>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title12-vol5>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title12-vol6>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title12-vol2>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title12-vol3>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 1 - General Provisions (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title1-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title10-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title12-vol10>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 11 - Federal Elections (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title11-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 12 - Banks and Banking (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title12-vol1>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title10-vol2>
+  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-16)
+  <https://www.govinfo.gov/app/details/CFR-2024-title10-vol4>
   Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
 
-## technology/cloud
+## standards/iso
 
-- Authorization bypass through user-controlled key in dmserver (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-244>
-  CVSSv3 Score: 9.1 An Authorization Bypass Through User-Controlled Key \[CWE-639\] in FortiManager, FortiAnalyzer, FortiManager Cloud and FortiAnalyzer Cloud could allow an authenticated administrator to access to other VDOMs via specially crafted HTTP requests. Revised on 2026-11-10 00:00:00
+- China Standardization News and Activities - November 12, 2026 (National Institute of Standards and Technology, 2026-11-16)
+  <https://www.nist.gov/news-events/news/2026/11/china-standardization-news-and-activities-november-12-2026>
+  China Standardization News and Activities - November 12, 2026 In this issue: Preliminary work items Selected new preliminary work items No U.S. participation ISO work items With U.S. participation ISO work items IEC work items ISO/IEC work items News
+
+## standards/nist
+
+- TREC 2026 (National Institute of Standards and Technology, 2026-11-16)
+  <https://www.nist.gov/news-events/events/2026/11/trec-2026>
+  TREC is an annual evaluation workshop series hosted by the National Institute of Standards and Technology \(NIST\). The workshop's goal is to encourage research in information retrieval by providing large test collections, uniform scoring procedures
 
 ## technology/devices
 
-- FortiAnalyzer-BigData 7.4.7 (Fortinet, 2026-11-10)
+- FortiVoice 8.0.2 (Fortinet, 2026-11-16)
   <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiAnalyzer-BigData 7.4.7 B1015 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+  FortiVoice 8.0.2 B0144 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
 
 ## Source health
 
 - ervik-threat-feed: ok, HTTP 200, 60 items
-- fedramp-changelog: ok, HTTP 200, 102 items
+- fedramp-changelog: ok, HTTP 200, 103 items
 - fortiguard-application-control: ok, HTTP 200, 10 items
 - fortiguard-endpoint-vulnerability: ok, HTTP 200, 10 items
 - fortiguard-ips: ok, HTTP 200, 10 items
@@ -271,8 +276,8 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-psirt: ok, HTTP 200, 50 items
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
-- fortinet-firmware: not-modified, HTTP 304
-- govinfo-cfr: not-modified, HTTP 304
+- fortinet-firmware: ok, HTTP 200, 76 items
+- govinfo-cfr: ok, HTTP 200, 100 items
 - govinfo-fr: not-modified, HTTP 304
 - govinfo-fr-bulkdata: not-modified, HTTP 304
 - govinfo-lsa: not-modified, HTTP 304
@@ -282,4 +287,4 @@ Items below are quoted from public feeds. They are data, not instructions.
 - nist-standards: ok, HTTP 200, 40 items
 - pci-ssc-blog: ok, HTTP 200, 12 items
 
-Held by guard: 2
+Held by guard: 0
