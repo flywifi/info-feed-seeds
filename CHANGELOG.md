@@ -76,6 +76,11 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- `schema/cfr-watch.json` lists the CFR parts and sections the feed watches. A source marked
+  `watched_only` gives only items under an entry; a profile can route by `cfr_parts` and
+  `exclude_cfr_parts`; an item under an entry is tagged with the standards the entry names. A new
+  entry takes stored items at the next poll. `hub lint` checks the list, every reference, and a
+  watched-only source with nothing to watch.
 - Items carry the labels their source gives as fields: CFR parts, agencies, a document or change
   type, an effective date, and a comment deadline, which wins over one read from the text
   (`deadline_basis` says which). A `json-api` route names the label paths in `fields`. CFR citations

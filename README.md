@@ -30,7 +30,15 @@ private notes or anything that identifies a client or a campaign.
   rows in its window); a profile's `industries` list routes in only items with an industry it names,
   `exclude_industries` keeps them out and wins over an inclusion, and an item with no industry is never
   named. An industries list narrows the items of the sources a profile polls and never adds a source,
-  so lint reports an industry no enabled source the profile polls lists. `source_cap` is the most
+  so lint reports an industry no enabled source the profile polls lists.
+  `cfr-watch.json` lists the Code of Federal Regulations parts and sections the feed watches, keyed
+  as `title/part` (`32/170`, which takes every section of the part) or `title/section`
+  (`48/252.204-7012`, only that section), each with the heading the eCFR gives and optional standards
+  ids. A source whose manifest sets `watched_only` gives only items under an entry: a new entry takes
+  stored items at the next poll, and an empty list gives none. A profile's `cfr_parts` list routes in
+  only items under a reference it names, and `exclude_cfr_parts` keeps them out and wins over an
+  inclusion. An item under an entry is tagged with the standards the entry names, at poll and by
+  `hub retag`. `source_cap` is the most
   items any one source may take in a day, and `source_caps` sets it per source id (an entry there
   wins). An item the guard holds takes a share as it takes a daily slot, and a story several sources
   carry is charged to the first of them with room. Items a share keeps back are not marked as shown, so they can enter a later day while inside
