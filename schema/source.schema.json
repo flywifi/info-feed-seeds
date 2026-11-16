@@ -8,6 +8,27 @@
             "else": {
               "else": {
                 "else": {
+                  "else": {
+                    "if": {
+                      "properties": {
+                        "adapter": {
+                          "const": "ecfr"
+                        }
+                      },
+                      "required": [
+                        "adapter"
+                      ]
+                    },
+                    "then": {
+                      "properties": {
+                        "params": {
+                          "additionalProperties": false,
+                          "properties": {},
+                          "type": "object"
+                        }
+                      }
+                    }
+                  },
                   "if": {
                     "properties": {
                       "adapter": {
@@ -266,7 +287,8 @@
             "xml",
             "json-api",
             "urllist",
-            "artifact"
+            "artifact",
+            "ecfr"
           ],
           "type": "string"
         },
@@ -281,7 +303,8 @@
             "xml",
             "json-api",
             "urllist",
-            "artifact"
+            "artifact",
+            "ecfr"
           ],
           "type": "string"
         },

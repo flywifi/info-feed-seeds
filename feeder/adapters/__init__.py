@@ -15,7 +15,7 @@ from __future__ import annotations
 from urllib.parse import urldefrag, urlsplit
 
 from ..items import RawItem
-from . import feed, files, page
+from . import ecfr, feed, files, page
 from .base import AdapterError
 
 ADAPTERS = {
@@ -26,6 +26,7 @@ ADAPTERS = {
     "json-api": files.parse_json_api,
     "urllist": files.parse_urllist,
     "artifact": files.parse_artifact,
+    "ecfr": ecfr.parse,
 }
 
 # Params a route must carry before the poller reads it, by adapter name (every name the schema allows).
@@ -37,6 +38,7 @@ REQUIRED_PARAMS = {
     "json-api": ("items_path", "fields"),
     "urllist": (),
     "artifact": (),
+    "ecfr": (),
 }
 
 # A page route that names any of these without item_selector is a configuration error, not a landing route.
@@ -51,6 +53,7 @@ ALLOWED_KINDS = {
     "json-api": ("json-api",),
     "urllist": ("urllist",),
     "artifact": ("artifact",),
+    "ecfr": ("ecfr",),
 }
 
 DEFAULT_FOLLOW_LIMIT = 3
@@ -147,5 +150,5 @@ def live_proof(attempt: dict | None) -> bool:
 
 
 __all__ = ["ADAPTERS", "ALLOWED_KINDS", "AdapterError", "DEFAULT_FOLLOW_LIMIT", "DEFAULT_PORTS", "PAGE_SELECTOR_KEYS",
-           "REQUIRED_PARAMS", "check_result", "configured", "feed", "files", "follow_limit", "follow_url", "get_adapter",
+           "REQUIRED_PARAMS", "check_result", "configured", "ecfr", "feed", "files", "follow_limit", "follow_url", "get_adapter",
            "lint_route", "live_proof", "page"]

@@ -53,13 +53,19 @@ NEW_COLUMNS = (
     ("language", "TEXT"),
     ("deadline", "TEXT"),
     ("updated", "TEXT"),
+    ("cfr", "TEXT NOT NULL DEFAULT ''"),
+    ("cfr_given", "TEXT NOT NULL DEFAULT ''"),
+    ("agencies", "TEXT NOT NULL DEFAULT ''"),
+    ("effective", "TEXT"),
+    ("deadline_basis", "TEXT"),
 )
 # The filter columns hub retag may rewrite: the content category with its basis, the source pair of a
 # row placed before content categories, the source's industries, and the tag columns. Hashes, text, guard and hit data are not here.
 RETAG_COLUMNS = ("content_category", "content_subcategory", "content_category_basis", "content_subcategory_basis",
                  "source_category", "source_subcategory", "industries", "standards", "editions", "cves", "severity",
-                 "severity_rank", "exploited", "vendors", "deadline")
-LIST_COLUMNS = ("industries", "standards", "editions", "change_types", "cves", "vendors", "link_hosts")
+                 "severity_rank", "exploited", "vendors", "deadline", "deadline_basis", "cfr")
+LIST_COLUMNS = ("industries", "standards", "editions", "change_types", "cves", "vendors", "link_hosts", "cfr",
+                "cfr_given", "agencies")
 INDEXES = (
     "CREATE INDEX IF NOT EXISTS items_published ON items(published)",
     "CREATE INDEX IF NOT EXISTS items_source_category ON items(source_category, source_subcategory)",

@@ -304,6 +304,41 @@ def editions(text: str, names: dict[str, list[str]]) -> list[str]:
     return list(out)
 
 
+# A CFR citation as sources write it: "32 CFR 170", "45 CFR Part 164", "48 CFR 252.204-7012",
+# "32 C.F.R. \u00a7 170.14". Only the first part of "Parts 160 and 164" is read.
+CFR_RE = re.compile(r"(?<![\w.-])(\d{1,2}) ?C\.?F\.?R\.?,? ?(?:(?:[Pp]arts?|[Ss]ections?|[Ss]ec\.|\u00a7{1,2}) ?)?"
+                    r"(\d{1,4}(?:-\d{1,3})?[a-z]?)(\.\d[\w-]{0,15}(?:\.[\w-]{1,15})?)?(?!\w)", re.A)
+# CFR references kept for one item; the rest of a long text adds none.
+CFR_CAP = 20
+
+
+def cfr_ref(title, part, section=None) -> str | None:
+    """'32/170' for a CFR title (1 to 50) and part, or '32/170.14' with a section of that part; None for
+    anything else. Titles and parts may be numbers or strings, as sources give them. A part may carry a
+    hyphen, as Title 41 numbers its parts (41 CFR 60-30)."""
+    t, p = str(title).strip(), str(part).strip().lower()
+    if not (t.isascii() and t.isdigit() and 1 <= int(t) <= 50) or not re.fullmatch(r"(?:0|[1-9]\d{0,3})(?:-\d{1,3})?[a-z]?", p, re.A):
+        return None
+    if section is None:
+        return f"{int(t)}/{p}"
+    s = str(section).strip().lower()
+    return f"{int(t)}/{s}" if re.fullmatch(re.escape(p) + r"\.[\w.-]{1,40}", s, re.A) else None
+
+
+def cfr_refs(text: str) -> list[str]:
+    """CFR parts the text cites, as 'title/part', each followed by 'title/part.section' when a section is
+    cited, in order of first mention, each once, at most CFR_CAP."""
+    out: dict[str, None] = {}
+    for m in CFR_RE.finditer(text or ""):
+        title, part, rest = m.groups()
+        if "-" in part and title != "41":   # only Title 41 numbers parts with a hyphen; elsewhere it is a range
+            part, rest = part.split("-", 1)[0], None
+        for ref in (cfr_ref(title, part), cfr_ref(title, part, part + rest) if rest else None):
+            if ref:
+                out.setdefault(ref, None)
+    return list(out)[:CFR_CAP]
+
+
 def tags(title: str, summary: str, names: dict[str, list[str]],
          standard_names: dict[str, list[str]] | None = None) -> dict:
     """The store's filter columns for one item, from its title and summary."""
@@ -313,9 +348,9 @@ def tags(title: str, summary: str, names: dict[str, list[str]],
     return {"cves": cve_ids(text), "severity": sev, "severity_rank": SEVERITY_RANK[sev] if sev else None,
             "exploited": exploited(text), "vendors": vendors(text, names), "deadline": found[0] if found else None,
             "standards": standards(text, standard_names or {}),
-            "editions": editions(text, standard_names or {})[:EDITION_CAP]}
+            "editions": editions(text, standard_names or {})[:EDITION_CAP], "cfr": cfr_refs(text)}
 
 
-__all__ = ["EDITION_AFTER", "EDITION_CAP", "SEVERITY_RANK", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
+__all__ = ["CFR_CAP", "EDITION_AFTER", "EDITION_CAP", "SEVERITY_RANK", "cfr_ref", "cfr_refs", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
            "load_vendors", "severity", "severity_from_score", "standard_problems", "standards", "tags",
            "vendor_problems", "vendors"]

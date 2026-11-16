@@ -142,7 +142,11 @@ def item_view(row: dict, source, profile: dict, released: set[str], reg: dict | 
             "severity_rank": row.get("severity_rank"), "exploited": bool(row.get("exploited")),
             "vendors": list(row.get("vendors") or []), "deadline": row.get("deadline"),
             "standards": list(row.get("standards") or []), "editions": list(row.get("editions") or []),
+            "cfr": list(row.get("cfr") or []),
         },
+        # What the source gave as its own fields, and whether the deadline came from one or from the text.
+        "labels": {"agencies": list(row.get("agencies") or []), "change_types": list(row.get("change_types") or []),
+                   "effective": row.get("effective"), "deadline_basis": row.get("deadline_basis")},
         "industries": list(row.get("industries") or []),
         "categories": {
             "source": _pair(manifest.get("source_category"), manifest.get("source_subcategory")),
@@ -245,7 +249,7 @@ def latest_json(profile: dict, day: str, views: list[dict], health: list[dict], 
             "summary_display": view["summary_display"], "published": view["published"],
             "first_seen": view["first_seen"], "topics": view["topics"], "authority": view["authority"],
             "tier": view["tier"], "industries": view["industries"], "categories": view["categories"],
-            "tags": view["tags"], guard.FIELD_NAME: view["scan"],
+            "tags": view["tags"], "labels": view["labels"], guard.FIELD_NAME: view["scan"],
         })
     return {"_comment": JSON_COMMENT, "version": FORMAT_VERSION, "profile": profile["name"], "date": day,
             "generated": generated, "items": out_items, "health": health, "coverage": coverage}
@@ -264,7 +268,7 @@ def coverage_of(views: list[dict], health: list[dict]) -> dict:
         "held_by_guard": sum(1 for v in views if v["state"] in ("blocked", "held")),
         # How many items each tag reader filled, so a reader that stops matching shows as a drop.
         "tagged": {name: sum(1 for v in views if v["state"] not in ("blocked", "held") and v["tags"][name])
-                   for name in ("cves", "severity", "exploited", "vendors", "deadline", "standards", "editions")},
+                   for name in ("cves", "severity", "exploited", "vendors", "deadline", "standards", "editions", "cfr")},
         "content_category_from_item_text": sum(1 for v in views if v["state"] not in ("blocked", "held")
                                                and v["categories"]["content_basis"]["category"] == "item"),
     }
@@ -280,8 +284,12 @@ def classification_of(views: list[dict]) -> dict:
     by_source: dict[str, dict[str, int]] = {}
     basis: dict[str, dict[str, int]] = {"category": {}, "subcategory": {}}
     industries: dict[str, int] = {}
+    cfr: dict[str, int] = {}
     moved = unlabelled = differs = 0
     for view in shown:
+        # Each CFR part an item cites or changes counts once for it, whatever sections it names.
+        for part in sorted({ref.split(".", 1)[0] for ref in view["tags"].get("cfr") or []}) or ["none"]:
+            cfr[part] = cfr.get(part, 0) + 1
         for iid in view.get("industries") or ["none"]:   # an item with two industries counts under each
             industries[iid] = industries.get(iid, 0) + 1
         cats = view["categories"]
@@ -302,7 +310,7 @@ def classification_of(views: list[dict]) -> dict:
     return {"items": len(shown), "content": dict(sorted(content.items())),
             "by_source": {k: dict(sorted(v.items())) for k, v in sorted(by_source.items())},
             "basis": {k: dict(sorted(v.items())) for k, v in basis.items()},
-            "industries": dict(sorted(industries.items())),
+            "industries": dict(sorted(industries.items())), "cfr": dict(sorted(cfr.items())),
             "moved_out_of_source_category": moved, "without_content_category": unlabelled,
             "rules_now_differ": differs}
 

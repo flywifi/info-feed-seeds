@@ -150,5 +150,84 @@ class ArtifactTests(unittest.TestCase):
                          "the same content gives the same key, so the store adds nothing")
 
 
+class LabelTests(unittest.TestCase):
+    FIELDS = {"title": "title", "link": "html_url", "deadline": "comments_close_on", "effective": "effective_on",
+              "cfr_titles": "cfr_references[].title", "cfr_parts": "cfr_references[].part",
+              "agencies": "agencies[].slug", "change_types": "type"}
+
+    def one(self, **doc):
+        body = json.dumps({"results": [dict({"title": "T", "html_url": "https://example.gov/d"}, **doc)]}).encode()
+        parsed = files.parse_json_api(body, url="https://example.gov/api", params={"items_path": "results", "fields": self.FIELDS})
+        return parsed["items"][0].extra
+
+    def test_a_json_api_gives_its_labels(self):
+        got = self.one(comments_close_on="2026-12-28", effective_on="2027-01-04", type="Proposed Rule",
+                       cfr_references=[{"title": 32, "part": "170"}, {"title": 48, "part": "204"}, {"title": 32, "part": "170"}],
+                       agencies=[{"slug": "defense-department"}, {"slug": "Defense Acquisition Regulations System"}])
+        self.assertEqual(got, {"deadline": "2026-12-28", "effective": "2027-01-04", "cfr": ["32/170", "48/204"],
+                               "agencies": ["defense-department", "defense-acquisition-regulations-system"],
+                               "change_types": ["proposed-rule"]})
+
+    def test_only_well_formed_label_values_are_kept(self):
+        got = self.one(comments_close_on="2026-13-45", effective_on="soon", type=7,
+                       cfr_references=[{"title": 99, "part": "1"}, {"title": 14, "part": "x y"}, {"part": "39"}, "junk"],
+                       agencies=[{"slug": None}, {"slug": "  "}, 5])
+        self.assertEqual(got, {})
+        self.assertEqual(self.one(cfr_references={"title": 14, "part": "39"}, agencies="Federal Aviation Administration"), {},
+                         "a path that reaches no list of entries gives no label")
+        scalar = dict(self.FIELDS, cfr_titles="t", cfr_parts="p", agencies="agency")
+        body = json.dumps({"results": [{"title": "T", "t": 14, "p": 39, "agency": "FAA"}]}).encode()
+        item = files.parse_json_api(body, url="https://example.gov/api", params={"items_path": "results", "fields": scalar})["items"][0]
+        self.assertEqual(item.extra, {"cfr": ["14/39"], "agencies": ["faa"]}, "two scalars make one reference")
+
+    def test_without_label_paths_an_item_carries_none(self):
+        body = json.dumps({"results": [{"title": "T", "comments_close_on": "2026-12-28"}]}).encode()
+        item = files.parse_json_api(body, url="https://example.gov/api", params={"items_path": "results", "fields": {"title": "title"}})["items"][0]
+        self.assertEqual(item.extra, {})
+
+
+class EcfrTests(unittest.TestCase):
+    ROWS = [
+        {"starts_on": "2026-11-10", "type": "Section", "change_types": ["effective"],
+         "hierarchy": {"title": "14", "part": "91", "section": "91.401", "appendix": None},
+         "headings": {"title": "Aeronautics and Space", "chapter": "Federal Aviation Administration", "part": "General Operating and Flight Rules",
+                      "section": "Applicability.", "appendix": None}},
+        {"starts_on": "2026-11-09", "type": "Appendix", "change_types": ["effective", "cross_reference"],
+         "hierarchy": {"title": "15", "part": "744", "section": None, "appendix": "Supplement No. 4 to Part 744"},
+         "headings": {"chapter": "Bureau of Industry and Security", "part": "Control Policy", "appendix": "Entity List\n"}},
+        {"starts_on": "not a date", "hierarchy": {"title": "26", "part": "1", "section": "1.401(a)-1"}, "headings": {"section": "Plans."}},
+        {"starts_on": "2026-11-09", "hierarchy": {"title": "99", "part": "1", "section": "1.1"}},
+        {"starts_on": "2026-11-06", "change_types": ["effective"], "hierarchy": {"title": "41", "part": "60-30", "section": "60-30.1"},
+         "headings": {"part": "Rules of Practice for Administrative Proceedings", "section": "Applicability of rules."}},
+        {"starts_on": "2026-11-09", "hierarchy": "junk"}, "junk",
+    ]
+
+    def test_one_item_per_changed_section_or_appendix(self):
+        from feeder.adapters import ecfr
+        parsed = ecfr.parse(json.dumps({"results": self.ROWS, "meta": {}}).encode(), url="https://www.ecfr.gov/api/search/v1/results")
+        self.assertEqual((parsed["kind"], parsed["follow"]), ("ecfr", []))
+        got = [(i.title, i.link, i.published, i.guid, i.summary, i.extra) for i in parsed["items"]]
+        self.assertEqual(got, [
+            ("14 CFR 91.401 Applicability.", "https://www.ecfr.gov/current/title-14/section-91.401", "2026-11-10T00:00:00Z",
+             "ecfr:14:91.401:2026-11-10", "General Operating and Flight Rules; Federal Aviation Administration",
+             {"cfr": ["14/91", "14/91.401"], "change_types": ["effective"]}),
+            ("15 CFR part 744, Supplement No. 4 to Part 744 Entity List", "https://www.ecfr.gov/current/title-15/part-744",
+             "2026-11-09T00:00:00Z", "ecfr:15:Supplement No. 4 to Part 744:2026-11-09", "Control Policy; Bureau of Industry and Security",
+             {"cfr": ["15/744"], "change_types": ["effective", "cross-reference"]}),
+            ("26 CFR 1.401(a)-1 Plans.", "https://www.ecfr.gov/current/title-26/section-1.401(a)-1", None,
+             "ecfr:26:1.401(a)-1:undated", "", {"cfr": ["26/1"]}),
+            ("41 CFR 60-30.1 Applicability of rules.", "https://www.ecfr.gov/current/title-41/section-60-30.1", "2026-11-06T00:00:00Z",
+             "ecfr:41:60-30.1:2026-11-06", "Rules of Practice for Administrative Proceedings",
+             {"cfr": ["41/60-30", "41/60-30.1"], "change_types": ["effective"]}),
+        ], "a row without a real CFR title and part is skipped")
+
+    def test_a_body_that_is_not_a_change_list_is_refused(self):
+        from feeder.adapters import ecfr
+        for body in (b"<html>", b"[]", b'{"results": "x"}', b'{"meta": {}}'):
+            with self.subTest(body=body), self.assertRaises(adapters.AdapterError):
+                ecfr.parse(body)
+        self.assertIs(adapters.ADAPTERS["ecfr"], ecfr.parse)
+
+
 if __name__ == "__main__":
     unittest.main()

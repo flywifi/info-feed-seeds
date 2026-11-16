@@ -110,7 +110,7 @@ class LatestJsonShapeTests(unittest.TestCase):
         self.assertEqual(doc["version"], "1")
         self.assertEqual(set(doc["items"][0]), {
             "content_sha256", "feed_id", "publisher", "title_display", "authors", "link",
-            "summary_display", "published", "first_seen", "topics", "authority", "tier", "industries", "categories", "tags",
+            "summary_display", "published", "first_seen", "topics", "authority", "tier", "industries", "categories", "tags", "labels",
             "offline_pattern_scan"})
         self.assertEqual(doc["items"][0]["authors"], ["Jane Example"], "bylines are kept as the feed gave them")
         self.assertIn("must escape", doc["_comment"])
@@ -181,6 +181,14 @@ class ClassificationTests(unittest.TestCase):
         bare = outputs.item_view(dict(row("Plain note", sha="b" * 64), industries=[]), CAT_SOURCE, PROFILE, set(), REG)
         got = outputs.classification_of([two, bare])
         self.assertEqual((got["industries"], got["items"]), ({"finance": 1, "healthcare": 1, "none": 1}, 2))
+
+    def test_cfr_parts_count_once_per_item_whatever_sections_it_names(self):
+        two = outputs.item_view(dict(row("Rule", sha="c" * 64), cfr=["32/170", "32/170.14", "32/170.15", "48/204"]),
+                                CAT_SOURCE, PROFILE, set(), REG)
+        bare = outputs.item_view(dict(row("Note", sha="d" * 64)), CAT_SOURCE, PROFILE, set(), REG)
+        self.assertEqual(outputs.classification_of([two, bare])["cfr"], {"32/170": 1, "48/204": 1, "none": 1})
+        self.assertEqual(two["tags"]["cfr"], ["32/170", "32/170.14", "32/170.15", "48/204"])
+        self.assertEqual(bare["labels"], {"agencies": [], "change_types": [], "effective": None, "deadline_basis": None})
 
     def test_without_the_registry_nothing_is_reread(self):
         view = outputs.item_view(row("Phishing scam wave"), CAT_SOURCE, PROFILE, set())

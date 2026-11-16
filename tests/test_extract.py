@@ -307,6 +307,56 @@ class StandardsTests(unittest.TestCase):
                              "a revision written straight after a name is within the matcher's edge")
 
 
+class CfrTests(unittest.TestCase):
+    def test_citations_as_sources_write_them(self):
+        for text, want in (
+                ("CMMC rule under 32 CFR 170 takes effect", ["32/170"]),
+                ("Amends 45 CFR Part 164 and 45 CFR part 160", ["45/164", "45/160"]),
+                ("See 45 CFR 164.308(a)(1) for the standard.", ["45/164", "45/164.308"]),
+                ("DFARS clause at 48 CFR 252.204-7012.", ["48/252", "48/252.204-7012"]),
+                ("32 C.F.R. \u00a7 170.14 lists the levels", ["32/170", "32/170.14"]),
+                ("under 16 CFR Sec. 314.4 and 16 CFR Section 314.5", ["16/314", "16/314.4", "16/314.5"]),
+                ("14 CFR Parts 39 and 91", ["14/39"]),
+                ("title 12 CFR 53, again 12 CFR 53", ["12/53"]),
+                ("41 CFR 60-30.1 and 41 CFR part 102-117", ["41/60-30", "41/60-30.1", "41/102-117"]),
+                ("14 CFR parts 91-93 and 40 CFR parts 1500-1508", ["14/91", "40/1500"])):
+            with self.subTest(text=text):
+                self.assertEqual(extract.cfr_refs(text), want)
+
+    def test_text_that_is_not_a_citation(self):
+        for text in ("99 CFR 170", "0 CFR 5", "100 CFR 5", "32 CFR", "32 cfr 170", "CFR 170", "32 CFR 17000", "32 CFR 0170",
+                     "v1.32 CFR 170", "the 2 CFRs", "32 CFR Part", ""):
+            with self.subTest(text=text):
+                self.assertEqual(extract.cfr_refs(text), [])
+
+    def test_a_reference_is_built_only_from_a_real_title_and_part(self):
+        self.assertEqual((extract.cfr_ref(32, "170"), extract.cfr_ref("14", 39), extract.cfr_ref(" 7 ", "2A")),
+                         ("32/170", "14/39", "7/2a"))
+        self.assertEqual((extract.cfr_ref(14, "91", "91.401"), extract.cfr_ref(47, "0"), extract.cfr_ref(47, "0", "0.11")),
+                         ("14/91.401", "47/0", "47/0.11"))
+        self.assertEqual((extract.cfr_ref(41, "60-30"), extract.cfr_ref("41", "60-30", "60-30.1")), ("41/60-30", "41/60-30.1"))
+        for title, part, section in ((51, "1", None), (0, "1", None), ("x", "1", None), (True, "1", None), (None, "1", None),
+                                     (32, "", None), (32, "17 0", None), (32, "0170", None), (32, "00", None), (41, "60-", None), (41, "60-3000", None), (32, None, None), (14, "91", "92.1"),
+                                     (14, "91", "91"), (26, "1", "1.401(a)-1")):
+            with self.subTest(title=title, part=part, section=section):
+                self.assertIsNone(extract.cfr_ref(title, part, section))
+
+    def test_at_most_twenty_references_in_linear_time(self):
+        many = " ".join(f"{1 + n % 50} CFR {n}" for n in range(1, 400))
+        self.assertEqual(len(extract.cfr_refs(many)), extract.CFR_CAP)
+        pairs = "1 CFR 1 " + " ".join(f"{n} CFR {n}.1" for n in range(2, 30))
+        self.assertEqual(extract.cfr_refs(pairs)[-2:], ["10/10.1", "11/11"], "a part and its section do not pass the cap")
+        for text in ("32 CFR 170 " * 9000, "3" * 100_000, "32 CFR " * 14000, "32 CFR 170." * 9000):
+            with self.subTest(text=text[:12]):
+                start = time.perf_counter()
+                extract.cfr_refs(text[:100_000])
+                self.assertLess(time.perf_counter() - start, 0.1)
+
+    def test_tags_carry_the_citations(self):
+        got = extract.tags(items.sanitize("Rule under 32&nbsp;CFR&nbsp;170"), "and 48 CFR 204", NAMES, STD)
+        self.assertEqual(got["cfr"], ["32/170", "48/204"])
+
+
 class DeadlineTests(unittest.TestCase):
     def test_dates_tied_to_a_deadline(self):
         text = ("Comments are due March 31, 2027. Effective date: 1 July 2027. The deadline 2027-01-15 stands. "
@@ -369,10 +419,10 @@ class TagsTests(unittest.TestCase):
         got = extract.tags("FortiOS heap overflow (Critical)", "CVE-2026-24858 is actively exploited. Patches must be "
                            "applied by November 10, 2026.", NAMES)
         self.assertEqual(got, {"cves": ["CVE-2026-24858"], "severity": "critical", "severity_rank": 4, "exploited": True,
-                               "vendors": ["fortinet"], "deadline": "2026-11-10", "standards": [], "editions": []})
+                               "vendors": ["fortinet"], "deadline": "2026-11-10", "standards": [], "editions": [], "cfr": []})
         self.assertEqual(extract.tags("Workshop announced", "", NAMES),
                          {"cves": [], "severity": None, "severity_rank": None, "exploited": False, "vendors": [], "deadline": None,
-                          "standards": [], "editions": []})
+                          "standards": [], "editions": [], "cfr": []})
 
 
 if __name__ == "__main__":
