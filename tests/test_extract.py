@@ -400,6 +400,14 @@ class CfrWatchTests(unittest.TestCase):
         self.assertEqual(extract.cfr_watched(["32/170"], None), [])
         self.assertEqual(extract.cfr_under(["32/170.14", "48/252.204-7012"]), {"32/170.14", "32/170", "48/252.204-7012", "48/252"})
 
+    def test_a_part_given_without_a_section_may_touch_a_section_entry(self):
+        for refs, want in ((["48/252"], ["48/252.204-7012"]), (["48/204", "48/252"], ["48/252.204-7012"]),
+                           (["48/252", "48/252.225-7001"], []), (["48/252", "48/252.204-7012"], []),
+                           (["48/252.204-7012"], []), (["45/164"], []), (["48/25"], []), ([], []), (None, [])):
+            with self.subTest(refs=refs):
+                self.assertEqual(extract.cfr_may_touch(refs, self.WATCH), want)
+        self.assertEqual(extract.cfr_may_touch(["48/252"], None), [])
+
     def test_standards_come_from_every_entry_an_item_falls_under(self):
         self.assertEqual(extract.watch_standards(["45/164.308", "32/170"], self.WATCH), ["cmmc", "hipaa"])
         self.assertEqual(extract.watch_standards(["48/252.204-7012"], self.WATCH), [])
