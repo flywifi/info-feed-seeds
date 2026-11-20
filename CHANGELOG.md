@@ -84,6 +84,11 @@ All notable changes to this repository are recorded here. The format follows
 - Sources `federal-register-rules` (Federal Register rules and proposed rules, with their CFR parts,
   agencies, comment deadlines and effective dates) and `ecfr-changes` (eCFR changes by section).
   Both are watched-only: only an item under an entry of `schema/cfr-watch.json` is selected.
+- A watched-only source also gives an item that names only the part of a section entry and no
+  section of that part (the Federal Register gives parts, not sections); no standard is tied on a
+  part alone. Items of a watched-only source are selected before the rest of the day, so the daily
+  cap cannot keep them out. `federal-register-rules` follows the next page when the first has new
+  documents, to catch up after missed polls.
 - `schema/cfr-watch.json` lists the CFR parts and sections the feed watches. A source marked
   `watched_only` gives only items under an entry; a profile can route by `cfr_parts` and
   `exclude_cfr_parts`; an item under an entry is tagged with the standards the entry names. A new
