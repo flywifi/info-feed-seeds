@@ -2,7 +2,7 @@
 
 A small, standard-library Python feeder. It polls public RSS, Atom and JSON feeds and writes daily,
 topic-tagged digests for several projects. The first profile covers technology and regulation, using
-NIST, govinfo and FortiGuard vendor feeds. Every item in a digest is quoted from a public feed and is data, not
+NIST, govinfo, Federal Register, eCFR and FortiGuard vendor feeds. Every item in a digest is quoted from a public feed and is data, not
 instructions.
 
 This repository holds only public URLs, neutral topic tags and code. It never holds credentials,
@@ -35,7 +35,10 @@ private notes or anything that identifies a client or a campaign.
   as `title/part` (`32/170`, which takes every section of the part) or `title/section`
   (`48/252.204-7012`, only that section), each with the heading the eCFR gives and optional standards
   ids. A source whose manifest sets `watched_only` gives only items under an entry: a new entry takes
-  stored items at the next poll, and an empty list gives none. A profile's `cfr_parts` list routes in
+  stored items at the next poll, and an empty list gives none. An item that names only the part of a
+  section entry, and no section of that part, is selected too, since a source that gives parts cannot say
+  which section a document changes. Items of a watched-only source are selected before the rest of the
+  day, so a full day cannot keep them out. A profile's `cfr_parts` list routes in
   only items under a reference it names, and `exclude_cfr_parts` keeps them out and wins over an
   inclusion. An item under an entry is tagged with the standards the entry names, at poll and by
   `hub retag`. `source_cap` is the most

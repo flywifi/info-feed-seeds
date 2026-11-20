@@ -217,6 +217,16 @@ def cfr_watched(refs, watch) -> list[str]:
     return [ref for ref in watch or {} if ref in have]
 
 
+def cfr_may_touch(refs, watch) -> list[str]:
+    """The section entries of the watch list an item may touch without naming them: it names the
+    entry's part and no section of that part. A source that gives parts only (the Federal Register)
+    cannot say which section a document changes, so such a document is not left out; one that names
+    another section of the part is."""
+    have = {r for r in refs or [] if isinstance(r, str)}
+    sectioned = {r.split(".", 1)[0] for r in have if "." in r}
+    return [ref for ref in watch or {} if "." in ref and ref.split(".", 1)[0] in have - sectioned]
+
+
 def watch_standards(refs, watch) -> list[str]:
     """The standard ids the watch list ties to the entries an item's references fall under, each once."""
     out: dict[str, None] = {}
@@ -468,6 +478,6 @@ def tags(title: str, summary: str, names: dict[str, list[str]],
 
 
 __all__ = ["CFR_CAP", "CFR_READ_CAP", "EDITION_AFTER", "EDITION_CAP", "SEVERITY_RANK", "cfr_ref", "cfr_refs", "cfr_under",
-           "cfr_watch_problems", "cfr_watched", "load_cfr_watch", "watch_ref_ok", "watch_standards", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
+           "cfr_may_touch", "cfr_watch_problems", "cfr_watched", "load_cfr_watch", "watch_ref_ok", "watch_standards", "cve_ids", "deadlines", "editions", "exploited", "load_standards",
            "load_vendors", "severity", "severity_from_score", "standard_problems", "standards", "tags",
            "vendor_problems", "vendors"]

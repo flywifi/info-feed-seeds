@@ -256,12 +256,14 @@ def industry_routed(profile: dict, source: Source, item: dict) -> bool:
 
 def cfr_routed(profile: dict, source: Source, item: dict, watch: dict | None = None) -> bool:
     """Whether an item goes to this profile by the CFR references stored with it. A source marked
-    `watched_only` gives only items under a watch-list entry, so without a watch list it gives none. A
+    `watched_only` gives only items under a watch-list entry, or naming the part of a section entry and no
+    section of it, so without a watch list it gives none. A
     reference in `exclude_cfr_parts` keeps an item out; when `cfr_parts` is set, only an item under one of
     them goes in. A part takes its sections; a section takes only itself. Without the lists, and for a
     source that is not watched-only, every item goes in."""
     have = extract.cfr_under(item.get("cfr"))
-    if source.manifest.get("watched_only") is True and not have & set(watch or {}):
+    if (source.manifest.get("watched_only") is True and not have & set(watch or {})
+            and not extract.cfr_may_touch(item.get("cfr"), watch)):
         return False
     if have & set(profile.get("exclude_cfr_parts") or []):
         return False

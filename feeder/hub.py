@@ -297,7 +297,10 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str, held: d
     for key, members in groups.items():
         members.sort(key=lambda m: (m[0]["feed_id"], m[0]["content_sha256"]))
         lead = members[0][0]
-        ordered.append(((outputs._neg(lead["published"] or lead["first_seen"]), lead["feed_id"],
+        # A watched-only source gives the few items the watch list is for, dated by day and not by the
+        # minute, so they go first: a day the other sources fill cannot keep them out.
+        rest = not any(chosen[m[0]["feed_id"]].manifest.get("watched_only") is True for m in members)
+        ordered.append(((rest, outputs._neg(lead["published"] or lead["first_seen"]), lead["feed_id"],
                          lead["content_sha256"]), key, members))
     ordered.sort(key=lambda entry: entry[0])
 

@@ -1,0 +1,56 @@
+{
+  "added": "2026-11-20",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-11-20",
+    "kind": "manual",
+    "ref": "https://www.federalregister.gov/api/v1/documents.json"
+  },
+  "enabled": true,
+  "homepage": "https://www.federalregister.gov/",
+  "id": "federal-register-rules",
+  "industries": [
+    "federal"
+  ],
+  "label": "Federal Register rules and proposed rules",
+  "publisher": "Office of the Federal Register",
+  "routes": [
+    {
+      "adapter": "json-api",
+      "kind": "json-api",
+      "params": {
+        "fields": {
+          "agencies": "agencies[].slug",
+          "cfr_parts": "cfr_references[].part",
+          "cfr_titles": "cfr_references[].title",
+          "change_types": "type",
+          "deadline": "comments_close_on",
+          "effective": "effective_on",
+          "guid": "document_number",
+          "link": "html_url",
+          "published": "publication_date",
+          "summary": "abstract",
+          "title": "title"
+        },
+        "items_path": "results",
+        "max_pages": 2,
+        "next_path": "next_page_url"
+      },
+      "url": "https://www.federalregister.gov/api/v1/documents.json?conditions[type][]=RULE&conditions[type][]=PRORULE&order=newest&per_page=100&fields[]=title&fields[]=html_url&fields[]=document_number&fields[]=abstract&fields[]=publication_date&fields[]=type&fields[]=comments_close_on&fields[]=effective_on&fields[]=cfr_references&fields[]=agencies"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "source_category": "regulatory",
+  "source_subcategory": "federal-rules",
+  "tier": "canonical",
+  "topics": [
+    "regulation/federal-rulemaking",
+    "government/federal"
+  ],
+  "verified": "2026-11-20",
+  "watched_only": true
+}

@@ -1656,7 +1656,7 @@ class CfrWatchTests(HubTestCase):
                                  "params": {"items_path": "results", "fields": LabelTests.FIELDS}}],
                         **({"watched_only": True} if watched_only else {}))
         self.script.update({self.API: json.dumps({"results": self.docs()}).encode(),
-                            "https://example.gov/alpha.xml": rss_with("Plain advisory")})
+                            "https://example.gov/alpha.xml": rss_with(*getattr(self, "alpha_titles", ("Plain advisory",)))})
         for key in ("cfr_parts", "exclude_cfr_parts"):
             self.profile.pop(key, None)
         self.profile.update(lists)
@@ -1762,6 +1762,30 @@ class CfrWatchTests(HubTestCase):
         self.docs = lambda: [dict(base, title=name, abstract=text, html_url=f"https://example.gov/d/{name}", document_number=f"w-{name}")
                              for name, text in texts.items()]
         self.assertEqual(self.watch_poll(), ["List", "Plain advisory", "Range", "Second"])
+
+    def test_a_document_that_names_only_the_part_of_a_watched_section_is_selected(self):
+        base = dict(LabelTests.DOC, comments_close_on=None, effective_on=None, abstract="Amends the clauses.")
+        rows = (("Part only", [{"title": 48, "part": "252"}], "Amends the clauses."),
+                ("Other part", [{"title": 48, "part": "253"}], "Amends the forms."),
+                ("Other section", [{"title": 48, "part": "252"}], "Amends 48 CFR 252.225-7001."),
+                ("Named section", [{"title": 48, "part": "252"}], "Amends 48 CFR 252.204-7019."))
+        self.docs = lambda: [dict(base, title=title, abstract=text, html_url=f"https://example.gov/d/m{n}", document_number=f"m-{n}",
+                                  cfr_references=refs) for n, (title, refs, text) in enumerate(rows)]
+        self.assertEqual(self.watch_poll(), ["Named section", "Part only", "Plain advisory"])
+        self.assertEqual((LabelTests.stored(self, "m-0")["standards"], LabelTests.stored(self, "m-3")["standards"]),
+                         ("", "nist-sp-800-171"), "a part alone ties no standard; a named section ties its own")
+        self.assertEqual(self.watch_poll(watched_only=False),
+                         ["Named section", "Other part", "Other section", "Part only", "Plain advisory"])
+
+    def test_a_watched_item_is_not_kept_out_by_a_full_day(self):
+        self.alpha_titles = ("Newer one", "Newer two", "Newer three")
+        self.docs = lambda: [dict(LabelTests.DOC, title="Program rule", abstract="Amends the rule.", comments_close_on=None,
+                                  effective_on=None, html_url="https://example.gov/d/p1", document_number="p-1",
+                                  cfr_references=[{"title": 32, "part": "170"}])]
+        self.assertEqual(self.watch_poll(daily_cap=2), ["Newer three", "Program rule"],
+                         "the watched item is dated by day and would sort last; it goes first")
+        self.assertEqual(self.watch_poll(watched_only=False, daily_cap=2), ["Newer three", "Newer two"],
+                         "a source that is not watched-only keeps its place by date")
 
     def test_lint_checks_the_watch_list_and_the_profile_references(self):
         self.assertEqual(self.run_hub("lint"), 0, self.output)
@@ -2177,12 +2201,13 @@ class RealProfileTests(unittest.TestCase):
             self.assertEqual(code, 0, buf.getvalue())
             report = jsonio.load_json(Path(td) / "out" / "technology-regulation" / "report.json")
             md = (Path(td) / "out" / "technology-regulation" / f"{DAY}.md").read_text(encoding="utf-8")
-        self.assertEqual(report["coverage"]["sources_selected"], 21)
+        self.assertEqual(report["coverage"]["sources_selected"], 22)
         for sid in ("fortiguard-antivirus", "fortiguard-ip-reputation", "fortiguard-dast"):
             self.assertNotIn(f"- {sid}:", md)
         for sid in ("fortiguard-psirt", "fortinet-firmware", "fortiguard-ips", "govinfo-fr", "govinfo-fr-bulkdata", "nist-news",
-                    "fedramp-changelog", "pci-ssc-blog"):
+                    "fedramp-changelog", "pci-ssc-blog", "federal-register-rules", "ecfr-changes"):
             self.assertIn(f"- {sid}:", md)
+        self.assertNotIn("- govinfo-cfr:", md, "a disabled source is not polled")
         self.assertNotIn("skipped, disabled", md)
 
 

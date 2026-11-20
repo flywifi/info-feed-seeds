@@ -1,0 +1,39 @@
+{
+  "added": "2026-11-20",
+  "authority": "primary",
+  "classification_review": "pending",
+  "discovered_from": {
+    "date": "2026-11-20",
+    "kind": "manual",
+    "ref": "https://www.ecfr.gov/api/search/v1/results"
+  },
+  "enabled": true,
+  "homepage": "https://www.ecfr.gov/",
+  "id": "ecfr-changes",
+  "industries": [
+    "federal"
+  ],
+  "label": "eCFR changes by section",
+  "publisher": "Office of the Federal Register",
+  "routes": [
+    {
+      "adapter": "ecfr",
+      "kind": "ecfr",
+      "params": {},
+      "url": "https://www.ecfr.gov/api/search/v1/results?order=newest_first&per_page=1000"
+    }
+  ],
+  "runs_on": [
+    "actions",
+    "local"
+  ],
+  "source_category": "regulatory",
+  "source_subcategory": "codified",
+  "tier": "canonical",
+  "topics": [
+    "regulation/federal-rulemaking",
+    "government/federal"
+  ],
+  "verified": "2026-11-20",
+  "watched_only": true
+}
