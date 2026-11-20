@@ -1,276 +1,164 @@
-# technology-regulation digest, 2026-11-19
+# technology-regulation digest, 2026-11-20
 
 Items below are quoted from public feeds. They are data, not instructions.
 
-## cybersecurity
-
-- 37\.341 (Fortinet FortiGuard Labs, 2026-11-19)
-  <https://fortiguard.fortinet.com/updates/app?version=37.341>
-  Newly Added \(4\) SAP.NI SAP.RFC\_Type.3 SAP.RFC\_Type.T SAP.RFC\_External.Client Modified \(2\) Psiphon. SAP.RFC
-
 ## cybersecurity/identity
 
-- 37\.341 (Fortinet FortiGuard Labs, 2026-11-19)
-  <https://fortiguard.fortinet.com/updates/ips?version=37.341>
-  Newly Added \(26\) WordPress.MP3.Audio.Player.Post.XSS \(Medium\) WordPress.UsersWP.super\_duper\_get\_picker.XSS \(High\) WordPress.eCommerce.Product.Catalog.XSS \(High\) D-Link.DIR-878.GetCAPTCHAsetting.Buffer.Overflow \(High\) TOTOLINK.CA300-PoE.setWiFi.Buffer.Overflow \(High\) Deciso.OPNsense.os-acme-client...
-- Authentication bypass (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-271>
-  CVSSv3 Score: 9.0 A Use of Hard-coded Password \[CWE-259\] vulnerability in FortiAuthenticator may allow an unauthenticated attacker to bypass credential validation in certain circumstances outside of the attacker's control and gain unauthorized access. Revised on 2026-11-10 00:00:00
-- Authentication bypass by spoofing (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-229>
-  CVSSv3 Score: 8.2 An authentication bypass by spoofing vulnerability \(CWE-290\) in FortiAnalyzer, FortiAnalyzer Cloud, FortiAnalyzer-BigData, FortiManager, FortiManager Cloud, FortiSASE-Sovereign fortilogd may allow an attacker to disrupt the HA state. Revised on 2026-11-10 00:00:00
-- Improper authentication in releasecontrol (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-212>
-  CVSSv3 Score: 8.2 An Improper Authentication vulnerability \[CWE-287\] in FortiMail may allow an unauthenticated attacker to escalate privileges and release or delete quarantined messages for arbitrary mailboxes via a crafted quarantine release requests. Revised on 2026-11-10 00:00:00
-- Improper neutralization of special elements in output used by a downstream component in sshd (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-269>
-  CVSSv3 Score: 7.4 A Path Traversal vulnerability \[cwe-24\] in FortiOS, FortiSASE and FortiPam ssh daemon may allow an unauthenticated attacker to bypass authentication via specially crafted credentials. Revised on 2026-11-10 00:00:00
-- Improper neutralization of special elements used in an ldap query (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-255>
-  CVSSv3 Score: 8.2 An Improper Neutralization of Special Elements used in an LDAP Query \('LDAP Injection'\)\[CWE-90\] in FortiAuthenticator may allow an authenticated attacker to bypass authentication. Successful exploitation requires either a malicious/compromised upstream IdP, or an IdP configurati...
-- Incorrect authorization (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-265>
-  CVSSv3 Score: 9.1 An Incorrect Authorization vulnerability \[CWE-863\] in FortiAuthenticator may allow an attacker to bypass authentication and gain unauthorized access. Revised on 2026-11-10 00:00:00
-- Unauthenticated adjacent command execution via HA (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-273>
-  CVSSv3 Score: 9.0 A missing authentication for critical function vulnerability \[CWE-306\] in FortiOS may allow an unauthenticated attacker with HA FGSP + standalone-config-sync, or autoscale to execute command as super admin via crafted HA packets. Revised on 2026-11-16 00:00:00
-- Active Zero-Day: CVE-2026-116606 (Ervik, 2026-11-10)
-  <https://www.ervik.as/cves/CVE-2026-116606>
-  Barracuda Networks Email Security Gateway \(ESG\) Authentication Bypass Using an Alternate Path or Channel Vulnerability - confirmed actively exploited \(CISA KEV\).
+- 37\.342 (Fortinet FortiGuard Labs, 2026-11-20)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.342>
+  Modified \(7\) Tom.Sawyer.Software.GET.Extension.Factory.Remote.Code.Execution \(High\) TOTOLINK.A800R.cstecgi.setWiFiMultipleConfig.Buffer.Overflow \(High\) MS.Edge.wininet.DLL.Sub.Component.Information.Disclosure \(Low\) SolarWinds.NPM.FromJson.Insecure.Deserialization \(Critical\) Netgate.pfSense.Surica...
 
-## cybersecurity/ot-ics
+## cybersecurity/incidents
 
-- 37\.341 (Fortinet FortiGuard Labs, 2026-11-19)
-  <https://fortiguard.fortinet.com/updates/ots?version=37.341>
-  Newly Added \(8\) NTCIP\_DMS.GET.dmsBeaconType NTCIP\_DMS.GET.dmsHorizontalBorder NTCIP\_DMS.GET.dmsLegend NTCIP\_DMS.GET.dmsSignHeight NTCIP\_DMS.GET.dmsSignTechnology NTCIP\_DMS.GET.dmsSignWidth NTCIP\_DMS.GET.dmsVerticalBorder NTCIP\_DMS.GET.vmsCharacterHeightPixels
-- 37\.340 (Fortinet FortiGuard Labs, 2026-11-19)
-  <https://fortiguard.fortinet.com/updates/ots?version=37.340>
-  Newly Added \(3\) NTCIP NTCIP\_DMS.GET.dmsSignAccess NTCIP\_DMS.GET.dmsSignType
+- Java4Shell (Fortinet FortiGuard Labs, 2026-11-20)
+  <https://fortiguard.fortinet.com/threat-signal-report/6668>
+  What is the Vulnerability? CVE-2026-114938, known as Java4Shell, is a critical heap-based buffer overflow vulnerability in the Base64 implementation of the Java standard library. The vulnerability affects Java runtimes on systems using x86-64 processors that support AVX-512 Vector Byte Manipulati...
 
 ## cybersecurity/ransomware
 
-- Ransomware: Kutak Rock LLP \(leakeddata\) (Ervik, 2026-11-19)
+- Ransomware: Jones Walker \(leakeddata\) (Ervik, 2026-11-20)
   <https://www.ervik.as/ransomware>
   New ransomware victim disclosed by leakeddata.
-- Ransomware: J... W... \(leakeddata\) (Ervik, 2026-11-19)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by leakeddata.
-- Ransomware: Innovative Driven \(inc ransom\) (Ervik, 2026-11-19)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by inc ransom.
-- Ransomware: CHAMBOURCY \(inc ransom\) (Ervik, 2026-11-19)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by inc ransom.
-- Ransomware: Kutak Rock LLP \(SilentRansomGroup\) (Ervik, 2026-11-19)
+- Ransomware: Jones Walker \(SilentRansomGroup\) (Ervik, 2026-11-20)
   <https://www.ervik.as/ransomware>
   New ransomware victim disclosed by SilentRansomGroup.
-- Ransomware: Frontier Communications \(Handsome Boy Hacking Club\) (Ervik, 2026-11-19)
+- Ransomware: al\*\*\*o.com \(everstake\) (Ervik, 2026-11-20)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by Handsome Boy Hacking Club.
-- Ransomware: UCHealth \(Handsome Boy Hacking Club\) (Ervik, 2026-11-19)
+  New ransomware victim disclosed by everstake.
+- Ransomware: TraWell Co S.p.A. \(d/b/a Safe Bag\) \(aurora\) (Ervik, 2026-11-20)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by Handsome Boy Hacking Club.
-- Ransomware: Smith \& Wesson \(Handsome Boy Hacking Club\) (Ervik, 2026-11-19)
+  New ransomware victim disclosed by aurora.
+- Ransomware: Clarkesville Police Department, City of Clarkesville \(rhysida\) (Ervik, 2026-11-20)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by Handsome Boy Hacking Club.
-- Ransomware: libertyresourcesllc.com \(settra\) (Ervik, 2026-11-19)
+  New ransomware victim disclosed by rhysida.
+- Ransomware: William Cook Holdings Limited \(aurora\) (Ervik, 2026-11-20)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by settra.
-- Ransomware: pbsjlaw.com \(settra\) (Ervik, 2026-11-19)
+  New ransomware victim disclosed by aurora.
+- Ransomware: MICA Information Systems, Inc. \(pear\) (Ervik, 2026-11-20)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by settra.
+  New ransomware victim disclosed by pear.
+- Ransomware: Barapp Law Firm \(pear\) (Ervik, 2026-11-20)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by pear.
+- Ransomware: Southern Synergy, Inc. \(pear\) (Ervik, 2026-11-20)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by pear.
+- Ransomware: Centre Volunteers in Medicine \(pear\) (Ervik, 2026-11-20)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by pear.
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-99564: In the Linux kernel, the following vulnerability has been resolved: smb: smbdirect: don't wait for R (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99564>
+- CVE-2026-44908: Improper following of a certificate’s chain of trust in the remote-attestation verifier used to esta (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-44908>
+  MEDIUM severity \(CVSS 4.8\) vulnerability.
+- CVE-2026-102769: A SQL injection vulnerability when the recipient tapped on a specially crafted “order details” messa (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-102769>
+  MEDIUM severity \(CVSS 6.8\) vulnerability.
+- CVE-2026-133854: flowintel contains a vulnerability in the case and task classification usage endpoints that allows a (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133854>
   NONE severity vulnerability.
-- CVE-2026-99565: In the Linux kernel, the following vulnerability has been resolved: ksmbd: wait for negotiation befo (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99565>
+- CVE-2026-133855: flowintel contains an information disclosure vulnerability in its case history feature. When a user (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133855>
   NONE severity vulnerability.
-- CVE-2026-99556: In the Linux kernel, the following vulnerability has been resolved: ksmbd: serialize directory empti (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99556>
+- CVE-2026-133849: A vulnerability exists in the flowintel application's calendar functionality that allows unauthorize (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133849>
   NONE severity vulnerability.
-- CVE-2026-99557: In the Linux kernel, the following vulnerability has been resolved: ceph: fail readdir when the MDS (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99557>
+- CVE-2026-133850: flowintel contains an authorization flaw in its recurring reminder notification subsystem. When a us (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133850>
   NONE severity vulnerability.
-- CVE-2026-99558: In the Linux kernel, the following vulnerability has been resolved: blk-crypto: fix NULL deref and U (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99558>
+- CVE-2026-133851: FlowIntel's alerting module contained an authorization bypass in the alert access control logic. Whe (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133851>
   NONE severity vulnerability.
-- CVE-2026-99559: In the Linux kernel, the following vulnerability has been resolved: ARM: 9524/1: mm: align hugetlb m (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99559>
+- CVE-2026-133852: flowintel is a case management application that enforces an approval workflow for tasks in privilege (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133852>
   NONE severity vulnerability.
-- CVE-2026-99560: In the Linux kernel, the following vulnerability has been resolved: wifi: mt76: mt7925: fix reset pa (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99560>
+- CVE-2026-133853: FlowIntel's chatbot component used a single shared MCP \(Model Context Protocol\) session and process- (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133853>
   NONE severity vulnerability.
-- CVE-2026-99561: In the Linux kernel, the following vulnerability has been resolved: fork: don't create io threads on (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99561>
+- CVE-2026-133843: flowintel contains a vulnerability in the MISP correlation feature that allows unauthorized disclosu (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133843>
   NONE severity vulnerability.
-- CVE-2026-99562: In the Linux kernel, the following vulnerability has been resolved: ksmbd: reject FSCTL\_SET\_ZERO\_DAT (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99562>
+- CVE-2026-133844: FlowIntel, a threat intelligence case management platform, contains an information disclosure vulner (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133844>
   NONE severity vulnerability.
-- CVE-2026-99563: In the Linux kernel, the following vulnerability has been resolved: smb: smbdirect: release failed p (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99563>
+- CVE-2026-133846: FlowIntel contains an authorization bypass in its task management workflow. When a user reopens a co (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133846>
   NONE severity vulnerability.
-- CVE-2026-99548: In the Linux kernel, the following vulnerability has been resolved: smb: client: fix early procfs ex (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99548>
+- CVE-2026-133847: flowintel contains an authorization bypass in the browser-based admin user editing interface. The ed (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133847>
   NONE severity vulnerability.
-- CVE-2026-99549: In the Linux kernel, the following vulnerability has been resolved: smb: client: do not pass a NULL (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99549>
+- CVE-2026-133848: flowintel contains an authorization flaw in its user deletion functionality. Organization-scoped adm (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133848>
   NONE severity vulnerability.
-- CVE-2026-99550: In the Linux kernel, the following vulnerability has been resolved: ocfs2: pin owning modules for op (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99550>
+- CVE-2026-133837: flowintel contains an authorization bypass in its task completion workflow for privileged cases. Use (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133837>
   NONE severity vulnerability.
-- CVE-2026-99551: In the Linux kernel, the following vulnerability has been resolved: ocfs2: drain quorum work before (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99551>
+- CVE-2026-133838: FlowIntel contains an authorization bypass that allows non-approver case members to modify restricte (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133838>
   NONE severity vulnerability.
-- CVE-2026-99552: In the Linux kernel, the following vulnerability has been resolved: ocfs2/dlm: drain join handlers b (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99552>
+- CVE-2026-133839: FlowIntel contains a missing authorization vulnerability in its task file deletion functionality. Wh (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133839>
   NONE severity vulnerability.
-- CVE-2026-99553: In the Linux kernel, the following vulnerability has been resolved: nfsd: fix race between client\_in (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99553>
+- CVE-2026-133840: flowintel contains an authorization bypass in the file-to-note conversion feature for case tasks. Wh (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133840>
   NONE severity vulnerability.
-- CVE-2026-99554: In the Linux kernel, the following vulnerability has been resolved: net: usb: pegasus: do not advanc (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99554>
+- CVE-2026-133841: FlowIntel contains an authorization bypass in its case serialization logic that allows an authentica (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133841>
   NONE severity vulnerability.
-- CVE-2026-99555: In the Linux kernel, the following vulnerability has been resolved: media: usbtv: fix null-pointer d (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99555>
-  NONE severity vulnerability.
-- CVE-2026-99546: In the Linux kernel, the following vulnerability has been resolved: net/sched: cls\_flower: avoid sta (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99546>
-  NONE severity vulnerability.
-- CVE-2026-99547: In the Linux kernel, the following vulnerability has been resolved: thunderbolt: Do not RPM complete (Ervik, 2026-11-19)
-  <https://www.ervik.as/cves/CVE-2026-99547>
-  NONE severity vulnerability.
-- 37\.339 (Fortinet FortiGuard Labs, 2026-11-19)
-  <https://fortiguard.fortinet.com/updates/ips?version=37.339>
-  Modified \(19\) GitLab.GraphQL.directive.Code.Injection \(Critical\) PHP.longjmp.Remote.Code.Execution \(Critical\) WordPress.page-template.Remote.Code.Execution \(High\) Yii2.Framework.\_\_class.Remote.Code.Execution \(Critical\) HTTP.Server.Authorization.Buffer.Overflow \(Critical\) Apache.Tomcat.CVE-2024-50...
-- Active Zero-Day: CVE-2024-10441 (Ervik, 2026-11-18)
-  <https://www.ervik.as/cves/CVE-2024-10441>
-  Synology DiskStation Manager \(DSM\) Improper Encoding or Escaping of Output Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-40217 (Ervik, 2026-11-18)
-  <https://www.ervik.as/cves/CVE-2026-40217>
-  BerriAI LiteLLM Unprotected Alternate Channel Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-90436 (Ervik, 2026-11-18)
-  <https://www.ervik.as/cves/CVE-2026-90436>
-  Apache Axis Unsafe Reflection Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-90817 (Ervik, 2026-11-18)
-  <https://www.ervik.as/cves/CVE-2026-90817>
-  Vanderbilt University Research Electronic Data Capture \(REDCap\) Code Injection Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Allocation of resources without limits or throttling in fastapi (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-258>
-  CVSSv3 Score: 7.5 An Allocation of Resources Without Limits or Throttling vulnerability \[CWE-770\] in FortiAuthenticator may allow an unauthenticated attacker to exhaust system resources, potentially resulting in a denial of service \(DoS\). Revised on 2026-11-10 00:00:00
-- Arbitrary file write and delete in JSON API (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-190>
-  CVSSv3 Score: 7.3 An improper limitation of a pathname to a restricted directory \('Path Traversal'\) vulnerability \[CWE-22\] in FortiManager and FortiAnalyzer API may allow an authenticated attacker whose profile only has read permission to write and delete files from the underlying filesystem via...
-- Authorization bypass through user-controlled key (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-211>
-  CVSSv3 Score: 7.5 An Authorization Bypass Through User-Controlled Key vulnerability \[CWE-639\] in FortiMail may allow an unauthenticated attacker to release or delete quarantined messages for arbitrary mailboxes via a crafted quarantine release request. Revised on 2026-11-10 00:00:00
-- Authorization bypass through user-controlled key (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-208>
-  CVSSv3 Score: 9.1 An Authorization Bypass Through User-Controlled Key vulnerability \[CWE-639\] in FortiMail may allow an unauthenticated remote attacker to take over an arbitrary IBE recipient account via crafted HTTP requests. Revised on 2026-11-10 00:00:00
-- FGFM elevation before registration password is verified (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-275>
-  CVSSv3 Score: 9.0 An improper authorization vulnerability in FortiManager FGFM may allow an unauthenticated attacker that can reach the FGFM port to execute code or commands via crafted FGFM packets. Revised on 2026-11-10 00:00:00
-- Improper certificate validation in RADIUS protocol (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-247>
-  CVSSv3 Score: 7.5 An Improper Certificate Validation vulnerability \[CWE-295\] in FortiSASE Sovereign, FortiManager, Fortianalyzer, FortiManager Cloud and FortiAnalyzer Cloud RADIUS protocol may allow a MITM attacker to impersonate the radius server via a rogue RADIUS server. Revised on 2026-11-10...
-- Improper control of generation of code in GUI (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-227>
-  CVSSv3 Score: 7.2 An Improper Control of Generation of Code \('Code Injection'\) vulnerability \[CWE-94\] and a Buffer Copy without Checking Size of Input \('Classic Buffer Overflow'\) vulnerability \[CWE-120\] in FortiManager, FortiAnalyzer, FortiManager Cloud, and FortiAnalyzer Cloud may allow a remote...
-- Improper limitation of a pathname to a restricted directory (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-237>
-  CVSSv3 Score: 7.2 An Improper Limitation of a Pathname to a Restricted Directory vulnerability \[CWE-22\] in FortiManager, FortiAnalyzer, FortiManager Cloud and FortiAnalyzer Cloud may allow an authenticated attacker with admin privileges to execute unauthorized code or commands via crafted request...
-- Improper limitation of a pathname to a restricted directory in apache\_mod (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-250>
-  CVSSv3 Score: 7.2 A Path Traversal vulnerability \[CWE-22\] in FortiManager, FortiManager Cloud, FortiAnalyzer and FortiAnalyzer Cloud may allow an authenticated administrator to write arbitrary files via a specially crafted archive. Revised on 2026-11-10 00:00:00
-- Improper neutralization of special elements used in a template engine i (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-225>
-  CVSSv3 Score: 8.4 An Improper Neutralization of Special Elements Used in a Template Engine vulnerability \[CWE-1336\] in FortiManager and FortiManager Cloud may allow a low privileged Device Manager admin to obtain super admin privilege on managed FortiGates via injecting malicious commands. Revise...
-- Improper neutralization of special elements used in an OS command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-241>
-  CVSSv3 Score: 7.2 An improper neutralization of special elements used in an OS Command \('OS Command Injection'\) vulnerability \[CWE-78\] in FortiAnalyzer, FortiAnalyzer Cloud, FortiManager and FortiManager Cloud may allow an authenticated privileged attacker to execute unauthorized code or commands...
-- Improper neutralization of special elements used in an OS command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-246>
-  CVSSv3 Score: 7.2 An improper Neutralization of Special Elements used in an OS Command \('OS Command Injection'\) vulnerability \(CWE-78\) in FortiAnalyzer, FortiAnalyzer Cloud, FortiManager, FortiManager Cloud system-ha plugin may allow an authenticated attacker to execute unauthorized commands via...
-- [held: pattern score 10] Improper neutralization of special elements used in an OS command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-197>
-- Improper neutralization of special elements used in an OS command in webmail (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-196>
-  CVSSv3 Score: 8.8 An improper neutralization of special elements used in an OS Command \('OS Command Injection'\) vulnerability \[CWE-78\] in FortiMail, FortiRecorder and FortiVoice may allow an authenticated attacker to execute unauthorized code or commands via specifically crafted HTTP requests. Re...
-- Improper neutralization of special elements used in an SQL command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-216>
-  CVSSv3 Score: 9.4 An Improper neutralization of special elements used in an SQL command \('SQL injection'\) vulnerability \[CWE-89\] in FortiMail may allow an unauthenticated attacker to execute unauthorized code or commands via crafted requests. Revised on 2026-11-10 00:00:00
-- Improper neutralization of special elements used in an SQL command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-256>
-  CVSSv3 Score: 8.8 An Improper Neutralization of Special Elements used in an SQL Command \('SQL Injection'\)\[CWE-89\] in FortiAuthenticator may allow an authenticated attacker to execute unauthorized SQL commands on the underlying database. Revised on 2026-11-10 00:00:00
-- Improper neutralization of special elements used in an SQL command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-233>
-  CVSSv3 Score: 7.1 An SQL Injection vulnerability \[CWE-89\] in FortiManager, FortiManager Cloud, FortiAnalyzer, FortiAnalyzer Cloud may allow an authenticated attacker to execute unauthorized SQL commands via specially crafted requests. Revised on 2026-11-10 00:00:00
-- Improper neutralization of special elements used in an SQL command (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-221>
-  CVSSv3 Score: 8.8 An improper neutralization of special elements used in an SQL Command \('SQL Injection'\) vulnerability \[CWE-89\] in FortiAnalyzer, FortiAnalyzer Cloud, FortiManager and FortiManager Cloud may allow an authenticated attacker to execute unauthorized code or commands via crafted JSON...
-- Improper neutralization of special elements used in an SQL command in collectoragent (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-266>
-  CVSSv3 Score: 8.3 An improper neutralization of special elements used in an sql command \('sql injection'\)\[CWE-89\] vulnerability may allow an authenticated attacker to execute unauthorized code or commands via http requests Revised on 2026-11-10 00:00:00
-- Incorrect authorization (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-207>
-  CVSSv3 Score: 9.1 An Incorrect Authorization vulnerability \[CWE-863\] in FortiMail may allow an unauthenticated remote attacker to obtain an authenticated IBE webmail session as any IBE recipient and read or send their encrypted mail via crafted HTTP requests. Revised on 2026-11-10 00:00:00
-- Numeric truncation error (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-268>
-  CVSSv3 Score: 9.6 A Numeric Truncation Error vulnerability \[cwe-197\] in FortiOS and FortiSASE bgp daemon may allow a configured ibgp neighbor to send malicious/malformed attributes to all connected routers via a specially crafted request Revised on 2026-11-13 00:00:00
-- SSLVPN Improper Certificate Validation (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-193>
-  CVSSv3 Score: 7.7 An improper certificate validation vulnerability \[CWE-295\] in FortiOS SSLVPN may allow a remote and unauthenticated attacker to perform a Man-in-the-Middle attack on the communication channel between the SSLVPN web portal and the backend destination website. Revised on 2026-11-1...
-- Active Zero-Day: CVE-2026-111793 (Ervik, 2026-11-10)
-  <https://www.ervik.as/cves/CVE-2026-111793>
-  Openwave Messaging Limited Webtop Media Transcoder Incorrect Resource Transfer Between Spheres Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-124194 (Ervik, 2026-11-10)
-  <https://www.ervik.as/cves/CVE-2026-124194>
-  Microsoft Office Outlook Missing User Interaction for Potentially Unsafe Action Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-20320 (Ervik, 2026-11-10)
-  <https://www.ervik.as/cves/CVE-2026-20320>
-  Cisco BroadWorks Improper Restriction of XML External Entity Reference Vulnerability - confirmed actively exploited \(CISA KEV\).
+- CVE-2026-133629: A vulnerability was determined in Sunnet CTMS up to 10.11. Impacted is an unknown function of the fi (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-133629>
+  MEDIUM severity \(CVSS 6.3\) vulnerability.
+- 37\.343 (Fortinet FortiGuard Labs, 2026-11-20)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.343>
+  Newly Added \(3\) Netcore.NBR200V2.Tools.Ping.Handler.Command.Injection \(High\) Wavlink.WL-WN586X3-A.ExportAllSettings.cgi.Buffer.Overflow \(High\) Phicomm.K2.autoupgrade.lua.Command.Injection \(High\) Modified \(1\) Oracle.E-Business.Suite.CVE-2026-101767.Code.Execution \(Critical\)
+- Chase, Visa and Mastercard Blame Marketing Vendors, Equinor's Attack Passes Day Three, and Dead Java Library CVE-2026-90436 Hits Confluence and N-central (Ervik, 2026-11-20)
+  <https://www.ervik.as/news/visa-mastercard-jpmorgan-marketing-vendor-breach-axis-cve-2026-90436-java4shell-probing-n-able-nginx2root-tfl-2026-11-20>
+  A look at the last 24 hours in cybersecurity: three payment giants say a marketing vendor was breached, Equinor is still fighting an intrusion, Norwegian Air's supplier skimmed card details, CISA lists the Axis 1.x flaw behind Confluence and N-central attacks, and Java4Shell is probed.
+- Active Zero-Day: CVE-2026-111560 (Ervik, 2026-11-10)
+  <https://www.ervik.as/cves/CVE-2026-111560>
+  Barracuda Networks Multiple Products OS Command Injection Vulnerability - confirmed actively exploited \(CISA KEV\).
+- Active Zero-Day: CVE-2026-125350 (Ervik, 2026-11-10)
+  <https://www.ervik.as/cves/CVE-2026-125350>
+  Google Chromium Use-After-Free Vulnerability - confirmed actively exploited \(CISA KEV\).
 
 ## regulation/federal-rulemaking
 
-- Federal Register Vol. 91, No.222, November 19, 2026 (U.S. Government Publishing Office, 2026-11-19)
-  <https://www.govinfo.gov/app/details/FR-2026-11-19>
+- Federal Register Vol. 91, No.223, November 20, 2026 (U.S. Government Publishing Office, 2026-11-20)
+  <https://www.govinfo.gov/app/details/FR-2026-11-20>
   Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-11-19 (U.S. Government Publishing Office, 2026-11-19)
-  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-19.xml>
+- FR-2026-11-20 (U.S. Government Publishing Office, 2026-11-20)
+  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-20.xml>
   Content Files XML
-- Title 10 - Energy (U.S. Government Publishing Office, 2026-11-15)
-  <https://www.govinfo.gov/app/details/CFR-2024-title10-vol3>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- Title 42 - Public Health (U.S. Government Publishing Office, 2026-11-15)
-  <https://www.govinfo.gov/app/details/CFR-2024-title42-vol5>
-  Content Files PDF XML TEXT Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- HIPAA Privacy Rule: Changes To Support Coordinated Care and Individual Engagement and Reduce Regulatory Burdens (Office of the Federal Register, 2026-11-19)
+  <https://www.federalregister.gov/documents/2026/11/19/2026-23429/hipaa-privacy-rule-changes-to-support-coordinated-care-and-individual-engagement-and-reduce>
+  The Department of Health and Human Services \(HHS or "Department"\) is issuing this final rule to modify the Standards for Privacy of Individually Identifiable Health Information \("Privacy Rule"\) under the Health Insurance Portability and Accountability Act of 1996 \(HIPAA\) and the Health Informatio...
+- NCCoE Update: Change to CRADA Consortium Announcements (National Institute of Standards and Technology, 2026-11-12)
+  <https://www.nist.gov/news-events/news/2026/11/nccoe-update-change-crada-consortium-announcements>
+  Today, the NIST National Cybersecurity Center of Excellence \(NCCoE\) published a Federal Register Notice \(FRN\), which provides notice of a change to our process for announcing Cooperative Research and Development Agreement \(CRADA\) consortia
+
+## standards/fedramp
+
+- 2026-11-10 Published NTC-0017 and the VDR/VER Migration Resources page. \(See NTC-0017: VDR/VER Migration Progress Reporting and Upcoming FY27 Q1 FedRAMP Security Inbox Test , and VDR/VER Migration Resources \) (US General Services Administration FedRAMP, 2026-11-10)
+  <https://www.fedramp.gov/notices/0017>
+
+## standards/iso
+
+- US and International Standardization News and Activities - November 19, 2026 (National Institute of Standards and Technology, 2026-11-20)
+  <https://www.nist.gov/news-events/news/2026/11/us-and-international-standardization-news-and-activities-november-19-2026>
+  US and International Standardization News and Activities - November 19, 2026 In this issue: Preliminary work items Selected new preliminary work items No U.S. participation ISO work items With U.S. participation ISO work items IEC work items ISO/IEC
 
 ## standards/nist
 
-- NIST Project Aims to Accelerate Mobile Driver’s License Adoption (National Institute of Standards and Technology, 2026-11-19)
-  <https://www.nist.gov/news-events/news/2026/11/nist-project-aims-accelerate-mobile-drivers-license-adoption>
-  Mobile driver’s licenses could help U.S. citizens do business more securely, but there are few ways to use them - an issue the project is designed to help address.
-
-## technology/ai
-
-- NSA outage traced to PHP2Shell patching as Java4Shell and agentic AI intrusions dominate the news (Ervik, 2026-11-19)
-  <https://www.ervik.as/news/2026-11-19-daily-news>
-  The NSA's classified network outage is tied to emergency PHP patching, Equinor says it is not a virus, Java4Shell and a Puppet RCE need patching, Barracuda details a 44-hour AI-speed cloud intrusion, and Swedish MSP Elitdata and retailer Lyko report data theft.
-- 37\.340 (Fortinet FortiGuard Labs, 2026-11-19)
-  <https://fortiguard.fortinet.com/updates/app?version=37.340>
-  Newly Added \(2\) DuckDuckGo.Duck.ai DuckDuckGo.Duck.ai\_Post Modified \(1\) OpenAI.ChatGPT\_Post.
-
-## technology/cloud
-
-- Improper neutralization of special elements used in a template engine in fortisoc (Fortinet FortiGuard Labs, 2026-11-10)
-  <https://fortiguard.fortinet.com/psirt/FG-IR-26-220>
-  CVSSv3 Score: 7.2 A Use of Externally-Controlled Format String \[CWE-134\] in FortiManager, FortiAnalyzer, FortiManager Cloud and FortiAnalyzer Cloud API may allow an authenticated attacker to execute unauthorized commands via specially crafted HTTP request Revised on 2026-11-10 00:00:00
+- Updated Guidelines: Accelerating the Adoption of Mobile Driver’s Licenses \(mDL\) (National Institute of Standards and Technology, 2026-11-19)
+  <https://www.nist.gov/news-events/news/2026/11/updated-guidelines-accelerating-adoption-mobile-drivers-licenses-mdl>
+  The NIST National Cybersecurity Center of Excellence \(NCCoE\) has released updated guidelines for the use of Mobile Driver’s Licenses \(mDLs\). These guidelines support broader adoption of secure, interoperable digital credentials across government
 
 ## Source health
 
+- ecfr-changes: ok, HTTP 200, 1000 items
 - ervik-threat-feed: ok, HTTP 200, 60 items
+- federal-register-rules: ok, HTTP 200, 300 items
 - fedramp-changelog: ok, HTTP 200, 103 items
 - fortiguard-application-control: ok, HTTP 200, 10 items
 - fortiguard-endpoint-vulnerability: ok, HTTP 200, 10 items
@@ -282,14 +170,13 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
 - fortinet-firmware: not-modified, HTTP 304
-- govinfo-cfr: ok, HTTP 200, 100 items
 - govinfo-fr: ok, HTTP 200, 100 items
 - govinfo-fr-bulkdata: ok, HTTP 200, 100 items
-- govinfo-lsa: ok, HTTP 200, 100 items
+- govinfo-lsa: not-modified, HTTP 304
 - nist-cybersecurity-insights: ok, HTTP 200, 40 items
 - nist-information-technology: ok, HTTP 200, 40 items
 - nist-news: ok, HTTP 200, 40 items
 - nist-standards: ok, HTTP 200, 40 items
 - pci-ssc-blog: ok, HTTP 200, 12 items
 
-Held by guard: 1
+Held by guard: 0
