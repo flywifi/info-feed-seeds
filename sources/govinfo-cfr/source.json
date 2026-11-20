@@ -7,7 +7,7 @@
     "kind": "seed",
     "ref": "seeds/2026-10-20_initial-sources.md"
   },
-  "enabled": true,
+  "enabled": false,
   "homepage": "https://www.govinfo.gov/app/collection/cfr",
   "id": "govinfo-cfr",
   "industries": [

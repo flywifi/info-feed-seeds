@@ -2177,12 +2177,13 @@ class RealProfileTests(unittest.TestCase):
             self.assertEqual(code, 0, buf.getvalue())
             report = jsonio.load_json(Path(td) / "out" / "technology-regulation" / "report.json")
             md = (Path(td) / "out" / "technology-regulation" / f"{DAY}.md").read_text(encoding="utf-8")
-        self.assertEqual(report["coverage"]["sources_selected"], 23)
+        self.assertEqual(report["coverage"]["sources_selected"], 22)
         for sid in ("fortiguard-antivirus", "fortiguard-ip-reputation", "fortiguard-dast"):
             self.assertNotIn(f"- {sid}:", md)
         for sid in ("fortiguard-psirt", "fortinet-firmware", "fortiguard-ips", "govinfo-fr", "govinfo-fr-bulkdata", "nist-news",
                     "fedramp-changelog", "pci-ssc-blog", "federal-register-rules", "ecfr-changes"):
             self.assertIn(f"- {sid}:", md)
+        self.assertNotIn("- govinfo-cfr:", md, "a disabled source is not polled")
         self.assertNotIn("skipped, disabled", md)
 
 
