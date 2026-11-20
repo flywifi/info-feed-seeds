@@ -1,0 +1,30 @@
+{
+  "id": "ecfr-changes",
+  "routes": [
+    {
+      "attempts": [
+        {
+          "capture_url": null,
+          "http_status": 200,
+          "media": [],
+          "method": "conditional-get",
+          "note": "parsed 1000 items (ecfr)",
+          "result": "ok",
+          "sample": {
+            "link": "https://www.ecfr.gov/current/title-12/section-204.4",
+            "published": "2026-11-18T00:00:00Z",
+            "title": "12 CFR 204.4 Computation of required reserves."
+          },
+          "source_label": "live",
+          "tried_at": "2026-11-20T18:25:06Z"
+        }
+      ],
+      "last_success": {
+        "method": "conditional-get",
+        "source_label": "live",
+        "tried_at": "2026-11-20T18:25:06Z"
+      },
+      "url": "https://www.ecfr.gov/api/search/v1/results?order=newest_first&per_page=1000"
+    }
+  ]
+}
