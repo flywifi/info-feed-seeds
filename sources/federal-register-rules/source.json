@@ -33,7 +33,9 @@
           "summary": "abstract",
           "title": "title"
         },
-        "items_path": "results"
+        "items_path": "results",
+        "max_pages": 2,
+        "next_path": "next_page_url"
       },
       "url": "https://www.federalregister.gov/api/v1/documents.json?conditions[type][]=RULE&conditions[type][]=PRORULE&order=newest&per_page=100&fields[]=title&fields[]=html_url&fields[]=document_number&fields[]=abstract&fields[]=publication_date&fields[]=type&fields[]=comments_close_on&fields[]=effective_on&fields[]=cfr_references&fields[]=agencies"
     }
