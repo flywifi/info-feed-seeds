@@ -159,7 +159,12 @@ def first_value(node: Node, compiled, base: str) -> str | None:
         value = (target.attrs.get(attr) or "").strip()
         if not value:
             return None
-        return urljoin(base, value) if attr in ("href", "src") else value
+        if attr not in ("href", "src"):
+            return value
+        try:
+            return urljoin(base, value)
+        except ValueError:   # not a URL that can be resolved: kept as written, and never published as a link
+            return value
     return target.text() or None
 
 

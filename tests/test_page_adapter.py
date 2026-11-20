@@ -114,5 +114,14 @@ class DateTests(unittest.TestCase):
                 self.assertIsNone(page.parse_date(text, fmt, rx))
 
 
+class BadLinkTests(unittest.TestCase):
+    def test_a_link_that_is_not_a_url_does_not_fail_the_page(self):
+        body = ('<div class="post"><h3><a href="http://[bad">Odd link</a></h3></div>'
+                '<div class="post"><h3><a href="/ok">Good</a></h3></div>')
+        parsed = parse(body, {"item_selector": "div.post", "title_selector": "h3 a", "link_selector": "h3 a@href"})
+        self.assertEqual([(i.title, i.link) for i in parsed["items"]],
+                         [("Odd link", "http://[bad"), ("Good", "https://example.gov/ok")])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -80,8 +80,10 @@ def safe_link(url: str | None) -> str | None:
     if not url:
         return None
     try:
-        if urlsplit(url).username is not None:
+        parts = urlsplit(url)
+        if parts.username is not None:
             return None
+        _ = parts.port   # raises for a port that is not a number in range: not a link to publish
     except ValueError:
         return None
     link = items.normalize_link(url)
