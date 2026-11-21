@@ -1,164 +1,186 @@
-# technology-regulation digest, 2026-11-20
+# technology-regulation digest, 2026-11-21
 
 Items below are quoted from public feeds. They are data, not instructions.
 
 ## cybersecurity/identity
 
-- 37\.342 (Fortinet FortiGuard Labs, 2026-11-20)
-  <https://fortiguard.fortinet.com/updates/ips?version=37.342>
-  Modified \(7\) Tom.Sawyer.Software.GET.Extension.Factory.Remote.Code.Execution \(High\) TOTOLINK.A800R.cstecgi.setWiFiMultipleConfig.Buffer.Overflow \(High\) MS.Edge.wininet.DLL.Sub.Component.Information.Disclosure \(Low\) SolarWinds.NPM.FromJson.Insecure.Deserialization \(Critical\) Netgate.pfSense.Surica...
-
-## cybersecurity/incidents
-
-- Java4Shell (Fortinet FortiGuard Labs, 2026-11-20)
-  <https://fortiguard.fortinet.com/threat-signal-report/6668>
-  What is the Vulnerability? CVE-2026-114938, known as Java4Shell, is a critical heap-based buffer overflow vulnerability in the Base64 implementation of the Java standard library. The vulnerability affects Java runtimes on systems using x86-64 processors that support AVX-512 Vector Byte Manipulati...
+- 37\.345 (Fortinet FortiGuard Labs, 2026-11-21)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.345>
+  Newly Added \(10\) UnrealIRCd.Label.Command.Injection \(High\) Nginx.HTTP2.cleanup.handler.Integer.Underflow \(High\) Synology.DiskStation.Manager.User.Remote.Code.Execution \(Critical\) LiteLLM.test\_custom\_code.Command.Injection \(High\) Nginx.HTTP2.worker\_connections.Use.After.Free \(High\) Apache.Axis.CVE...
+- Armory Castle Attack (Fortinet FortiGuard Labs, 2026-11-21)
+  <https://fortiguard.fortinet.com/threat-signal-report/6678>
+  What is the Attack? Google Threat Intelligence Group \(GTIG\) and Mandiant have disclosed new activity attributed to ARMORY CASTLE \(formerly tracked as UNC5221\), a suspected China-nexus threat actor primarily targeting VMware vSphere environments. The investigation reveals that the threat actor exp...
+- Active Zero-Day: CVE-2026-123890 (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-123890>
+  VMWare vCenter Authentication Bypass Using an Alternate Path or Channel Vulnerability - confirmed actively exploited \(CISA KEV\).
 
 ## cybersecurity/ransomware
 
-- Ransomware: Jones Walker \(leakeddata\) (Ervik, 2026-11-20)
+- Ransomware: Kang Chiao International School \(Linkou\) \(osiris\) (Ervik, 2026-11-21)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by leakeddata.
-- Ransomware: Jones Walker \(SilentRansomGroup\) (Ervik, 2026-11-20)
+  New ransomware victim disclosed by osiris.
+- Ransomware: Regions Behavioral Hospital \(incransom\) (Ervik, 2026-11-21)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by SilentRansomGroup.
-- Ransomware: al\*\*\*o.com \(everstake\) (Ervik, 2026-11-20)
+  New ransomware victim disclosed by incransom.
+- Ransomware: County government within a U.S. state \(soul\) (Ervik, 2026-11-21)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by everstake.
-- Ransomware: TraWell Co S.p.A. \(d/b/a Safe Bag\) \(aurora\) (Ervik, 2026-11-20)
+  New ransomware victim disclosed by soul.
+- Ransomware: County government within a U.S. state \(SoulGroup\) (Ervik, 2026-11-21)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by aurora.
-- Ransomware: Clarkesville Police Department, City of Clarkesville \(rhysida\) (Ervik, 2026-11-20)
+  New ransomware victim disclosed by SoulGroup.
+- Ransomware: genica.com.ve \(lockbit5\) (Ervik, 2026-11-21)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by rhysida.
-- Ransomware: William Cook Holdings Limited \(aurora\) (Ervik, 2026-11-20)
-  <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by aurora.
-- Ransomware: MICA Information Systems, Inc. \(pear\) (Ervik, 2026-11-20)
+  New ransomware victim disclosed by lockbit5.
+- Ransomware: Vegely Welding Inc. \(pear\) (Ervik, 2026-11-21)
   <https://www.ervik.as/ransomware>
   New ransomware victim disclosed by pear.
-- Ransomware: Barapp Law Firm \(pear\) (Ervik, 2026-11-20)
+- Ransomware: Law Office of Ronald D. Weiss, P.C \(pear\) (Ervik, 2026-11-21)
   <https://www.ervik.as/ransomware>
   New ransomware victim disclosed by pear.
-- Ransomware: Southern Synergy, Inc. \(pear\) (Ervik, 2026-11-20)
+- Ransomware: Dallas Fort Worth Fertility Associates \(Barracuda\) (Ervik, 2026-11-21)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by pear.
-- Ransomware: Centre Volunteers in Medicine \(pear\) (Ervik, 2026-11-20)
+  New ransomware victim disclosed by Barracuda.
+- Ransomware: Realta Technologies \(eclipse\) (Ervik, 2026-11-21)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by pear.
+  New ransomware victim disclosed by eclipse.
+- Ransomware: MT5 algo-trading farm \(OneFunded funded account, WINSERVER\) \(pixelleaks\) (Ervik, 2026-11-21)
+  <https://www.ervik.as/ransomware>
+  New ransomware victim disclosed by pixelleaks.
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-44908: Improper following of a certificate’s chain of trust in the remote-attestation verifier used to esta (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-44908>
-  MEDIUM severity \(CVSS 4.8\) vulnerability.
-- CVE-2026-102769: A SQL injection vulnerability when the recipient tapped on a specially crafted “order details” messa (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-102769>
+- CVE-2026-134458: web-token jwt-framework and jwt-library before 3.4.12, 4.0.x before 4.0.8, 4.1.x before 4.1.10, and (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134458>
+  MEDIUM severity \(CVSS 5.9\) vulnerability.
+- CVE-2026-134459: web-token jwt-framework and jwt-library before 3.4.10, 4.0.x before 4.0.7, and 4.1.x before 4.1.7 co (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134459>
+  MEDIUM severity \(CVSS 5.9\) vulnerability.
+- CVE-2026-134460: web-token jwt-framework 1.2.0 before 3.4.10, jwt-experimental before 3.4.10, 4.0.x before 4.0.7, and (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134460>
+  LOW severity \(CVSS 3.7\) vulnerability.
+- CVE-2026-134461: Web-Token jwt-framework and jwt-library before 3.4.10, 4.0.0 before 4.0.7, and 4.1.0 before 4.1.7 co (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134461>
+  HIGH severity \(CVSS 7.5\) vulnerability.
+- CVE-2026-134451: Dockhand before 1.0.57 contains a privilege escalation vulnerability that allows non-admin users wit (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134451>
+  HIGH severity \(CVSS 8.1\) vulnerability.
+- CVE-2026-134452: Dockhand before 1.0.57 merges stack secret environment variables into the environment used to spawn (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134452>
+  HIGH severity \(CVSS 8.8\) vulnerability.
+- CVE-2026-134453: Dockhand before 1.0.50 contains an improper access control vulnerability that allows authenticated u (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134453>
+  MEDIUM severity \(CVSS 6.5\) vulnerability.
+- CVE-2026-134454: Hysteria from 2.0.0 before 2.9.2 contains an ACL bypass vulnerability that allows authenticated clie (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134454>
+  HIGH severity \(CVSS 7.4\) vulnerability.
+- CVE-2026-134455: Hysteria 1.0.0 before 2.9.2 contains a denial of service vulnerability in FragUDPMessage where UDP f (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134455>
+  MEDIUM severity \(CVSS 6.5\) vulnerability.
+- CVE-2026-134456: Hysteria 2.5.0 before 2.9.2 contains a denial of service vulnerability in the HTTP sniff implementat (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134456>
+  HIGH severity \(CVSS 7.5\) vulnerability.
+- CVE-2026-134457: Hysteria 2.5.0 before 2.8.2 contains a memory allocation vulnerability when sniffing is enabled, all (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134457>
+  MEDIUM severity \(CVSS 6.5\) vulnerability.
+- CVE-2026-134434: Frappe ERPNext 16.0.0 before 16.36.0 contains a missing authorization vulnerability in a Manufacturi (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134434>
+  HIGH severity \(CVSS 7.7\) vulnerability.
+- CVE-2026-134435: Frappe ERPNext before 15.124.2 and 16.x before 16.50.0 contains a missing authorization vulnerabilit (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134435>
+  HIGH severity \(CVSS 7.7\) vulnerability.
+- CVE-2026-134436: Frappe ERPNext 15.8.0 before 15.121.4 and 16.x before 16.36.0 contains a missing authorization vulne (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134436>
+  HIGH severity \(CVSS 7.7\) vulnerability.
+- CVE-2026-134448: Finsys Dockhand 1.0.7 before 1.0.57 contains a path traversal vulnerability that allows low-privileg (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134448>
+  HIGH severity \(CVSS 8.1\) vulnerability.
+- CVE-2026-134449: Dockhand before 1.0.57 contains a cross-site request forgery vulnerability that allows attackers to (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134449>
   MEDIUM severity \(CVSS 6.8\) vulnerability.
-- CVE-2026-133854: flowintel contains a vulnerability in the case and task classification usage endpoints that allows a (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133854>
-  NONE severity vulnerability.
-- CVE-2026-133855: flowintel contains an information disclosure vulnerability in its case history feature. When a user (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133855>
-  NONE severity vulnerability.
-- CVE-2026-133849: A vulnerability exists in the flowintel application's calendar functionality that allows unauthorize (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133849>
-  NONE severity vulnerability.
-- CVE-2026-133850: flowintel contains an authorization flaw in its recurring reminder notification subsystem. When a us (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133850>
-  NONE severity vulnerability.
-- CVE-2026-133851: FlowIntel's alerting module contained an authorization bypass in the alert access control logic. Whe (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133851>
-  NONE severity vulnerability.
-- CVE-2026-133852: flowintel is a case management application that enforces an approval workflow for tasks in privilege (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133852>
-  NONE severity vulnerability.
-- CVE-2026-133853: FlowIntel's chatbot component used a single shared MCP \(Model Context Protocol\) session and process- (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133853>
-  NONE severity vulnerability.
-- CVE-2026-133843: flowintel contains a vulnerability in the MISP correlation feature that allows unauthorized disclosu (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133843>
-  NONE severity vulnerability.
-- CVE-2026-133844: FlowIntel, a threat intelligence case management platform, contains an information disclosure vulner (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133844>
-  NONE severity vulnerability.
-- CVE-2026-133846: FlowIntel contains an authorization bypass in its task management workflow. When a user reopens a co (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133846>
-  NONE severity vulnerability.
-- CVE-2026-133847: flowintel contains an authorization bypass in the browser-based admin user editing interface. The ed (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133847>
-  NONE severity vulnerability.
-- CVE-2026-133848: flowintel contains an authorization flaw in its user deletion functionality. Organization-scoped adm (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133848>
-  NONE severity vulnerability.
-- CVE-2026-133837: flowintel contains an authorization bypass in its task completion workflow for privileged cases. Use (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133837>
-  NONE severity vulnerability.
-- CVE-2026-133838: FlowIntel contains an authorization bypass that allows non-approver case members to modify restricte (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133838>
-  NONE severity vulnerability.
-- CVE-2026-133839: FlowIntel contains a missing authorization vulnerability in its task file deletion functionality. Wh (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133839>
-  NONE severity vulnerability.
-- CVE-2026-133840: flowintel contains an authorization bypass in the file-to-note conversion feature for case tasks. Wh (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133840>
-  NONE severity vulnerability.
-- CVE-2026-133841: FlowIntel contains an authorization bypass in its case serialization logic that allows an authentica (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133841>
-  NONE severity vulnerability.
-- CVE-2026-133629: A vulnerability was determined in Sunnet CTMS up to 10.11. Impacted is an unknown function of the fi (Ervik, 2026-11-20)
-  <https://www.ervik.as/cves/CVE-2026-133629>
-  MEDIUM severity \(CVSS 6.3\) vulnerability.
-- 37\.343 (Fortinet FortiGuard Labs, 2026-11-20)
-  <https://fortiguard.fortinet.com/updates/ips?version=37.343>
-  Newly Added \(3\) Netcore.NBR200V2.Tools.Ping.Handler.Command.Injection \(High\) Wavlink.WL-WN586X3-A.ExportAllSettings.cgi.Buffer.Overflow \(High\) Phicomm.K2.autoupgrade.lua.Command.Injection \(High\) Modified \(1\) Oracle.E-Business.Suite.CVE-2026-101767.Code.Execution \(Critical\)
-- Chase, Visa and Mastercard Blame Marketing Vendors, Equinor's Attack Passes Day Three, and Dead Java Library CVE-2026-90436 Hits Confluence and N-central (Ervik, 2026-11-20)
-  <https://www.ervik.as/news/visa-mastercard-jpmorgan-marketing-vendor-breach-axis-cve-2026-90436-java4shell-probing-n-able-nginx2root-tfl-2026-11-20>
-  A look at the last 24 hours in cybersecurity: three payment giants say a marketing vendor was breached, Equinor is still fighting an intrusion, Norwegian Air's supplier skimmed card details, CISA lists the Axis 1.x flaw behind Confluence and N-central attacks, and Java4Shell is probed.
-- Active Zero-Day: CVE-2026-111560 (Ervik, 2026-11-10)
-  <https://www.ervik.as/cves/CVE-2026-111560>
-  Barracuda Networks Multiple Products OS Command Injection Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-125350 (Ervik, 2026-11-10)
-  <https://www.ervik.as/cves/CVE-2026-125350>
-  Google Chromium Use-After-Free Vulnerability - confirmed actively exploited \(CISA KEV\).
+- CVE-2026-134450: Dockhand before 1.0.57 contains a clickjacking vulnerability because src/hooks.server.ts never sets (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134450>
+  LOW severity \(CVSS 3.1\) vulnerability.
+- CVE-2026-134431: Frappe ERPNext 7.0.0 before 15.122.0 and 16.x before 16.50.0 contains an SQL injection vulnerability (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134431>
+  MEDIUM severity \(CVSS 6.5\) vulnerability.
+- CVE-2026-134432: Frappe ERPNext 15.0.0 before 15.121.4 and 16.x before 16.36.0 contains a missing authorization vulne (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134432>
+  HIGH severity \(CVSS 7.1\) vulnerability.
+- CVE-2026-134433: Frappe ERPNext before 15.124.2 and 16.x before 16.53.0 fails to enforce record-level authorization i (Ervik, 2026-11-21)
+  <https://www.ervik.as/cves/CVE-2026-134433>
+  HIGH severity \(CVSS 8.5\) vulnerability.
+- VMware vCenter Zero-Day Exploited for Months, European Commission Hit by AI-Generated Attack, Norwegian Energy Firms Hit via Azure APIM (Ervik, 2026-11-21)
+  <https://www.ervik.as/news/daily-news-2026-11-21>
+  A China-nexus group abused vCenter CVE-2026-123890 before the fix, Java4Shell probing begins, NGINX2Root ships with public PoCs, and Equinor and Skagerak are caught in an Azure API Management compromise.
+- NGINX vulnerabilities (Fortinet FortiGuard Labs, 2026-11-20)
+  <https://fortiguard.fortinet.com/psirt/FG-IR-26-279>
+  CVSSv3 Score: 8.1 CVE-2026-123007 \(high\)This vulnerability affects NGINX OSS versions 1.31.0 - 1.31.8, 1.9.5 - 1.30.6.CVE-2026-123633 \(high\)This vulnerability affects NGINX OSS versions 1.31.0 - 1.31.8, 1.19.7 - 1.30.6.CVE-2026-121810 \(high\)This vulnerability affects NGINX OSS versions 1.31.0 - 1...
+- Active Zero-Day: CVE-2025-42884 (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2025-42884>
+  SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability - confirmed actively exploited \(CISA KEV\).
+- Active Zero-Day: CVE-2026-129448 (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-129448>
+  Apache Roller Deserialization of Untrusted Data Vulnerability - confirmed actively exploited \(CISA KEV\).
+- Active Zero-Day: CVE-2026-76466 (Ervik, 2026-11-20)
+  <https://www.ervik.as/cves/CVE-2026-76466>
+  Cisco Expressway Series Use of Hard-coded Credentials Vulnerability - confirmed actively exploited \(CISA KEV\).
 
 ## regulation/federal-rulemaking
 
-- Federal Register Vol. 91, No.223, November 20, 2026 (U.S. Government Publishing Office, 2026-11-20)
-  <https://www.govinfo.gov/app/details/FR-2026-11-20>
+- Federal Register Vol. 91, No.224, November 23, 2026 (U.S. Government Publishing Office, 2026-11-21)
+  <https://www.govinfo.gov/app/details/FR-2026-11-23>
   Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-11-20 (U.S. Government Publishing Office, 2026-11-20)
-  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-20.xml>
+- FR-2026-11-23 (U.S. Government Publishing Office, 2026-11-21)
+  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-23.xml>
   Content Files XML
-- HIPAA Privacy Rule: Changes To Support Coordinated Care and Individual Engagement and Reduce Regulatory Burdens (Office of the Federal Register, 2026-11-19)
-  <https://www.federalregister.gov/documents/2026/11/19/2026-23429/hipaa-privacy-rule-changes-to-support-coordinated-care-and-individual-engagement-and-reduce>
-  The Department of Health and Human Services \(HHS or "Department"\) is issuing this final rule to modify the Standards for Privacy of Individually Identifiable Health Information \("Privacy Rule"\) under the Health Insurance Portability and Accountability Act of 1996 \(HIPAA\) and the Health Informatio...
-- NCCoE Update: Change to CRADA Consortium Announcements (National Institute of Standards and Technology, 2026-11-12)
-  <https://www.nist.gov/news-events/news/2026/11/nccoe-update-change-crada-consortium-announcements>
-  Today, the NIST National Cybersecurity Center of Excellence \(NCCoE\) published a Federal Register Notice \(FRN\), which provides notice of a change to our process for announcing Cooperative Research and Development Agreement \(CRADA\) consortia
+- 45 CFR 160.103 Definitions. (Office of the Federal Register, 2026-11-19)
+  <https://www.ecfr.gov/current/title-45/section-160.103>
+  General Administrative Requirements
+- 45 CFR 164.501 Definitions. (Office of the Federal Register, 2026-11-19)
+  <https://www.ecfr.gov/current/title-45/section-164.501>
+  Security and Privacy
+- 45 CFR 164.502 Uses and disclosures of protected health information: General rules. (Office of the Federal Register, 2026-11-19)
+  <https://www.ecfr.gov/current/title-45/section-164.502>
+  Security and Privacy
+- 45 CFR 164.506 Uses and disclosures to carry out treatment, payment, or health care operations. (Office of the Federal Register, 2026-11-19)
+  <https://www.ecfr.gov/current/title-45/section-164.506>
+  Security and Privacy
+- 45 CFR 164.512 Uses and disclosures for which an authorization or opportunity to agree or object is not required. (Office of the Federal Register, 2026-11-19)
+  <https://www.ecfr.gov/current/title-45/section-164.512>
+  Security and Privacy
+- 45 CFR 164.514 Other requirements relating to uses and disclosures of protected health information. (Office of the Federal Register, 2026-11-19)
+  <https://www.ecfr.gov/current/title-45/section-164.514>
+  Security and Privacy
+- 45 CFR 164.520 Notice of privacy practices for protected health information. (Office of the Federal Register, 2026-11-19)
+  <https://www.ecfr.gov/current/title-45/section-164.520>
+  Security and Privacy
+- 45 CFR 164.524 Access of individuals to protected health information. (Office of the Federal Register, 2026-11-19)
+  <https://www.ecfr.gov/current/title-45/section-164.524>
+  Security and Privacy
+- 45 CFR 164.525 xxx (Office of the Federal Register, 2026-11-19)
+  <https://www.ecfr.gov/current/title-45/section-164.525>
+  Security and Privacy
+- 45 CFR 164.532 Transition provisions. (Office of the Federal Register, 2026-11-19)
+  <https://www.ecfr.gov/current/title-45/section-164.532>
+  Security and Privacy
 
-## standards/fedramp
+## technology/devices
 
-- 2026-11-10 Published NTC-0017 and the VDR/VER Migration Resources page. \(See NTC-0017: VDR/VER Migration Progress Reporting and Upcoming FY27 Q1 FedRAMP Security Inbox Test , and VDR/VER Migration Resources \) (US General Services Administration FedRAMP, 2026-11-10)
-  <https://www.fedramp.gov/notices/0017>
-
-## standards/iso
-
-- US and International Standardization News and Activities - November 19, 2026 (National Institute of Standards and Technology, 2026-11-20)
-  <https://www.nist.gov/news-events/news/2026/11/us-and-international-standardization-news-and-activities-november-19-2026>
-  US and International Standardization News and Activities - November 19, 2026 In this issue: Preliminary work items Selected new preliminary work items No U.S. participation ISO work items With U.S. participation ISO work items IEC work items ISO/IEC
-
-## standards/nist
-
-- Updated Guidelines: Accelerating the Adoption of Mobile Driver’s Licenses \(mDL\) (National Institute of Standards and Technology, 2026-11-19)
-  <https://www.nist.gov/news-events/news/2026/11/updated-guidelines-accelerating-adoption-mobile-drivers-licenses-mdl>
-  The NIST National Cybersecurity Center of Excellence \(NCCoE\) has released updated guidelines for the use of Mobile Driver’s Licenses \(mDLs\). These guidelines support broader adoption of secure, interoperable digital credentials across government
+- FortiPAM 7.0.1 (Fortinet, 2026-11-21)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiPAM 7.0.1 B0034 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiSwitch 8.0.2 (Fortinet, 2026-11-20)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiSwitch 8.0.2 B0107 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiNAC-F 7.6.8 (Fortinet, 2026-11-20)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiNAC-F 7.6.8 B1007 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
 
 ## Source health
 
 - ecfr-changes: ok, HTTP 200, 1000 items
 - ervik-threat-feed: ok, HTTP 200, 60 items
-- federal-register-rules: ok, HTTP 200, 300 items
+- federal-register-rules: ok, HTTP 200, 200 items
 - fedramp-changelog: ok, HTTP 200, 103 items
 - fortiguard-application-control: ok, HTTP 200, 10 items
 - fortiguard-endpoint-vulnerability: ok, HTTP 200, 10 items
@@ -169,7 +191,7 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-psirt: ok, HTTP 200, 50 items
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
-- fortinet-firmware: not-modified, HTTP 304
+- fortinet-firmware: ok, HTTP 200, 75 items
 - govinfo-fr: ok, HTTP 200, 100 items
 - govinfo-fr-bulkdata: ok, HTTP 200, 100 items
 - govinfo-lsa: not-modified, HTTP 304
