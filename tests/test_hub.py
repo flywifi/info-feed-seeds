@@ -1787,6 +1787,35 @@ class CfrWatchTests(HubTestCase):
         self.assertEqual(self.watch_poll(watched_only=False, daily_cap=2), ["Newer three", "Newer two"],
                          "a source that is not watched-only keeps its place by date")
 
+    def test_lint_reports_a_cfr_list_that_leaves_a_watched_only_profile_nothing(self):
+        self.add_source("fr", self.API, ["regulation/federal-rulemaking"], watched_only=True,
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": self.API,
+                                 "params": {"items_path": "results", "fields": LabelTests.FIELDS}}])
+        self.set_watch({"32/170": {"label": "x"}, "48/252.204-7012": {"label": "y"}})
+
+        def lint(**lists):
+            for key in ("cfr_parts", "exclude_cfr_parts"):
+                self.profile.pop(key, None)
+            self.profile.update(lists)
+            jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+            code = self.run_hub("lint")
+            return code, self.output
+
+        self.profile.update(topics=[], sources=["fr"])
+        self.assertEqual(lint(cfr_parts=["32/170.14", "48/252", "48/252.204-7012"])[0], 0, self.output)
+        code, out = lint(cfr_parts=["45/164", "32/170", "48/252.204-7019"])
+        self.assertEqual(code, 1)
+        for ref in ("45/164", "48/252.204-7019"):
+            self.assertIn(f"profiles/tr.json: CFR reference {ref!r} meets no entry of schema/cfr-watch.json", out)
+        self.assertNotIn("'32/170' meets", out)
+        code, out = lint(exclude_cfr_parts=["32/170", "48/252"])
+        self.assertEqual(code, 1)
+        self.assertIn("profiles/tr.json: exclude_cfr_parts covers every entry of schema/cfr-watch.json", out)
+        self.assertEqual(lint(exclude_cfr_parts=["32/170"])[0], 0, self.output)
+        self.profile.update(topics=["cybersecurity"], sources=["fr"])
+        self.assertEqual(lint(cfr_parts=["45/164"], exclude_cfr_parts=["32/170", "48/252"])[0], 0,
+                         "a profile that also polls an ordinary source can still route its items")
+
     def test_lint_checks_the_watch_list_and_the_profile_references(self):
         self.assertEqual(self.run_hub("lint"), 0, self.output)
         self.set_watch({"32 CFR 170": {"label": "x"}, "32/170": {"label": "x", "standards": ["nope"]}})
