@@ -264,16 +264,16 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str, held: d
     day_dt = date.fromisoformat(day)
     earliest = (day_dt - timedelta(days=int(profile["window_days"]))).isoformat()
 
-    rows = store.items_for_feeds(sorted(chosen))
+    # Only rows dated inside the window can be selected, so only those are read; what older rows still
+    # decide (which links are shared, which guids were shown) is asked of the store, not loaded.
+    feeds_polled = sorted(chosen)
+    rows = store.items_in_window(feeds_polled, earliest, day)
     # A link one source gives to several distinct items (a shared listing page) does not identify an
     # item. It counts as shared when two or more distinct guids carry it: each post on it is then keyed
     # by its guid (or, without one, by its own hash), so a retitled post keeps its guid and stays one story.
-    per_source: dict[tuple[str, str], set] = {}
-    for row in rows:
-        if row["link_key"] and row["guid"]:
-            per_source.setdefault((row["feed_id"], row["link_key"]), set()).add(row["guid"])
+    shared_links = store.shared_links(feeds_polled)
     # A guid already shown stays shown, so a retitled post on a shared link is not published again.
-    taken_keys |= {_guid_key(row) for row in rows if row["content_sha256"] in taken and row["guid"]}
+    taken_keys |= {_guid_key({"feed_id": feed, "guid": guid}) for feed, guid in store.shown_guids(name, feeds_polled)}
     groups: dict[str, list[tuple[dict, list[str]]]] = {}
     for row in rows:
         if row["content_sha256"] in taken:
@@ -286,7 +286,7 @@ def select_for_day(store: Store, profile: dict, sources: dict, day: str, held: d
                 or not cfr_routed(profile, chosen[row["feed_id"]], row, watch)):
             continue
         tags, _ = item_tags(profile, chosen[row["feed_id"]], row)
-        shared = len(per_source.get((row["feed_id"], row["link_key"]), ())) > 1
+        shared = (row["feed_id"], row["link_key"]) in shared_links
         if shared:
             key = _guid_key(row) if row["guid"] else row["content_sha256"]
         else:

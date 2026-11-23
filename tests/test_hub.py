@@ -1808,6 +1808,81 @@ class CfrWatchTests(HubTestCase):
         self.assertIn("profiles/tr.json: CFR reference '32 CFR 170' is not a CFR part (32/170) or section (48/252.204-7012)", self.output)
 
 
+class WindowReadTests(HubTestCase):
+    """Selection reads only the rows dated inside the window; what older rows decide is still honoured."""
+
+    LISTING = "example.gov/updates"
+
+    def setUp(self):
+        super().setUp()
+        from feeder import config
+        self.store = Store.open(self.state)
+        self.sources = config.Repo(self.root).load_sources()
+        self.prof = config.with_defaults(dict(self.profile))
+
+    def tearDown(self):
+        self.store.close()
+        super().tearDown()
+
+    def plant(self, n, day, **over):
+        rec = {"feed_id": "alpha", "summary": "", "link": f"https://example.gov/p{n}", "link_key": f"example.gov/p{n}",
+               "published": f"{day}T00:00:00Z", "guard_level": "CLEAN", "guard_score": 0, "authors": [], "route_url": None,
+               "retrieved_at": None, "content_sha256": f"{n:064x}", "guid": f"g{n}", "title": f"Post {n}"}
+        rec.update(over)
+        self.store.upsert_item(rec, first_seen=f"{day}T12:00:00Z")
+        return rec["content_sha256"]
+
+    def select(self, day):
+        hub.select_for_day(self.store, self.prof, self.sources, day)
+        return {r[0] for r in self.store.conn.execute("SELECT content_sha256 FROM hits WHERE day = ?", (day,))}
+
+    def listed(self, n, day, guid):
+        return self.plant(n, day, link=f"https://{self.LISTING}", link_key=self.LISTING, guid=guid)
+
+    def test_a_shown_post_older_than_the_window_still_blocks_its_retitle(self):
+        first, second = self.listed(1, "2026-08-01", "g1"), self.listed(2, "2026-08-01", "g2")
+        self.assertEqual(self.select("2026-08-02"), {first, second})
+        self.listed(3, "2026-10-18", "g1")
+        self.assertEqual(self.select("2026-10-19"), set(), "the same guid on the listing page is the same story")
+
+    def test_a_listing_link_stays_shared_when_its_other_posts_are_older_than_the_window(self):
+        first, second = self.listed(1, "2026-08-01", "g1"), self.listed(2, "2026-08-01", "g2")
+        self.assertEqual(self.select("2026-08-02"), {first, second})
+        new = self.listed(3, "2026-10-18", "g3")
+        self.assertEqual(self.select("2026-10-19"), {new}, "a new guid on the listing page is a new story")
+
+    def test_only_rows_dated_inside_the_window_are_read(self):
+        old, edge, inside = self.plant(1, "2026-09-18"), self.plant(2, "2026-09-19"), self.plant(3, "2026-10-19")
+        later = self.plant(4, "2026-10-20")
+        undated = self.plant(5, "2026-10-01", published=None)
+        blank = self.plant(6, "2026-10-02", published="")
+        other = self.plant(7, "2026-10-10", feed_id="beta")
+        read = {r["content_sha256"] for r in self.store.items_in_window(["alpha"], "2026-09-19", "2026-10-19")}
+        self.assertEqual(read, {edge, inside, undated, blank}, "both ends of the window count; a row without a date uses first seen")
+        self.assertEqual(self.store.items_in_window([], "2026-09-19", "2026-10-19"), [])
+        self.assertEqual(self.select("2026-10-19"), {edge, inside, undated, blank, other})
+        self.assertEqual(self.select("2026-10-20"), {later}, "a row older than the window is never selected")
+        self.assertNotIn(old, {r[0] for r in self.store.conn.execute("SELECT content_sha256 FROM hits")})
+
+    def test_shared_links_and_shown_guids_are_counted_over_every_row(self):
+        self.listed(1, "2026-01-05", "g1")
+        self.listed(2, "2026-10-18", "g2")
+        self.plant(3, "2026-10-18", link_key="example.gov/one", guid="g3")
+        self.plant(4, "2026-10-18", link_key="example.gov/one", guid="g3", title="Retitled")
+        self.plant(5, "2026-10-18", link_key="example.gov/none", guid=None)
+        self.plant(6, "2026-10-18", link_key="example.gov/none", guid="")
+        self.plant(7, "2026-10-18", link_key=self.LISTING, guid="g7", feed_id="beta")
+        self.assertEqual(self.store.shared_links(["alpha", "beta"]), {("alpha", self.LISTING)},
+                         "two guids of one feed on one link; one guid twice, no guid, or another feed do not count")
+        self.assertEqual((self.store.shared_links([]), self.store.shown_guids("tr", [])), (set(), set()))
+        self.store.add_hit("tr", f"{1:064x}", "2026-01-06", [])
+        self.store.add_hit("tr", f"{5:064x}", "2026-10-19", [])
+        self.store.add_hit("tr", f"{6:064x}", "2026-10-19", [])
+        self.store.add_hit("other", f"{2:064x}", "2026-10-19", [])
+        self.assertEqual(self.store.shown_guids("tr", ["alpha", "beta"]), {("alpha", "g1")})
+        self.assertEqual(self.store.shown_guids("tr", ["beta"]), set())
+
+
 class GuardBandTests(HubTestCase):
     def setUp(self):
         super().setUp()
