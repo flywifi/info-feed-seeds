@@ -1802,19 +1802,27 @@ class CfrWatchTests(HubTestCase):
             return code, self.output
 
         self.profile.update(topics=[], sources=["fr"])
-        self.assertEqual(lint(cfr_parts=["32/170.14", "48/252", "48/252.204-7012"])[0], 0, self.output)
-        code, out = lint(cfr_parts=["45/164", "32/170", "48/252.204-7019"])
-        self.assertEqual(code, 1)
-        for ref in ("45/164", "48/252.204-7019"):
-            self.assertIn(f"profiles/tr.json: CFR reference {ref!r} meets no entry of schema/cfr-watch.json", out)
-        self.assertNotIn("'32/170' meets", out)
-        code, out = lint(exclude_cfr_parts=["32/170", "48/252"])
-        self.assertEqual(code, 1)
-        self.assertIn("profiles/tr.json: exclude_cfr_parts covers every entry of schema/cfr-watch.json", out)
-        self.assertEqual(lint(exclude_cfr_parts=["32/170"])[0], 0, self.output)
+        dead = "profiles/tr.json: cfr_parts and exclude_cfr_parts leave nothing to route"
+        for lists in ({"cfr_parts": ["32/170.14", "48/252", "48/252.204-7012"]},
+                      {"cfr_parts": ["45/164"]},   # an item naming 32/170 and 45/164 is routed
+                      {"exclude_cfr_parts": ["32/170"]},
+                      {"exclude_cfr_parts": ["32/170", "48/252.204-7012"]},   # a document naming only 48/252 still passes
+                      {"cfr_parts": ["32/170.14"], "exclude_cfr_parts": ["48/252"]}):
+            with self.subTest(lists=lists):
+                self.assertEqual(lint(**lists)[0], 0, self.output)
+        for lists in ({"exclude_cfr_parts": ["32/170", "48/252"]},
+                      {"cfr_parts": ["45/164"], "exclude_cfr_parts": ["32/170", "48/252"]}):
+            with self.subTest(lists=lists):
+                code, out = lint(**lists)
+                self.assertEqual((code, out.count(dead)), (1, 1), out)
         self.profile.update(topics=["cybersecurity"], sources=["fr"])
         self.assertEqual(lint(cfr_parts=["45/164"], exclude_cfr_parts=["32/170", "48/252"])[0], 0,
                          "a profile that also polls an ordinary source can still route its items")
+        m = jsonio.load_json(self.root / "sources" / "alpha" / "source.json")
+        jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", dict(m, enabled=False))
+        self.profile.update(topics=[], sources=["fr", "alpha"])
+        self.assertEqual(lint(exclude_cfr_parts=["32/170", "48/252"])[0], 0,
+                         "stored rows of a named source are still selected after it is disabled")
 
     def test_lint_checks_the_watch_list_and_the_profile_references(self):
         self.assertEqual(self.run_hub("lint"), 0, self.output)

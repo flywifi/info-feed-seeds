@@ -536,19 +536,19 @@ def lint(repo: Repo) -> list[str]:
                 if iid in known_industries:
                     problems.append(f"{rel}: industry {iid!r} is listed by no enabled source this profile polls, "
                                     "so it routes nothing")
-        polled_now = [] if shape else [s for s in selected_sources(with_defaults(profile), loaded)
-                                       if s.manifest.get("enabled", True)]
-        if polled_now and watch and all(s.manifest.get("watched_only") is True for s in polled_now):
-            # Every source this profile polls gives only items under the watch list, so a CFR list that
-            # no entry can meet, or an exclusion that covers every entry, leaves nothing to route.
-            for ref in sorted(set(_ref_list(profile, "cfr_parts"))):
-                part = ref.split(".", 1)[0]
-                if extract.watch_ref_ok(ref) and not any(w in (ref, part) or w.split(".", 1)[0] == ref for w in watch):
-                    problems.append(f"{rel}: CFR reference {ref!r} meets no entry of schema/cfr-watch.json and this "
-                                    "profile polls only watched-only sources, so it routes nothing")
-            if all(w in kept_out or w.split(".", 1)[0] in kept_out for w in watch):
-                problems.append(f"{rel}: exclude_cfr_parts covers every entry of schema/cfr-watch.json and this "
-                                "profile polls only watched-only sources, so nothing is routed")
+        # Stored rows of a source a profile names are selected whether or not the source is enabled.
+        polled_now = [] if shape else selected_sources(with_defaults(profile), loaded)
+        wanted = [r for r in _ref_list(profile, "cfr_parts") if extract.watch_ref_ok(r)]
+        if (polled_now and watch and (wanted or kept_out)
+                and all(s.manifest.get("watched_only") is True for s in polled_now)):
+            # Every source this profile polls gives only items under the watch list. The routing rule
+            # itself is asked whether anything can pass: an item naming an entry or its part, alone or
+            # beside a reference the profile routes in (one item can carry several references).
+            anchors = [[e] for e in dict.fromkeys(e for w in watch for e in (w, w.split(".", 1)[0]))]
+            probes = anchors + [[r] for r in wanted] + [[*a, r] for a in anchors for r in wanted]
+            if not any(cfr_routed(profile, polled_now[0], {"cfr": refs}, watch) for refs in probes):
+                problems.append(f"{rel}: cfr_parts and exclude_cfr_parts leave nothing to route: every source this "
+                                "profile polls is watched-only")
         excluded = set(_ref_list(profile, "exclude_content_categories"))
         polled = {r.split("/", 1)[0] for r in _ref_list(profile, "source_categories")}
         polled |= {cat_of.get(s) for s in _ref_list(profile, "sources")}

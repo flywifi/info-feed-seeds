@@ -81,9 +81,9 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
-- `hub lint` reports a `cfr_parts` reference that meets no watch-list entry, and an
-  `exclude_cfr_parts` list that covers every entry, for a profile that polls only watched-only
-  sources: such a list leaves it nothing to route.
+- `hub lint` reports `cfr_parts` and `exclude_cfr_parts` lists that leave nothing to route for a
+  profile that polls only watched-only sources. It asks the routing rule itself, so a list is
+  reported only when no item can pass.
 - Sources `federal-register-rules` (Federal Register rules and proposed rules, with their CFR parts,
   agencies, comment deadlines and effective dates) and `ecfr-changes` (eCFR changes by section).
   Both are watched-only: only an item under an entry of `schema/cfr-watch.json` is selected.
