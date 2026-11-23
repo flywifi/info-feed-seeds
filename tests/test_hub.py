@@ -1787,6 +1787,43 @@ class CfrWatchTests(HubTestCase):
         self.assertEqual(self.watch_poll(watched_only=False, daily_cap=2), ["Newer three", "Newer two"],
                          "a source that is not watched-only keeps its place by date")
 
+    def test_lint_reports_a_cfr_list_that_leaves_a_watched_only_profile_nothing(self):
+        self.add_source("fr", self.API, ["regulation/federal-rulemaking"], watched_only=True,
+                        routes=[{"kind": "json-api", "adapter": "json-api", "url": self.API,
+                                 "params": {"items_path": "results", "fields": LabelTests.FIELDS}}])
+        self.set_watch({"32/170": {"label": "x"}, "48/252.204-7012": {"label": "y"}})
+
+        def lint(**lists):
+            for key in ("cfr_parts", "exclude_cfr_parts"):
+                self.profile.pop(key, None)
+            self.profile.update(lists)
+            jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+            code = self.run_hub("lint")
+            return code, self.output
+
+        self.profile.update(topics=[], sources=["fr"])
+        dead = "profiles/tr.json: cfr_parts and exclude_cfr_parts leave nothing to route"
+        for lists in ({"cfr_parts": ["32/170.14", "48/252", "48/252.204-7012"]},
+                      {"cfr_parts": ["45/164"]},   # an item naming 32/170 and 45/164 is routed
+                      {"exclude_cfr_parts": ["32/170"]},
+                      {"exclude_cfr_parts": ["32/170", "48/252.204-7012"]},   # a document naming only 48/252 still passes
+                      {"cfr_parts": ["32/170.14"], "exclude_cfr_parts": ["48/252"]}):
+            with self.subTest(lists=lists):
+                self.assertEqual(lint(**lists)[0], 0, self.output)
+        for lists in ({"exclude_cfr_parts": ["32/170", "48/252"]},
+                      {"cfr_parts": ["45/164"], "exclude_cfr_parts": ["32/170", "48/252"]}):
+            with self.subTest(lists=lists):
+                code, out = lint(**lists)
+                self.assertEqual((code, out.count(dead)), (1, 1), out)
+        self.profile.update(topics=["cybersecurity"], sources=["fr"])
+        self.assertEqual(lint(cfr_parts=["45/164"], exclude_cfr_parts=["32/170", "48/252"])[0], 0,
+                         "a profile that also polls an ordinary source can still route its items")
+        m = jsonio.load_json(self.root / "sources" / "alpha" / "source.json")
+        jsonio.dump_json(self.root / "sources" / "alpha" / "source.json", dict(m, enabled=False))
+        self.profile.update(topics=[], sources=["fr", "alpha"])
+        self.assertEqual(lint(exclude_cfr_parts=["32/170", "48/252"])[0], 0,
+                         "stored rows of a named source are still selected after it is disabled")
+
     def test_lint_checks_the_watch_list_and_the_profile_references(self):
         self.assertEqual(self.run_hub("lint"), 0, self.output)
         self.set_watch({"32 CFR 170": {"label": "x"}, "32/170": {"label": "x", "standards": ["nope"]}})
@@ -1806,6 +1843,81 @@ class CfrWatchTests(HubTestCase):
         jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
         self.assertEqual(self.run_hub("lint"), 1)
         self.assertIn("profiles/tr.json: CFR reference '32 CFR 170' is not a CFR part (32/170) or section (48/252.204-7012)", self.output)
+
+
+class WindowReadTests(HubTestCase):
+    """Selection reads only the rows dated inside the window; what older rows decide is still honoured."""
+
+    LISTING = "example.gov/updates"
+
+    def setUp(self):
+        super().setUp()
+        from feeder import config
+        self.store = Store.open(self.state)
+        self.sources = config.Repo(self.root).load_sources()
+        self.prof = config.with_defaults(dict(self.profile))
+
+    def tearDown(self):
+        self.store.close()
+        super().tearDown()
+
+    def plant(self, n, day, **over):
+        rec = {"feed_id": "alpha", "summary": "", "link": f"https://example.gov/p{n}", "link_key": f"example.gov/p{n}",
+               "published": f"{day}T00:00:00Z", "guard_level": "CLEAN", "guard_score": 0, "authors": [], "route_url": None,
+               "retrieved_at": None, "content_sha256": f"{n:064x}", "guid": f"g{n}", "title": f"Post {n}"}
+        rec.update(over)
+        self.store.upsert_item(rec, first_seen=f"{day}T12:00:00Z")
+        return rec["content_sha256"]
+
+    def select(self, day):
+        hub.select_for_day(self.store, self.prof, self.sources, day)
+        return {r[0] for r in self.store.conn.execute("SELECT content_sha256 FROM hits WHERE day = ?", (day,))}
+
+    def listed(self, n, day, guid):
+        return self.plant(n, day, link=f"https://{self.LISTING}", link_key=self.LISTING, guid=guid)
+
+    def test_a_shown_post_older_than_the_window_still_blocks_its_retitle(self):
+        first, second = self.listed(1, "2026-08-01", "g1"), self.listed(2, "2026-08-01", "g2")
+        self.assertEqual(self.select("2026-08-02"), {first, second})
+        self.listed(3, "2026-10-18", "g1")
+        self.assertEqual(self.select("2026-10-19"), set(), "the same guid on the listing page is the same story")
+
+    def test_a_listing_link_stays_shared_when_its_other_posts_are_older_than_the_window(self):
+        first, second = self.listed(1, "2026-08-01", "g1"), self.listed(2, "2026-08-01", "g2")
+        self.assertEqual(self.select("2026-08-02"), {first, second})
+        new = self.listed(3, "2026-10-18", "g3")
+        self.assertEqual(self.select("2026-10-19"), {new}, "a new guid on the listing page is a new story")
+
+    def test_only_rows_dated_inside_the_window_are_read(self):
+        old, edge, inside = self.plant(1, "2026-09-18"), self.plant(2, "2026-09-19"), self.plant(3, "2026-10-19")
+        later = self.plant(4, "2026-10-20")
+        undated = self.plant(5, "2026-10-01", published=None)
+        blank = self.plant(6, "2026-10-02", published="")
+        other = self.plant(7, "2026-10-10", feed_id="beta")
+        read = {r["content_sha256"] for r in self.store.items_in_window(["alpha"], "2026-09-19", "2026-10-19")}
+        self.assertEqual(read, {edge, inside, undated, blank}, "both ends of the window count; a row without a date uses first seen")
+        self.assertEqual(self.store.items_in_window([], "2026-09-19", "2026-10-19"), [])
+        self.assertEqual(self.select("2026-10-19"), {edge, inside, undated, blank, other})
+        self.assertEqual(self.select("2026-10-20"), {later}, "a row older than the window is never selected")
+        self.assertNotIn(old, {r[0] for r in self.store.conn.execute("SELECT content_sha256 FROM hits")})
+
+    def test_shared_links_and_shown_guids_are_counted_over_every_row(self):
+        self.listed(1, "2026-01-05", "g1")
+        self.listed(2, "2026-10-18", "g2")
+        self.plant(3, "2026-10-18", link_key="example.gov/one", guid="g3")
+        self.plant(4, "2026-10-18", link_key="example.gov/one", guid="g3", title="Retitled")
+        self.plant(5, "2026-10-18", link_key="example.gov/none", guid=None)
+        self.plant(6, "2026-10-18", link_key="example.gov/none", guid="")
+        self.plant(7, "2026-10-18", link_key=self.LISTING, guid="g7", feed_id="beta")
+        self.assertEqual(self.store.shared_links(["alpha", "beta"]), {("alpha", self.LISTING)},
+                         "two guids of one feed on one link; one guid twice, no guid, or another feed do not count")
+        self.assertEqual((self.store.shared_links([]), self.store.shown_guids("tr", [])), (set(), set()))
+        self.store.add_hit("tr", f"{1:064x}", "2026-01-06", [])
+        self.store.add_hit("tr", f"{5:064x}", "2026-10-19", [])
+        self.store.add_hit("tr", f"{6:064x}", "2026-10-19", [])
+        self.store.add_hit("other", f"{2:064x}", "2026-10-19", [])
+        self.assertEqual(self.store.shown_guids("tr", ["alpha", "beta"]), {("alpha", "g1")})
+        self.assertEqual(self.store.shown_guids("tr", ["beta"]), set())
 
 
 class GuardBandTests(HubTestCase):

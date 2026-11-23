@@ -81,6 +81,9 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- `hub lint` reports `cfr_parts` and `exclude_cfr_parts` lists that leave nothing to route for a
+  profile that polls only watched-only sources. It asks the routing rule itself, so a list is
+  reported only when no item can pass.
 - Sources `federal-register-rules` (Federal Register rules and proposed rules, with their CFR parts,
   agencies, comment deadlines and effective dates) and `ecfr-changes` (eCFR changes by section).
   Both are watched-only: only an item under an entry of `schema/cfr-watch.json` is selected.
@@ -414,6 +417,10 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Changed
 
+- The daily selection reads only the rows dated inside a profile's window. Which links are shared
+  and which ids were already shown are asked of the store over every row, so the digest is unchanged
+  and a poll no longer slows in step with the store (three days selected on 60,000 stored rows took
+  5.2 s before and 1.7 s after).
 - `govinfo-cfr` is disabled (2026-11-20): its feed lists the annual CFR volumes, not changes, and
   took 40 of the 80 digest slots on 2026-11-11. `ecfr-changes` reports the changes. Its folder stays,
   so one line switches it back on.

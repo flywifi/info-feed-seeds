@@ -209,12 +209,40 @@ class Store:
             self.conn.execute(f"UPDATE items SET {sets} WHERE content_sha256 = ?",
                               tuple(_column_value(n, v) for n, v in values.items()) + (sha,))
 
-    def items_for_feeds(self, feed_ids: list[str]) -> list[dict]:
+    def items_in_window(self, feed_ids: list[str], earliest: str, day: str) -> list[dict]:
+        """Rows of these feeds dated inside the window, by the day published or, without one, first
+        seen: the only rows a day can still select."""
         if not feed_ids:
             return []
         marks = ",".join("?" for _ in feed_ids)
-        rows = self.conn.execute(f"SELECT * FROM items WHERE feed_id IN ({marks})", list(feed_ids)).fetchall()
+        rows = self.conn.execute(
+            f"SELECT * FROM items WHERE feed_id IN ({marks})"
+            " AND substr(COALESCE(NULLIF(published, ''), first_seen), 1, 10) BETWEEN ? AND ?",
+            [*feed_ids, earliest, day]).fetchall()
         return [_item_row(r) for r in rows]
+
+    def shared_links(self, feed_ids: list[str]) -> set[tuple[str, str]]:
+        """(feed, link key) pairs that two or more distinct guids of that feed carry, over every stored
+        row, so a listing page is still known as one when its other posts are older than the window."""
+        if not feed_ids:
+            return set()
+        marks = ",".join("?" for _ in feed_ids)
+        rows = self.conn.execute(
+            f"SELECT feed_id, link_key FROM items WHERE feed_id IN ({marks})"
+            " AND link_key IS NOT NULL AND link_key != '' AND guid IS NOT NULL AND guid != ''"
+            " GROUP BY feed_id, link_key HAVING COUNT(DISTINCT guid) > 1", list(feed_ids)).fetchall()
+        return {(r[0], r[1]) for r in rows}
+
+    def shown_guids(self, profile: str, feed_ids: list[str]) -> set[tuple[str, str]]:
+        """(feed, guid) of every item of these feeds this profile has shown, whatever its age."""
+        if not feed_ids:
+            return set()
+        marks = ",".join("?" for _ in feed_ids)
+        rows = self.conn.execute(
+            "SELECT i.feed_id, i.guid FROM hits h JOIN items i ON i.content_sha256 = h.content_sha256"
+            f" WHERE h.profile = ? AND i.guid IS NOT NULL AND i.guid != '' AND i.feed_id IN ({marks})",
+            [profile, *feed_ids]).fetchall()
+        return {(r[0], r[1]) for r in rows}
 
     def item(self, sha: str) -> dict | None:
         row = self.conn.execute("SELECT * FROM items WHERE content_sha256 = ?", (sha,)).fetchone()
