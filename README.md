@@ -38,7 +38,8 @@ private notes or anything that identifies a client or a campaign.
   stored items at the next poll, and an empty list gives none. An item that names only the part of a
   section entry, and no section of that part, is selected too, since a source that gives parts cannot say
   which section a document changes. Items of a watched-only source are selected before the rest of the
-  day, so a full day cannot keep them out. A profile's `cfr_parts` list routes in
+  day, so a full day cannot keep them out. Lint reports a `cfr_parts` or `exclude_cfr_parts` list that
+  leaves a profile polling only watched-only sources nothing to route. A profile's `cfr_parts` list routes in
   only items under a reference it names, and `exclude_cfr_parts` keeps them out and wins over an
   inclusion. An item under an entry is tagged with the standards the entry names, at poll and by
   `hub retag`. `source_cap` is the most
