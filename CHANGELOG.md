@@ -418,8 +418,11 @@ All notable changes to this repository are recorded here. The format follows
 ### Changed
 
 - Tool settings: the tools of the Firecrawl connector (web search and page reading) are on the
-  allow list in `.claude/settings.json`, so a session that has the connector runs them without a
-  permission prompt.
+  allow list in `.claude/settings.json` under both names the connector can have (`Firecrawl` in
+  cloud sessions, `claude_ai_Firecrawl` where a session fetches its connectors itself), so they run
+  without a permission prompt. Four still ask first: the research agent, which is billed for every
+  credit a job uses; the two people and company lookups, which are billed per lookup and can return
+  contact details; and saving a skill to the shared library. A test keeps the two names in step.
 - The daily selection reads only the rows dated inside a profile's window. Which links are shared
   and which ids were already shown are asked of the store over every row, so the digest is unchanged
   and a poll no longer slows in step with the store (three days selected on 60,000 stored rows took

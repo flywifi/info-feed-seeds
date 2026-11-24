@@ -120,5 +120,26 @@ class PointerTests(unittest.TestCase):
             self.assertFalse(INSTRUCTION_PATHS.search(rel), rel)
 
 
+class ToolSettingsTests(unittest.TestCase):
+    # One connector has two names: cloud sessions call it Firecrawl, and a session that fetches its
+    # connectors itself calls it claude_ai_Firecrawl. A rule written for one name must exist for both.
+    NAMES = ("mcp__Firecrawl", "mcp__claude_ai_Firecrawl")
+
+    def test_connector_rules_exist_under_both_names(self):
+        permissions = json.loads((ROOT / ".claude" / "settings.json").read_text(encoding="ascii"))["permissions"]
+        for kind in ("allow", "ask", "deny"):
+            rules = set(permissions.get(kind, []))
+            for name, other in (self.NAMES, self.NAMES[::-1]):
+                for rule in sorted(rules):
+                    if rule == name or rule.startswith(name + "__"):
+                        with self.subTest(kind=kind, rule=rule):
+                            self.assertIn(other + rule[len(name):], rules)
+
+    def test_the_costly_tools_ask_and_the_rest_are_allowed(self):
+        permissions = json.loads((ROOT / ".claude" / "settings.json").read_text(encoding="ascii"))["permissions"]
+        self.assertIn("mcp__Firecrawl", permissions["allow"])
+        self.assertIn("mcp__Firecrawl__firecrawl_agent", permissions["ask"])
+
+
 if __name__ == "__main__":
     unittest.main()

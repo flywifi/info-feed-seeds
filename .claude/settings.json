@@ -1,7 +1,12 @@
 {
   "permissions": {
     "defaultMode": "acceptEdits",
-    "allow": ["Bash", "Read", "Edit", "Write", "Glob", "Grep", "NotebookEdit", "WebFetch", "WebSearch", "Agent", "TodoWrite", "mcp__Firecrawl"],
+    "allow": ["Bash", "Read", "Edit", "Write", "Glob", "Grep", "NotebookEdit", "WebFetch", "WebSearch", "Agent", "TodoWrite",
+              "mcp__Firecrawl", "mcp__claude_ai_Firecrawl"],
+    "ask": ["mcp__Firecrawl__firecrawl_agent", "mcp__Firecrawl__people_company_search",
+            "mcp__Firecrawl__people_company_enrich", "mcp__Firecrawl__firecrawl_save_skill",
+            "mcp__claude_ai_Firecrawl__firecrawl_agent", "mcp__claude_ai_Firecrawl__people_company_search",
+            "mcp__claude_ai_Firecrawl__people_company_enrich", "mcp__claude_ai_Firecrawl__firecrawl_save_skill"],
     "deny": ["Bash(git push --force:*)", "Bash(git push -f:*)", "Bash(git push origin main:*)"]
   },
   "attribution": {
