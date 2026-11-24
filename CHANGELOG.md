@@ -81,6 +81,13 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
+- Each poll also publishes every day's digest as `YYYY-MM-DD.json`, a per-profile `index.json`
+  (every published day, newest first, with its item count), `recent.json` (the items of the newest
+  30 days in one file, each with its day) and `digests/index.json` (every profile with its newest and
+  oldest day), so past days can be read as structured data. A day the item database still holds but
+  that was published before these files existed gets its JSON on the next poll, and its Markdown is
+  left as published. A day that cannot be rendered is skipped with a warning and never stops the
+  publish. Unchanged files are not rewritten.
 - `hub lint` reports `cfr_parts` and `exclude_cfr_parts` lists that leave nothing to route for a
   profile that polls only watched-only sources. It asks the routing rule itself, so a list is
   reported only when no item can pass.

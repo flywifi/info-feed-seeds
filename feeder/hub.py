@@ -572,6 +572,7 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
 
     written: list[Path] = []
     summary_rows = []
+    all_pending: dict[Path, bytes] = {}
     for profile in profiles:
         held: dict[str, int] = {}
         added = select_for_day(store, profile, sources, day, held, cfr_watch)
@@ -580,10 +581,26 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
             prior = (date.fromisoformat(day) - timedelta(days=back)).isoformat()
             if prior in store.days_with_hits(profile["name"]):
                 days.append(prior)
+        # A day the store still holds but that has no dated JSON yet (published before these files
+        # existed) gets its JSON only; its Markdown stays as published.
+        folder = out_dir / profile["name"]
+        fill = ([d for d in store.days_with_hits(profile["name"])
+                 if d < day and d not in days and not (folder / f"{d}.json").exists()]
+                if "json" in profile.get("outputs", ["md", "json"]) else [])
         coverage = None
-        for d in sorted(days):
-            rendered = render_day(store, repo, profile, sources, d, released, now_z, out_dir,
-                                  held if d == day else None)
+        pending: dict[Path, bytes] = {}
+        for d in sorted(days + fill):
+            try:
+                rendered = render_day(store, repo, profile, sources, d, released, now_z, out_dir,
+                                      held if d == day else None)
+            except Exception as exc:  # noqa: BLE001 - an old day that cannot be filled never stops the publish
+                if d not in fill:
+                    raise
+                warn(f"digest {profile['name']} {d}: JSON not filled, {type(exc).__name__}: {exc}")
+                continue
+            if d in fill:
+                rendered["files"] = {p: b for p, b in rendered["files"].items() if p.name == f"{d}.json"}
+            pending.update(rendered["files"])
             if d == day:
                 coverage = rendered["coverage"]
             if args.dry_run:
@@ -591,9 +608,24 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
                     say(f"dry-run: would write {_show(path)}")
             else:
                 written += outputs.write_files(rendered["files"])
+        catalog = outputs.plan_catalog(out_dir, profile, now_z, pending)
+        all_pending.update(pending)
+        all_pending.update(catalog)
+        if args.dry_run:
+            for path in outputs.changed_files(catalog):
+                say(f"dry-run: would write {_show(path)}")
+        else:
+            written += outputs.write_files(catalog)
         summary_rows.append((profile["name"], added, coverage))
         say(f"digest {profile['name']} {day}: {coverage['items_in_markdown']} items, "
             f"{added} new today, held by guard {coverage['held_by_guard']}")
+
+    root_index = outputs.plan_root_index(out_dir, now_z, all_pending)
+    if args.dry_run:
+        for path in outputs.changed_files(root_index):
+            say(f"dry-run: would write {_show(path)}")
+    else:
+        written += outputs.write_files(root_index)
 
     if args.dry_run:
         store.conn.close()
