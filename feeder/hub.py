@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from types import SimpleNamespace
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urldefrag, urlsplit, urlunsplit
@@ -446,7 +447,7 @@ def cmd_retag(args, repo: Repo, now_fn) -> int:
 # --------------------------------------------------------------------------- rendering
 
 def render_day(store: Store, repo: Repo, profile: dict, sources: dict, day: str, released: set[str],
-               generated: str, out_dir: Path, source_cap_held: dict | None = None) -> dict:
+               generated: str, out_dir: Path, source_cap_held: dict | None = None, *, as_recorded: bool = False) -> dict:
     chosen = selected_sources(profile, sources)
     by_id = {s.id: s for s in chosen}
     views = []
@@ -456,7 +457,14 @@ def render_day(store: Store, repo: Repo, profile: dict, sources: dict, day: str,
         if src is not None:
             row["primary"] = item_tags(profile, src, row)[1]
         views.append(outputs.item_view(row, src, profile, released, reg))
-    health = outputs.health_entries(chosen, store.health_for_day(day))
+    recorded = store.health_for_day(day)
+    if as_recorded:
+        # A day rendered again long after its poll lists the sources that poll recorded, in today's
+        # order where they are still selected, never today's selection.
+        order = [s.id for s in chosen if s.id in recorded] + sorted(set(recorded) - set(by_id))
+        health = outputs.health_entries([SimpleNamespace(id=f) for f in order], recorded)
+    else:
+        health = outputs.health_entries(chosen, recorded)
     coverage = outputs.coverage_of(views, health)
     transitions = []
     for entry in health:
@@ -592,7 +600,7 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
         for d in sorted(days + fill):
             try:
                 rendered = render_day(store, repo, profile, sources, d, released, now_z, out_dir,
-                                      held if d == day else None)
+                                      held if d == day else None, as_recorded=d in fill)
             except Exception as exc:  # noqa: BLE001 - an old day that cannot be filled never stops the publish
                 if d not in fill:
                     raise
@@ -620,7 +628,8 @@ def cmd_poll(args, repo: Repo, fetcher_factory, now_fn) -> int:
         say(f"digest {profile['name']} {day}: {coverage['items_in_markdown']} items, "
             f"{added} new today, held by guard {coverage['held_by_guard']}")
 
-    root_index = outputs.plan_root_index(out_dir, now_z, all_pending)
+    json_off = {p["name"] for p in profiles if "json" not in p.get("outputs", ["md", "json"])}
+    root_index = outputs.plan_root_index(out_dir, now_z, all_pending, exclude=json_off)
     if args.dry_run:
         for path in outputs.changed_files(root_index):
             say(f"dry-run: would write {_show(path)}")

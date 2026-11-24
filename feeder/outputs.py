@@ -6,6 +6,10 @@ Files under `<out-dir>/<profile>/`:
   latest.json    the newest day as data (`version` "1").
   report.json    coverage, health transitions, guard holds (levels and category counts only, never
                  raw text) and the sources that did not run, for the newest day.
+  YYYY-MM-DD.json  the day as data, the same content latest.json has on that day (json output).
+  index.json     every day with a dated JSON file, newest first, with its item count (json output).
+  recent.json    the items of the newest RECENT_DAYS dated JSON files, each with its day (json output).
+And `<out-dir>/index.json`: every profile with json output, with its newest and oldest day.
 
 latest.* and report.json are written only when the day being rendered is the newest dated digest
 in the folder, so re-rendering an older day never rolls `latest` backwards. A file is written only
@@ -364,7 +368,8 @@ def carry_generated(path: Path, obj: dict) -> dict:
 
 
 def newest_dated(folder: Path) -> str | None:
-    days = sorted(p.stem for p in folder.glob("????-??-??.md")) if folder.is_dir() else []
+    # Either dated file counts, so a profile with json output only also knows its newest day.
+    days = sorted(p.stem for p in folder.glob("????-??-??.*") if p.suffix in (".md", ".json")) if folder.is_dir() else []
     return days[-1] if days else None
 
 
@@ -411,7 +416,7 @@ def plan_catalog(out_dir: Path, profile: dict, generated: str, pending: dict[Pat
     items of the newest RECENT_DAYS of those days, each with its day) for one profile folder."""
     folder = out_dir / profile["name"]
     days = dated_json(folder, pending)
-    if not days:
+    if "json" not in set(profile.get("outputs", ["md", "json"])) or not days:
         return {}
     newest_first = sorted(days, reverse=True)
     recent = newest_first[:RECENT_DAYS]
@@ -425,8 +430,10 @@ def plan_catalog(out_dir: Path, profile: dict, generated: str, pending: dict[Pat
             folder / "recent.json": jsonio.dumps(carry_generated(folder / "recent.json", listing)).encode("utf-8")}
 
 
-def plan_root_index(out_dir: Path, generated: str, pending: dict[Path, bytes] | None = None) -> dict[Path, bytes]:
-    """digests/index.json: the profiles that publish an index, with their newest day."""
+def plan_root_index(out_dir: Path, generated: str, pending: dict[Path, bytes] | None = None,
+                    exclude: set[str] | frozenset = frozenset()) -> dict[Path, bytes]:
+    """digests/index.json: the profiles that publish an index, with their newest day. `exclude` names
+    profiles whose json output is off: their old index file stays on disk but is no longer listed."""
     rows = []
     paths = set(out_dir.glob("*/index.json")) if out_dir.is_dir() else set()
     paths |= {p for p in (pending or {}) if p.name == "index.json" and p.parent.parent == out_dir}
@@ -435,12 +442,14 @@ def plan_root_index(out_dir: Path, generated: str, pending: dict[Path, bytes] | 
             obj = json.loads((pending or {})[path].decode("utf-8")) if path in (pending or {}) else jsonio.load_json(path)
         except (OSError, ValueError):
             continue
+        if path.parent.name in exclude:
+            continue
         if isinstance(obj, dict) and obj.get("profile") == path.parent.name and isinstance(obj.get("days"), list):
             days = [d for d in obj["days"] if isinstance(d, dict) and isinstance(d.get("date"), str)]
             if days:
                 rows.append({"profile": obj["profile"], "latest": days[0]["date"], "oldest": days[-1]["date"],
                              "days": len(days), "items_latest": days[0].get("items")})
-    if not rows:
+    if not rows and not (out_dir / "index.json").exists():
         return {}
     root = {"_comment": INDEX_COMMENT, "version": FORMAT_VERSION, "generated": generated, "profiles": rows}
     return {out_dir / "index.json": jsonio.dumps(carry_generated(out_dir / "index.json", root)).encode("utf-8")}

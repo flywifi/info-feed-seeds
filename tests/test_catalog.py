@@ -55,12 +55,13 @@ class DatedJsonTests(HubTestCase):
         (self.out / "tr" / f"{DAY}.json").unlink()
         real = hub.render_day
 
-        def render(store, repo, profile, sources, day, *rest):
+        def render(store, repo, profile, sources, day, *rest, **kw):
             if day == DAY:
                 raise ValueError("old row")
-            return real(store, repo, profile, sources, day, *rest)
-        with unittest.mock.patch.object(hub, "render_day", render):
+            return real(store, repo, profile, sources, day, *rest, **kw)
+        with unittest.mock.patch.object(hub, "render_day", render), unittest.mock.patch.object(hub, "warn") as warned:
             self.assertEqual(self.poll_day(NEXT, "--offline"), 0)
+        self.assertTrue(any(f"tr {DAY}: JSON not filled, ValueError: old row" in c.args[0] for c in warned.call_args_list))
         self.assertFalse((self.out / "tr" / f"{DAY}.json").exists())
         self.assertEqual(jsonio.load_json(self.out / "tr" / "latest.json")["date"], NEXT)
         self.assertEqual([d["date"] for d in jsonio.load_json(self.out / "tr" / "index.json")["days"]], [NEXT])
@@ -74,6 +75,48 @@ class DatedJsonTests(HubTestCase):
         self.assertTrue((folder / f"{DAY}.json").exists())
         self.assertEqual((folder / f"{DAY}.md").read_text(encoding="utf-8"), "as published\n")
         self.assertEqual([d["date"] for d in jsonio.load_json(folder / "index.json")["days"]], [NEXT, DAY])
+
+    def test_a_filled_day_lists_the_sources_its_own_poll_recorded(self):
+        self.poll()                                   # alpha answers; beta fails with HTTP 503
+        self.add_source("beta", "https://example.gov/beta.xml", ["regulation/federal-rulemaking"], enabled=False)
+        self.add_source("gamma", "https://example.gov/gamma.xml", ["cybersecurity"])
+        (self.out / "tr" / f"{DAY}.json").unlink()
+        self.poll_day(NEXT, "--offline")
+        filled = jsonio.load_json(self.out / "tr" / f"{DAY}.json")
+        self.assertEqual([h["feed_id"] for h in filled["health"]], ["alpha", "beta"])
+        self.assertEqual(filled["health"][1]["http_status"], 503)
+        self.assertEqual((filled["coverage"]["sources_failed"], filled["coverage"]["sources_did_not_run"]), (1, 0))
+        today = jsonio.load_json(self.out / "tr" / f"{NEXT}.json")
+        self.assertEqual([h["feed_id"] for h in today["health"]], ["alpha", "gamma"])
+
+    def test_turning_json_output_off_stops_the_catalog_and_the_root_index_entry(self):
+        self.poll()
+        folder = self.out / "tr"
+        index = (folder / "index.json").read_bytes()
+        (folder / "recent.json").unlink()
+        self.profile["outputs"] = ["md"]
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.poll_day(NEXT, "--offline")
+        self.assertTrue((folder / f"{NEXT}.md").exists())
+        self.assertFalse((folder / f"{NEXT}.json").exists())
+        self.assertFalse((folder / "recent.json").exists())
+        self.assertEqual((folder / "index.json").read_bytes(), index)   # left as published, no longer listed
+        self.assertEqual(jsonio.load_json(self.out / "index.json")["profiles"], [])
+
+    def test_a_json_only_profile_keeps_latest_on_its_newest_day(self):
+        self.profile.update(outputs=["json"], backfill_days=2)
+        jsonio.dump_json(self.root / "profiles" / "tr.json", self.profile)
+        self.poll()
+        self.poll_day(NEXT, "--offline")
+        folder = self.out / "tr"
+        latest = (folder / "latest.json").read_bytes()
+        self.assertEqual(latest, (folder / f"{NEXT}.json").read_bytes())
+        later = datetime(2026, 10, 21, 18, 0, 0, tzinfo=timezone.utc)
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            hub.main(["poll", "--profile", "tr", "--date", NEXT, "--state-dir", str(self.state), "--out-dir",
+                      str(self.out), "--offline"], root=self.root, fetcher_factory=lambda d: FakeFetcher(self.script),
+                     now_fn=lambda: later)
+        self.assertEqual((folder / "latest.json").read_bytes(), latest)
 
     def test_a_profile_without_json_output_gets_no_json_files(self):
         self.profile["outputs"] = ["md"]
