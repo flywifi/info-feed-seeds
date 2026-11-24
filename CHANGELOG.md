@@ -81,13 +81,17 @@ All notable changes to this repository are recorded here. The format follows
 
 ### Added
 
-- Each poll also publishes every day's digest as `YYYY-MM-DD.json`, a per-profile `index.json`
-  (every published day, newest first, with its item count), `recent.json` (the items of the newest
-  30 days in one file, each with its day) and `digests/index.json` (every profile with its newest and
-  oldest day), so past days can be read as structured data. A day the item database still holds but
-  that was published before these files existed gets its JSON on the next poll, and its Markdown is
-  left as published. A day that cannot be rendered is skipped with a warning and never stops the
-  publish. Unchanged files are not rewritten.
+- Each poll also publishes the day's digest as `YYYY-MM-DD.json`, a per-profile `index.json` (every
+  day that has dated JSON, newest first, with its item count), `recent.json` (the items of the newest
+  30 of those days in one file, each with its day) and `digests/index.json` (every profile with JSON
+  output, with its newest and oldest day), so past days can be read as structured data. A day
+  published before these files existed gets its JSON on the next poll if the item database still
+  holds items for it: its items and labels as rendered then, and the source health its own poll
+  recorded. Its Markdown is left as published, and if it cannot be rendered it is skipped with a
+  warning; an error on the day being polled still stops the poll. Unchanged files are not rewritten.
+  Turning JSON output off leaves the files already published in place, no longer updated.
+- A profile with JSON output only now knows its newest day from its dated JSON files, so a re-run no
+  longer rewrites its `latest.json` and `report.json` with a new `generated` time.
 - `hub lint` reports `cfr_parts` and `exclude_cfr_parts` lists that leave nothing to route for a
   profile that polls only watched-only sources. It asks the routing rule itself, so a list is
   reported only when no item can pass.

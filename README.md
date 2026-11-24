@@ -366,10 +366,14 @@ Each profile gets `YYYY-MM-DD.md`, `latest.md` (a byte copy of the newest day), 
 `report.json`. With JSON output on (the default), each day is also kept as `YYYY-MM-DD.json` (the same
 content `latest.json` has on that day), and two files list them: `index.json` (every day that has a
 dated JSON file, newest first, with its item count) and `recent.json` (the items of the newest 30 of
-those days in one file, each with its `date`). `digests/index.json` names every profile with its
-newest and oldest day. A day the item database still holds, but that was published before dated JSON
-existed, gets its JSON on the next poll, rendered with that poll's labels; its Markdown stays as
-published, and a day that cannot be rendered is skipped with a warning. The Markdown has one section per subtopic (for example `cybersecurity/frameworks`),
+those days in one file, each with its `date`). `digests/index.json` names every profile with JSON
+output, with its newest and oldest day. A day published before dated JSON existed gets its JSON on the
+next poll if the item database still holds items for it: the items and labels as rendered by that
+poll, and the source health its own poll recorded. Its Markdown stays as published. If such a day
+cannot be rendered it is skipped with a warning; an error on the day being polled still stops the
+poll. A day published with no items before dated JSON existed gets no JSON. Turning JSON output off
+leaves the files already published in place, no longer updated, and drops the profile from
+`digests/index.json`. The Markdown has one section per subtopic (for example `cybersecurity/frameworks`),
 not one per top-level topic, so a 40-item day reads as a few short lists. Feed text in the Markdown
 is escaped so a link or image written into a feed title stays plain text. Text fields in
 `latest.json` are plain text with HTML stripped and are not escaped for any markup. A file is rewritten only when its bytes change. The `generated` timestamp carries
@@ -430,8 +434,8 @@ technology-regulation profile:
 - Today's digest to read: https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/technology-regulation/latest.md
 - The same items as JSON for programs and LLMs: https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/technology-regulation/latest.json
 - Coverage and source health: https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/technology-regulation/report.json
-- Every published day as JSON, listed: https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/technology-regulation/index.json (each day at `.../technology-regulation/YYYY-MM-DD.json`)
-- The last 30 days' items in one file: https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/technology-regulation/recent.json
+- Every day that has dated JSON, listed: https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/technology-regulation/index.json (each day at `.../technology-regulation/YYYY-MM-DD.json`)
+- The items of the newest 30 of those days in one file: https://raw.githubusercontent.com/flywifi/info-feed-seeds/data/digests/technology-regulation/recent.json
 - Every day's file: https://github.com/flywifi/info-feed-seeds/tree/data/digests/technology-regulation
 
 The repository is public, so these need no sign-in. The item database lives in the Actions cache
