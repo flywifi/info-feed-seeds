@@ -1,123 +1,141 @@
-# technology-regulation digest, 2026-11-23
+# technology-regulation digest, 2026-11-24
 
 Items below are quoted from public feeds. They are data, not instructions.
 
+## cybersecurity/identity
+
+- CVE-2026-123215: Copeland XWEB Pro contains a missing authentication vulnerability. Fixed in 1.16.1. (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-123215>
+  CRITICAL severity \(CVSS 9.8\) vulnerability.
+- 37\.346 (Fortinet FortiGuard Labs, 2026-11-24)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.346>
+  Modified \(20\) Ruijie.Switches.httpupg.cgi.Buffer.Overflow \(High\) Wavlink.WN701AE.del\_vlan\_group.Command.Injection \(High\) Wavlink.WN701AE.del\_staticrule.Command.Injection \(High\) Oray.Pugongying.X5.Pro.config\_restore\_ex.Path.Traversal \(High\) Wavlink.WL-WN530HG4B.port\_forward.Command.Injection \(High...
+
 ## cybersecurity/ransomware
 
-- Ransomware: HT Global Circuits \(the gentlemen\) (Ervik, 2026-11-23)
+- Ransomware: UltraBac Software \(play\) (Ervik, 2026-11-24)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by the gentlemen.
-- Ransomware: Cimmino \(the gentlemen\) (Ervik, 2026-11-23)
+  New ransomware victim disclosed by play.
+- Ransomware: IRL Group \(play\) (Ervik, 2026-11-24)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by the gentlemen.
-- Ransomware: New Teeth Now \(the gentlemen\) (Ervik, 2026-11-23)
+  New ransomware victim disclosed by play.
+- Ransomware: Valvo Electrical Supply Ltd \(play\) (Ervik, 2026-11-24)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by the gentlemen.
-- Ransomware: Nuova PSC \(the gentlemen\) (Ervik, 2026-11-23)
+  New ransomware victim disclosed by play.
+- Ransomware: Rolf Maier \& Co AG \(play\) (Ervik, 2026-11-24)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by the gentlemen.
-- Ransomware: Mechanix Wear \(the gentlemen\) (Ervik, 2026-11-23)
+  New ransomware victim disclosed by play.
+- Ransomware: Stanley Parts and Equipment \(play\) (Ervik, 2026-11-24)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by the gentlemen.
-- Ransomware: Stadtwerke Achim AG \(the gentlemen\) (Ervik, 2026-11-23)
+  New ransomware victim disclosed by play.
+- Ransomware: H... \(leakeddata\) (Ervik, 2026-11-24)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by the gentlemen.
-- Ransomware: University Goce Delcev At Stip \(the gentlemen\) (Ervik, 2026-11-23)
+  New ransomware victim disclosed by leakeddata.
+- Ransomware: K... B... \(leakeddata\) (Ervik, 2026-11-24)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by the gentlemen.
-- Ransomware: Groupe Gagneraud \(the gentlemen\) (Ervik, 2026-11-23)
+  New ransomware victim disclosed by leakeddata.
+- Ransomware: G... \(leakeddata\) (Ervik, 2026-11-24)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by the gentlemen.
-- Ransomware: TC Industries \(the gentlemen\) (Ervik, 2026-11-23)
+  New ransomware victim disclosed by leakeddata.
+- Ransomware: Xactus \(qilin\) (Ervik, 2026-11-24)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by the gentlemen.
-- Ransomware: Arendal \(the gentlemen\) (Ervik, 2026-11-23)
+  New ransomware victim disclosed by qilin.
+- Ransomware: H... R... \(leakeddata\) (Ervik, 2026-11-24)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by the gentlemen.
+  New ransomware victim disclosed by leakeddata.
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-95793: An arbitrary remote code execution vulnerability exists in HPE Morpheus Manager. (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-95793>
+- CVE-2026-135800: A flaw has been found in hiyouga LLaMA-Factory up to 0.9.5. Affected is the function save\_args/load\_ (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-135800>
+  HIGH severity \(CVSS 7.3\) vulnerability.
+- CVE-2026-136328: A flaw was found in the file-psd plugin in GIMP. When processing a specially crafted PSD \(Photoshop (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-136328>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-136452: browser-use before 1.0.0 contains a URL parser differential vulnerability in SecurityWatchdog that a (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-136452>
+  MEDIUM severity \(CVSS 6.1\) vulnerability.
+- CVE-2026-136453: browser-use before 1.0.0 contains an allowlist bypass vulnerability in the SecurityWatchdog's \_is\_ur (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-136453>
+  MEDIUM severity \(CVSS 6.5\) vulnerability.
+- CVE-2026-136455: borg-ui before 2.4.1 contains a privilege escalation vulnerability that allows a repository-scoped o (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-136455>
   HIGH severity \(CVSS 8.8\) vulnerability.
-- CVE-2026-135470: WPC Product Options for WooCommerce before 4.0.9 contains a price manipulation vulnerability that al (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-135470>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-135471: Dynamic Product Gallery for WooCommerce before 3.6.2 contains a stored cross-site scripting vulnerab (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-135471>
+- CVE-2026-135046: Cross-Site Request Forgery \(CSRF\) vulnerability in Rymera Web Co Store Exporter woocommerce-exporter (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-135046>
+  HIGH severity \(CVSS 8.8\) vulnerability.
+- CVE-2026-135414: Server-side request forgery in Amazon OpenSearch Service service software before R20260720 might all (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-135414>
+  MEDIUM severity \(CVSS 5.5\) vulnerability.
+- CVE-2026-135799: A vulnerability was detected in flowable flowable-engine 8.0.0. This impacts the function createElCo (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-135799>
+  MEDIUM severity \(CVSS 4.7\) vulnerability.
+- CVE-2026-126695: Use of hard-coded password vulnerability in Tibco Control Plane and Tibco Control Tower. This issue (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-126695>
+  NONE severity vulnerability.
+- CVE-2026-123340: Copeland XWEB Pro contains an OS command injection vulnerability that allows a remote, authenticated (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-123340>
+  CRITICAL severity \(CVSS 9.6\) vulnerability.
+- CVE-2026-123216: Copeland XWEB Pro contains an OS command injection vulnerability that allows a remote, authenticated (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-123216>
+  CRITICAL severity \(CVSS 9.6\) vulnerability.
+- CVE-2026-123217: Copeland XWEB Pro allows a remote, authenticated attacker to inject additional arguments into the wi (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-123217>
+  MEDIUM severity \(CVSS 4.2\) vulnerability.
+- CVE-2026-112732: Double free in Microsoft Office Visio allows an unauthorized attacker to execute code over a network (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-112732>
+  CRITICAL severity \(CVSS 9.8\) vulnerability.
+- CVE-2026-86154: A vulnerability in Apache Jena allows arbitrary stack usage when parsing RDF Turtle-family languages (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-86154>
+  NONE severity vulnerability.
+- CVE-2026-86155: A vulnerability in Apache Jena Fuseki in the SHACL validation functionality cause server side reques (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-86155>
+  NONE severity vulnerability.
+- CVE-2026-86156: Improper Limitation of a Pathname to a Restricted Directory \('Path Traversal'\) can allow SPARQL Upda (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-86156>
+  NONE severity vulnerability.
+- CVE-2026-75664: Adobe Experience Manager is affected by a DOM-based Cross-Site Scripting \(XSS\) vulnerability. An att (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-75664>
   MEDIUM severity \(CVSS 5.4\) vulnerability.
-- CVE-2026-135120: A security flaw has been discovered in RainyGao DocSys up to 2.02.91. Affected by this vulnerability (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-135120>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-135126: A weakness has been identified in FredrikNoren ungit 1.5.30. Affected by this issue is the function (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-135126>
-  MEDIUM severity \(CVSS 6.3\) vulnerability.
-- CVE-2026-135127: A security vulnerability has been detected in FredrikNoren ungit 1.5.30. This affects the function w (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-135127>
-  MEDIUM severity \(CVSS 6.3\) vulnerability.
-- CVE-2026-12422: Rejected reason: This issue was not considered a security vulnerability. (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-12422>
-  NONE severity vulnerability.
-- CVE-2026-134056: An out-of-bounds write issue exists in padded block cipher decryption in AWS-LC. It affects applicat (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-134056>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-49961: DreameHome MQTT broker before 2026-10-26 contained an incorrect authorization vulnerability that all (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-49961>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-49962: DreameHome device sharing and MQTT broker before 2026-10-26 contained an incorrect authorization vul (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-49962>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-49963: DreameHome for Android \(com.dreame.smartlife\) before 2.6.4.0 contains a download of code without int (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-49963>
-  MEDIUM severity \(CVSS 6.8\) vulnerability.
-- CVE-2026-49964: DreameHome cloud API before 2026-10-14 contained an insecure direct object reference vulnerability i (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-49964>
-  HIGH severity \(CVSS 7.1\) vulnerability.
-- CVE-2026-49965: DreameHome cloud API before 2026-11-19 contained an insecure direct object reference vulnerability i (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-49965>
-  HIGH severity \(CVSS 7.1\) vulnerability.
-- CVE-2026-49960: DreameHome cloud API before 2026-10-14 contained an insecure direct object reference vulnerability i (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-49960>
-  MEDIUM severity \(CVSS 6.5\) vulnerability.
-- CVE-2026-135452: A potential security vulnerability has been identified in the HP Hotkey UWP Service, which might all (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-135452>
-  NONE severity vulnerability.
-- CVE-2026-135089: A vulnerability was found in humhub questions up to 1.1.5. Affected is an unknown function of the fi (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-135089>
-  LOW severity \(CVSS 3.5\) vulnerability.
-- CVE-2026-135090: A vulnerability was determined in humhub lets-meet up to 1.2.1. Affected by this vulnerability is th (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-135090>
-  LOW severity \(CVSS 3.5\) vulnerability.
-- CVE-2026-135091: A security flaw has been discovered in humhub rest up to 0.12.6. This affects an unknown part of the (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-135091>
-  LOW severity \(CVSS 2.4\) vulnerability.
-- CVE-2026-135088: A vulnerability has been found in ONLYOFFICE onlyoffice-humhub up to 4.0.0. This impacts the functio (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-135088>
-  LOW severity \(CVSS 3.5\) vulnerability.
-- CVE-2026-102956: ethernet\_send\(\) in subsys/net/l2/ethernet/ethernet.c dropped the caller's reference on an IPv4 packe (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-102956>
-  LOW severity \(CVSS 3.1\) vulnerability.
-- AI Inference Providers Were Breached for Months, Microsoft's Entra Health API Leaked Admin Emails, and Ghostscript Is Reachable From Upload Forms (Ervik, 2026-11-23)
-  <https://www.ervik.as/news/ai-inference-providers-breached-canary-research-openrouter-entra-connect-health-ghostscript-cve-2026-125396-arctic-wolf-october-2026-11-23>
-  A look at the last 24 hours in cybersecurity: Dragos canaries show three AI inference providers were breached and prompts were read in China, OpenRouter drops three providers, Microsoft confirms read-only access to Entra Connect Health data, Ghostscript CVE-2026-125396 is shown reachable from upl...
-- Active Zero-Day: CVE-2026-133968 (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-133968>
-  Project MONAI MONAI Label Path Traversal Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-134624 (Ervik, 2026-11-23)
-  <https://www.ervik.as/cves/CVE-2026-134624>
-  N-able MailAssure \(SpamExperts\) Server-Side Request Forgery \(SSRF\) Vulnerability - confirmed actively exploited \(CISA KEV\).
+- CVE-2026-75673: Adobe Experience Manager is affected by a DOM-based Cross-Site Scripting \(XSS\) vulnerability. An att (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-75673>
+  MEDIUM severity \(CVSS 5.4\) vulnerability.
+- CVE-2026-75688: Adobe Experience Manager is affected by a DOM-based Cross-Site Scripting \(XSS\) vulnerability. An att (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-75688>
+  MEDIUM severity \(CVSS 5.4\) vulnerability.
+- Norway Pins the Equinor Attack on Azure API Management, ARMORY CASTLE Gets Five Named Tools, and CrowdStrike Buys Zscaler for $43.9 Billion (Ervik, 2026-11-24)
+  <https://www.ervik.as/news/norway-equinor-azure-api-management-flaw-armory-castle-vcenter-cisco-expressway-screenconnect-cve-2026-84869-inception-crowdstrike-zscaler-2026-11-24>
+  A look at the last 24 hours in cybersecurity: NSM links the Equinor and Skagerak Energi attacks to Azure API Management and tells customers to rotate secrets, Google names five tools used by ARMORY CASTLE in vCenter, Cisco Expressway CVE-2026-76466 is exploited after a public PoC, ScreenConnect C...
+- Active Zero-Day: CVE-2026-131914 (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-131914>
+  Idunno AntiCsrf Deserialization of Untrusted Data Vulnerability - confirmed actively exploited \(CISA KEV\).
+- Active Zero-Day: CVE-2026-132165 (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-132165>
+  Drupal Core Remote Code Execution Vulnerability - confirmed actively exploited \(CISA KEV\).
+- Active Zero-Day: CVE-2026-132224 (Ervik, 2026-11-24)
+  <https://www.ervik.as/cves/CVE-2026-132224>
+  Optimizely Web Experimentation External Control of Critical State Data Vulnerability - confirmed actively exploited \(CISA KEV\).
 
-## technology/devices
+## regulation/federal-rulemaking
 
-- FortiNDR 7.6.6 (Fortinet, 2026-11-23)
-  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiNDR 7.6.6 B0700 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- Federal Register Vol. 91, No.225, November 24, 2026 (U.S. Government Publishing Office, 2026-11-24)
+  <https://www.govinfo.gov/app/details/FR-2026-11-24>
+  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- FR-2026-11-24 (U.S. Government Publishing Office, 2026-11-24)
+  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-24.xml>
+  Content Files XML
+- Federal Register Vol. 88, No.30, February 14, 2023 (U.S. Government Publishing Office, 2026-11-24)
+  <https://www.govinfo.gov/app/details/FR-2023-02-14>
+  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
+- FR-2023-02-14 (U.S. Government Publishing Office, 2026-11-24)
+  <https://www.govinfo.gov/bulkdata/FR/2023/02/FR-2023-02-14.xml>
+  Content Files XML
 
 ## Source health
 
 - ecfr-changes: ok, HTTP 200, 1000 items
 - ervik-threat-feed: ok, HTTP 200, 60 items
-- federal-register-rules: ok, HTTP 200, 100 items
+- federal-register-rules: ok, HTTP 200, 200 items
 - fedramp-changelog: ok, HTTP 200, 103 items
 - fortiguard-application-control: ok, HTTP 200, 10 items
 - fortiguard-endpoint-vulnerability: ok, HTTP 200, 10 items
@@ -128,10 +146,10 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-psirt: ok, HTTP 200, 50 items
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
-- fortinet-firmware: ok, HTTP 200, 76 items
-- govinfo-fr: not-modified, HTTP 304
-- govinfo-fr-bulkdata: not-modified, HTTP 304
-- govinfo-lsa: not-modified, HTTP 304
+- fortinet-firmware: not-modified, HTTP 304
+- govinfo-fr: ok, HTTP 200, 99 items
+- govinfo-fr-bulkdata: ok, HTTP 200, 99 items
+- govinfo-lsa: ok, HTTP 200, 100 items
 - nist-cybersecurity-insights: ok, HTTP 200, 40 items
 - nist-information-technology: ok, HTTP 200, 40 items
 - nist-news: ok, HTTP 200, 40 items
