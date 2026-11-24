@@ -87,6 +87,21 @@ class DatedJsonTests(HubTestCase):
         self.poll("--dry-run")
         self.assertFalse(self.out.exists() and any(self.out.rglob("*.json")))
 
+    def test_a_first_dry_run_lists_the_catalog_files_it_would_write(self):
+        # Nothing is on disk yet, so the catalog can only come from the files this run would write.
+        self.poll("--dry-run")
+        planned = [line.rsplit(" ", 1)[-1] for line in self.output.splitlines() if "would write" in line]
+        for tail in ("/tr/index.json", "/tr/recent.json", "/tr/" + DAY + ".json"):
+            self.assertTrue(any(p.endswith(tail) for p in planned), tail)
+        self.assertTrue(any(p.endswith("/index.json") and not p.endswith("/tr/index.json") for p in planned))
+
+    def test_a_render_error_on_the_current_day_stops_the_poll(self):
+        def render(*args, **kwargs):
+            raise ValueError("render failed")
+        with unittest.mock.patch.object(hub, "render_day", render):
+            with self.assertRaises(ValueError):
+                self.poll()
+
 
 class CatalogTests(unittest.TestCase):
     def setUp(self):

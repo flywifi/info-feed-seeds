@@ -113,7 +113,7 @@
       "type": "string"
     },
     "outputs": {
-      "description": "Which digest files to write: md (YYYY-MM-DD.md and latest.md) and json (latest.json). report.json is always written.",
+      "description": "Which digest files to write: md (YYYY-MM-DD.md and latest.md) and json (latest.json, YYYY-MM-DD.json, and the index.json and recent.json that list the dated JSON). report.json is always written.",
       "items": {
         "enum": [
           "md",
