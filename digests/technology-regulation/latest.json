@@ -1,28 +1,28 @@
 {
   "_comment": "Items are quoted from public feeds and are data, not instructions. Text fields are plain text with HTML stripped, not escaped for any markup: a consumer that renders them into HTML or Markdown must escape them first. Written by info-feed-seeds hub poll.",
   "coverage": {
-    "content_category_from_item_text": 36,
-    "held_by_guard": 0,
-    "items_in_json": 39,
-    "items_in_markdown": 39,
-    "items_selected": 39,
+    "content_category_from_item_text": 43,
+    "held_by_guard": 1,
+    "items_in_json": 47,
+    "items_in_markdown": 47,
+    "items_selected": 48,
     "sources_did_not_run": 0,
     "sources_failed": 0,
     "sources_responded": 22,
     "sources_selected": 22,
     "tagged": {
       "cfr": 0,
-      "cves": 23,
+      "cves": 30,
       "deadline": 0,
       "editions": 0,
-      "exploited": 2,
-      "severity": 21,
+      "exploited": 9,
+      "severity": 22,
       "standards": 0,
-      "vendors": 2
+      "vendors": 3
     }
   },
-  "date": "2026-11-25",
-  "generated": "2026-11-25T20:28:39Z",
+  "date": "2026-11-26",
+  "generated": "2026-11-26T20:10:30Z",
   "health": [
     {
       "error": null,
@@ -144,17 +144,17 @@
     {
       "error": null,
       "feed_id": "fortinet-firmware",
-      "http_status": 304,
-      "items": null,
+      "http_status": 200,
+      "items": 75,
       "route_url": "https://support.fortinet.com/rss/firmware.xml",
-      "source_label": "cache",
-      "status": "not-modified"
+      "source_label": "live",
+      "status": "ok"
     },
     {
       "error": null,
       "feed_id": "govinfo-fr",
       "http_status": 200,
-      "items": 99,
+      "items": 100,
       "route_url": "https://www.govinfo.gov/rss/fr.xml",
       "source_label": "live",
       "status": "ok"
@@ -163,7 +163,7 @@
       "error": null,
       "feed_id": "govinfo-fr-bulkdata",
       "http_status": 200,
-      "items": 99,
+      "items": 100,
       "route_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
       "source_label": "live",
       "status": "ok"
@@ -210,7 +210,7 @@
       "http_status": 200,
       "items": 40,
       "route_url": "https://www.nist.gov/news-events/standards/rss.xml",
-      "source_label": "live",
+      "source_label": "cache",
       "status": "ok"
     },
     {
@@ -225,6 +225,203 @@
   ],
   "items": [
     {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/detections",
+        "content_basis": {
+          "category": "source",
+          "subcategory": "source"
+        },
+        "reread": {
+          "content": "vulnerabilities/detections",
+          "reasons": [
+            "no signal in the item text; the source category and source subcategory"
+          ]
+        },
+        "source": "vulnerabilities/detections"
+      },
+      "content_sha256": "07d412a4c804bf0e05a306bfba1d52f0b3cda07c09bfa2d4cb8f29cd3ab1c3bf",
+      "feed_id": "fortiguard-ot-security",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://fortiguard.fortinet.com/updates/ots?version=37.349",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T23:40:33Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Newly Added (2) NTCIP_DMS.SET.fontName NTCIP_DMS.SET.fontNumber Modified (2) Rockwell.Automation.PowerMonitor.1000.DateTime.Buffer.Overflow Rockwell.Automation.PowerMonitor.1000.URI.Buffer.Overflow",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "vendor",
+      "title_display": "37.349",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/ot-ics"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/detections",
+        "content_basis": {
+          "category": "source",
+          "subcategory": "source"
+        },
+        "reread": {
+          "content": "vulnerabilities/detections",
+          "reasons": [
+            "no signal in the item text; the source category and source subcategory"
+          ]
+        },
+        "source": "vulnerabilities/detections"
+      },
+      "content_sha256": "f0f5844a4f33011952cb94f686f828f73261f8b22f96e63801100892e05bcd2b",
+      "feed_id": "fortiguard-application-control",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://fortiguard.fortinet.com/updates/app?version=37.349",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T23:40:25Z",
+      "publisher": "Fortinet FortiGuard Labs",
+      "summary_display": "Modified (3) X-VPN. Backblaze_File.Download Salesforce",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "vendor",
+      "title_display": "37.349",
+      "topics": [
+        "cybersecurity"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "releases/firmware",
+        "content_basis": {
+          "category": "source",
+          "subcategory": "source"
+        },
+        "reread": {
+          "content": "releases/firmware",
+          "reasons": [
+            "no signal in the item text; the source category and source subcategory"
+          ]
+        },
+        "source": "releases/firmware"
+      },
+      "content_sha256": "9c2d42151681967a2938ab610b73322327a4b25c9a96a26c0ff396c34ef500d3",
+      "feed_id": "fortinet-firmware",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://support.fortinet.com/EndUser/FirmwareImages.aspx",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T19:34:06Z",
+      "publisher": "Fortinet",
+      "summary_display": "FortiWeb 7.4.14 B0744 and release notes are available for download from the Support site : https://support.fortinet.com",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": [
+          "fortinet"
+        ]
+      },
+      "tier": "vendor",
+      "title_display": "FortiWeb 7.4.14",
+      "topics": [
+        "cybersecurity",
+        "technology",
+        "technology/devices"
+      ]
+    },
+    {
       "authority": "secondary",
       "authors": [],
       "categories": {
@@ -242,9 +439,9 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "1cd34c872120ce3ff98510039cfaaf2e09a883e7384e606e502651aa3da1b809",
+      "content_sha256": "56cd9bf614e9b8b6e65e6e30afaea30253e11f40d7b126f2ee3940f28b821f20",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
+      "first_seen": "2026-11-26T20:10:30Z",
       "industries": [
         "cybersecurity"
       ],
@@ -269,9 +466,9 @@
           "raw": 0
         }
       },
-      "published": "2026-11-25T20:25:55Z",
+      "published": "2026-11-26T19:16:21Z",
       "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by rhysida.",
+      "summary_display": "New ransomware victim disclosed by inception.",
       "tags": {
         "cfr": [],
         "cves": [],
@@ -284,7 +481,7 @@
         "vendors": []
       },
       "tier": "news",
-      "title_display": "Ransomware: York Engineering (rhysida)",
+      "title_display": "Ransomware: GoDaddy (inception)",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -310,9 +507,9 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "3d49ff5e02e2f161ab854c01c3545cdc46b055ad1e838baead54fb0484c1eaab",
+      "content_sha256": "ba5cc74caf90e1f3fb3fe2ec6f6a4b0b41a46816d120e37e1464fd441b4b8772",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
+      "first_seen": "2026-11-26T20:10:30Z",
       "industries": [
         "cybersecurity"
       ],
@@ -337,9 +534,9 @@
           "raw": 0
         }
       },
-      "published": "2026-11-25T20:21:48Z",
+      "published": "2026-11-26T18:28:26Z",
       "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by anubis.",
+      "summary_display": "New ransomware victim disclosed by qilin.",
       "tags": {
         "cfr": [],
         "cves": [],
@@ -352,7 +549,287 @@
         "vendors": []
       },
       "tier": "news",
-      "title_display": "Ransomware: HydroCision (anubis)",
+      "title_display": "Ransomware: Sweet Darling Sales (qilin)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "e4d4718166a147199f6e55331dac8900eec9b48f9ecf2c754a0b9d801adb6aa2",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-137416",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T18:17:18Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 4.8) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-137416"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-137416: A weakness has been identified in sgl-project SpecForge 0.2.0. This impacts the function Eagle3Draft",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "063a2cd7a9755cbb928381287a18ee547fd3497e9b92e809ce3384cb730443b4",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-137412",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T18:17:17Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-137412"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-137412: A vulnerability was determined in projectworlds Online Jewellery Shopping System 1.0. The affected e",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "d2e1613f2c78e2ce9709c7de7746d010a422f9e18e0de2720a0a266a04430375",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-137414",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T18:17:17Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-137414"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-137414: A vulnerability was identified in itsourcecode Event Management System 1.0. The impacted element is",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "750361256a26cae0352d4a713997b11ebf66e983aee90fa43809a85ec4468bcc",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-137415",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T18:17:17Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-137415"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-137415: A security flaw has been discovered in Tencent RapidJSON up to 1.1.0. This affects the function Writ",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -378,9 +855,9 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "af871488e54da69f907a3aad056d4916b2d71a2cd0687be7075727a10259104b",
+      "content_sha256": "93563c3f9d5cf384e48e7ffe757dfc8f4927cc969aecd71ea6e761ac1d5b4cbf",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
+      "first_seen": "2026-11-26T20:10:30Z",
       "industries": [
         "cybersecurity"
       ],
@@ -405,7 +882,7 @@
           "raw": 0
         }
       },
-      "published": "2026-11-25T19:16:41Z",
+      "published": "2026-11-26T17:26:38Z",
       "publisher": "Ervik",
       "summary_display": "New ransomware victim disclosed by aurora.",
       "tags": {
@@ -420,7 +897,1739 @@
         "vendors": []
       },
       "tier": "news",
-      "title_display": "Ransomware: KSI Auto Parts (aurora)",
+      "title_display": "Ransomware: AIM Consulting SA (aurora)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "3ef995174c96ab7ffe28f989533fc1dc7cab409b90589c35acd381575c135b9a",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-137410",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:07Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-137410"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-137410: A vulnerability has been found in liuwy-project zhglxt up to 3fd4ad44458f87bdad0afa997ba29706488fa1f",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "9d349726223441a8d97ff3af791f162a37b18931f26692ff329e60cc5f8bd4b4",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-137411",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:07Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-137411"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-137411: A vulnerability was found in projectworlds Online Jewellery Shopping System 1.0. Impacted is the fun",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "3048d6f34f2b7bc75fb131099a7931d9e7afe73fd24102f82a42e79943364c50",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-135230",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:06Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.4) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-135230"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-135230: @fastify/express is the plugin that lets an application run Express middleware and Express applicati",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "2b09e51b3d095cf2e1bf1bf2c2ee98e761779841fb9b21ddaaee99bc4a27ba01",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-135264",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:06Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.4) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-135264"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-135264: @fastify/express is the plugin that lets an application run Express middleware and Express applicati",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "472732741c318a1e48f959d56f08f97bfc0e42500e84ab581b67f79b66259478",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-135270",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:06Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.4) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-135270"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-135270: @fastify/express is the plugin that lets an application run Express middleware and Express applicati",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "d9c572f8ef4d2e9f1244fc9135263d1cb72c49a68858615262bb047e0f0919d1",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-135279",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:06Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 9.1) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-135279"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "critical",
+        "severity_rank": 4,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-135279: @fastify/express is the plugin that lets an application run Express middleware and Express applicati",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "66c86f1c324697229c43ef89816aaaac7e17f4f753ae3863fac8c8def6ee500a",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-135280",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:06Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.4) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-135280"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-135280: @fastify/express is the plugin that lets an application run Express middleware and Express applicati",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "34e0b0adf2bf66be014b211e6a020c773a63f813327d0d2cd0c14ac5f58565e6",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-137407",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:06Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-137407"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-137407: A security vulnerability has been detected in Max Foundry Media Library Folders Plugin up to 8.4.3 o",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "9a187cef9adeb6842abc180dea493be1113d58a1c86e9127f46cad055243dd86",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-137409",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:06Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-137409"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-137409: A flaw has been found in chuckfairy node-webcam up to 0.8.2. This vulnerability affects the function",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "7c347030d3936d638602c96c103da42eb2b0ecc45dfbdceb7c09e3715cf1cbed",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2025-8209",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:05Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.4) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2025-8209"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2025-8209: The Ultimate Bootstrap Elements for Elementor plugin for WordPress is vulnerable to Stored Cross-Sit",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "0d945ce6ddd2747cafdddbe3cf844d3350e542af3229ea698b952b6911917b5d",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-102001",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:05Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.4) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-102001"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-102001: The wpForo Forum plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'nickname",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "56fdded2f28b2144556296febd59573c36335fbf7b8b244fd5087a4f7d81ed0f",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-135205",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T17:17:05Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.4) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-135205"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-135205: @fastify/middie is the plugin that adds Express-style middleware support to the Fastify web framewor",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/breaches",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/breaches",
+          "reasons": [
+            "title has 'breach'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "c31b503f9653aa39598f82277ac5b139449ff609b5b73f507d63207d1e882982",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/news/fifa-confirms-cyberattack-handsome-boy-hacking-club-claim-2026-11-26",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:50:00Z",
+      "publisher": "Ervik",
+      "summary_display": "FIFA says criminals gained unauthorized access to a limited set of personal and business information. It did not name the Handsome Boy Hacking Club, which lists FIFA as leaked on its own site. Here is what is confirmed, what is claimed and what nobody knows.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "FIFA Confirms the Breach but Not the Group: What Is Known About the HBHC Claim",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "802d23b20f9a76af6491b02df2b255fa8a1d960eab07e50604f9e4fd6dccd851",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:23:41Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by orova.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: Nelson Jewellery Arts (orova)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "0a4a3485b96c4e569ecdb24beb092bc56e130b4dced23677531b1a51edbc2392",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:23:40Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by orova.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: HealthMetrics Sdn Bhd (orova)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "e5877cdef2bb0ec46d3d4464215d4816848e5f84c412e4664b1b7d2604335eb5",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:23:19Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by inception.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: Paramount (inception)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "13cac670de3a9e94568b3f049ce09fc612d2d5833f2fab37f8392f7b00f319b2",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:23:18Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by inception.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: Verisk (inception)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "2d97a2cfe093f9c8804dea05d156e1b4b5c36ceec03ea680c479c044014facbf",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:23:17Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by inception.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: McDonald's (inception)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "5a21095b0389146561de9a8bddb54a52ac72d5e62d9c09afc61077095cf63972",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:23:16Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by inception.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: Mattel (inception)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "243a2a811911a5ac4f3c86e43f3b5230b306b4975f4681aa38047d57bba4f693",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:23:09Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by aurora.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: Arlberger Bergbahnen AG (aurora)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "ac32677a6b0aa3b20440a75597f65422ebabb7d27f898b11a8507e32cc27daa3",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-85416",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:18:12Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.2) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-85416"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-85416: The Lenix Leads Collector plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Form",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "2f6132ad6bc078bbffda2ba6f25229ea73c9f08344e8d27a6490b0bde613d3a2",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-90962",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:18:12Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-90962"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-90962: The WebP Express plugin for WordPress is vulnerable to Authorization Bypass via Malformed Bcrypt Sal",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "a2a21f1632e377b397cb02d90c74e2cd311181174610137155aa8258b789440b",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-92251",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:18:12Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-92251"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-92251: The ZarinPal Payment Gateway for WooCommerce plugin for WordPress is vulnerable to Insecure Direct O",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "83be6cbf104bafb1605e9b1b863d338aac6e44987be6cd74393a7f6e7ff203d9",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-97345",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T16:18:12Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-97345"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-97345: The SumUp Payment Gateway For WooCommerce plugin for WordPress is vulnerable to Insecure Direct Obje",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/exploited-now",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/exploited-now",
+          "reasons": [
+            "title has 'exploited'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "dd8f9f65e189af5e368ee738946bb96375c0be29721d59b95f05a6cbb7e08c24",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/news/fincen-intrusion-hex-pm-cvss-10-rce-drupal-fail2install-cve-2026-132165-idunno-anticsrf-cve-2026-131914-guadeloupe-hospital-2026-11-26",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-26T06:30:00Z",
+      "publisher": "Ervik",
+      "summary_display": "A look at the last 24 hours in cybersecurity: FinCEN confirms unauthorized access to some of its systems, the Hex package registry discloses a CVSS 10.0 compromise of six servers, CISA lists Drupal's installer flaw and an abandoned ASP.NET library as exploited, Palo Alto confirms attacks on expos...",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "critical",
+        "severity_rank": 4,
+        "standards": [],
+        "vendors": [
+          "microsoft"
+        ]
+      },
+      "tier": "news",
+      "title_display": "FinCEN Takes Systems Offline, Hex.pm Loses Six Servers to a CVSS 10.0 Bug, and Drupal's Installer Flaw Is Exploited",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -445,9 +2654,9 @@
         },
         "source": "regulatory/federal-rules"
       },
-      "content_sha256": "680c92453e42b727c30b7d47676f7810609acf2c8d6db20d0853e52c0987d3da",
+      "content_sha256": "03cb94aa7300530c6614519db69f4c5f47c1112ad02db2fc2d9b36684d5bbd17",
       "feed_id": "govinfo-fr",
-      "first_seen": "2026-11-25T20:28:39Z",
+      "first_seen": "2026-11-26T20:10:30Z",
       "industries": [
         "federal"
       ],
@@ -457,7 +2666,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.govinfo.gov/app/details/FR-2026-11-25",
+      "link": "https://www.govinfo.gov/app/details/FR-2026-11-27",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -472,7 +2681,7 @@
           "raw": 0
         }
       },
-      "published": "2026-11-25T18:28:00Z",
+      "published": "2026-11-26T05:40:00Z",
       "publisher": "U.S. Government Publishing Office",
       "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
       "tags": {
@@ -487,7 +2696,7 @@
         "vendors": []
       },
       "tier": "canonical",
-      "title_display": "Federal Register Vol. 91, No.226, November 25, 2026",
+      "title_display": "Federal Register Vol. 91, No.227, November 27, 2026",
       "topics": [
         "government",
         "government/federal",
@@ -512,9 +2721,9 @@
         },
         "source": "regulatory/federal-rules"
       },
-      "content_sha256": "88a117838130e37e7686b7ccfb307fc90d944829e8a4b556918ae3d9597f36af",
+      "content_sha256": "e6bdc966efcca9d8e7d7d44a003b0f369b1637092fbc4890f28e6ff419472a8a",
       "feed_id": "govinfo-fr-bulkdata",
-      "first_seen": "2026-11-25T20:28:39Z",
+      "first_seen": "2026-11-26T20:10:30Z",
       "industries": [
         "federal"
       ],
@@ -524,7 +2733,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-25.xml",
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-27.xml",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -539,7 +2748,7 @@
           "raw": 0
         }
       },
-      "published": "2026-11-25T18:28:00Z",
+      "published": "2026-11-26T05:40:00Z",
       "publisher": "U.S. Government Publishing Office",
       "summary_display": "Content Files XML",
       "tags": {
@@ -554,2099 +2763,12 @@
         "vendors": []
       },
       "tier": "canonical",
-      "title_display": "FR-2026-11-25",
+      "title_display": "FR-2026-11-27",
       "topics": [
         "government",
         "government/federal",
         "regulation",
         "regulation/federal-rulemaking"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "85b6ee4a4b6c726a97aedb306753c397e3ba24e47285515b46905d00bc53c786",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81418",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:57Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 4.8) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81418"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81418: Nmap before 7.992 contains an uncontrolled resource consumption vulnerability in the TLV.AUTH parser",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "4211f4503829183c61fa691203a35f0f8cf574afc29df7ebf856c8d706194621",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81419",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:57Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 4.8) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81419"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81419: Nmap before 7.992 contains an infinite loop vulnerability in the LSUpdate.parse function of the NSE",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "b0a9b768d9da51e8547f2082a49dbbba25547d17d252ef386bba0ff3f4f82248",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81412",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:56Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81412"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81412: Nmap before 7.992 contains an excessive memory allocation vulnerability in the unmarshall_array func",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "5ade7cc8aa99a09cb9558bf1d4ecefbf72e8aeb1e1d4328dd13e0e8c1f18ea08",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81413",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:56Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81413"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81413: Nmap before 7.992 contains an uncontrolled resource consumption vulnerability in the inline AXFR res",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "7654c5660480856c778632baea740ceb2a6022c280a856a3058f77e5ed7cceee",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81414",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:56Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81414"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81414: Nmap before 7.992 contains an uncontrolled resource consumption vulnerability in the sendPacketsTCP",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "12ee5bd68d73a3288966a35e5cd54d7126747af3386aa74f6df04a12738f07c2",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81415",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:56Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81415"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81415: Nmap before 7.992 contains an infinite loop vulnerability in the negotiate_tn3270 function of the NS",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "76663871fd5a2c7dc2d9a4d07709ac11273f04c9ef09eae2803ab3179863e1f9",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81416",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:56Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81416"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81416: Nmap before 7.992 contains an infinite loop vulnerability in the process_write function of the NSE t",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "cfa25124051a85329d92ae325f1fa49b2362c722497174e551f12df47d5d494d",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81417",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:56Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81417"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81417: Nmap before 7.992 contains an infinite loop vulnerability in the dispatcher of the NSE tftp.lua libr",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "dd0b820e00a970e2dff2a48d26eec41a6f2c7609f7154b1b2f330b244694057f",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81405",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:55Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81405"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81405: Nmap before 7.992 contains an uncontrolled resource consumption vulnerability in the Comm.ReceivePac",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "22f0779584e2dc90fe4036d78d1aa1e8e6bddccb73a6823aa6d0bbf80b608abb",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81406",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:55Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81406"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81406: Nmap before 7.992 contains an uncontrolled resource consumption vulnerability in the read_db2_packet",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "97bd449c690a74a07ab4099476a225a37ad6489647067aaeba3680d6bd9e87c9",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81407",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:55Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81407"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81407: Nmap before 7.992 contains a hardcoded cryptographic key vulnerability in the DHCAST128 login of the",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "284abc5f46402446a7594b1668e4aebffed117394bc95e6b2cbf47fc61c4efbb",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81408",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:55Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81408"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81408: Nmap before 7.992 contains a loop with an unreachable exit condition in the parameter-list parsing o",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "7482e7a25f02d67ff99ff46552bf8e0b577f0c2090047351af9073ca534c45c3",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81409",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:55Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 4.7) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81409"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81409: Nmap before 7.992 contains a server-side request forgery vulnerability in the http-cisco-anyconnect.",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "5e066dcfa78f935a16608d1e8b5c83a5445368f65b78af43d05ff56555078917",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81410",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:55Z",
-      "publisher": "Ervik",
-      "summary_display": "LOW severity (CVSS 2.9) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81410"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "low",
-        "severity_rank": 1,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81410: Nmap before 7.992 contains a server-side request forgery vulnerability in the broadcast-upnp-info.ns",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "a8ef3ef794f3a65ce61270a1738295506734a711e266ee27fca515dffc49a422",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81411",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:55Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81411"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81411: Nmap before 7.992 contains an infinite loop vulnerability in the ConfCreateResponse GCC block parser",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "72ea1183e50440838d02ed6ac9a8f235cb50b6fdb5d386eae5066f81021708ae",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-136721",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:52Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-136721"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-136721: A vulnerability was determined in coleifer peewee up to 4.5.3. This affects the function _print_tabl",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "faae32f21e12b141f5f08bd93e94dfa2492340cbf2bb7ba17fe671930084c916",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-136722",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:52Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.3) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-136722"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "high",
-        "severity_rank": 3,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-136722: A vulnerability was identified in Zhengzhou Weiwei Information Technology mayicms up to 5.8E. This v",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "8c2545a9e5e034e61d7fe006d7ba837a39c3f90aa53180919b5549a9e0ce8962",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-135227",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:51Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 8.2) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-135227"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "high",
-        "severity_rank": 3,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-135227: An improper restriction of dynamically determined object attributes in the object-document mapping l",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "8120238c6ee640dee58f253dc04fa8db866f6c67a20a3a7a25adf382f9540f51",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-135898",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:51Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 8.2) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-135898"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "high",
-        "severity_rank": 3,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-135898: An out-of-bounds read in the native C BSON decoding extension of the MongoDB Python Driver may allow",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "ac6a275ca21138dfa5c1e5e3575dcd78ddfb5764185f75e371ce41edaeae0a16",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-136697",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:18:51Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-136697"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-136697: A flaw has been found in LibrePhotos up to 1.2.1. Affected by this issue is the function write_metad",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "10d535479785fd3d5013e40b8a800ca64cb3acacab93e2fa0c2d864886ce48f8",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:17:15Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by scarlettgroup.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: liverpool.ac.uk (scarlettgroup)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "963b38786d879246a562a9b4f0ac3bfda20031f747cd49e03491b4da1fb62c91",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T18:17:10Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by n0n.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: Company #286 (n0n)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "bf1549566f1bb9c2487b8bea75e7a33b3d5d81905f86b179e033a62ca41119d3",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T17:34:29Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by SilentVault.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: THE NEIL JONES FOOD COMPANY (SilentVault)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "c0446455fa663b758da963c88cbd9e4c3e5f12848a29d0e095063fa27d415d35",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T17:33:49Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by SilentRansomGroup.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: Honigman LLP (SilentRansomGroup)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "98d393998c0fe2b4aedf4b28ebcd3aedd0353994cc9288afdd60a8393f3372fa",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T17:21:16Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by n0n.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: Company #285 (n0n)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "db81819382ca896c0f8c0d31dd564649ae08763303b2ae28b760a7c1f72f8b58",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T17:21:15Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by n0n.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: Company #284 (n0n)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "7e9525164591409764d424bbd87fd2e3bdb47bdfcb720bccc0a140fe59e58964",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T17:20:57Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by leakeddata.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: Honigman LLP (leakeddata)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/threat-research",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "attacks/threat-research",
-          "reasons": [
-            "summary has 'exploited'",
-            "summary has 'breach'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "4b36ea2c3ab901475283d00b7c026ad5dfa5083b443011ede8ef7ba9b4cf66ad",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/news/cia-osint-network-breach-mycolorado-volant-manticore-n-able-kev-cve-2026-134624-whmcs-cve-2026-82981-2026-11-25",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T06:30:00Z",
-      "publisher": "Ervik",
-      "summary_display": "A look at the last 24 hours in cybersecurity: hackers get into an unclassified CIA open-source intelligence network with an AI pentest tool in the frame, Colorado's myColorado breach likely touches 150,000 people, a Wyoming uranium mine reports an operating-system breach, Check Point names Volant...",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CIA's Unclassified OSINT Network Breached, Colorado's ID App Goes Dark, and Iran-Nexus Volant Manticore Runs C2 Over IPFS",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities",
-        "technology",
-        "technology/ai"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "summary has 'known exploited'",
-            "summary has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "655441cf14c51576846fd75d0b441b8e77536e3934d4701db803147e30e4cbd0",
-      "feed_id": "fortiguard-threat-signal",
-      "first_seen": "2026-11-25T20:28:39Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/threat-signal-report/6685",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T05:30:10Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "What is the Vulnerability? CVE-2026-90436 is a critical unsafe-reflection vulnerability (CWE-470) in Apache Axis 1.x, the legacy SOAP web-services library. Because Axis instantiates classes from attacker-controlled input, an unauthenticated remote attacker can achieve remote code execution on any...",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-90436"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": true,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": [
-          "atlassian",
-          "microsoft"
-        ]
-      },
-      "tier": "vendor",
-      "title_display": "Apache Axis RCE in Confluence Data Center & N-able N-central",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/identity",
-        "cybersecurity/incidents",
-        "cybersecurity/vulnerabilities",
-        "technology",
-        "technology/cloud"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "802500ac075383e08d92537f869dce081e6f8e93906307b992fec9348524e459",
-      "feed_id": "fortiguard-ot-security",
-      "first_seen": "2026-11-24T21:11:00Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/ots?version=37.347",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T01:15:26Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (20) NTCIP_DMS.GET.characterBitmap NTCIP_DMS.GET.characterNumber NTCIP_DMS.GET.characterWidth NTCIP_DMS.GET.fontCharSpacing NTCIP_DMS.GET.fontHeight NTCIP_DMS.GET.fontIndex NTCIP_DMS.GET.fontLineSpacing NTCIP_DMS.GET.fontMaxCharacterSize NTCIP_DMS.GET.fontName NTCIP_DMS.GET.fontNumber...",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "37.347",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/ot-ics"
       ]
     },
     {
@@ -2666,9 +2788,9 @@
         },
         "source": "vulnerabilities/detections"
       },
-      "content_sha256": "b5a1701e9f2b153256b43c505b8f4a3ac755d884b96335c36cbb788542f62fc4",
+      "content_sha256": "e102082905fade36589d345919a990501236f60d3f0924ce4d356b903ba39a6a",
       "feed_id": "fortiguard-ips",
-      "first_seen": "2026-11-24T21:11:00Z",
+      "first_seen": "2026-11-25T20:28:39Z",
       "industries": [
         "cybersecurity"
       ],
@@ -2678,7 +2800,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.347",
+      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.348",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -2693,21 +2815,22 @@
           "raw": 0
         }
       },
-      "published": "2026-11-25T01:09:08Z",
+      "published": "2026-11-25T23:50:15Z",
       "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (8) Comfast.Routers.webmgnt.update_interface_png.Command.Injection (Medium) Comfast.CF-WR630AX.webmgnt.ntp_timezone.Command.Injection (Medium) D-Link.DCS.Cameras.wireless.htm.Buffer.Overflow (High) TRENDNet.TEW-827DRU.Diagnostic.Ping.Buffer.Overflow (High) TRENDNet.TEW-827DRU.Setup.Wi...",
+      "summary_display": "Newly Added (7) Linksys.EA8100.SetRemoteSetting.Improper.Authentication (Critical) FlowiseAI.Flowise.executeJavaScriptCode.Remote.Code.Execution (Critical) Fortinet.FortiSandbox.cronValue.Remote.Code.Execution (High) GPUStack.auth.client_ip_getter.Authentication.Bypass (Critical) Google.Chrome.CV...",
       "tags": {
         "cfr": [],
         "cves": [
+          "CVE-2025-4664",
+          "CVE-2026-14266",
+          "CVE-2026-129448",
+          "CVE-2025-8088",
+          "CVE-2025-6554",
+          "CVE-2026-95983",
+          "CVE-2026-95988",
+          "CVE-2026-95989",
           "CVE-2026-119618",
-          "CVE-2023-32015",
-          "CVE-2024-5082",
-          "CVE-2026-88230",
-          "CVE-2026-88242",
-          "CVE-2026-96077",
-          "CVE-2026-96126",
-          "CVE-2026-109473",
-          "CVE-2026-86076"
+          "CVE-2026-90436"
         ],
         "deadline": null,
         "editions": [],
@@ -2715,82 +2838,17 @@
         "severity": "critical",
         "severity_rank": 4,
         "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "37.347",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/identity",
-        "cybersecurity/vulnerabilities",
-        "technology",
-        "technology/telecom"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "8fe4bcdea83b35a9e73ad5b18e8d349e9a8a8731ed5d13f2a094923c18d7c7f2",
-      "feed_id": "fortiguard-application-control",
-      "first_seen": "2026-11-24T21:11:00Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/app?version=37.347",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T01:08:44Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Modified (18) X-VPN. DICOM. Tor. Google.Drive_File.Upload. Simple.VPN.Pro TeamDrive_Upload DICOM_C.Echo.Request DICOM_C.Find.Request DICOM_C.Get.Request DICOM_C.Move.Request DICOM_C.Store.Request DICOM_N.Action.Request DICOM_N.Create.Request DICOM_N.Get.Request DICOM_N.Set.Request Backblaze Dassa...",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
         "vendors": [
+          "fortinet",
           "google"
         ]
       },
       "tier": "vendor",
-      "title_display": "37.347",
+      "title_display": "37.348",
       "topics": [
-        "cybersecurity"
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/vulnerabilities"
       ]
     },
     {
@@ -2811,9 +2869,9 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "6db5a4522da0445b307c35e7ce50649f3ac3e8a17c37dc78575439f6d2acead1",
+      "content_sha256": "a17b3cde6c5923e57d02aeac727a117bcb4c854adb7db6e75833a24cb75ea6c5",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-25T20:28:39Z",
+      "first_seen": "2026-11-26T20:10:30Z",
       "industries": [
         "cybersecurity"
       ],
@@ -2823,7 +2881,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.ervik.as/cves/CVE-2026-103406",
+      "link": "https://www.ervik.as/cves/CVE-2023-25914",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -2840,11 +2898,11 @@
       },
       "published": "2026-11-25T00:00:00Z",
       "publisher": "Ervik",
-      "summary_display": "Hewlett Packard Enterprise (HPE) Juniper Session Smart Conductor and Session Smart Router OS Command Injection Vulnerability - confirmed actively exploited (CISA KEV).",
+      "summary_display": "Danfoss AK-SM 800A Series Path Traversal Vulnerability - confirmed actively exploited (CISA KEV).",
       "tags": {
         "cfr": [],
         "cves": [
-          "CVE-2026-103406"
+          "CVE-2023-25914"
         ],
         "deadline": null,
         "editions": [],
@@ -2855,7 +2913,7 @@
         "vendors": []
       },
       "tier": "news",
-      "title_display": "Active Zero-Day: CVE-2026-103406",
+      "title_display": "Active Zero-Day: CVE-2023-25914",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -2864,30 +2922,28 @@
       ]
     },
     {
-      "authority": "primary",
-      "authors": [
-        "Anita Rao"
-      ],
+      "authority": "secondary",
+      "authors": [],
       "categories": {
-        "content": "standards/drafts",
+        "content": "attacks/exploited-now",
         "content_basis": {
           "category": "item",
           "subcategory": "item"
         },
         "reread": {
-          "content": "standards/drafts",
+          "content": "attacks/exploited-now",
           "reasons": [
-            "summary has 'draft'",
-            "summary has 'public comment'"
+            "title has 'active zero-day'",
+            "summary has 'actively exploited'"
           ]
         },
-        "source": "standards/measurement"
+        "source": "attacks/threat-research"
       },
-      "content_sha256": "a6f369b0bdd582cce8b45ee1a0aec5df303f747b9fd62a11d4e074e7ca7a0753",
-      "feed_id": "nist-standards",
-      "first_seen": "2026-11-25T20:28:39Z",
+      "content_sha256": "8a17242256da4aba2b8038f1540128253fa97311284ae3d32f6ba45a22967e59",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
       "industries": [
-        "technology"
+        "cybersecurity"
       ],
       "labels": {
         "agencies": [],
@@ -2895,7 +2951,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.nist.gov/news-events/news/2026/11/towards-best-practices-evaluating-si-driven-uplift",
+      "link": "https://www.ervik.as/cves/CVE-2023-25915",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -2910,25 +2966,521 @@
           "raw": 0
         }
       },
-      "published": "2026-11-24T12:00:00Z",
-      "publisher": "National Institute of Standards and Technology",
-      "summary_display": "NIST CAISSI is requesting public comment on a draft document, NIST SP 2400-801 Practices for Evaluating SI-Driven Uplift, through February 22, 2027. Uplift evaluations are a crucial input to evidence-based decisions on secure and effective super",
+      "published": "2026-11-25T00:00:00Z",
+      "publisher": "Ervik",
+      "summary_display": "Danfoss AK-SM 800A Series Improper Input Validation Vulnerability - confirmed actively exploited (CISA KEV).",
       "tags": {
         "cfr": [],
-        "cves": [],
+        "cves": [
+          "CVE-2023-25915"
+        ],
         "deadline": null,
         "editions": [],
-        "exploited": false,
+        "exploited": true,
         "severity": null,
         "severity_rank": null,
         "standards": [],
         "vendors": []
       },
-      "tier": "canonical",
-      "title_display": "Towards Best Practices for Evaluating SI-Driven Uplift",
+      "tier": "news",
+      "title_display": "Active Zero-Day: CVE-2023-25915",
       "topics": [
-        "standards",
-        "standards/nist"
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/exploited-now",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/exploited-now",
+          "reasons": [
+            "title has 'active zero-day'",
+            "summary has 'actively exploited'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "25b3b68cf42bfaa6b5b9910a004853e01aebd2f88c6230b94b0629c7fe7f07f2",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2025-41450",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-25T00:00:00Z",
+      "publisher": "Ervik",
+      "summary_display": "Danfoss AK-SM 800A Series Improper Authentication Vulnerability - confirmed actively exploited (CISA KEV).",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2025-41450"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": true,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Active Zero-Day: CVE-2025-41450",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/exploited-now",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/exploited-now",
+          "reasons": [
+            "title has 'active zero-day'",
+            "summary has 'actively exploited'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "bccbc1c80dac00aa38157213abeff52f229f517bb72b80f04e9123757be608b6",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-133275",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-25T00:00:00Z",
+      "publisher": "Ervik",
+      "summary_display": "Mitel MiCollab Unrestricted Upload of File with Dangerous Type Vulnerability - confirmed actively exploited (CISA KEV).",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-133275"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": true,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Active Zero-Day: CVE-2026-133275",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/exploited-now",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/exploited-now",
+          "reasons": [
+            "title has 'active zero-day'",
+            "summary has 'actively exploited'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "41ff8dcd346d51fb84b5799ff335e2d61905d5490944f496a3813beb462546f0",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-133303",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-25T00:00:00Z",
+      "publisher": "Ervik",
+      "summary_display": "Mitel MiCollab XML Injection Vulnerability - confirmed actively exploited (CISA KEV).",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-133303"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": true,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Active Zero-Day: CVE-2026-133303",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/exploited-now",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/exploited-now",
+          "reasons": [
+            "title has 'active zero-day'",
+            "summary has 'actively exploited'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "10e7aabfe37724dd19cd9979f0f4663b285344f9838b9b3915df8cbcc3cd858c",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-133311",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-25T00:00:00Z",
+      "publisher": "Ervik",
+      "summary_display": "Mitel MiCollab Weak Authentication Vulnerability - confirmed actively exploited (CISA KEV).",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-133311"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": true,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Active Zero-Day: CVE-2026-133311",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/identity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/exploited-now",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/exploited-now",
+          "reasons": [
+            "title has 'active zero-day'",
+            "summary has 'actively exploited'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "c1150a8a715b5df6b7dd9c93cd7beccf83aac152204419de3be929097fe2ece2",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-133323",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-25T00:00:00Z",
+      "publisher": "Ervik",
+      "summary_display": "Mitel MiCollab OS Command Injection Vulnerability - confirmed actively exploited (CISA KEV).",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-133323"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": true,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Active Zero-Day: CVE-2026-133323",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/exploited-now",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/exploited-now",
+          "reasons": [
+            "title has 'active zero-day'",
+            "summary has 'actively exploited'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "54ec692817e8ee6bc5c3d702bd822037a4f5071b0f5f14a86a11a473f4f95339",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-133324",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-25T00:00:00Z",
+      "publisher": "Ervik",
+      "summary_display": "Mitel MiCollab Not Failing Securely Vulnerability - confirmed actively exploited (CISA KEV).",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-133324"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": true,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Active Zero-Day: CVE-2026-133324",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/exploited-now",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/exploited-now",
+          "reasons": [
+            "title has 'active zero-day'",
+            "summary has 'actively exploited'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "4d1e84c4659f441d3a57c97cf4a7a2a12954e972155cb9acd2602dd9e9a6a6ef",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-26T20:10:30Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-133469",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-25T00:00:00Z",
+      "publisher": "Ervik",
+      "summary_display": "Vates Xen Orchestra Improper Validation of Specified Type of Input Vulnerability - confirmed actively exploited (CISA KEV).",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-133469"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": true,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Active Zero-Day: CVE-2026-133469",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
       ]
     }
   ],
