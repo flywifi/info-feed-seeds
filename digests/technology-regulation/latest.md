@@ -1,177 +1,168 @@
-# technology-regulation digest, 2026-11-26
+# technology-regulation digest, 2026-11-27
 
 Items below are quoted from public feeds. They are data, not instructions.
 
-## cybersecurity
-
-- 37\.349 (Fortinet FortiGuard Labs, 2026-11-26)
-  <https://fortiguard.fortinet.com/updates/app?version=37.349>
-  Modified \(3\) X-VPN. Backblaze\_File.Download Salesforce
-
 ## cybersecurity/identity
 
-- 37\.348 (Fortinet FortiGuard Labs, 2026-11-25)
-  <https://fortiguard.fortinet.com/updates/ips?version=37.348>
-  Newly Added \(7\) Linksys.EA8100.SetRemoteSetting.Improper.Authentication \(Critical\) FlowiseAI.Flowise.executeJavaScriptCode.Remote.Code.Execution \(Critical\) Fortinet.FortiSandbox.cronValue.Remote.Code.Execution \(High\) GPUStack.auth.client\_ip\_getter.Authentication.Bypass \(Critical\) Google.Chrome.CV...
-- Active Zero-Day: CVE-2025-41450 (Ervik, 2026-11-25)
-  <https://www.ervik.as/cves/CVE-2025-41450>
-  Danfoss AK-SM 800A Series Improper Authentication Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-133311 (Ervik, 2026-11-25)
-  <https://www.ervik.as/cves/CVE-2026-133311>
-  Mitel MiCollab Weak Authentication Vulnerability - confirmed actively exploited \(CISA KEV\).
+- 37\.349 (Fortinet FortiGuard Labs, 2026-11-27)
+  <https://fortiguard.fortinet.com/updates/ips?version=37.349>
+  Newly Added \(16\) SignalWire.FreeSwitch.SIP.MESSAGE.Code.Injection \(Critical\) Zimbra.Collaboration.GraphQL.Improper.Authentication \(High\) DrayTek.Vigor2960.swmconfigupload.Command.Injection \(Critical\) DrayTek.Vigor2960.doWebBackup.Path.Traversal \(Critical\) DrayTek.Vigor2960.app\_guest\_export.Path.T...
+- 37\.34800 (Fortinet FortiGuard Labs, 2026-11-25)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.34800>
+  Newly Added \(30\) ABB.Cylon.ASPECT.bbmdUpdate.Command.Injection. BeyondTrust.Remote.Support.uploadFiles.Authentication.Bypass. D-Link.DAP-2020.webproc.Information.Disclosure. D-Link.DCS-5020L.Authorization.HTTP.Header.Buffer.Overflow. D-Link.DI-8400.DDNS.Configuration.Buffer.Overflow. D-Link.DIR-8...
+- 37\.34700 (Fortinet FortiGuard Labs, 2026-11-25)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.34700>
+  Newly Added \(22\) D-Link.DIR-841.jsonrpc.Command.Injection. Hisense.VIDAA.TV.RenderingControl.Improper.Authentication. Linksys.Devices.RP\_doSpecifySiteSurvey.Buffer.Overflow. Linksys.Devices.setOpMode.opMode.Buffer.Overflow. Linksys.E1200.httpd.url.Buffer.Overflow. Linksys.E1200.httpd.validate\_sta...
+- 37\.33800 (Fortinet FortiGuard Labs, 2026-11-18)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.33800>
+  Newly Added \(4\) Danfoss.AK-SM.800A.getauth.Improper.Authentication. Danfoss.AK-SM.800A.load\_nginx\_headers.DoS. TRENDnet.TEW-657BRM.mini\_httpd.Buffer.Overflow. TRENDnet.TEW-657BRM.upgrade\_flash.cgi.Buffer.Overflow.
 
 ## cybersecurity/incidents
 
-- FIFA Confirms the Breach but Not the Group: What Is Known About the HBHC Claim (Ervik, 2026-11-26)
-  <https://www.ervik.as/news/fifa-confirms-cyberattack-handsome-boy-hacking-club-claim-2026-11-26>
-  FIFA says criminals gained unauthorized access to a limited set of personal and business information. It did not name the Handsome Boy Hacking Club, which lists FIFA as leaked on its own site. Here is what is confirmed, what is claimed and what nobody knows.
+- AI-Assisted Crew Works Through Check Point Management Servers, Mitel's CVSS 10.0 Flaw Is Exploited, and SAP Confirms a GitHub Intrusion (Ervik, 2026-11-27)
+  <https://www.ervik.as/news/gt13-check-point-servers-ai-campaign-mitel-micollab-cvss-10-exploited-sap-project-granite-rackspace-spot-drupal-cve-2026-136716-2026-11-27>
+  A look at the last 24 hours in cybersecurity: GreyNoise details a suspected AI-assisted campaign against Check Point management servers across 17 countries, CISA lists ten more exploited flaws including a CVSS 10.0 Mitel MiCollab bug, Drupal discloses a second exploited installer flaw, SAP confir...
 
 ## cybersecurity/ot-ics
 
-- 37\.349 (Fortinet FortiGuard Labs, 2026-11-26)
-  <https://fortiguard.fortinet.com/updates/ots?version=37.349>
-  Newly Added \(2\) NTCIP\_DMS.SET.fontName NTCIP\_DMS.SET.fontNumber Modified \(2\) Rockwell.Automation.PowerMonitor.1000.DateTime.Buffer.Overflow Rockwell.Automation.PowerMonitor.1000.URI.Buffer.Overflow
+- 37\.34900 (Fortinet FortiGuard Labs, 2026-11-26)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.34900>
+  Newly Added \(3\) ABB.Cylon.ASPECT.syslogUpdate.Remote.Code.Execution. D-Link.DIR-X1860.anweb.Command.Injection. Tenda.RX3.auto\_discover.Buffer.Overflow.
+- 37\.34300 (Fortinet FortiGuard Labs, 2026-11-20)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.34300>
+  Newly Added \(7\) D-Link.DIR-878.GetCAPTCHAsetting.Buffer.Overflow. D-Link.DIR-878.ListDirectoryPath.Path.Traversal. TOTOLINK.CA300-PoE.setIpQosRules.Buffer.Overflow. TOTOLINK.CA300-PoE.setLanConfig.Buffer.Overflow. TOTOLINK.CA300-PoE.setWanConfig.Buffer.Overflow. TOTOLINK.CA300-PoE.setWiFi.Buffer....
+- 37\.34200 (Fortinet FortiGuard Labs, 2026-11-19)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.34200>
+  Modified \(1\) PHP.longjmp.Remote.Code.Execution.
+- 37\.34000 (Fortinet FortiGuard Labs, 2026-11-19)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.34000>
+  Newly Added \(1\) Danfoss.AK-SM.800A.SMTP.Email.Command.Injection. Modified \(1\) PHP.longjmp.Remote.Code.Execution.
+- 37\.33900 (Fortinet FortiGuard Labs, 2026-11-18)
+  <https://fortiguard.fortinet.com/updates/otips?version=37.33900>
+  Newly Added \(5\) Linksys.E5600.mesh\_login.cgi.Buffer.Overflow. Linksys.E5600.upload\_fw.cgi.Buffer.Overflow. Rockwell.Automation.PowerMonitor.1000.DateTime.Buffer.Overflow. Rockwell.Automation.PowerMonitor.1000.URI.Buffer.Overflow. TOTOLINK.A950RG.setWiFiBasicConfig.Buffer.Overflow.
 
 ## cybersecurity/ransomware
 
-- Ransomware: GoDaddy \(inception\) (Ervik, 2026-11-26)
+- Ransomware: Brit Ltd / Brit Insurance \(britinsurance.com\) \(inc ransom\) (Ervik, 2026-11-27)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by inception.
-- Ransomware: Sweet Darling Sales \(qilin\) (Ervik, 2026-11-26)
+  New ransomware victim disclosed by inc ransom.
+- Ransomware: Friedl Richardson \(the gentlemen\) (Ervik, 2026-11-27)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by qilin.
-- Ransomware: AIM Consulting SA \(aurora\) (Ervik, 2026-11-26)
+  New ransomware victim disclosed by the gentlemen.
+- SAP Confirms Suspicious Activity but Not the GitHub Claims: What Is Known About 'Project Granite' (Ervik, 2026-11-27)
+  <https://www.ervik.as/news/sap-confirms-suspicious-activity-project-granite-github-claims-2026-11-27>
+  SAP says it found suspicious activity and, so far, no evidence that customer business data was accessed. Reports that attackers stole employee tokens and changed source code on GitHub come from Der Spiegel's insiders and are not confirmed. Here is what is said, by whom, and what nobody knows.
+- Ransomware: Ferrometalco \(FMC\) \(soul\) (Ervik, 2026-11-27)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by aurora.
-- Ransomware: Nelson Jewellery Arts \(orova\) (Ervik, 2026-11-26)
+  New ransomware victim disclosed by soul.
+- Ransomware: US CNC Machine Company \(soul\) (Ervik, 2026-11-27)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by orova.
-- Ransomware: HealthMetrics Sdn Bhd \(orova\) (Ervik, 2026-11-26)
+  New ransomware victim disclosed by soul.
+- Ransomware: rogers-group \(iah647\) (Ervik, 2026-11-27)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by orova.
-- Ransomware: Paramount \(inception\) (Ervik, 2026-11-26)
+  New ransomware victim disclosed by iah647.
+- Ransomware: blackstone-consulting \(iah647\) (Ervik, 2026-11-27)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by inception.
-- Ransomware: Verisk \(inception\) (Ervik, 2026-11-26)
+  New ransomware victim disclosed by iah647.
+- Ransomware: supplyone \(iah647\) (Ervik, 2026-11-27)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by inception.
-- Ransomware: McDonald's \(inception\) (Ervik, 2026-11-26)
+  New ransomware victim disclosed by iah647.
+- Ransomware: MedMira Inc \(deadlock\) (Ervik, 2026-11-27)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by inception.
-- Ransomware: Mattel \(inception\) (Ervik, 2026-11-26)
+  New ransomware victim disclosed by deadlock.
+- Ransomware: resers \(iah647\) (Ervik, 2026-11-27)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by inception.
-- Ransomware: Arlberger Bergbahnen AG \(aurora\) (Ervik, 2026-11-26)
+  New ransomware victim disclosed by iah647.
+- Ransomware: rogers-group \(iah6477\) (Ervik, 2026-11-27)
   <https://www.ervik.as/ransomware>
-  New ransomware victim disclosed by aurora.
-- FinCEN Takes Systems Offline, Hex.pm Loses Six Servers to a CVSS 10.0 Bug, and Drupal's Installer Flaw Is Exploited (Ervik, 2026-11-26)
-  <https://www.ervik.as/news/fincen-intrusion-hex-pm-cvss-10-rce-drupal-fail2install-cve-2026-132165-idunno-anticsrf-cve-2026-131914-guadeloupe-hospital-2026-11-26>
-  A look at the last 24 hours in cybersecurity: FinCEN confirms unauthorized access to some of its systems, the Hex package registry discloses a CVSS 10.0 compromise of six servers, CISA lists Drupal's installer flaw and an abandoned ASP.NET library as exploited, Palo Alto confirms attacks on expos...
+  New ransomware victim disclosed by iah6477.
 
 ## cybersecurity/vulnerabilities
 
-- CVE-2026-137416: A weakness has been identified in sgl-project SpecForge 0.2.0. This impacts the function Eagle3Draft (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-137416>
-  MEDIUM severity \(CVSS 4.8\) vulnerability.
-- CVE-2026-137412: A vulnerability was determined in projectworlds Online Jewellery Shopping System 1.0. The affected e (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-137412>
-  HIGH severity \(CVSS 7.3\) vulnerability.
-- CVE-2026-137414: A vulnerability was identified in itsourcecode Event Management System 1.0. The impacted element is (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-137414>
-  HIGH severity \(CVSS 7.3\) vulnerability.
-- CVE-2026-137415: A security flaw has been discovered in Tencent RapidJSON up to 1.1.0. This affects the function Writ (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-137415>
-  HIGH severity \(CVSS 7.3\) vulnerability.
-- CVE-2026-137410: A vulnerability has been found in liuwy-project zhglxt up to 3fd4ad44458f87bdad0afa997ba29706488fa1f (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-137410>
-  MEDIUM severity \(CVSS 6.3\) vulnerability.
-- CVE-2026-137411: A vulnerability was found in projectworlds Online Jewellery Shopping System 1.0. Impacted is the fun (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-137411>
-  HIGH severity \(CVSS 7.3\) vulnerability.
-- CVE-2026-135230: @fastify/express is the plugin that lets an application run Express middleware and Express applicati (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-135230>
-  HIGH severity \(CVSS 7.4\) vulnerability.
-- CVE-2026-135264: @fastify/express is the plugin that lets an application run Express middleware and Express applicati (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-135264>
-  HIGH severity \(CVSS 7.4\) vulnerability.
-- CVE-2026-135270: @fastify/express is the plugin that lets an application run Express middleware and Express applicati (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-135270>
-  HIGH severity \(CVSS 7.4\) vulnerability.
-- CVE-2026-135279: @fastify/express is the plugin that lets an application run Express middleware and Express applicati (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-135279>
-  CRITICAL severity \(CVSS 9.1\) vulnerability.
-- CVE-2026-135280: @fastify/express is the plugin that lets an application run Express middleware and Express applicati (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-135280>
-  HIGH severity \(CVSS 7.4\) vulnerability.
-- CVE-2026-137407: A security vulnerability has been detected in Max Foundry Media Library Folders Plugin up to 8.4.3 o (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-137407>
-  MEDIUM severity \(CVSS 6.3\) vulnerability.
-- CVE-2026-137409: A flaw has been found in chuckfairy node-webcam up to 0.8.2. This vulnerability affects the function (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-137409>
-  HIGH severity \(CVSS 7.3\) vulnerability.
-- CVE-2025-8209: The Ultimate Bootstrap Elements for Elementor plugin for WordPress is vulnerable to Stored Cross-Sit (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2025-8209>
-  MEDIUM severity \(CVSS 6.4\) vulnerability.
-- CVE-2026-102001: The wpForo Forum plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'nickname (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-102001>
-  MEDIUM severity \(CVSS 6.4\) vulnerability.
-- CVE-2026-135205: @fastify/middie is the plugin that adds Express-style middleware support to the Fastify web framewor (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-135205>
-  HIGH severity \(CVSS 7.4\) vulnerability.
-- CVE-2026-85416: The Lenix Leads Collector plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Form (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-85416>
-  HIGH severity \(CVSS 7.2\) vulnerability.
-- CVE-2026-90962: The WebP Express plugin for WordPress is vulnerable to Authorization Bypass via Malformed Bcrypt Sal (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-90962>
-  MEDIUM severity \(CVSS 5.3\) vulnerability.
-- CVE-2026-92251: The ZarinPal Payment Gateway for WooCommerce plugin for WordPress is vulnerable to Insecure Direct O (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-92251>
+- CVE-2026-132876: Dreamweaver Desktop is affected by a Dependency on Vulnerable Third-Party Component vulnerability th (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-132876>
+  HIGH severity \(CVSS 7.7\) vulnerability.
+- CVE-2026-81045: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Improper Ce (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-81045>
+  MEDIUM severity \(CVSS 6.8\) vulnerability.
+- CVE-2026-81047: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Improper Au (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-81047>
+  MEDIUM severity \(CVSS 6.8\) vulnerability.
+- CVE-2026-81050: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Insufficien (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-81050>
+  LOW severity \(CVSS 2.9\) vulnerability.
+- CVE-2026-81053: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains a Concurrent E (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-81053>
+  MEDIUM severity \(CVSS 6.7\) vulnerability.
+- CVE-2026-81054: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Insertion o (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-81054>
+  MEDIUM severity \(CVSS 5.5\) vulnerability.
+- CVE-2026-81055: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Observable (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-81055>
+  LOW severity \(CVSS 2.9\) vulnerability.
+- CVE-2026-81041: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Improper Ce (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-81041>
+  HIGH severity \(CVSS 7.1\) vulnerability.
+- CVE-2026-81042: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Insertion o (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-81042>
+  LOW severity \(CVSS 3.3\) vulnerability.
+- CVE-2026-81044: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Improper Ne (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-81044>
+  MEDIUM severity \(CVSS 5.8\) vulnerability.
+- CVE-2026-137997: HCIPy through 0.7.1 contains an insecure deserialization vulnerability that allows attackers to exec (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-137997>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-137998: Detoxify 0.5.3 through 0.5.4 contains an insecure deserialization vulnerability in load\_checkpoint t (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-137998>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-137999: JSONSchema2PoPo2 through 3.0.3 contains a code injection vulnerability that allows attackers to inje (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-137999>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-137992: libexpat through 2.11.0 contains a denial of service vulnerability in defineAttribute\(\) of lib/xmlpa (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-137992>
   HIGH severity \(CVSS 7.5\) vulnerability.
-- CVE-2026-97345: The SumUp Payment Gateway For WooCommerce plugin for WordPress is vulnerable to Insecure Direct Obje (Ervik, 2026-11-26)
-  <https://www.ervik.as/cves/CVE-2026-97345>
-  HIGH severity \(CVSS 7.5\) vulnerability.
-- Active Zero-Day: CVE-2023-25914 (Ervik, 2026-11-25)
-  <https://www.ervik.as/cves/CVE-2023-25914>
-  Danfoss AK-SM 800A Series Path Traversal Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2023-25915 (Ervik, 2026-11-25)
-  <https://www.ervik.as/cves/CVE-2023-25915>
-  Danfoss AK-SM 800A Series Improper Input Validation Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-133275 (Ervik, 2026-11-25)
-  <https://www.ervik.as/cves/CVE-2026-133275>
-  Mitel MiCollab Unrestricted Upload of File with Dangerous Type Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-133303 (Ervik, 2026-11-25)
-  <https://www.ervik.as/cves/CVE-2026-133303>
-  Mitel MiCollab XML Injection Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-133323 (Ervik, 2026-11-25)
-  <https://www.ervik.as/cves/CVE-2026-133323>
-  Mitel MiCollab OS Command Injection Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-133324 (Ervik, 2026-11-25)
-  <https://www.ervik.as/cves/CVE-2026-133324>
-  Mitel MiCollab Not Failing Securely Vulnerability - confirmed actively exploited \(CISA KEV\).
-- Active Zero-Day: CVE-2026-133469 (Ervik, 2026-11-25)
-  <https://www.ervik.as/cves/CVE-2026-133469>
-  Vates Xen Orchestra Improper Validation of Specified Type of Input Vulnerability - confirmed actively exploited \(CISA KEV\).
-
-## regulation/federal-rulemaking
-
-- Federal Register Vol. 91, No.227, November 27, 2026 (U.S. Government Publishing Office, 2026-11-26)
-  <https://www.govinfo.gov/app/details/FR-2026-11-27>
-  Content Files PDF XML Metadata download Descriptive Metadata \(MODS\) Preservation Metadata \(PREMIS\) All Content and Metadata files, including granules ZIP
-- FR-2026-11-27 (U.S. Government Publishing Office, 2026-11-26)
-  <https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-27.xml>
-  Content Files XML
+- CVE-2026-137993: django-allauth 65.17.0 before 65.23.0 contains a denial of service vulnerability in truncate\_ip\(\) th (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-137993>
+  LOW severity \(CVSS 3.7\) vulnerability.
+- CVE-2026-137994: Leo through 6.8.10 contains an insecure deserialization vulnerability that allows attackers to execu (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-137994>
+  HIGH severity \(CVSS 7.8\) vulnerability.
+- CVE-2026-137995: FOG Project before 1.6.0.119 contains an information disclosure vulnerability that allows unauthenti (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-137995>
+  MEDIUM severity \(CVSS 6.1\) vulnerability.
+- CVE-2026-137996: Zettlr before 4.11.0 fails to validate URI schemes in Markdown link targets, allowing attackers to l (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-137996>
+  MEDIUM severity \(CVSS 5.5\) vulnerability.
+- CVE-2026-137684: A security flaw has been discovered in eosphoros-ai DB-GPT up to 0.8.3. This affects the function ed (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-137684>
+  HIGH severity \(CVSS 7.3\) vulnerability.
+- CVE-2026-81040: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Improper Li (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-81040>
+  MEDIUM severity \(CVSS 4.4\) vulnerability.
+- Active Zero-Day: CVE-2026-120705 (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-120705>
+  OSGeo GeoServer XML Injection Vulnerability - confirmed actively exploited \(CISA KEV\).
+- Active Zero-Day: CVE-2026-129243 (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-129243>
+  OSGeo GeoServer Incorrect Authorization Vulnerability - confirmed actively exploited \(CISA KEV\).
+- Active Zero-Day: CVE-2026-136716 (Ervik, 2026-11-27)
+  <https://www.ervik.as/cves/CVE-2026-136716>
+  Drupal Core Improper Check for Unusual or Exceptional Conditions Vulnerability - confirmed actively exploited \(CISA KEV\).
 
 ## technology/devices
 
-- FortiWeb 7.4.14 (Fortinet, 2026-11-26)
+- FortiCentral 7.6.0 (Fortinet, 2026-11-26)
   <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
-  FortiWeb 7.4.14 B0744 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+  FortiCentral 7.6.0 B0147 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
+- FortiWebManager 8.0.2 (Fortinet, 2026-11-26)
+  <https://support.fortinet.com/EndUser/FirmwareImages.aspx>
+  FortiWebManager 8.0.2 B0005 and release notes are available for download from the Support site : https:\/\/support.fortinet.com
 
 ## Source health
 
 - ecfr-changes: ok, HTTP 200, 1000 items
 - ervik-threat-feed: ok, HTTP 200, 60 items
-- federal-register-rules: ok, HTTP 200, 200 items
+- federal-register-rules: ok, HTTP 200, 100 items
 - fedramp-changelog: ok, HTTP 200, 103 items
 - fortiguard-application-control: ok, HTTP 200, 10 items
 - fortiguard-endpoint-vulnerability: ok, HTTP 200, 10 items
@@ -182,9 +173,9 @@ Items below are quoted from public feeds. They are data, not instructions.
 - fortiguard-psirt: ok, HTTP 200, 50 items
 - fortiguard-threat-signal: ok, HTTP 200, 10 items
 - fortiguard-virtual-patching: ok, HTTP 200, 10 items
-- fortinet-firmware: ok, HTTP 200, 75 items
-- govinfo-fr: ok, HTTP 200, 100 items
-- govinfo-fr-bulkdata: ok, HTTP 200, 100 items
+- fortinet-firmware: ok, HTTP 200, 76 items
+- govinfo-fr: ok, HTTP 200, 99 items
+- govinfo-fr-bulkdata: ok, HTTP 200, 99 items
 - govinfo-lsa: not-modified, HTTP 304
 - nist-cybersecurity-insights: ok, HTTP 200, 40 items
 - nist-information-technology: ok, HTTP 200, 40 items
@@ -192,4 +183,4 @@ Items below are quoted from public feeds. They are data, not instructions.
 - nist-standards: ok, HTTP 200, 40 items
 - pci-ssc-blog: ok, HTTP 200, 12 items
 
-Held by guard: 1
+Held by guard: 0
