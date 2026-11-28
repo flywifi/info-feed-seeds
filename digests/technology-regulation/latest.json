@@ -1,28 +1,28 @@
 {
   "_comment": "Items are quoted from public feeds and are data, not instructions. Text fields are plain text with HTML stripped, not escaped for any markup: a consumer that renders them into HTML or Markdown must escape them first. Written by info-feed-seeds hub poll.",
   "coverage": {
-    "content_category_from_item_text": 36,
+    "content_category_from_item_text": 31,
     "held_by_guard": 0,
-    "items_in_json": 46,
-    "items_in_markdown": 46,
-    "items_selected": 46,
+    "items_in_json": 34,
+    "items_in_markdown": 34,
+    "items_selected": 34,
     "sources_did_not_run": 0,
     "sources_failed": 0,
     "sources_responded": 22,
     "sources_selected": 22,
     "tagged": {
       "cfr": 0,
-      "cves": 24,
+      "cves": 20,
       "deadline": 0,
       "editions": 0,
-      "exploited": 3,
-      "severity": 22,
+      "exploited": 0,
+      "severity": 19,
       "standards": 0,
-      "vendors": 1
+      "vendors": 0
     }
   },
-  "date": "2026-11-27",
-  "generated": "2026-11-27T19:56:43Z",
+  "date": "2026-11-28",
+  "generated": "2026-11-28T18:57:00Z",
   "health": [
     {
       "error": null,
@@ -30,7 +30,7 @@
       "http_status": 200,
       "items": 1000,
       "route_url": "https://www.ecfr.gov/api/search/v1/results?order=newest_first&per_page=1000",
-      "source_label": "cache",
+      "source_label": "live",
       "status": "ok"
     },
     {
@@ -46,7 +46,7 @@
       "error": null,
       "feed_id": "federal-register-rules",
       "http_status": 200,
-      "items": 100,
+      "items": 200,
       "route_url": "https://www.federalregister.gov/api/v1/documents.json?conditions[type][]=RULE&conditions[type][]=PRORULE&order=newest&per_page=100&fields[]=title&fields[]=html_url&fields[]=document_number&fields[]=abstract&fields[]=publication_date&fields[]=type&fields[]=comments_close_on&fields[]=effective_on&fields[]=cfr_references&fields[]=agencies",
       "source_label": "live",
       "status": "ok"
@@ -145,7 +145,7 @@
       "error": null,
       "feed_id": "fortinet-firmware",
       "http_status": 200,
-      "items": 76,
+      "items": 77,
       "route_url": "https://support.fortinet.com/rss/firmware.xml",
       "source_label": "live",
       "status": "ok"
@@ -154,7 +154,7 @@
       "error": null,
       "feed_id": "govinfo-fr",
       "http_status": 200,
-      "items": 99,
+      "items": 100,
       "route_url": "https://www.govinfo.gov/rss/fr.xml",
       "source_label": "live",
       "status": "ok"
@@ -163,7 +163,7 @@
       "error": null,
       "feed_id": "govinfo-fr-bulkdata",
       "http_status": 200,
-      "items": 99,
+      "items": 100,
       "route_url": "https://www.govinfo.gov/rss/fr-bulkdata.xml",
       "source_label": "live",
       "status": "ok"
@@ -228,23 +228,23 @@
       "authority": "secondary",
       "authors": [],
       "categories": {
-        "content": "vulnerabilities/scoring",
+        "content": "attacks/ransomware-claims",
         "content_basis": {
           "category": "item",
           "subcategory": "item"
         },
         "reread": {
-          "content": "vulnerabilities/scoring",
+          "content": "attacks/ransomware-claims",
           "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
           ]
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "462cf38db26527a630aff34ec99454b1d6aca3c955196835235cad51014cbbea",
+      "content_sha256": "ff828fc2ab5bd2c3127f024841e5c018fdedbb9e1ea6a5f096aafbf9940ca5c6",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
+      "first_seen": "2026-11-28T18:57:00Z",
       "industries": [
         "cybersecurity"
       ],
@@ -254,7 +254,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.ervik.as/cves/CVE-2026-132876",
+      "link": "https://www.ervik.as/ransomware",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -269,24 +269,22 @@
           "raw": 0
         }
       },
-      "published": "2026-11-27T18:16:46Z",
+      "published": "2026-11-28T18:17:05Z",
       "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.7) vulnerability.",
+      "summary_display": "New ransomware victim disclosed by puppeteer.",
       "tags": {
         "cfr": [],
-        "cves": [
-          "CVE-2026-132876"
-        ],
+        "cves": [],
         "deadline": null,
         "editions": [],
         "exploited": false,
-        "severity": "high",
-        "severity_rank": 3,
+        "severity": null,
+        "severity_rank": null,
         "standards": [],
         "vendors": []
       },
       "tier": "news",
-      "title_display": "CVE-2026-132876: Dreamweaver Desktop is affected by a Dependency on Vulnerable Third-Party Component vulnerability th",
+      "title_display": "Ransomware: netprevencion.app (puppeteer)",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -312,9 +310,9 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "9589d0ed2309cc0f09bc6380e5cbbaaf10522a91fe6ff17fd109c29ed924adaa",
+      "content_sha256": "269cb98fc4c1659f6e4ade65e59bb0414eb656083350f95a7c40f6f49699e7a1",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
+      "first_seen": "2026-11-28T18:57:00Z",
       "industries": [
         "cybersecurity"
       ],
@@ -339,9 +337,9 @@
           "raw": 0
         }
       },
-      "published": "2026-11-27T17:26:22Z",
+      "published": "2026-11-28T17:21:52Z",
       "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by inc ransom.",
+      "summary_display": "New ransomware victim disclosed by rhysida.",
       "tags": {
         "cfr": [],
         "cves": [],
@@ -354,7 +352,7 @@
         "vendors": []
       },
       "tier": "news",
-      "title_display": "Ransomware: Brit Ltd / Brit Insurance (britinsurance.com) (inc ransom)",
+      "title_display": "Ransomware: Chaparral Software (rhysida)",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -380,9 +378,9 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "e35a6d768621ffa1cbb70ae730e159faa042b1de7a8812db1a744067afe3eb57",
+      "content_sha256": "b81f320f430e7ae7968fa158990e0402c3e83c72355a6ff3e02790d29d2a9367",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
+      "first_seen": "2026-11-28T18:57:00Z",
       "industries": [
         "cybersecurity"
       ],
@@ -407,9 +405,9 @@
           "raw": 0
         }
       },
-      "published": "2026-11-27T17:24:19Z",
+      "published": "2026-11-28T16:17:42Z",
       "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by the gentlemen.",
+      "summary_display": "New ransomware victim disclosed by qilin.",
       "tags": {
         "cfr": [],
         "cves": [],
@@ -422,7 +420,7 @@
         "vendors": []
       },
       "tier": "news",
-      "title_display": "Ransomware: Friedl Richardson (the gentlemen)",
+      "title_display": "Ransomware: Decor-rest Furniture (qilin)",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -434,23 +432,23 @@
       "authority": "secondary",
       "authors": [],
       "categories": {
-        "content": "vulnerabilities/scoring",
+        "content": "attacks/ransomware-claims",
         "content_basis": {
           "category": "item",
           "subcategory": "item"
         },
         "reread": {
-          "content": "vulnerabilities/scoring",
+          "content": "attacks/ransomware-claims",
           "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
           ]
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "2a9beed51511ba8d2662806afaf18043758fa4c118ba386801eedf7b3a1c7562",
+      "content_sha256": "05486c12fae4de8bea5fc9fbb8c69a6d14ef86a6360d1526571b03dc3125cb7c",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
+      "first_seen": "2026-11-28T18:57:00Z",
       "industries": [
         "cybersecurity"
       ],
@@ -460,7 +458,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.ervik.as/cves/CVE-2026-81045",
+      "link": "https://www.ervik.as/ransomware",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -475,24 +473,22 @@
           "raw": 0
         }
       },
-      "published": "2026-11-27T17:18:02Z",
+      "published": "2026-11-28T16:17:19Z",
       "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.8) vulnerability.",
+      "summary_display": "New ransomware victim disclosed by hyflock.",
       "tags": {
         "cfr": [],
-        "cves": [
-          "CVE-2026-81045"
-        ],
+        "cves": [],
         "deadline": null,
         "editions": [],
         "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
+        "severity": null,
+        "severity_rank": null,
         "standards": [],
         "vendors": []
       },
       "tier": "news",
-      "title_display": "CVE-2026-81045: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Improper Ce",
+      "title_display": "Ransomware: Dirjen Imigrasi Hendarsam Marantoko membantah (hyflock)",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -518,9 +514,9 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "45f718b1bdfd53b3ab190fa5927b8036c29552ccc35392b035c46272704364d6",
+      "content_sha256": "bf3e8abbc51dcd333dc644e0d2d2ad708bff06d5e93d148fe583b52c74f8c9ae",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
+      "first_seen": "2026-11-28T18:57:00Z",
       "industries": [
         "cybersecurity"
       ],
@@ -530,7 +526,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.ervik.as/cves/CVE-2026-81047",
+      "link": "https://www.ervik.as/cves/CVE-2026-138261",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -545,853 +541,13 @@
           "raw": 0
         }
       },
-      "published": "2026-11-27T17:18:02Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.8) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81047"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81047: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Improper Au",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "3ba8e596633366dad31210415d9952861317cdd5dc03d501fad7e43f25a07e49",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81050",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:18:02Z",
-      "publisher": "Ervik",
-      "summary_display": "LOW severity (CVSS 2.9) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81050"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "low",
-        "severity_rank": 1,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81050: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Insufficien",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "98c0deaa6a43a6a8c5ea5210b79e90de0ac3fff860233382d47552f623e6ef9c",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81053",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:18:02Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 6.7) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81053"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81053: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains a Concurrent E",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "a1d1777d525f8e41351c9ba0ac121910097d3f7eead7d94f572a47d007c83468",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81054",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:18:02Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.5) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81054"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81054: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Insertion o",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "5fbab33ffafbd45166aa665cb2ec383eff80ffdf0556e84f02c9af83b6c0a5d3",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81055",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:18:02Z",
-      "publisher": "Ervik",
-      "summary_display": "LOW severity (CVSS 2.9) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81055"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "low",
-        "severity_rank": 1,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81055: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Observable",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "d52ede2d5dac23d6cb27f87a629e93523f374b7f2e7dfc542164f63f6bab678d",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81041",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:18:01Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.1) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81041"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "high",
-        "severity_rank": 3,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81041: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Improper Ce",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "db9e52d164d9ca0c012fd2e382aee39c1960233da6c19c43a5112b142a7158e0",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81042",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:18:01Z",
-      "publisher": "Ervik",
-      "summary_display": "LOW severity (CVSS 3.3) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81042"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "low",
-        "severity_rank": 1,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81042: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Insertion o",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "9faabaf115d41dee458ae7a53c101396d5499c9565e82b8479660ed5f5d096ba",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-81044",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:18:01Z",
-      "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.8) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81044"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81044: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Improper Ne",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "b98e97cefee206cc332e3a068c418f18b241b165368d68f90c1e23983c5e595e",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-137997",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:17:59Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.8) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-137997"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "high",
-        "severity_rank": 3,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-137997: HCIPy through 0.7.1 contains an insecure deserialization vulnerability that allows attackers to exec",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "6a5762ebf606051b7c891a014159d2c34697be589e068bafbd04611c8f4b9b09",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-137998",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:17:59Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.8) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-137998"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "high",
-        "severity_rank": 3,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-137998: Detoxify 0.5.3 through 0.5.4 contains an insecure deserialization vulnerability in load_checkpoint t",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "1e834e090f08bce1fb5d5abbc41abe139fe4865ff21d6bc79b113665af8e7df1",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-137999",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:17:59Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.8) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-137999"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "high",
-        "severity_rank": 3,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-137999: JSONSchema2PoPo2 through 3.0.3 contains a code injection vulnerability that allows attackers to inje",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "b1c3b9af9b0b6c42370aa4507808f5e2b2b47f34d9474b39175708354ee49587",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-137992",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:17:58Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.5) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-137992"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "high",
-        "severity_rank": 3,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-137992: libexpat through 2.11.0 contains a denial of service vulnerability in defineAttribute() of lib/xmlpa",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "e3f4b5302cfe41a655de962964bff77279a3fbb7872235cf3f6de0b40ff1b634",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-137993",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:17:58Z",
+      "published": "2026-11-28T16:16:48Z",
       "publisher": "Ervik",
       "summary_display": "LOW severity (CVSS 3.7) vulnerability.",
       "tags": {
         "cfr": [],
         "cves": [
-          "CVE-2026-137993"
+          "CVE-2026-138261"
         ],
         "deadline": null,
         "editions": [],
@@ -1402,7 +558,7 @@
         "vendors": []
       },
       "tier": "news",
-      "title_display": "CVE-2026-137993: django-allauth 65.17.0 before 65.23.0 contains a denial of service vulnerability in truncate_ip() th",
+      "title_display": "CVE-2026-138261: Listmonk 2.3.0 through 7.0.0-beta.2 contains an information disclosure vulnerability that allows una",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -1428,9 +584,9 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "dd7e99519b537bba04e3ebc1d1ce182d71981443313620f1184d0a09235ee685",
+      "content_sha256": "584325ac193b03d3bcafa37b4a4ba0c286b3d3fc4bf35eda8ed9f716b5bcbd6c",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
+      "first_seen": "2026-11-28T18:57:00Z",
       "industries": [
         "cybersecurity"
       ],
@@ -1440,7 +596,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.ervik.as/cves/CVE-2026-137994",
+      "link": "https://www.ervik.as/cves/CVE-2026-138262",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1455,83 +611,13 @@
           "raw": 0
         }
       },
-      "published": "2026-11-27T17:17:58Z",
-      "publisher": "Ervik",
-      "summary_display": "HIGH severity (CVSS 7.8) vulnerability.",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-137994"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "high",
-        "severity_rank": 3,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-137994: Leo through 6.8.10 contains an insecure deserialization vulnerability that allows attackers to execu",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/scoring",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "vulnerabilities/scoring",
-          "reasons": [
-            "summary has 'cvss'",
-            "title has 'cve'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "ebddc1f608dd42df060f858a27ced772501bd7d323fa3c8d069ae500e2b7cf5d",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-137995",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T17:17:58Z",
+      "published": "2026-11-28T16:16:48Z",
       "publisher": "Ervik",
       "summary_display": "MEDIUM severity (CVSS 6.1) vulnerability.",
       "tags": {
         "cfr": [],
         "cves": [
-          "CVE-2026-137995"
+          "CVE-2026-138262"
         ],
         "deadline": null,
         "editions": [],
@@ -1542,7 +628,7 @@
         "vendors": []
       },
       "tier": "news",
-      "title_display": "CVE-2026-137995: FOG Project before 1.6.0.119 contains an information disclosure vulnerability that allows unauthenti",
+      "title_display": "CVE-2026-138262: WinFsp before 2.2.26323 contains a kernel pool out-of-bounds write vulnerability in FspEaBufferFromF",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -1568,9 +654,9 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "d2c09f8f57444f5241bb7d689abc473d5ed5b8059f1ac4b3d443b068716e6359",
+      "content_sha256": "b5aa2d6952475b5ccbc7d31fa59c10c6b8425db2febf8e635b39984cd130b974",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
+      "first_seen": "2026-11-28T18:57:00Z",
       "industries": [
         "cybersecurity"
       ],
@@ -1580,7 +666,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.ervik.as/cves/CVE-2026-137996",
+      "link": "https://www.ervik.as/cves/CVE-2026-138054",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1595,13 +681,13 @@
           "raw": 0
         }
       },
-      "published": "2026-11-27T17:17:58Z",
+      "published": "2026-11-28T16:16:47Z",
       "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 5.5) vulnerability.",
+      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
       "tags": {
         "cfr": [],
         "cves": [
-          "CVE-2026-137996"
+          "CVE-2026-138054"
         ],
         "deadline": null,
         "editions": [],
@@ -1612,7 +698,7 @@
         "vendors": []
       },
       "tier": "news",
-      "title_display": "CVE-2026-137996: Zettlr before 4.11.0 fails to validate URI schemes in Markdown link targets, allowing attackers to l",
+      "title_display": "CVE-2026-138054: A vulnerability has been found in itsourcecode Insurance Management System 1.0. The impacted element",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -1638,9 +724,9 @@
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "96dfd53b284c57b90f8f700bd72c166705f0828e3d1661cb6d87935d93d5797e",
+      "content_sha256": "29c993745979d31ca830605c960a0436a719b24866e50cb88a4691a146b121f4",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
+      "first_seen": "2026-11-28T18:57:00Z",
       "industries": [
         "cybersecurity"
       ],
@@ -1650,7 +736,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.ervik.as/cves/CVE-2026-137684",
+      "link": "https://www.ervik.as/cves/CVE-2026-138055",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -1665,13 +751,13 @@
           "raw": 0
         }
       },
-      "published": "2026-11-27T17:17:56Z",
+      "published": "2026-11-28T16:16:47Z",
       "publisher": "Ervik",
       "summary_display": "HIGH severity (CVSS 7.3) vulnerability.",
       "tags": {
         "cfr": [],
         "cves": [
-          "CVE-2026-137684"
+          "CVE-2026-138055"
         ],
         "deadline": null,
         "editions": [],
@@ -1682,7 +768,1668 @@
         "vendors": []
       },
       "tier": "news",
-      "title_display": "CVE-2026-137684: A security flaw has been discovered in eosphoros-ai DB-GPT up to 0.8.3. This affects the function ed",
+      "title_display": "CVE-2026-138055: A vulnerability was found in Cloud-CV EvalAI up to 30128ca50ab24a0c65e556d78199309e8ecc3eae. This af",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities",
+        "technology",
+        "technology/cloud"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "a6a804fed34ac18c8f8c1e77aa73ce97aaf0779541d845c5cfb5129b5aa07371",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138056",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T16:16:47Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138056"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138056: A vulnerability was determined in SonicJs-Org SonicJS up to 3.0.1. This impacts the function AuthMan",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "148c1ee3bf72252bf7ad1676ab489fd10d675d65fa03fa2893c7c57407966e4d",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138053",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T15:16:32Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138053"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138053: A flaw has been found in itsourcecode Event Management System 1.0. The affected element is an unknow",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "0dec4ab00d71cd0b308bb0e0a12edc104a9dad7bf550fe0c2d1bea07737801ed",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T14:17:53Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by rhysida.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: Multotec (rhysida)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "5406b42eb4ab8aee1cd0029db159ac2d2ffaf5cc71e72632a5296d3cf0e68d31",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T14:17:52Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by rhysida.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: Servicios Integrales de Salud SiSalud (rhysida)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "c849882cf10b01bd80901986b7ce892ae3c5d5ced07fdddfceaae7c8341b3d77",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138256",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T14:17:51Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 6.5) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138256"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138256: Apprise before 1.12.0 contains an improper certificate validation vulnerability in NotifyEmail.send",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "e79afb27018ed8022b59b345e7343c19a209f771ff65a18846c06d201999cbb3",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138051",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T14:17:50Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138051"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138051: A security vulnerability has been detected in OpenAirInterface oai-cn5g-upf up to 2.2.2. This issue",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "8d709ad38a7d0887d1f5e07af6b6595381f25dabb54834e2856bf000e354bec5",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138052",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T14:17:50Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138052"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138052: A vulnerability was detected in OpenAirInterface oai-cn5g-amf up to 2.2.2. Impacted is the function",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "dd0efdf284ae65e628751eafdfe0aa988930170ab2d920cd7833fc2cd02cffee",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138255",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T14:17:50Z",
+      "publisher": "Ervik",
+      "summary_display": "LOW severity (CVSS 2.7) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138255"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "low",
+        "severity_rank": 1,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138255: ELADMIN through 2.7 contains an authorization bypass vulnerability in the user export endpoint that",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "20db3ae01670abdb7199beb6979812399f57e7ecd238f9599caa29870f2a783d",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138050",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T14:17:49Z",
+      "publisher": "Ervik",
+      "summary_display": "HIGH severity (CVSS 7.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138050"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "high",
+        "severity_rank": 3,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138050: A weakness has been identified in OpenAirInterface oai-cn5g-udr up to 2.2.2. This vulnerability affe",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "f277b6aaea726b4c242d42741c4f040a283f66b4310ffd3929c9da74426ac609",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T13:18:34Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by payload.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: GAIA Group Srl (payload)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "578825eaaf7dcc7fdd62ac673cb494784ac73643f71bc3ce20023d84b87d5d3d",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138047",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T13:17:03Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 4.7) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138047"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138047: A vulnerability was identified in dcatadmin Dcat-Admin 2.2.2-beta. Affected by this issue is the fun",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "cf3f920c7bb38359760ab0ca35f51a465bc0a34011e71be398f8d7302e048aa2",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138049",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T13:17:03Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138049"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138049: A security flaw has been discovered in OpenAirInterface oai-cn5g-nrf up to 2.2.1. This affects the f",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "12a27cae1b9b94fc7475304336d1c7b1fff1e381a33a4ff02f444cd3a5124618",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138039",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T13:17:02Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138039"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138039: A vulnerability was found in Open5GS up to 2.8.0. Affected is the function smf_ue_find_by_imsi of th",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "0940f423c94f399fec102c816786e44538662c8f0b6d7f28f8f87f49ba5f2155",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-5771",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T12:17:42Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 4.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-5771"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-5771: The Loco Translate plugin for WordPress is vulnerable to Arbitrary File Write/Overwrite via Path Tra",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "3a42679e6c25d9a7b0c5c42a6c56de2d25036e2dae329a26148047e09d840dc0",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138037",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T12:17:41Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138037"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138037: A flaw has been found in Open5GS up to 2.8.0. This affects the function ogs_pfcp_handle_create_urr o",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "616a3b2344d51c06cb9d2ed36ea19110ac6e0d4dae954f5397b6e0f9be3c8e59",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138038",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T12:17:41Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138038"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138038: A vulnerability has been found in Open5GS 2.8.0. This impacts the function nrf_nnrf_handle_nf_discov",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "fb1c7936a9ac01344b62282d0b5c172697d5ddfb9a7f724814fd6b996b755752",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T10:18:07Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by pear.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: Marietta Dermatology Associates, PA (pear)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "fb0c8197932bd6731613587e043ac3b06cf590be61163fa96db4d8d970580b65",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T10:18:06Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by pear.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: Konicom, Inc. (pear)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/ransomware-claims",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "attacks/ransomware-claims",
+          "reasons": [
+            "summary has 'ransomware victim'",
+            "summary has 'victim disclosed'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "d52b85823997969003b76ab9b3211b952e4f4b648a0cc48f337b1bf929b720d7",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/ransomware",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T10:18:06Z",
+      "publisher": "Ervik",
+      "summary_display": "New ransomware victim disclosed by pear.",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "Ransomware: McGlynn & McGlynn (pear)",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "a5bb8ac6cb6a6411af93d684b19e053b8d667cf7aac34f6670db3c23bd5099ce",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138005",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T10:17:00Z",
+      "publisher": "Ervik",
+      "summary_display": "CRITICAL severity (CVSS 10) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138005"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "critical",
+        "severity_rank": 4,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138005: A vulnerability was detected in TRENDnet TEW-751DR 1.03B01. Affected by this vulnerability is the fu",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "vulnerabilities/scoring",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "vulnerabilities/scoring",
+          "reasons": [
+            "summary has 'cvss'",
+            "title has 'cve'"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "3daf7084d5868cbada96fbc85e9aa74c7f98c046d94d4240b02941a13153e56c",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/cves/CVE-2026-138036",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T10:17:00Z",
+      "publisher": "Ervik",
+      "summary_display": "MEDIUM severity (CVSS 5.3) vulnerability.",
+      "tags": {
+        "cfr": [],
+        "cves": [
+          "CVE-2026-138036"
+        ],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": "medium",
+        "severity_rank": 2,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "CVE-2026-138036: A vulnerability was detected in Free5GC up to 4.3.0. The impacted element is the function PostPolici",
+      "topics": [
+        "cybersecurity",
+        "cybersecurity/incidents",
+        "cybersecurity/ransomware",
+        "cybersecurity/vulnerabilities"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "regulatory/federal-rules",
+        "content_basis": {
+          "category": "item",
+          "subcategory": "item"
+        },
+        "reread": {
+          "content": "regulatory/federal-rules",
+          "reasons": [
+            "title has 'federal register'"
+          ]
+        },
+        "source": "regulatory/federal-rules"
+      },
+      "content_sha256": "72dfbac8daebf399017e95b09f9340ba436e06a972105dd27b64990fe282d3ad",
+      "feed_id": "govinfo-fr",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "federal"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.govinfo.gov/app/details/FR-2026-11-30",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T07:03:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files PDF XML Metadata download Descriptive Metadata (MODS) Preservation Metadata (PREMIS) All Content and Metadata files, including granules ZIP",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "canonical",
+      "title_display": "Federal Register Vol. 91, No.228, November 30, 2026",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "primary",
+      "authors": [],
+      "categories": {
+        "content": "regulatory/federal-rules",
+        "content_basis": {
+          "category": "source",
+          "subcategory": "source"
+        },
+        "reread": {
+          "content": "regulatory/federal-rules",
+          "reasons": [
+            "no signal in the item text; the source category and source subcategory"
+          ]
+        },
+        "source": "regulatory/federal-rules"
+      },
+      "content_sha256": "05a1c17935b0eea35a2ac5bab8f5893aaba1b68d23f20c4c8cbec697bcbf67b1",
+      "feed_id": "govinfo-fr-bulkdata",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "federal"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.govinfo.gov/bulkdata/FR/2026/11/FR-2026-11-30.xml",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T07:03:00Z",
+      "publisher": "U.S. Government Publishing Office",
+      "summary_display": "Content Files XML",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "canonical",
+      "title_display": "FR-2026-11-30",
+      "topics": [
+        "government",
+        "government/federal",
+        "regulation",
+        "regulation/federal-rulemaking"
+      ]
+    },
+    {
+      "authority": "secondary",
+      "authors": [],
+      "categories": {
+        "content": "attacks/threat-research",
+        "content_basis": {
+          "category": "source",
+          "subcategory": "source"
+        },
+        "reread": {
+          "content": "attacks/threat-research",
+          "reasons": [
+            "no signal in the item text; the source category and source subcategory"
+          ]
+        },
+        "source": "attacks/threat-research"
+      },
+      "content_sha256": "69fd27abb17b70bd0443af44199544f9bff02e9bfa77061508da9d8c1c766c6e",
+      "feed_id": "ervik-threat-feed",
+      "first_seen": "2026-11-28T18:57:00Z",
+      "industries": [
+        "cybersecurity"
+      ],
+      "labels": {
+        "agencies": [],
+        "change_types": [],
+        "deadline_basis": null,
+        "effective": null
+      },
+      "link": "https://www.ervik.as/news/dwp-cyber-incident-q-dir-desktopok-supply-chain-afp-forum-offline-japan-mext-remus-sys010-weavelotus-2026-11-28",
+      "offline_pattern_scan": {
+        "patterns_detected": [],
+        "quarantine_active": false,
+        "response": "proceed",
+        "risk_level": "CLEAN",
+        "scored_view": "raw",
+        "source_trust_class": "untrusted_external",
+        "surfaced_to_user": false,
+        "total_score": 0,
+        "views": {
+          "folded": 0,
+          "raw": 0
+        }
+      },
+      "published": "2026-11-28T06:30:00Z",
+      "publisher": "Ervik",
+      "summary_display": "A look at the last 24 hours in cybersecurity: the UK's DWP pulls benefit sign-in services after a cyber incident, AhnLab finds trojanised Q-Dir and DesktopOK installers on the publisher's official site, AFP's customer platform stays offline, Japan's education ministry discloses a two-month-old pr...",
+      "tags": {
+        "cfr": [],
+        "cves": [],
+        "deadline": null,
+        "editions": [],
+        "exploited": false,
+        "severity": null,
+        "severity_rank": null,
+        "standards": [],
+        "vendors": []
+      },
+      "tier": "news",
+      "title_display": "UK Benefits Portals Go Dark, Official Q-Dir and DesktopOK Downloads Carry a RAT, and Switzerland Revises Its AI-Agent Count Upward",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
@@ -1696,481 +2443,6 @@
       "authority": "secondary",
       "authors": [],
       "categories": {
-        "content": "guidance/explainers",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "guidance/explainers",
-          "reasons": [
-            "title has 'what is'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "32bc67cf0d1202d10c7e180b2bd776976df73ed9e155c5830980a8e11655e48e",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/news/sap-confirms-suspicious-activity-project-granite-github-claims-2026-11-27",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T16:55:00Z",
-      "publisher": "Ervik",
-      "summary_display": "SAP says it found suspicious activity and, so far, no evidence that customer business data was accessed. Reports that attackers stole employee tokens and changed source code on GitHub come from Der Spiegel's insiders and are not confirmed. Here is what is said, by whom, and what nobody knows.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "SAP Confirms Suspicious Activity but Not the GitHub Claims: What Is Known About 'Project Granite'",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "30b8c591674338a8c1f0b8c33dcf23060279e6fde0aac124fa921eba25484130",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T16:27:27Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by soul.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: Ferrometalco (FMC) (soul)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "ea5c88f44e811769f2cce3693d9b3e2975c45a63b88627dbe59464f4ac176d17",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T16:27:26Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by soul.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: US CNC Machine Company (soul)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "c12bb31c5ba255a85306e29ed48c444397c34f58982b6f1268fcc7472c3bd5d3",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T16:27:01Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by iah647.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: rogers-group (iah647)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "e2c961992f2abd41bb4e34d3473b705aa1e90bac843e43240390b08d6ccca8b3",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T16:27:00Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by iah647.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: blackstone-consulting (iah647)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "ff11b166b15cf2fdcce8ef219a458b21357a204fdaace7df4958cf53fa349100",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T16:26:59Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by iah647.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: supplyone (iah647)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "ca87147f4388569a999099a90cd180687cfadb5253d1e85e558ba7d7920057b6",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T16:26:56Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by deadlock.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: MedMira Inc (deadlock)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
         "content": "vulnerabilities/scoring",
         "content_basis": {
           "category": "item",
@@ -2179,15 +2451,14 @@
         "reread": {
           "content": "vulnerabilities/scoring",
           "reasons": [
-            "summary has 'cvss'",
             "title has 'cve'"
           ]
         },
         "source": "attacks/threat-research"
       },
-      "content_sha256": "77ff592c861e5003e743ce78cde11c099ec576017860a7da66bc4ca7608e8713",
+      "content_sha256": "7008e012e8db80e15ef8bc791eeebfa556f35d16b81742cbfe589df0fb49f2c5",
       "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
+      "first_seen": "2026-11-28T18:57:00Z",
       "industries": [
         "cybersecurity"
       ],
@@ -2197,7 +2468,7 @@
         "deadline_basis": null,
         "effective": null
       },
-      "link": "https://www.ervik.as/cves/CVE-2026-81040",
+      "link": "https://www.ervik.as/cves/CVE-2026-123654",
       "offline_pattern_scan": {
         "patterns_detected": [],
         "quarantine_active": false,
@@ -2212,583 +2483,28 @@
           "raw": 0
         }
       },
-      "published": "2026-11-27T16:18:13Z",
+      "published": "2026-11-28T06:16:42Z",
       "publisher": "Ervik",
-      "summary_display": "MEDIUM severity (CVSS 4.4) vulnerability.",
+      "summary_display": "NONE severity vulnerability.",
       "tags": {
         "cfr": [],
         "cves": [
-          "CVE-2026-81040"
+          "CVE-2026-123654"
         ],
         "deadline": null,
         "editions": [],
         "exploited": false,
-        "severity": "medium",
-        "severity_rank": 2,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "CVE-2026-81040: Dell Secure Connect Gateway - Virtual Edition, versions prior to 5.36.00.16, contains an Improper Li",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "966db9fbf0e00f22e9127eb9e68225d2b23fd609e576b346aaab994a231e7c1e",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T15:16:17Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by iah647.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
         "severity": null,
         "severity_rank": null,
         "standards": [],
         "vendors": []
       },
       "tier": "news",
-      "title_display": "Ransomware: resers (iah647)",
+      "title_display": "CVE-2026-123654: Themify Base WordPress theme through 1.2.4 does not perform capability checks on its option save and",
       "topics": [
         "cybersecurity",
         "cybersecurity/incidents",
         "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/ransomware-claims",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/ransomware-claims",
-          "reasons": [
-            "summary has 'ransomware victim'",
-            "summary has 'victim disclosed'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "84cfc1154b6c4dd06a8725fc72c2560092341fb03361eaf36776d39e548281a2",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/ransomware",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T15:09:03Z",
-      "publisher": "Ervik",
-      "summary_display": "New ransomware victim disclosed by iah6477.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Ransomware: rogers-group (iah6477)",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/exploited-now",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/exploited-now",
-          "reasons": [
-            "title has 'exploited'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "a12eff6faaf88f5556cff4b94c04db169f5a7a49d29dc21c899eb239666ea20a",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/news/gt13-check-point-servers-ai-campaign-mitel-micollab-cvss-10-exploited-sap-project-granite-rackspace-spot-drupal-cve-2026-136716-2026-11-27",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T06:30:00Z",
-      "publisher": "Ervik",
-      "summary_display": "A look at the last 24 hours in cybersecurity: GreyNoise details a suspected AI-assisted campaign against Check Point management servers across 17 countries, CISA lists ten more exploited flaws including a CVSS 10.0 Mitel MiCollab bug, Drupal discloses a second exploited installer flaw, SAP confir...",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "critical",
-        "severity_rank": 4,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "AI-Assisted Crew Works Through Check Point Management Servers, Mitel's CVSS 10.0 Flaw Is Exploited, and SAP Confirms a GitHub Intrusion",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities",
-        "technology",
-        "technology/ai",
-        "technology/cloud"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "summary has 'ips'"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "74537cdc5b011ac54b4cc9081acb03ebee7f37bde971596fcd22eeef3e952c59",
-      "feed_id": "fortiguard-ips",
-      "first_seen": "2026-11-26T20:10:30Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/ips?version=37.349",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T02:46:35Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (16) SignalWire.FreeSwitch.SIP.MESSAGE.Code.Injection (Critical) Zimbra.Collaboration.GraphQL.Improper.Authentication (High) DrayTek.Vigor2960.swmconfigupload.Command.Injection (Critical) DrayTek.Vigor2960.doWebBackup.Path.Traversal (Critical) DrayTek.Vigor2960.app_guest_export.Path.T...",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-81990",
-          "CVE-2026-94514",
-          "CVE-2026-95874",
-          "CVE-2026-95935"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": "critical",
-        "severity_rank": 4,
-        "standards": [],
-        "vendors": [
-          "vmware"
-        ]
-      },
-      "tier": "vendor",
-      "title_display": "37.349",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/identity",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/exploited-now",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/exploited-now",
-          "reasons": [
-            "title has 'active zero-day'",
-            "summary has 'actively exploited'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "6cafe1021154ba0be0434f6e4aa1fb3df19ee2abb2caa128f6ee531189aa8494",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-120705",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T00:00:00Z",
-      "publisher": "Ervik",
-      "summary_display": "OSGeo GeoServer XML Injection Vulnerability - confirmed actively exploited (CISA KEV).",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-120705"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": true,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Active Zero-Day: CVE-2026-120705",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/exploited-now",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/exploited-now",
-          "reasons": [
-            "title has 'active zero-day'",
-            "summary has 'actively exploited'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "5efccf607ebd8c0e30de281ebba180163d25bc77b7ffc5ce831af1bfd9cf6576",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-129243",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T00:00:00Z",
-      "publisher": "Ervik",
-      "summary_display": "OSGeo GeoServer Incorrect Authorization Vulnerability - confirmed actively exploited (CISA KEV).",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-129243"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": true,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Active Zero-Day: CVE-2026-129243",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "secondary",
-      "authors": [],
-      "categories": {
-        "content": "attacks/exploited-now",
-        "content_basis": {
-          "category": "item",
-          "subcategory": "item"
-        },
-        "reread": {
-          "content": "attacks/exploited-now",
-          "reasons": [
-            "title has 'active zero-day'",
-            "summary has 'actively exploited'"
-          ]
-        },
-        "source": "attacks/threat-research"
-      },
-      "content_sha256": "ac808ba56e5f94087e67a4e7b9d90a51b7c3ce56e6eac94961a49dc0cf131a31",
-      "feed_id": "ervik-threat-feed",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://www.ervik.as/cves/CVE-2026-136716",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-27T00:00:00Z",
-      "publisher": "Ervik",
-      "summary_display": "Drupal Core Improper Check for Unusual or Exceptional Conditions Vulnerability - confirmed actively exploited (CISA KEV).",
-      "tags": {
-        "cfr": [],
-        "cves": [
-          "CVE-2026-136716"
-        ],
-        "deadline": null,
-        "editions": [],
-        "exploited": true,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "news",
-      "title_display": "Active Zero-Day: CVE-2026-136716",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/incidents",
-        "cybersecurity/ransomware",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "9754e379f5221177d38fb54b964aaf1309de950aa7a4ae050abad10ab0fa8840",
-      "feed_id": "fortiguard-ot-ips",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.34900",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-26T23:41:02Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (3) ABB.Cylon.ASPECT.syslogUpdate.Remote.Code.Execution. D-Link.DIR-X1860.anweb.Command.Injection. Tenda.RX3.auto_discover.Buffer.Overflow.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "37.34900",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/ot-ics",
         "cybersecurity/vulnerabilities"
       ]
     },
@@ -2809,9 +2525,9 @@
         },
         "source": "releases/firmware"
       },
-      "content_sha256": "157024e16a41efd4cc3b502f7884d2509290de2cf63580b265066dc77ca51857",
+      "content_sha256": "e0bc2fd0600c9cc8e09e76a4ccedad9a7d4f0ffbf458f8ebc2046d68483762c0",
       "feed_id": "fortinet-firmware",
-      "first_seen": "2026-11-27T19:56:43Z",
+      "first_seen": "2026-11-28T18:57:00Z",
       "industries": [
         "cybersecurity"
       ],
@@ -2836,9 +2552,9 @@
           "raw": 0
         }
       },
-      "published": "2026-11-26T21:49:46Z",
+      "published": "2026-11-27T20:41:13Z",
       "publisher": "Fortinet",
-      "summary_display": "FortiCentral 7.6.0 B0147 and release notes are available for download from the Support site : https://support.fortinet.com",
+      "summary_display": "FortiVoiceUCDesktop 8.0.1 B0076 and release notes are available for download from the Support site : https://support.fortinet.com",
       "tags": {
         "cfr": [],
         "cves": [],
@@ -2851,542 +2567,11 @@
         "vendors": []
       },
       "tier": "vendor",
-      "title_display": "FortiCentral 7.6.0",
+      "title_display": "FortiVoiceUCDesktop 8.0.1",
       "topics": [
         "cybersecurity",
         "technology",
         "technology/devices"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "releases/firmware",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "releases/firmware",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "releases/firmware"
-      },
-      "content_sha256": "876bb507b96938356e018f1e2e63c44743e1bd5e684b3661d59b0c31c6b1254a",
-      "feed_id": "fortinet-firmware",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://support.fortinet.com/EndUser/FirmwareImages.aspx",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-26T21:07:45Z",
-      "publisher": "Fortinet",
-      "summary_display": "FortiWebManager 8.0.2 B0005 and release notes are available for download from the Support site : https://support.fortinet.com",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "FortiWebManager 8.0.2",
-      "topics": [
-        "cybersecurity",
-        "technology",
-        "technology/devices"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "71f914e9eec8cbee0aac1cd32545ed1af5f71cc5108699f262827c6800cd28c6",
-      "feed_id": "fortiguard-ot-ips",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.34800",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T23:50:36Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (30) ABB.Cylon.ASPECT.bbmdUpdate.Command.Injection. BeyondTrust.Remote.Support.uploadFiles.Authentication.Bypass. D-Link.DAP-2020.webproc.Information.Disclosure. D-Link.DCS-5020L.Authorization.HTTP.Header.Buffer.Overflow. D-Link.DI-8400.DDNS.Configuration.Buffer.Overflow. D-Link.DIR-8...",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "37.34800",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/identity",
-        "cybersecurity/ot-ics",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "72fe134f61a3de1d78923a96284dff51b551f7bdd7b76f176f89c37be6d2fae2",
-      "feed_id": "fortiguard-ot-ips",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.34700",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-25T00:22:21Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (22) D-Link.DIR-841.jsonrpc.Command.Injection. Hisense.VIDAA.TV.RenderingControl.Improper.Authentication. Linksys.Devices.RP_doSpecifySiteSurvey.Buffer.Overflow. Linksys.Devices.setOpMode.opMode.Buffer.Overflow. Linksys.E1200.httpd.url.Buffer.Overflow. Linksys.E1200.httpd.validate_sta...",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "37.34700",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/identity",
-        "cybersecurity/ot-ics",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "bf8d9f426b4c53a8076e7321d2780f99088b5dac0600e450dd29d8b53974ce39",
-      "feed_id": "fortiguard-ot-ips",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.34300",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-20T07:00:51Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (7) D-Link.DIR-878.GetCAPTCHAsetting.Buffer.Overflow. D-Link.DIR-878.ListDirectoryPath.Path.Traversal. TOTOLINK.CA300-PoE.setIpQosRules.Buffer.Overflow. TOTOLINK.CA300-PoE.setLanConfig.Buffer.Overflow. TOTOLINK.CA300-PoE.setWanConfig.Buffer.Overflow. TOTOLINK.CA300-PoE.setWiFi.Buffer....",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "37.34300",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/ot-ics",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "f9b5a5fbce72a2ec80bcb90e8e93e60d9ae9be4434b0e03069716f555cb07155",
-      "feed_id": "fortiguard-ot-ips",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.34200",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-19T23:15:09Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Modified (1) PHP.longjmp.Remote.Code.Execution.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "37.34200",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/ot-ics",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "2e11dce0ee15a017a02be20ce1d27b976158f2e45a6e230b023d36e54a18f523",
-      "feed_id": "fortiguard-ot-ips",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.34000",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-19T04:14:37Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (1) Danfoss.AK-SM.800A.SMTP.Email.Command.Injection. Modified (1) PHP.longjmp.Remote.Code.Execution.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "37.34000",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/ot-ics",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "ac72b61664c06a2a6b27586f627cec9680de99bffd1133d2412f326315314c5c",
-      "feed_id": "fortiguard-ot-ips",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.33900",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-18T23:09:49Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (5) Linksys.E5600.mesh_login.cgi.Buffer.Overflow. Linksys.E5600.upload_fw.cgi.Buffer.Overflow. Rockwell.Automation.PowerMonitor.1000.DateTime.Buffer.Overflow. Rockwell.Automation.PowerMonitor.1000.URI.Buffer.Overflow. TOTOLINK.A950RG.setWiFiBasicConfig.Buffer.Overflow.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "37.33900",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/ot-ics",
-        "cybersecurity/vulnerabilities"
-      ]
-    },
-    {
-      "authority": "primary",
-      "authors": [],
-      "categories": {
-        "content": "vulnerabilities/detections",
-        "content_basis": {
-          "category": "source",
-          "subcategory": "source"
-        },
-        "reread": {
-          "content": "vulnerabilities/detections",
-          "reasons": [
-            "no signal in the item text; the source category and source subcategory"
-          ]
-        },
-        "source": "vulnerabilities/detections"
-      },
-      "content_sha256": "2f8b590c25c799635d09cd4e733bd85d3efcc79847b3e748191f47924afd9a6c",
-      "feed_id": "fortiguard-ot-ips",
-      "first_seen": "2026-11-27T19:56:43Z",
-      "industries": [
-        "cybersecurity"
-      ],
-      "labels": {
-        "agencies": [],
-        "change_types": [],
-        "deadline_basis": null,
-        "effective": null
-      },
-      "link": "https://fortiguard.fortinet.com/updates/otips?version=37.33800",
-      "offline_pattern_scan": {
-        "patterns_detected": [],
-        "quarantine_active": false,
-        "response": "proceed",
-        "risk_level": "CLEAN",
-        "scored_view": "raw",
-        "source_trust_class": "untrusted_external",
-        "surfaced_to_user": false,
-        "total_score": 0,
-        "views": {
-          "folded": 0,
-          "raw": 0
-        }
-      },
-      "published": "2026-11-18T00:12:50Z",
-      "publisher": "Fortinet FortiGuard Labs",
-      "summary_display": "Newly Added (4) Danfoss.AK-SM.800A.getauth.Improper.Authentication. Danfoss.AK-SM.800A.load_nginx_headers.DoS. TRENDnet.TEW-657BRM.mini_httpd.Buffer.Overflow. TRENDnet.TEW-657BRM.upgrade_flash.cgi.Buffer.Overflow.",
-      "tags": {
-        "cfr": [],
-        "cves": [],
-        "deadline": null,
-        "editions": [],
-        "exploited": false,
-        "severity": null,
-        "severity_rank": null,
-        "standards": [],
-        "vendors": []
-      },
-      "tier": "vendor",
-      "title_display": "37.33800",
-      "topics": [
-        "cybersecurity",
-        "cybersecurity/identity",
-        "cybersecurity/ot-ics",
-        "cybersecurity/vulnerabilities"
       ]
     }
   ],

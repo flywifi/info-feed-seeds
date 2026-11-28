@@ -3,71 +3,70 @@
   "classification": {
     "basis": {
       "category": {
-        "item": 36,
-        "source": 10
+        "item": 31,
+        "source": 3
       },
       "subcategory": {
-        "item": 35,
-        "source": 11
+        "item": 31,
+        "source": 3
       }
     },
     "by_source": {
       "attacks/threat-research": {
-        "attacks/exploited-now": 4,
         "attacks/ransomware-claims": 10,
-        "guidance/explainers": 1,
+        "attacks/threat-research": 1,
         "vulnerabilities/scoring": 20
       },
-      "releases/firmware": {
-        "releases/firmware": 2
+      "regulatory/federal-rules": {
+        "regulatory/federal-rules": 2
       },
-      "vulnerabilities/detections": {
-        "vulnerabilities/detections": 9
+      "releases/firmware": {
+        "releases/firmware": 1
       }
     },
     "cfr": {
-      "none": 46
+      "none": 34
     },
     "content": {
-      "attacks/exploited-now": 4,
       "attacks/ransomware-claims": 10,
-      "guidance/explainers": 1,
-      "releases/firmware": 2,
-      "vulnerabilities/detections": 9,
+      "attacks/threat-research": 1,
+      "regulatory/federal-rules": 2,
+      "releases/firmware": 1,
       "vulnerabilities/scoring": 20
     },
     "industries": {
-      "cybersecurity": 46
+      "cybersecurity": 32,
+      "federal": 2
     },
-    "items": 46,
-    "moved_out_of_source_category": 21,
+    "items": 34,
+    "moved_out_of_source_category": 20,
     "rules_now_differ": 0,
     "without_content_category": 0
   },
   "coverage": {
-    "content_category_from_item_text": 36,
+    "content_category_from_item_text": 31,
     "held_by_guard": 0,
-    "items_in_json": 46,
-    "items_in_markdown": 46,
-    "items_selected": 46,
+    "items_in_json": 34,
+    "items_in_markdown": 34,
+    "items_selected": 34,
     "sources_did_not_run": 0,
     "sources_failed": 0,
     "sources_responded": 22,
     "sources_selected": 22,
     "tagged": {
       "cfr": 0,
-      "cves": 24,
+      "cves": 20,
       "deadline": 0,
       "editions": 0,
-      "exploited": 3,
-      "severity": 22,
+      "exploited": 0,
+      "severity": 19,
       "standards": 0,
-      "vendors": 1
+      "vendors": 0
     }
   },
-  "date": "2026-11-27",
+  "date": "2026-11-28",
   "did_not_run": [],
-  "generated": "2026-11-27T19:56:43Z",
+  "generated": "2026-11-28T18:57:00Z",
   "guard": {
     "held_by_category": {},
     "held_by_level": {},
